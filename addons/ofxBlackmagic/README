@@ -1,0 +1,119 @@
+ofxBlackmagic is an openframeworks extension wrapping the native
+Blackmagic Designs Decklink API. It can be used to do real-time HDV
+capture with a Blackmagic Intensity Pro card. It has not been tested
+with any of the other Blackmagic Designs cards, but it should work
+fine.
+
+
+####################################
+    License
+####################################
+
+Copyright (c) 2011, James Hughes
+All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+####################################
+    Installation/Usage
+####################################
+
+ofxBlackmagic is mostly API compatible with ofVideoGrabber, but it has
+slightly different initialization semantics. See the example code.
+
+This wrapper doesn't support much of the Decklink API. It only does
+video capture (no audio). There is built-in support for YUV422 to RGB
+24, and YUV422 to grayscale conversion.
+
+This build is currently Windows specific. Porting to other platforms
+shouldn't be too hard, but I don't have a pressing need for it. It
+would involve:
+
+    - switching from the Decklink COM API to the equivalent C API
+      (mostly a cut and paste job)
+
+    - replacing the atomic operations in DLFrameQueue.cpp with
+      equivalent ops on your target platform - if you have a compiler
+      that supports c++0x, then this should be easy to do portably.
+
+
+This extension has external binary dependencies on:
+    OpenCv          (included in openframeworks)
+    Boost Threads   (recommend installing Boost Pro - http://www.boostpro.com/download/)
+
+This extension has external header file dependencies on:
+    Boost Shared Pointer   (recommend installing Boost Pro - http://www.boostpro.com/download/)
+
+When installing Boost Pro, make sure to include the multi-threaded DLL
+and multi-threaded debug DLL installs.
+
+
+####################################
+    Visual Studio 2008 Configuration
+####################################
+
+------------------------------------
+    Common Debug/Release Config
+------------------------------------
+
+Configuration Properties -> C/C++ -> General -> Additional Include Directories:
+  ..\..\..\addons\ofxBlackmagic\src
+  ..\..\..\addons\ofxOpenCv\libs\include\opencv\include
+  <path to boost headers> (e.g. C:\Program Files\boost\boost_1_44)
+
+Configuration Properties -> Linker -> General:
+  ..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs2008
+  <path to boost libs> (e.g. C:\Program Files (x86)\boost\boost_1_44\lib)
+  
+Configuration Properties -> C/C++ -> Preprocessor -> Preprocessor Definitions:
+  BOOST_ALL_DYN_LINK
+  BOOST_ALL_NO_LIB
+    
+
+------------------------------------
+    Debug Config
+------------------------------------
+
+Configuration Properties -> Linker -> Input -> Additional Dependencies:
+  boost_thread-vc90-mt-gd-1_44.lib
+  boost_date_time-vc90-mt-gd-1_44.lib
+  comsuppw.lib
+  cv110.lib
+  cxcore110.lib
+
+Configuration Properties -> Build Events -> Post-Build Event:
+  xcopy /i /y /d "C:\Program Files (x86)\boost\boost_1_44\lib\boost_date_time-vc90-mt-gd-1_44.dll" "$(OutDir)"
+  xcopy /i /y /d "C:\Program Files (x86)\boost\boost_1_44\lib\boost_thread-vc90-mt-gd-1_44.dll" "$(OutDir)"
+
+
+------------------------------------
+    Release Config
+------------------------------------
+
+Configuration Properties -> Linker -> Input -> Additional Dependencies:
+  boost_thread-vc90-mt-1_44.lib
+  boost_date_time-vc90-mt-1_44.lib
+  comsuppw.lib
+  cv110.lib
+  cxcore110.lib
+
+Configuration Properties -> Build Events -> Post-Build Event:
+  xcopy /i /y /d "C:\Program Files (x86)\boost\boost_1_44\lib\boost_date_time-vc90-mt-1_44.dll" "$(OutDir)"
+  xcopy /i /y /d "C:\Program Files (x86)\boost\boost_1_44\lib\boost_thread-vc90-mt-1_44.dll" "$(OutDir)"

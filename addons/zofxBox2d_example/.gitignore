@@ -1,0 +1,17 @@
+*.mode1v3
+*.pbxuser
+build/
+obj/
+*.o
+*.app/
+*.DS_Store
+/Dev
+
+*.svn
+
+*.xcscheme
+*.xcsettings
+*.xcworkspacedata
+*.xcworkspace
+*.xcuserdatad
+	
