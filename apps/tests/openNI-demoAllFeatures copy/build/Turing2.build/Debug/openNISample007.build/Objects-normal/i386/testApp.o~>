@@ -1,0 +1,79 @@
+In file included from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnTypes.h:29,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnOpenNI.h:28,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:33,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.h:6,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.cpp:1:
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnOS.h:453: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnOS.h:456: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnOS.h:465: warning: 'warning' attribute directive ignored
+In file included from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnOpenNI.h:29,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:33,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.h:6,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.cpp:1:
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnContext.h:125: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnContext.h:149: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnContext.h:173: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnContext.h:194: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnContext.h:219: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnContext.h:348: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnContext.h:365: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnContext.h:403: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnContext.h:424: warning: 'warning' attribute directive ignored
+In file included from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnOpenNI.h:32,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:33,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.h:6,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.cpp:1:
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnPrdNodeInfo.h:115: warning: 'warning' attribute directive ignored
+In file included from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnOpenNI.h:34,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:33,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.h:6,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.cpp:1:
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnPrdNode.h:72: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnPrdNode.h:1910: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnPrdNode.h:1917: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnPrdNode.h:2060: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnPrdNode.h:2067: warning: 'warning' attribute directive ignored
+In file included from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:35,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.h:6,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.cpp:1:
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:1070: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:1071: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:4086: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:4304: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:4332: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:4626: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:4654: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:5497: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:5525: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:5553: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:5591: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:5683: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnCppWrapper.h:5758: warning: 'warning' attribute directive ignored
+In file included from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnLog.h:30,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:36,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.h:6,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.cpp:1:
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnDump.h:163: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnDump.h:164: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnDump.h:165: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnDump.h:166: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnDump.h:167: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnDump.h:168: warning: 'warning' attribute directive ignored
+In file included from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNIContext.h:36,
+                 from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/src/ofxOpenNI.h:33,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.h:6,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.cpp:1:
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnLog.h:428: warning: 'warning' attribute directive ignored
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxOpenNI/include/openni/XnLog.h:429: warning: 'warning' attribute directive ignored
+In file included from /Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxQTKitAVScreenRecorder/ofxQTKitAVScreenRecorder.h:14,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.h:10,
+                 from /Applications/OF/apps/tests/Turing Museum copy/src/testApp.cpp:1:
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxQTKitVideoGrabber/ofxQTKitVideoGrabber.h: In member function 'virtual ofPixels& ofxQTKitVideoGrabber::getPixelsRef()':
+/Applications/OF/apps/tests/Turing Museum copy/../../../addons/ofxQTKitVideoGrabber/ofxQTKitVideoGrabber.h:69: warning: reference to local variable 'p' returned
+i686-apple-darwin10-gcc-4.2.1: -lpthread: linker input file unused because linking not done

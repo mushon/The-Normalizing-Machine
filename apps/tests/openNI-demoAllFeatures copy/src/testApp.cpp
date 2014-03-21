@@ -31,6 +31,7 @@ void testApp::setup() {
     fboSaver.begin();
     ofClear(255,255,255,0);
     fboSaver.end();
+	chooseVideos();
 
     
     
