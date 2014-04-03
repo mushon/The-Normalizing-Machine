@@ -7,7 +7,7 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxFaceTracker.h"
-#include "ofxQTKitAVScreenRecorder.h" 
+//#include "ofxQTKitAVScreenRecorder.h" 
 using namespace ofxCv;
 using namespace cv;
 
@@ -35,23 +35,26 @@ public:
 	bool				isLive, isTracking, isRecording, isCloud, isCPBkgnd, isMasking;
 	bool				isTrackingHands, isFiltering;
 
-	ofxOpenNIContext	recordContext, playContext;
-	ofxDepthGenerator	recordDepth, playDepth;
+	/*
+	xn::Context	recordContext, playContext;
+	xn::DepthGenerator	recordDepth, playDepth;
 
 #ifdef USE_IR
-	ofxIRGenerator		recordImage, playImage;
+	xn::IRGenerator		recordImage, playImage;
 #else
-	ofxImageGenerator	recordImage, playImage;
+	xn::ImageGenerator	recordImage, playImage;
 #endif
 
-	ofxHandGenerator	recordHandTracker, playHandTracker;
+	xn::HandsGenerator	recordHandTracker, playHandTracker;
 
-	ofxUserGenerator	recordUser, playUser;
-	ofxOpenNIRecorder	oniRecorder;
-    
+	xn::UserGenerator	recordUser, playUser;
+	xn::Recorder	oniRecorder;
+    */
 
-    
-    ofxLimb leftHand, rightHand, neck;
+	ofxOpenNI openNIRecorder;
+    ofxOpenNI openNIPlayer;
+
+    ofxOpenNILimb leftHand, rightHand, neck;
     
 
     
@@ -61,8 +64,8 @@ public:
 #endif
 
 	void				drawMasks();
-	void				drawPointCloud(ofxUserGenerator * user_generator, int userID);
-    ofPoint                centermass(ofxUserGenerator * user_generator, int userID);
+	void				drawPointCloud(xn::UserGenerator* user_generator, int userID);
+    ofPoint                centermass(xn::UserGenerator* user_generator, int userID);
 
 	int					nearThreshold, farThreshold;
 	int					pointCloudRotationY;
@@ -97,10 +100,10 @@ public:
     
     ofFbo fboSaver;
     ofPixels fboPixels;
-    ofxQTKitAVScreenRecorder recorder; 
+//    ofxQTKitAVScreenRecorder recorder; 
 
     //WEBCAM
-    ofxQTKitVideoGrabber grabber;
+//   ofxQTKitVideoGrabber grabber;
 
     
 };

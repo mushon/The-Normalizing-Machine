@@ -21,9 +21,8 @@ void testApp::setup() {
 
 	ofBackground(0, 0, 0);
 
-    tracker.setup();
+    tracker.setup(); //face
     
-    recorder.setup();
     fboSaver.allocate(320, 240, GL_RGB);
     fboPixels.allocate(320, 240, OF_IMAGE_COLOR);
 //    ofEnableAlphaBlending();
@@ -49,55 +48,74 @@ void testApp::setupRecording(string _filename) {
 	hardware.setLedOption(LED_OFF); // turn off the led just for yacks (or for live installation/performances ;-)
 #endif
 
-	recordContext.setup();	// all nodes created by code -> NOT using the xml config file at all
-	//recordContext.setupUsingXMLFile();
-	recordDepth.setup(&recordContext);
-	recordImage.setup(&recordContext);
 
-	recordUser.setup(&recordContext);
-	recordUser.setSmoothing(filterFactor);				// built in openni skeleton smoothing...
-	recordUser.setUseMaskPixels(isMasking);
-	recordUser.setUseCloudPoints(isCloud);
-	recordUser.setMaxNumberOfUsers(1);					// use this to set dynamic max number of users (NB: that a hard upper limit is defined by MAX_NUMBER_USERS in ofxUserGenerator)
+	//"ofxopenni_config.xml"
+	openNIRecorder.setup();
+    openNIRecorder.addDepthGenerator();
+    openNIRecorder.addImageGenerator();
+    
+
+	
+	//recordUser.setup(&recordContext);
+
+	openNIRecorder.setUserSmoothing(filterFactor);				// built in openni skeleton smoothing...
+	openNIRecorder.setUseMaskPixelsAllUsers(isMasking);
+	openNIRecorder.setUsePointCloudsAllUsers(isCloud);
+	openNIRecorder.setMaxNumUsers(1);					// use this to set dynamic max number of users (NB: that a hard upper limit is defined by MAX_NUMBER_USERS in ofxUserGenerator)
     
 
 
-  
-
-
-	recordHandTracker.setup(&recordContext, 4);
-	recordHandTracker.setSmoothing(filterFactor);		// built in openni hand track smoothing...
-	recordHandTracker.setFilterFactors(filterFactor);	// custom smoothing/filtering (can also set per hand with setFilterFactor)...set them all to 0.1f to    begin with
+	openNIRecorder.addHandsGenerator();
+	openNIRecorder.addAllHandFocusGestures();
+	
     
-    recordHandTracker.setMaxNumHands(2);
+	openNIRecorder.getHandsGenerator().SetSmoothing(filterFactor);		// built in openni hand track smoothing... //TODO: add to ofxOpenNI
+	///XXX recordHandTracker.setFilterFactors(filterFactor);	// custom smoothing/filtering (can also set per hand with setFilterFactor)...set them all to 0.1f to    begin with
+    
+    openNIRecorder.setMaxNumHands(2);
+	
+	openNIRecorder.setRegister(true);
+    openNIRecorder.setMirror(true);
+    
 
-	recordContext.toggleRegisterViewport();
-	recordContext.toggleMirror();
+	//oniRecorder.setup(&recordContext, ONI_STREAMING);
 
-	oniRecorder.setup(&recordContext, ONI_STREAMING);
+
 	//oniRecorder.setup(&recordContext, ONI_CYCLIC, 60); // KINECT RECORDER
 	//read the warning in ofxOpenNIRecorder about memory usage with ONI_CYCLIC recording!!!
 
+	openNIRecorder.start(); //
 }
 
 void testApp::setupPlayback(string _filename) {
 
-	playContext.shutdown();
-	playContext.setupUsingRecording(ofToDataPath(_filename));
-	playDepth.setup(&playContext);
-	playImage.setup(&playContext);
+	openNIPlayer.stop();
+	openNIPlayer.setupFromONI(ofToDataPath(_filename));
+	
+	openNIPlayer.addDepthGenerator();
+    openNIPlayer.addImageGenerator();
+    
 
-	playUser.setup(&playContext);
-	playUser.setSmoothing(filterFactor);				// built in openni skeleton smoothing...
-	playUser.setUseMaskPixels(isMasking);
-	playUser.setUseCloudPoints(isCloud);
+	openNIPlayer.setUserSmoothing(filterFactor);				// built in openni skeleton smoothing...
+	openNIPlayer.setUseMaskPixelsAllUsers(isMasking);
+	openNIPlayer.setUsePointCloudsAllUsers(isCloud);
+	openNIPlayer.setMaxNumUsers(1);					// use this to set dynamic max number of users (NB: that a hard upper limit is defined by MAX_NUMBER_USERS in ofxUserGenerator)
+    
 
-	playHandTracker.setup(&playContext, 4);
-	playHandTracker.setSmoothing(filterFactor);			// built in openni hand track smoothing...
-	playHandTracker.setFilterFactors(filterFactor);		// custom smoothing/filtering (can also set per hand with setFilterFactor)...set them all to 0.1f to begin with
 
-	playContext.toggleRegisterViewport();
-	playContext.toggleMirror();
+	openNIPlayer.addHandsGenerator();
+	openNIPlayer.addAllHandFocusGestures();
+	
+    
+	openNIPlayer.getHandsGenerator().SetSmoothing(filterFactor);		// built in openni hand track smoothing... //TODO: add to ofxOpenNI
+	///XXX openNIPlayer.setFilterFactors(filterFactor);	// custom smoothing/filtering (can also set per hand with setFilterFactor)...set them all to 0.1f to    begin with
+    
+    openNIPlayer.setMaxNumHands(2);
+	
+	openNIPlayer.setRegister(true);
+    openNIPlayer.setMirror(true);
+    
+
 
 }
 
@@ -111,12 +129,10 @@ void testApp::update(){
 	if (isLive) {
 
 		// update all nodes
-		recordContext.update();
-		recordDepth.update();
-		recordImage.update();
+		openNIRecorder.update();
         
    //FACETRACKER:      
-        unsigned char *pixels = recordImage.getPixels();
+		unsigned char *pixels = openNIRecorder.getImagePixels().getPixels();
     
         //   Mat imgMat = Mat(640, 480, CV_8UC1, pixels, 0);  
         img.setFromPixels(pixels, 640, 480, OF_IMAGE_COLOR);
@@ -136,7 +152,7 @@ void testApp::update(){
         fboSaver.end();
         
 // RECORDING:::                
-        if(recorder.getIsRecording()) {
+		if(openNIRecorder.isRecording()) {
 
         
             if (tracker.getFound()){
@@ -153,7 +169,7 @@ void testApp::update(){
                 int   rh = faceBox.height+50;
                 ofImage faceImg;
 
-                         
+                         /* XXX
                 unsigned char face[ rw * rh * 3 ];  
   
                 for (int i = 0; i < rw; i++){  
@@ -169,15 +185,16 @@ void testApp::update(){
                         
                     }
                 }
-
                 
                 fboSaver.begin();
                 faceImg.setFromPixels(face, rw, rh, OF_IMAGE_COLOR);                
                 faceImg.draw(0,0);
                 fboSaver.end();
+
+				XXX */
                 
                 fboSaver.readToPixels(fboPixels);
-                recorder.addFrame(fboPixels);
+                //recorder.addFrame(fboPixels); QT QT QT QT QT
                 
             }
             
@@ -212,24 +229,28 @@ void testApp::update(){
         
 
         
-        recorder.update(); 
+//        recorder.update();   QT QT QT QT QT
+
 //////////         
         
 
 		
         // demo getting depth pixels directly from depth gen
-		depthRangeMask.setFromPixels(recordDepth.getDepthPixels(nearThreshold, farThreshold),
-									 recordDepth.getWidth(), recordDepth.getHeight(), OF_IMAGE_GRAYSCALE);
+		
+		
+		// TODO: addDepthThreshold(int _nearThreshold,
+
+		//XXX depthRangeMask.setFromPixels( openNIRecorder.getDepthPixels(nearThreshold, farThreshold), recordDepth.getWidth(), recordDepth.getHeight(), OF_IMAGE_GRAYSCALE);
 
 		// update tracking/recording nodes
-		recordUser.update();
-		if (isRecording) oniRecorder.update();
+		//XXX recordUser.update();
+		//XXX if (isRecording) oniRecorder.update();
 
 		// demo getting pixels from user gen
 		if (isTracking && isMasking) {
-			allUserMasks.setFromPixels(recordUser.getUserPixels(), recordUser.getWidth(), recordUser.getHeight(), OF_IMAGE_GRAYSCALE);
-			user1Mask.setFromPixels(recordUser.getUserPixels(1), recordUser.getWidth(), recordUser.getHeight(), OF_IMAGE_GRAYSCALE);
-			user2Mask.setFromPixels(recordUser.getUserPixels(2), recordUser.getWidth(), recordUser.getHeight(), OF_IMAGE_GRAYSCALE);
+			//XXX allUserMasks.setFromPixels(openNIRecorder.getuset.getUserPixels(), recordUser.getWidth(), recordUser.getHeight(), OF_IMAGE_GRAYSCALE);
+			//XXX user1Mask.setFromPixels(recordUser.getUserPixels(1), recordUser.getWidth(), recordUser.getHeight(), OF_IMAGE_GRAYSCALE);
+			//XXX user2Mask.setFromPixels(recordUser.getUserPixels(2), recordUser.getWidth(), recordUser.getHeight(), OF_IMAGE_GRAYSCALE);
 		}
         
 
@@ -243,23 +264,20 @@ void testApp::update(){
 	} else {
 
 		// update all nodes
-		playContext.update();
-		playDepth.update();
-		playImage.update();
+		openNIPlayer.update();
 
 		// demo getting depth pixels directly from depth gen
-		depthRangeMask.setFromPixels(playDepth.getDepthPixels(nearThreshold, farThreshold),
-									 playDepth.getWidth(), playDepth.getHeight(), OF_IMAGE_GRAYSCALE);
+		//XXX depthRangeMask.setFromPixels(playDepth.getDepthPixels(nearThreshold, farThreshold),									 playDepth.getWidth(), playDepth.getHeight(), OF_IMAGE_GRAYSCALE);
 
 		// update tracking/recording nodes
-		if (isTracking) playUser.update();
+		//XXX if (isTracking) playUser.update();
 
 		// demo getting pixels from user gen
-		if (isTracking && isMasking) {
-			allUserMasks.setFromPixels(playUser.getUserPixels(), playUser.getWidth(), playUser.getHeight(), OF_IMAGE_GRAYSCALE);
-			user1Mask.setFromPixels(playUser.getUserPixels(1), playUser.getWidth(), playUser.getHeight(), OF_IMAGE_GRAYSCALE);
-			user2Mask.setFromPixels(playUser.getUserPixels(2), playUser.getWidth(), playUser.getHeight(), OF_IMAGE_GRAYSCALE);
-		}
+		//XXX if (isTracking && isMasking) {
+		//XXX allUserMasks.setFromPixels(playUser.getUserPixels(), playUser.getWidth(), playUser.getHeight(), OF_IMAGE_GRAYSCALE);
+		//XXX user1Mask.setFromPixels(playUser.getUserPixels(1), playUser.getWidth(), playUser.getHeight(), OF_IMAGE_GRAYSCALE);
+		//XXX user2Mask.setFromPixels(playUser.getUserPixels(2), playUser.getWidth(), playUser.getHeight(), OF_IMAGE_GRAYSCALE);
+		//XXX }
 	}
 }
 
@@ -273,8 +291,8 @@ void testApp::draw(){
 
 	if (isLive) {
 
-//		recordDepth.draw(0,0,640,480);
-		recordImage.draw(0, 0, 640, 480);
+//XXX		recordDepth.draw(0,0,640,480);
+//XXX		recordImage.draw(0, 0, 640, 480);
         
   /*      
         //       TRACKER
@@ -314,22 +332,24 @@ void testApp::draw(){
 */
         
 
-        if (recordUser.getNumberOfTrackedUsers() > 0){
-            recordUser.startTracking(1);
+        if (openNIRecorder.getNumTrackedUsers() > 0){
+            //recordUser.startTracking(1);
             
-            recordUser.setUseCloudPoints(true);
+			openNIRecorder.setUsePointCloudsAllUsers(true);
 
             
-            ofPoint center = centermass(&recordUser, 1);
+			XnPoint3D com;
+			openNIRecorder.getUserGenerator().GetCoM(1, com);
+            //ofPoint center = centermass(&recordUser, 1);
+			ofPoint center(com.X, com.Y, com.Z);
+
             
             ofCircle(center.x, center.y,  10);
 
-			
             
+			 ofxOpenNIHand & handOne = openNIRecorder.getTrackedHand(1);
             
-                ofxTrackedHand* handOne =  recordHandTracker.getHand(1);
-            
-                ofPoint handPos = handOne->projectPos;
+                ofPoint handPos = handOne.getPosition();
                
             
                 ofSetColor(255, 0, 0);
@@ -340,7 +360,7 @@ void testApp::draw(){
             
                 ofDrawBitmapString(distHand, handPos.x, handPos.y);
 
-                recordHandTracker.drawHands();
+				openNIRecorder.drawHands();
 
 /* THIS IS FOR SKELETON CALIBRATION:            
             
@@ -387,20 +407,20 @@ void testApp::draw(){
 
 	} else {
 
-		playDepth.draw(0,0,640,480);
-		playImage.draw(640, 0, 640, 480);
+		openNIPlayer.drawDepth(0,0,640,480);
+		openNIPlayer.drawImage(640, 0, 640, 480);
 
 		depthRangeMask.draw(0, 480, 320, 240);	// can use this with openCV to make masks, find contours etc when not dealing with openNI 'User' like objects
 
 		if (isTracking) {
-			playUser.draw();
+			//openNIPlayer.draw();
 
 //			if (isMasking) drawMasks();
-			if (isCloud) drawPointCloud(&playUser, 0);	// 0 gives you all point clouds; use userID to see point clouds for specific users
+			//XXX if (isCloud) drawPointCloud(&playUser, 0);	// 0 gives you all point clouds; use userID to see point clouds for specific users
 
 		}
 		if (isTrackingHands)
-			playHandTracker.drawHands();
+			openNIPlayer.drawHands();
 	}
 
 	glPopMatrix();
@@ -409,12 +429,12 @@ void testApp::draw(){
 
 	string statusPlay		= (string)(isLive ? "LIVE STREAM" : "PLAY STREAM");
 	string statusRec		= (string)(!isRecording ? "READY" : "RECORDING");
-	string statusSkeleton	= (string)(isTracking ? "TRACKING USERS: " + (string)(isLive ? ofToString(recordUser.getNumberOfTrackedUsers()) : ofToString(playUser.getNumberOfTrackedUsers())) + "" : "NOT TRACKING USERS");
-	string statusSmoothSkel = (string)(isLive ? ofToString(recordUser.getSmoothing()) : ofToString(playUser.getSmoothing()));
-	string statusHands		= (string)(isTrackingHands ? "TRACKING HANDS: " + (string)(isLive ? ofToString(recordHandTracker.getNumTrackedHands()) : ofToString(playHandTracker.getNumTrackedHands())) + ""  : "NOT TRACKING");
+	string statusSkeleton	= (string)(isTracking ? "TRACKING USERS: " + (string)(isLive ? ofToString(openNIRecorder.getNumTrackedUsers()) : ofToString(openNIPlayer.getNumTrackedUsers())) + "" : "NOT TRACKING USERS");
+	string statusSmoothSkel = (string)(isLive ? ofToString(openNIRecorder.getUserSmoothing()) : ofToString(openNIPlayer.getUserSmoothing()));
+	string statusHands		= (string)(isTrackingHands ? "TRACKING HANDS: " + (string)(isLive ? ofToString(openNIRecorder.getNumTrackedHands()) : ofToString(openNIPlayer.getNumTrackedHands())) + ""  : "NOT TRACKING");
 	string statusFilter		= (string)(isFiltering ? "FILTERING" : "NOT FILTERING");
 	string statusFilterLvl	= ofToString(filterFactor);
-	string statusSmoothHand = (string)(isLive ? ofToString(recordHandTracker.getSmoothing()) : ofToString(playHandTracker.getSmoothing()));
+	//XXX string statusSmoothHand = (string)(isLive ? ofToString(openNIRecorder.getHandsGenerator().GetSmoothing()) : ofToString(playHandTracker.getSmoothing()));
 	string statusMask		= (string)(!isMasking ? "HIDE" : (isTracking ? "SHOW" : "YOU NEED TO TURN ON TRACKING!!"));
 	string statusCloud		= (string)(isCloud ? "ON" : "OFF");
 	string statusCloudData	= (string)(isCPBkgnd ? "SHOW BACKGROUND" : (isTracking ? "SHOW USER" : "YOU NEED TO TURN ON TRACKING!!"));
@@ -445,14 +465,14 @@ void testApp::draw(){
 	<< "    h : hand tracking         : " << statusHands << endl
 	<< "    f : filter hands (custom) : " << statusFilter << endl
 	<< "[ / ] : filter hands factor   : " << statusFilterLvl << endl
-	<< "; / ' : smooth hands (openni) : " << statusSmoothHand << endl
+//XXX 	<< "; / ' : smooth hands (openni) : " << statusSmoothHand << endl
 	<< "    m : drawing masks         : " << statusMask << endl
 	<< "    c : draw cloud points     : " << statusCloud << endl
 	<< "    b : cloud user data       : " << statusCloudData << endl
 	<< "- / + : nearThreshold         : " << ofToString(nearThreshold) << endl
 	<< "< / > : farThreshold          : " << ofToString(farThreshold) << endl
 	<< endl
-	<< "File  : " << oniRecorder.getCurrentFileName() << endl
+	//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 	<< "FPS   : " << ofToString(ofGetFrameRate()) << "  " << statusHardware << endl;
 
 	ofDrawBitmapString(msg.str(), 20, 560);
@@ -471,6 +491,8 @@ void testApp:: drawMasks() {
 	user2Mask.draw(640, 480, 320, 240);
 	
 }
+
+/* XXX
 
 void testApp::drawPointCloud(ofxUserGenerator * user_generator, int userID) {
 
@@ -502,6 +524,10 @@ void testApp::drawPointCloud(ofxUserGenerator * user_generator, int userID) {
 
 	glPopMatrix();
 }
+*/
+
+
+/* XXX
 
 ofPoint testApp::centermass(ofxUserGenerator * user_generator, int userID) {
  
@@ -577,7 +603,7 @@ ofPoint testApp::centermass(ofxUserGenerator * user_generator, int userID) {
     return result;
 }
 
-
+*/
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
@@ -596,23 +622,25 @@ void testApp::keyPressed(int key){
 		case 's':
 		case 'S':
 			if (isRecording) {
-				oniRecorder.stopRecord();
+				openNIRecorder.stopRecording();
 				isRecording = false;
 				break;
 			} else {
-				oniRecorder.startRecord(generateFileName());
+				openNIRecorder.startRecording(generateFileName());
 				isRecording = true;
 				break;
 			}
 			break;
 		case 'p':
 		case 'P':
-			if (oniRecorder.getCurrentFileName() != "" && !isRecording && isLive) {
-				setupPlayback(oniRecorder.getCurrentFileName());
-				isLive = false;
-			} else {
-				isLive = true;
-			}
+
+			//! XXX
+			//! XXX if (openNIRecorder.getCurrentFileName() != "" && !isRecording && isLive) {
+			//! XXX setupPlayback(oniRecorder.getCurrentFileName());
+			//! XXX	isLive = false;
+			//! XXX } else {
+			//! XXX isLive = true;
+			//! XXX }
 			break;
 		case 't':
 		case 'T':
@@ -621,26 +649,33 @@ void testApp::keyPressed(int key){
 		case 'h':
 		case 'H':
 			isTrackingHands = !isTrackingHands;
-			if(isLive) recordHandTracker.toggleTrackHands();
-			if(!isLive) playHandTracker.toggleTrackHands();
+			if (isTrackingHands)
+			{
+				//TODO: start tracking
+			}
+			else
+			{
+			if(isLive) openNIRecorder.getHandsGenerator().StopTrackingAll();
+			if(!isLive) openNIPlayer.getHandsGenerator().StopTrackingAll();
+			}
 			break;
 		case 'f':
 		case 'F':
 			isFiltering = !isFiltering;
-			recordHandTracker.isFiltering = isFiltering;
-			playHandTracker.isFiltering = isFiltering;
+//XXX			recordHandTracker.isFiltering = isFiltering;
+//XXX			playHandTracker.isFiltering = isFiltering;
 			break;
 		case 'm':
 		case 'M':
 			isMasking = !isMasking;
-			recordUser.setUseMaskPixels(isMasking);
-			playUser.setUseMaskPixels(isMasking);
+//XXX		recordUser.setUseMaskPixels(isMasking);
+//XXX		playUser.setUseMaskPixels(isMasking);
 			break;
 		case 'c':
 		case 'C':
 			isCloud = !isCloud;
-			recordUser.setUseCloudPoints(isCloud);
-			playUser.setUseCloudPoints(isCloud);
+//XXX			recordUser.setUsePointCloud(isCloud);
+//XXX			playUser.setUsePointCloud(isCloud);
 			break;
 		case 'b':
 		case 'B':
@@ -648,56 +683,56 @@ void testApp::keyPressed(int key){
 			break;
 		case '9':
 		case '(':
-			smooth = recordUser.getSmoothing();
+			smooth = openNIRecorder.getUserSmoothing();
 			if (smooth - 0.1f > 0.0f) {
-				recordUser.setSmoothing(smooth - 0.1f);
-				playUser.setSmoothing(smooth - 0.1f);
+				openNIRecorder.setUserSmoothing(smooth - 0.1f);
+				openNIPlayer.setUserSmoothing(smooth - 0.1f);
 			}
 			break;
 		case '0':
 		case ')':
-			smooth = recordUser.getSmoothing();
+		smooth = openNIRecorder.getUserSmoothing();	
 			if (smooth + 0.1f <= 1.0f) {
-				recordUser.setSmoothing(smooth + 0.1f);
-				playUser.setSmoothing(smooth + 0.1f);
+				openNIRecorder.setUserSmoothing(smooth + 0.1f);
+				openNIPlayer.setUserSmoothing(smooth + 0.1f);
 			}
 			break;
 		case '[':
 		//case '{':
 			if (filterFactor - 0.1f > 0.0f) {
 				filterFactor = filterFactor - 0.1f;
-				recordHandTracker.setFilterFactors(filterFactor);
-				if (oniRecorder.getCurrentFileName() != "") playHandTracker.setFilterFactors(filterFactor);
+				//XXX			recordHandTracker.setFilterFactors(filterFactor);
+				//XXX			if (oniRecorder.getCurrentFileName() != "") playHandTracker.setFilterFactors(filterFactor);
 			}
 			break;
 		case ']':
 		//case '}':
 			if (filterFactor + 0.1f <= 1.0f) {
 				filterFactor = filterFactor + 0.1f;
-				recordHandTracker.setFilterFactors(filterFactor);
-				if (oniRecorder.getCurrentFileName() != "") playHandTracker.setFilterFactors(filterFactor);
+				//XXX			recordHandTracker.setFilterFactors(filterFactor);
+				//XXX			if (oniRecorder.getCurrentFileName() != "") playHandTracker.setFilterFactors(filterFactor);
 			}
 			break;
 		case ';':
 		case ':':
-			smooth = recordHandTracker.getSmoothing();
+			//XXX			smooth = recordHandTracker.getSmoothing();
 			if (smooth - 0.1f > 0.0f) {
-				recordHandTracker.setSmoothing(smooth -  0.1f);
-				playHandTracker.setSmoothing(smooth -  0.1f);
+			//XXX				recordHandTracker.setSmoothing(smooth -  0.1f);
+			//XXX				playHandTracker.setSmoothing(smooth -  0.1f);
 			}
 			break;
 		case '\'':
 		case '\"':
-			smooth = recordHandTracker.getSmoothing();
+			//XXX			smooth = recordHandTracker.getSmoothing();
 			if (smooth + 0.1f <= 1.0f) {
-				recordHandTracker.setSmoothing(smooth +  0.1f);
-				playHandTracker.setSmoothing(smooth +  0.1f);
+			//XXX				recordHandTracker.setSmoothing(smooth +  0.1f);
+			//XXX				playHandTracker.setSmoothing(smooth +  0.1f);
 			}
 			break;
 		case '>':
 		case '.':
 			farThreshold += 50;
-			if (farThreshold > recordDepth.getMaxDepth()) farThreshold = recordDepth.getMaxDepth();
+			//XXX if (farThreshold > openNIRecorder.maxDepth()) farThreshold = recordDepth.getMaxDepth();
 			break;
 		case '<':
 		case ',':
@@ -708,7 +743,7 @@ void testApp::keyPressed(int key){
 		case '+':
 		case '=':
 			nearThreshold += 50;
-			if (nearThreshold > recordDepth.getMaxDepth()) nearThreshold = recordDepth.getMaxDepth();
+			//XXX if (nearThreshold > recordDepth.getMaxDepth()) nearThreshold = recordDepth.getMaxDepth();
 			break;
 
 		case '-':
@@ -717,15 +752,15 @@ void testApp::keyPressed(int key){
 			if (nearThreshold < 0) nearThreshold = 0;
 			break;
 		case 'r':
-			recordContext.toggleRegisterViewport();
+			//XXX recordContext.toggleRegisterViewport();
 			break;
             
         case '2':
-            recorder.finishMovie(); 
+            //XXX recorder.finishMovie(); 
             break;
             
         case '1':
-            recorder.startNewRecording(); 
+            //XXX recorder.startNewRecording(); 
             break; 
             
         default:
@@ -783,7 +818,7 @@ void testApp::windowResized(int w, int h){
 }
 
 void testApp::exit(){ 
-    recorder.exit(); 
+	openNIRecorder.stop(); 
 }
 
 
