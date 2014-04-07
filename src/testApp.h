@@ -88,19 +88,6 @@ public:
         ofPolyline fullFace;
 
     ofRectangle faceBox;
-// CAMERA:
-//    ofVideoGrabber cam;
-
-    
-//RECORDING VIDEO:
-    
-    ofFbo fboSaver;
-    ofPixels fboPixels;
-//    ofxQTKitAVScreenRecorder recorder; 
-
-    //WEBCAM
-//   ofxQTKitVideoGrabber grabber;
-
     
 };
 

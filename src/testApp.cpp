@@ -21,23 +21,6 @@ void testApp::setup() {
 
 	ofBackground(0, 0, 0);
 
-    
-    fboSaver.allocate(320, 240, GL_RGB);
-    fboPixels.allocate(320, 240, OF_IMAGE_COLOR);
-//    ofEnableAlphaBlending();
-//    alphaPNG.loadImage("1.png"); //test image
-    fboSaver.begin();
-    ofClear(255,255,255,0);
-    fboSaver.end();
-
-    
-    
-    //    cam.listDevices();
-    //    
-    //    cam.setDeviceID(3);
-    // 	cam.initGrabber(640, 480);
-
-
 }
 
 void testApp::setupRecording(string _filename) {
@@ -129,20 +112,6 @@ void testApp::update(){
 
 		// update all nodes
 		openNIRecorder.update();
-		
-//CLEAR FBO:
-        
-        fboSaver.begin();
-        ofClear(0,0,0,0);
-        fboSaver.end();
-        
-        
-        
-//        recorder.update();   QT QT QT QT QT
-
-//////////         
-        
-
 		
         // demo getting depth pixels directly from depth gen
 		
