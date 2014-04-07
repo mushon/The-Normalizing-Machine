@@ -21,7 +21,6 @@ void testApp::setup() {
 
 	ofBackground(0, 0, 0);
 
-    tracker.setup(); //face
     
     fboSaver.allocate(320, 240, GL_RGB);
     fboPixels.allocate(320, 240, OF_IMAGE_COLOR);
@@ -130,104 +129,14 @@ void testApp::update(){
 
 		// update all nodes
 		openNIRecorder.update();
-        
-   //FACETRACKER:      
-		unsigned char *pixels = openNIRecorder.getImagePixels().getPixels();
-    
-        //   Mat imgMat = Mat(640, 480, CV_8UC1, pixels, 0);  
-        img.setFromPixels(pixels, 640, 480, OF_IMAGE_COLOR);
-        //    pix.set(*pixels);
-        Mat imgMat = toCv(img);
-        
-        tracker.update(imgMat);
-
-  
-        
-        
-
+		
 //CLEAR FBO:
         
         fboSaver.begin();
         ofClear(0,0,0,0);
         fboSaver.end();
         
-// RECORDING:::                
-		if(openNIRecorder.isRecording()) {
-
         
-            if (tracker.getFound()){
-//            tracker.draw();
-
-//TRACKING FACE:
-    
-
-            fullFace = tracker.getImageFeature(ofxFaceTracker::FACE_OUTLINE);
-            faceBox = fullFace.getBoundingBox();
-                int      x = faceBox.x-25;
-                int     y = faceBox.y-50;
-                int    rw = faceBox.width+50;
-                int   rh = faceBox.height+50;
-                ofImage faceImg;
-
-                         /* XXX
-                unsigned char face[ rw * rh * 3 ];  
-  
-                for (int i = 0; i < rw; i++){  
-                    for (int j = 0; j < rh; j++){  
-                                           
-                    int mainPixelPos = ((j + y) * 640 + (i + x)) * 3;  
-                    int subPixlPos = (j * (rw) + i) * 3;  
-                    
-                    face[subPixlPos] = pixels[mainPixelPos];   // R  
-                    face[subPixlPos + 1] = pixels[mainPixelPos + 1];  // G  
-                    face[subPixlPos + 2] = pixels[mainPixelPos + 2];  // B  
-               
-                        
-                    }
-                }
-                
-                fboSaver.begin();
-                faceImg.setFromPixels(face, rw, rh, OF_IMAGE_COLOR);                
-                faceImg.draw(0,0);
-                fboSaver.end();
-
-				XXX */
-                
-                fboSaver.readToPixels(fboPixels);
-                //recorder.addFrame(fboPixels); QT QT QT QT QT
-                
-            }
-            
-            
-
-            
-                                
-        }
-        
-        
-        
-        //       TRACKER
-        if(tracker.getFound()) {
-//            
-//            ofMesh mesh = tracker.getObjectMesh();
-//            ofVec3f center =  mesh.getCentroid();
-//            
-//            ofNoFill();
-            
-            
-            
-            
-            
-            //EYE            
-            //        leftEye = tracker.getImageFeature(ofxFaceTracker::LEFT_EYE);
-            //        ofRectangle eyeBox = leftEye.getBoundingBox();
-            //        ofRect(eyeBox.x, eyeBox.y, eyeBox.width, eyeBox.height);
-            
-            
-            //            tracker.draw();
-        }
-        
-
         
 //        recorder.update();   QT QT QT QT QT
 
@@ -245,21 +154,6 @@ void testApp::update(){
 		// update tracking/recording nodes
 		//XXX recordUser.update();
 		//XXX if (isRecording) oniRecorder.update();
-
-		// demo getting pixels from user gen
-		if (isTracking && isMasking) {
-			//XXX allUserMasks.setFromPixels(openNIRecorder.getuset.getUserPixels(), recordUser.getWidth(), recordUser.getHeight(), OF_IMAGE_GRAYSCALE);
-			//XXX user1Mask.setFromPixels(recordUser.getUserPixels(1), recordUser.getWidth(), recordUser.getHeight(), OF_IMAGE_GRAYSCALE);
-			//XXX user2Mask.setFromPixels(recordUser.getUserPixels(2), recordUser.getWidth(), recordUser.getHeight(), OF_IMAGE_GRAYSCALE);
-		}
-        
-
-        
-        
-        
-        
-        
-
 
 	} else {
 
@@ -291,45 +185,8 @@ void testApp::draw(){
 
 	if (isLive) {
 
-//XXX		recordDepth.draw(0,0,640,480);
-//XXX		recordImage.draw(0, 0, 640, 480);
-        
-  /*      
-        //       TRACKER
-        if(tracker.getFound()) {
-            
-            ofMesh mesh = tracker.getObjectMesh();
-            ofVec3f center =  mesh.getCentroid();
-            
-            ofNoFill();
-            ofRect(faceBox.x-25, faceBox.y-50, faceBox.width+50, faceBox.height+50);
-            
-            ofImage faceImg;        
-            faceImg.allocate(faceBox.width+50, faceBox.height+50, OF_IMAGE_COLOR);
-            
-            
-            
-            //        tracker.draw();
-            ofPushMatrix();
-            ofTranslate(640, 480);
-            //    ofSetColor(255,0,0);
-            
-            ofTranslate(100, 100);
-            //   ofSetColor(0,255,0);
-            
-            ofPopMatrix();
-            
-            
-            //EYE            
-            //        leftEye = tracker.getImageFeature(ofxFaceTracker::LEFT_EYE);
-            //        ofRectangle eyeBox = leftEye.getBoundingBox();
-            //        ofRect(eyeBox.x, eyeBox.y, eyeBox.width, eyeBox.height);
-            
-            
-            //            tracker.draw();
-        }
-        
-*/
+openNIRecorder.drawDepth(0,0,640,480);
+openNIRecorder.drawImage(640,0,640,480);
         
 
         if (openNIRecorder.getNumTrackedUsers() > 0){

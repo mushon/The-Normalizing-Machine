@@ -74,12 +74,8 @@ public:
 
 	float				filterFactor;
 
-        ofImage img;
+    ofImage img;
     
-///
-    
-    
-    ofxFaceTracker tracker;
 	ofVec2f position;
 	float scale;
 	ofVec3f orientation;
