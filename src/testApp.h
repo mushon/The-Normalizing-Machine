@@ -88,7 +88,9 @@ public:
         ofPolyline fullFace;
 
     ofRectangle faceBox;
-    
+
+	string lastDump;
+
 };
 
 #endif

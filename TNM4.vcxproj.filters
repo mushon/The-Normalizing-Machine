@@ -115,6 +115,9 @@
     <ClCompile Include="src\testApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxProfile\src\ofxProfile.cpp">
+      <Filter>addons\ofxProfile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -254,6 +257,9 @@
     </Filter>
     <Filter Include="addons\ofxOpenNI\src">
       <UniqueIdentifier>{AD812F33-7C24-A6AD-00DA-EC2B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxProfile">
+      <UniqueIdentifier>{e5810f8f-d2c8-4a47-9fef-bd28bf8f5ee6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -631,6 +637,9 @@
     </ClInclude>
     <ClInclude Include="src\testApp.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxProfile\src\ofxProfile.h">
+      <Filter>addons\ofxProfile</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

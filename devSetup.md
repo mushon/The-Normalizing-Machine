@@ -11,3 +11,6 @@ FTracker.cc/h (or whatever) - this solves Tracker issues with ofxCv's Tracker.cp
 Download & Install OpenNI 1.5.2.x
 //put link
 Restart Computer (sets paths)
+
+Copy facetracker/model/ directory to bin/data/model/ of the project
+
