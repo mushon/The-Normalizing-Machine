@@ -28,7 +28,7 @@ void testApp::setup() {
 
 void testApp::setupRecording(string _filename) {
 
-	openNIRecorder.setup(false);
+	openNIRecorder.setup(true);
     openNIRecorder.addDepthGenerator();
     openNIRecorder.addImageGenerator();
     
@@ -59,6 +59,7 @@ void testApp::setupPlayback(string _filename) {
 //--------------------------------------------------------------
 void testApp::update(){
 
+
 #ifdef TARGET_OSX // only working on Mac at the moment
 	hardware.update();
 #endif
@@ -66,8 +67,11 @@ void testApp::update(){
 	if (isLive) {
 
 		// update all nodes
+
+		ofxProfileSectionPush("openni update");
 		openNIRecorder.update();
-		
+		ofxProfileSectionPop();
+
         // demo getting depth pixels directly from depth gen
 		
 		
@@ -101,17 +105,13 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	ofxProfileThisFunction();
 
-	ofxProfileSectionPush("draw profiler information");
-	ofDrawBitmapString( lastDump, ofPoint( 640, 500 ) );
-	ofxProfileSectionPop();
+	lastDump = ofxProfile::describe();
 	
-	ofxProfileSectionPush("draw instruction text");
-	ofDrawBitmapString( "press 'd' to update profile information, 'c' to clear profile data", ofPoint( 10, ofGetHeight()-20 ) );
-	ofxProfileSectionPop();
-
-
+	ofxProfileThisFunction();
+	ofDrawBitmapString( lastDump, ofPoint( 640, 500 ) );
+	//ofDrawBitmapString( " 'c' to clear profile data", ofPoint( 10, ofGetHeight()-20 ) );
+	
 
 	ofSetColor(255, 255, 255);
 
@@ -120,9 +120,16 @@ void testApp::draw(){
 
 	if (isLive) {
 
-openNIRecorder.drawDepth(0,0,640,480);
-openNIRecorder.drawImage(640,0,640,480);
-        
+
+		ofxProfileSectionPush("drawDepth");
+		openNIRecorder.drawDepth(0,0,640,480);
+		ofxProfileSectionPop();
+
+		ofxProfileSectionPush("drawImage");
+		openNIRecorder.drawImage(640,0,640,480);
+        ofxProfileSectionPop();
+
+
 		if (isTracking) {
 			openNIRecorder.drawSkeletons();
 		}
@@ -232,6 +239,7 @@ openNIRecorder.drawImage(640,0,640,480);
 	stringstream msg;
 
 	msg
+		<< "F: Fullscreen" << endl
 	<< "    s : start/stop recording  : " << statusRec << endl
 	<< "    p : playback/live streams : " << statusPlay << endl
 	<< "    t : skeleton tracking     : " << statusSkeleton << endl
@@ -394,13 +402,11 @@ void testApp::keyPressed(int key){
 			break;
 #endif
 
-		case 'd':	
-			lastDump = ofxProfile::describe();
-		break;
-
+		
+		
 		case'c':
-		ofxProfile::clear();
-		lastDump = "";
+			ofxProfile::clear();
+			lastDump = "";
 		break;
 	
 
@@ -445,11 +451,16 @@ void testApp::keyPressed(int key){
 			}
 			break;
 		case 'f':
-		case 'F':
 			isFiltering = !isFiltering;
 //XXX			recordHandTracker.isFiltering = isFiltering;
 //XXX			playHandTracker.isFiltering = isFiltering;
 			break;
+		
+		case 'F':
+			ofToggleFullscreen();
+			break;
+
+
 		case 'm':
 		case 'M':
 			isMasking = !isMasking;
