@@ -106,9 +106,6 @@
     <ClCompile Include="..\..\..\addons\ofxOpenNI\src\ofxOpenNI.cpp">
       <Filter>addons\ofxOpenNI\src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOpenNI\src\ofxOpenNITypes.cpp">
-      <Filter>addons\ofxOpenNI\src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxFaceTracker\libs\FaceTracker\src\lib\FTracker.cc">
       <Filter>addons\ofxFaceTracker\libs\FaceTracker\src\lib</Filter>
     </ClCompile>

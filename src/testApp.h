@@ -52,10 +52,9 @@ public:
     */
 
 	ofxOpenNI openNIRecorder;
-    ofxOpenNI openNIPlayer;
+    ofxOpenNI openNIPlayers[4];
+	int n_players;
 
-    ofxOpenNILimb leftHand, rightHand, neck;
-    
 
     
 
@@ -64,8 +63,6 @@ public:
 #endif
 
 	void				drawMasks();
-	void				drawPointCloud(xn::UserGenerator* user_generator, int userID);
-    ofPoint                centermass(xn::UserGenerator* user_generator, int userID);
 
 	int					nearThreshold, farThreshold;
 	int					pointCloudRotationY;
