@@ -24,10 +24,10 @@ void testApp::setup() {
 	filterFactor = 0.1f;
 
 	setupRecording();
-	setupPlayback("data\\t1.oni");
-	setupPlayback("data\\t2.oni");
-	setupPlayback("data\\t3.oni");
-	setupPlayback("data\\t4.oni");
+	setupPlayback("e:\\t1.oni");
+	setupPlayback("E:\\t2.oni");
+	setupPlayback("e:\\t3.oni");
+	setupPlayback("e:\\t4.oni");
 
 
 	ofBackground(0, 0, 0);
@@ -90,14 +90,18 @@ void testApp::update(){
 
 		// update all nodes
 
-		ofxProfileSectionPush("openni update");
+		ofxProfileSectionPush("openni update live");
 		openNIRecorder.update();
 		ofxProfileSectionPop();
 
 		
 		for (int i=0; i<n_players; i++)
 		{
-			ofxProfileSectionPush("openni update p1");
+			stringstream ss;
+			ss << "openni update ";
+			ss << i;
+
+			ofxProfile::sectionPush(ss.str());
 			openNIPlayers[i].update();
 			ofxProfileSectionPop();
 	
@@ -140,7 +144,12 @@ void testApp::draw(){
 	lastDump = ofxProfile::describe();
 	
 	ofxProfileThisFunction();
+
+	ofSetColor(0);
 	ofDrawBitmapString( lastDump, ofPoint( 640, 500 ) );
+	ofSetColor(255);
+	ofDrawBitmapString( lastDump, ofPoint( 641, 501 ) );
+
 	//ofDrawBitmapString( " 'c' to clear profile data", ofPoint( 10, ofGetHeight()-20 ) );
 	
 
@@ -157,13 +166,14 @@ void testApp::draw(){
 		ofxProfileSectionPop();
 
 		
-		
+		ofTranslate(320,10);
 		for (int i=0; i<n_players; i++)
 		{
-			ofxProfileSectionPush("drawImage");
-			ofTranslate(320,10);
+			ofPushMatrix();
+			ofScale(0.5, 0.5);
+			ofTranslate(0, i * 480);
 			openNIPlayers[i].draw();
-			ofxProfileSectionPop();
+			ofPopMatrix();
 		}
 		//openNIRecorder.drawImage(640,0,640,480);
         
@@ -447,11 +457,11 @@ void testApp::keyPressed(int key){
 		case 's':
 		case 'S':
 			if (isRecording) {
-//				openNIRecorder.stopRecording();
+				openNIRecorder.stopRecording();
 				isRecording = false;
 				break;
 			} else {
-//				openNIRecorder.startRecording(generateFileName());
+				openNIRecorder.startRecording(generateFileName());
 				isRecording = true;
 				break;
 			}
@@ -566,7 +576,7 @@ void testApp::keyPressed(int key){
 
 string testApp::generateFileName() {
 
-	string _root = "kinectRecord";
+	string _root = "e:\\kinectRecord";
 
 	string _timestamp = ofToString(ofGetDay()) +
 	ofToString(ofGetMonth()) +
@@ -614,9 +624,12 @@ void testApp::windowResized(int w, int h){
 }
 
 void testApp::exit(){ 
+
 	openNIRecorder.stop(); 
 	for (int i=0; i<n_players; i++)
 	{
 		openNIPlayers[i].stop();
-	}	
+	}
+	Sleep(1000);
+	ofxOpenNI::shutdown();
 }
