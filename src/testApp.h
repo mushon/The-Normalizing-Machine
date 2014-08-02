@@ -1,13 +1,11 @@
 #ifndef _TEST_APP
 #define _TEST_APP
 
-//#define USE_IR // Uncomment this to use infra red instead of RGB cam...
-
 #include "ofxOpenNI.h"
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxFaceTracker.h"
-//#include "ofxQTKitAVScreenRecorder.h" 
+
 using namespace ofxCv;
 using namespace cv;
 
@@ -28,6 +26,7 @@ public:
 	void windowResized(int w, int h);
 	void exit();
 
+private:
 	void	setupRecording(string _filename = "");
 	void	setupPlayback(string _filename);
 	string	generateFileName();
@@ -35,56 +34,10 @@ public:
 	bool				isLive, isTracking, isRecording, isCloud, isCPBkgnd, isMasking;
 	bool				isTrackingHands, isFiltering;
 
-	/*
-	xn::Context	recordContext, playContext;
-	xn::DepthGenerator	recordDepth, playDepth;
-
-#ifdef USE_IR
-	xn::IRGenerator		recordImage, playImage;
-#else
-	xn::ImageGenerator	recordImage, playImage;
-#endif
-
-	xn::HandsGenerator	recordHandTracker, playHandTracker;
-
-	xn::UserGenerator	recordUser, playUser;
-	xn::Recorder	oniRecorder;
-    */
-
 	ofxOpenNI openNIRecorder;
     ofxOpenNI openNIPlayers[4];
 	int n_players;
-
-
-    
-
-#if defined (TARGET_OSX) //|| defined(TARGET_LINUX) // only working on Mac/Linux at the moment (but on Linux you need to run as sudo...)
-	ofxHardwareDriver	hardware;
-#endif
-
-	void				drawMasks();
-
-	int					nearThreshold, farThreshold;
-	int					pointCloudRotationY;
-
-	ofImage				allUserMasks, user1Mask, user2Mask, depthRangeMask;
-
-	float				filterFactor;
-
-    ofImage img;
-    
-	ofVec2f position;
-	float scale;
-	ofVec3f orientation;
-	ofMatrix4x4 rotationMatrix;
-	
-	Mat translation, rotation;
-	ofMatrix4x4 pose;
-    
-    ofPolyline leftEye;
-        ofPolyline fullFace;
-
-    ofRectangle faceBox;
+	string lastRecordingFilename;
 
 	string lastDump;
 

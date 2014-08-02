@@ -18,11 +18,6 @@ void testApp::setup() {
 
 	n_players = 0;
 
-	nearThreshold = 500;
-	farThreshold  = 1000;
-
-	filterFactor = 0.1f;
-
 	setupRecording();
 	setupPlayback("e:\\t1.oni");
 	setupPlayback("E:\\t2.oni");
@@ -40,16 +35,12 @@ void testApp::setupRecording(string _filename) {
     openNIRecorder.addDepthStream();
     openNIRecorder.addImageStream();
     
-	//openNIRecorder.addUserTracker();
+	openNIRecorder.addUserTracker();
 	
-	/*
-	openNIRecorder.setUserSmoothing(filterFactor);				// built in openni skeleton smoothing...
-	openNIRecorder.setUseMaskPixelsAllUsers(isMasking);
-	openNIRecorder.setUsePointCloudsAllUsers(isCloud);
-	openNIRecorder.setMaxNumUsers(1);					// use this to set dynamic max number of users (NB: that a hard upper limit is defined by MAX_NUMBER_USERS in ofxUserGenerator)
-    */
+	//openNIRecorder.setUserSmoothing(filterFactor);				// built in openni skeleton smoothing...
+	//openNIRecorder.setMaxNumUsers(1);					// use this to set dynamic max number of users (NB: that a hard upper limit is defined by MAX_NUMBER_USERS in ofxUserGenerator)
 
-	//openNIRecorder.addHandsTracker();
+	openNIRecorder.addHandsTracker();
 	/*
 	openNIRecorder.addAllHandFocusGestures();    
 	openNIRecorder.setHandSmoothing(filterFactor);
@@ -74,8 +65,9 @@ void testApp::setupPlayback(string _filename) {
     openNIPlayers[n_players].addImageStream();
     openNIPlayers[n_players].start();
 	n_players++;
+	
+	//if (n_players >= 4) n_players=0;
 
-//openNIPlayer.startPlayer(ofToDataPath(_filename));
 }
 
 //--------------------------------------------------------------
@@ -176,90 +168,10 @@ void testApp::draw(){
 			ofPopMatrix();
 		}
 		//openNIRecorder.drawImage(640,0,640,480);
-        
 
 
 
-		if (isTracking) {
-			//openNIRecorder.drawUsers();
-		}
-
-		if (isTracking) {
-			//openNIRecorder.drawHands();
-		}
-
-
-		/*
-        if (0 && openNIRecorder.getNumTrackedUsers() > 0){
-            
-			XnPoint3D com;
-			openNIRecorder.getUserGenerator().GetCoM(1, com);
-            //ofPoint center = centermass(&recordUser, 1);
-			ofPoint center(com.X, com.Y, com.Z);
-
-            
-            ofCircle(center.x, center.y,  10);
-			*/
-
-            /*
-			 ofxOpenNIHand & handOne = openNIRecorder.getTrackedHand(1);
-            
-                ofPoint handPos = handOne.getPosition();
-               
-            
-                ofSetColor(255, 0, 0);
-                ofLine(handPos, center);
-                string distHand	= ofToString(sqrt(pow(center.x-handPos.x,2) + pow(center.y-handPos.y,2)));
-            
-                cout << handPos.z - center.z << " DISTANCE TO CENTER" << endl;
-            
-                ofDrawBitmapString(distHand, handPos.x, handPos.y);
-				
-
-       
-		*/
 	}
-
-        
-   //		depthRangeMask.draw(0, 480, 320, 240);	// can use this with openCV to make masks, find contours etc when not dealing with openNI 'User' like objects
-
-            
-        /* DRAWING PIXELS OF USER: 
-        
-		if (isTracking) {
-			recordUser.draw();
-
-			if (isMasking) drawMasks();
-			if (isCloud) drawPointCloud(&recordUser, 1);	// 0 gives you all point clouds; use userID to see point clouds for specific users
-
-		}
-    */
-
-
-        
-
-
-	 
-/*
-
-}else {
-
-		openNIPlayer.drawDepth(0,0,640,480);
-		openNIPlayer.drawImage(640, 0, 640, 480);
-
-		depthRangeMask.draw(0, 480, 320, 240);	// can use this with openCV to make masks, find contours etc when not dealing with openNI 'User' like objects
-
-		if (isTracking) {
-			openNIPlayer.drawSkeletons();
-
-//			if (isMasking) drawMasks();
-			//XXX if (isCloud) drawPointCloud(&playUser, 0);	// 0 gives you all point clouds; use userID to see point clouds for specific users
-
-		}
-		if (isTrackingHands)
-			openNIPlayer.drawHands();
-	}
-	*/
 	glPopMatrix();
 
 	ofSetColor(255, 255, 0);
@@ -270,27 +182,12 @@ void testApp::draw(){
 //	string statusSmoothSkel = (string)(isLive ? ofToString(openNIRecorder.getUserSmoothing()) : ofToString(openNIPlayer.getUserSmoothing()));
 //	string statusHands		= (string)(isTrackingHands ? "TRACKING HANDS: " + (string)(isLive ? ofToString(openNIRecorder.getNumTrackedHands()) : ofToString(openNIPlayer.getNumTrackedHands())) + ""  : "NOT TRACKING");
 	string statusFilter		= (string)(isFiltering ? "FILTERING" : "NOT FILTERING");
-	string statusFilterLvl	= ofToString(filterFactor);
 //	string statusSmoothHand = (string)(isLive ? ofToString(openNIRecorder.getHandsSmoothing()) : ofToString(openNIPlayer.getHandsSmoothing()));
 	string statusMask		= (string)(!isMasking ? "HIDE" : (isTracking ? "SHOW" : "YOU NEED TO TURN ON TRACKING!!"));
 	string statusCloud		= (string)(isCloud ? "ON" : "OFF");
 	string statusCloudData	= (string)(isCPBkgnd ? "SHOW BACKGROUND" : (isTracking ? "SHOW USER" : "YOU NEED TO TURN ON TRACKING!!"));
 
 	string statusHardware;
-
-#ifdef TARGET_OSX // only working on Mac at the moment
-	ofPoint statusAccelerometers = hardware.getAccelerometers();
-	stringstream	statusHardwareStream;
-
-	statusHardwareStream
-	<< "ACCELEROMETERS:"
-	<< " TILT: " << hardware.getTiltAngle() << "/" << hardware.tilt_angle
-	<< " x - " << statusAccelerometers.x
-	<< " y - " << statusAccelerometers.y
-	<< " z - " << statusAccelerometers.z;
-
-	statusHardware = statusHardwareStream.str();
-#endif
 
 	stringstream msg;
 
@@ -301,14 +198,10 @@ void testApp::draw(){
 //	<< "    t : skeleton tracking     : " << statusSkeleton << endl
 //	<< "( / ) : smooth skely (openni) : " << statusSmoothSkel << endl
 //	<< "    h : hand tracking         : " << statusHands << endl
-	<< "    f : filter hands (custom) : " << statusFilter << endl
-	<< "[ / ] : filter hands factor   : " << statusFilterLvl << endl
 	
 	<< "    m : drawing masks         : " << statusMask << endl
 	<< "    c : draw cloud points     : " << statusCloud << endl
 	<< "    b : cloud user data       : " << statusCloudData << endl
-	<< "- / + : nearThreshold         : " << ofToString(nearThreshold) << endl
-	<< "< / > : farThreshold          : " << ofToString(farThreshold) << endl
 	<< endl
 	//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 	<< "FPS   : " << ofToString(ofGetFrameRate()) << "  " << statusHardware << endl;
@@ -317,135 +210,12 @@ void testApp::draw(){
 
 }
 
-/* XXX
-
-void testApp::drawPointCloud(ofxUserGenerator * user_generator, int userID) {
-
-	glPushMatrix();
-
-	int w = user_generator->getWidth();
-	int h = user_generator->getHeight();
-
-	glTranslatef(w, h/2, -500);
-	ofRotateY(pointCloudRotationY);
-
-	glBegin(GL_POINTS);
-
-	int step = 1;
-
-	for(int y = 0; y < h; y += step) {
-		for(int x = 0; x < w; x += step) {
-			ofPoint pos = user_generator->getWorldCoordinateAt(x, y, userID);
-			if (pos.z == 0 && isCPBkgnd) continue;	// gets rid of background -> still a bit weird if userID > 0...
-			ofColor color = user_generator->getWorldColorAt(x,y, userID);
-			glColor4ub((unsigned char)color.r, (unsigned char)color.g, (unsigned char)color.b, (unsigned char)color.a);
-			glVertex3f(pos.x, pos.y, pos.z);
-		}
-	}
-
-	glEnd();
-
-	glColor3f(1.0f, 1.0f, 1.0f);
-
-	glPopMatrix();
-}
-*/
-
-
-/* XXX
-
-ofPoint testApp::centermass(ofxUserGenerator * user_generator, int userID) {
- 
-
-
-    int w = user_generator->getWidth();
-	int h = user_generator->getHeight();
-    int sumx = 0;
-    int sumy = 0;
-    int sumz = 0;
-    int tot = 1;
-    int step = 1;
-    
-	for(int y = 0; y < h; y += step) {
-		for(int x = 0; x < w; x += step) {
-			ofPoint pos = user_generator->getWorldCoordinateAt(x, y, userID);
-			if (pos.z == 0 && isCPBkgnd) continue;	// gets rid of background -> still a bit weird if userID > 0...
-            sumx += pos.x;
-            sumy += pos.y;
-            sumz += pos.z;
-            tot +=1;
-		}
-	}
-    sumx = sumx/tot;
-    sumy = sumy/tot;
-    sumz = sumz/tot;    
-
-    //    
-//    int sumxs = 0;
-//    int sumys = 0;
-//    int sumzs = 0;
-//    //sumz = sumz/tot;
-//    
-//    for(int y = 0; y < h; y += step) {
-//		for(int x = 0; x < w; x += step) {
-//			ofPoint pos = user_generator->getWorldCoordinateAt(x, y, userID);
-//			if (pos.z == 0 && isCPBkgnd) continue;	// gets rid of background -> still a bit weird if userID > 0...
-//            sumxs += pow(pos.x-sumx,2);
-//            sumys += pow(pos.y-sumy,2);
-//            //sumzs += pow(pos.z-sumz,2);
-//        }
-//	}
-//    
-//    int sumxn = 0;
-//    int sumyn = 0;
-//    int sumzn = 0;
-//    int totn = 1;
-//    
-//    sumxs = sqrt(sumxs/tot)/2;
-//    sumys = sqrt(sumys/tot)/2;
-//    //sumzs = sqrt(sumzs/tot);
-//    
-//    for(int y = 0; y < h; y += step) {
-//		for(int x = 0; x < w; x += step) {
-//			ofPoint pos = user_generator->getWorldCoordinateAt(x, y, userID);
-//			if (pos.z > 0 && (pow(pos.x-sumx,2)) < sumxs && (pow(pos.y-sumy,2)) < sumys) {            
-//                sumxn += pos.x;
-//                sumyn += pos.y;
-//                //sumzn += pow(pos.z-sumz,2);
-//                totn +=1;
-//            }
-//		}
-//	}
-//    
-//    
-// 
-//    cout << sumx << " " << sumy << " " << sumz << " " << tot << " SUMX SUMY SUMZ TOT" << endl;
-
-
-//    ofRect(sumxn/totn, sumyn/totn, 10, 10);
-    ofPoint result(sumx, sumy, sumz);
-
-    return result;
-}
-
-*/
-
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 
 	float smooth;
 
 	switch (key) {
-#ifdef TARGET_OSX // only working on Mac at the moment
-		case 357: // up key
-			hardware.setTiltAngle(hardware.tilt_angle++);
-			break;
-		case 359: // down key
-			hardware.setTiltAngle(hardware.tilt_angle--);
-			break;
-#endif
-
-		
 		
 		case'c':
 			ofxProfile::clear();
@@ -459,9 +229,15 @@ void testApp::keyPressed(int key){
 			if (isRecording) {
 				openNIRecorder.stopRecording();
 				isRecording = false;
+
+				//HACKHACK !!!
+				//setupPlayback(lastRecordingFilename);
 				break;
+
+
 			} else {
-				openNIRecorder.startRecording(generateFileName());
+				lastRecordingFilename = generateFileName();
+				openNIRecorder.startRecording(lastRecordingFilename);
 				isRecording = true;
 				break;
 			}
@@ -503,19 +279,6 @@ void testApp::keyPressed(int key){
 			ofToggleFullscreen();
 			break;
 
-
-		case 'm':
-		case 'M':
-			isMasking = !isMasking;
-//XXX		recordUser.setUseMaskPixels(isMasking);
-//XXX		playUser.setUseMaskPixels(isMasking);
-			break;
-		//case 'c':
-		case 'C':
-			isCloud = !isCloud;
-//XXX			recordUser.setUsePointCloud(isCloud);
-//XXX			playUser.setUsePointCloud(isCloud);
-			break;
 		case 'b':
 		case 'B':
 			isCPBkgnd = !isCPBkgnd;
@@ -533,32 +296,6 @@ void testApp::keyPressed(int key){
 			if (smooth + 0.1f <= 1.0f) {
 //				openNIRecorder.setUserSmoothing(smooth + 0.1f);
 			}
-			break;
-
-		case '>':
-		case '.':
-			farThreshold += 50;
-			//XXX if (farThreshold > openNIRecorder.maxDepth()) farThreshold = recordDepth.getMaxDepth();
-			break;
-		case '<':
-		case ',':
-			farThreshold -= 50;
-			if (farThreshold < 0) farThreshold = 0;
-			break;
-
-		case '+':
-		case '=':
-			nearThreshold += 50;
-			//XXX if (nearThreshold > recordDepth.getMaxDepth()) nearThreshold = recordDepth.getMaxDepth();
-			break;
-
-		case '-':
-		case '_':
-			nearThreshold -= 50;
-			if (nearThreshold < 0) nearThreshold = 0;
-			break;
-		case 'r':
-			//XXX recordContext.toggleRegisterViewport();
 			break;
             
         case '2':
@@ -591,36 +328,22 @@ string testApp::generateFileName() {
 
 }
 
-//--------------------------------------------------------------
 void testApp::keyReleased(int key){
-
 }
 
-//--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y ){
-
-	if (isCloud) pointCloudRotationY = x;
-
 }
 
-//--------------------------------------------------------------
 void testApp::mouseDragged(int x, int y, int button){
-
 }
 
-//--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
-
 }
 
-//--------------------------------------------------------------
 void testApp::mouseReleased(int x, int y, int button){
-
 }
 
-//--------------------------------------------------------------
 void testApp::windowResized(int w, int h){
-
 }
 
 void testApp::exit(){ 
@@ -630,6 +353,7 @@ void testApp::exit(){
 	{
 		openNIPlayers[i].stop();
 	}
-	Sleep(1000);
+
+	Sleep(5000);
 	ofxOpenNI::shutdown();
 }
