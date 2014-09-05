@@ -5,6 +5,7 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxFaceTracker.h"
+#include "ofxUI.h"
 
 using namespace ofxCv;
 using namespace cv;
@@ -26,13 +27,33 @@ public:
 	void windowResized(int w, int h);
 	void exit();
 
+	void guiEvent(ofxUIEventArgs &e);
+	bool drawVideo;
+	bool drawGui;
+	
+	struct States
+	{
+		States() :
+			Idle("Idle"),
+			Recognition("Recognition"),
+			Selection("Selection"),
+			Confirmation("Confirmation")
+		{
+		}
+		const string Idle, Recognition, Selection, Confirmation;
+	} State;
+
+	
+
 private:
 	void	setupRecording(string _filename = "");
 	void	setupPlayback(string _filename);
 	string	generateFileName();
 
-	bool				isLive, isTracking, isRecording, isCloud, isCPBkgnd, isMasking;
-	bool				isTrackingHands, isFiltering;
+	bool isLive;
+	bool isTracking;
+	bool isRecording;
+	bool isTrackingHands;
 
 	ofxOpenNI openNIRecorder;
     ofxOpenNI openNIPlayers[4];
@@ -41,6 +62,10 @@ private:
 
 	string lastDump;
 
+	
+	void setupGui();
+	ofxUISuperCanvas *gui0;
+	
 };
 
 #endif

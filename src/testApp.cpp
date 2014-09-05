@@ -10,21 +10,17 @@ void testApp::setup() {
 	isLive			= true;
 	isTracking		= true;
 	isTrackingHands	= true;
-	isFiltering		= false;
 	isRecording		= false;
-	isCloud			= false;
-	isCPBkgnd		= true;
-	isMasking		= true;
-
+	
 	n_players = 0;
 
 	setupRecording();
-	setupPlayback("e:\\t1.oni");
+	setupPlayback("e:\\t111.oni");
 	setupPlayback("E:\\t2.oni");
 	setupPlayback("e:\\t3.oni");
 	setupPlayback("e:\\t4.oni");
 
-
+	setupGui();
 	ofBackground(0, 0, 0);
 
 }
@@ -142,50 +138,39 @@ void testApp::draw(){
 	ofSetColor(255);
 	ofDrawBitmapString( lastDump, ofPoint( 641, 501 ) );
 
-	//ofDrawBitmapString( " 'c' to clear profile data", ofPoint( 10, ofGetHeight()-20 ) );
+	if (drawVideo) {
 	
-
-	ofSetColor(255, 255, 255);
-
-	glPushMatrix();
-	glScalef(0.75, 0.75, 0.75);
-
-	if (isLive) {
-
-
-		ofxProfileSectionPush("drawDepth");
-		openNIRecorder.draw();
-		ofxProfileSectionPop();
-
-		
-		ofTranslate(320,10);
 		for (int i=0; i<n_players; i++)
 		{
+
 			ofPushMatrix();
-			ofScale(0.5, 0.5);
-			ofTranslate(0, i * 480);
-			openNIPlayers[i].draw();
+			int dx = i%2 + 1;
+			int dy = i/2 + 1;
+
+			float sc = 0.5;
+
+			ofTranslate(dx * ofGetScreenWidth() / 3 - openNIPlayers[i].imageWidth * sc / 2,
+				dy * ofGetScreenHeight() / 3 - openNIPlayers[i].imageHeight * sc / 2);
+
+			ofScale(sc, sc);
+			openNIPlayers[i].drawImage();
+
 			ofPopMatrix();
 		}
-		//openNIRecorder.drawImage(640,0,640,480);
 
-
-
+		ofPushMatrix();
+		ofTranslate(ofGetScreenWidth() / 2 - openNIRecorder.imageWidth / 2,
+					ofGetScreenHeight() / 2 - openNIRecorder.imageHeight / 2);
+		ofxProfileSectionPush("draw live");
+		openNIRecorder.draw();
+		ofxProfileSectionPop();
+		ofPopMatrix();
 	}
-	glPopMatrix();
 
 	ofSetColor(255, 255, 0);
 
 	string statusPlay		= (string)(isLive ? "LIVE STREAM" : "PLAY STREAM");
 	string statusRec		= (string)(!isRecording ? "READY" : "RECORDING");
-//	string statusSkeleton	= (string)(isTracking ? "TRACKING USERS: " + (string)(isLive ? ofToString(openNIRecorder.getNumTrackedUsers()) : ofToString(openNIPlayer.getNumTrackedUsers())) + "" : "NOT TRACKING USERS");
-//	string statusSmoothSkel = (string)(isLive ? ofToString(openNIRecorder.getUserSmoothing()) : ofToString(openNIPlayer.getUserSmoothing()));
-//	string statusHands		= (string)(isTrackingHands ? "TRACKING HANDS: " + (string)(isLive ? ofToString(openNIRecorder.getNumTrackedHands()) : ofToString(openNIPlayer.getNumTrackedHands())) + ""  : "NOT TRACKING");
-	string statusFilter		= (string)(isFiltering ? "FILTERING" : "NOT FILTERING");
-//	string statusSmoothHand = (string)(isLive ? ofToString(openNIRecorder.getHandsSmoothing()) : ofToString(openNIPlayer.getHandsSmoothing()));
-	string statusMask		= (string)(!isMasking ? "HIDE" : (isTracking ? "SHOW" : "YOU NEED TO TURN ON TRACKING!!"));
-	string statusCloud		= (string)(isCloud ? "ON" : "OFF");
-	string statusCloudData	= (string)(isCPBkgnd ? "SHOW BACKGROUND" : (isTracking ? "SHOW USER" : "YOU NEED TO TURN ON TRACKING!!"));
 
 	string statusHardware;
 
@@ -195,16 +180,9 @@ void testApp::draw(){
 		<< "F: Fullscreen" << endl
 	<< "    s : start/stop recording  : " << statusRec << endl
 	<< "    p : playback/live streams : " << statusPlay << endl
-//	<< "    t : skeleton tracking     : " << statusSkeleton << endl
-//	<< "( / ) : smooth skely (openni) : " << statusSmoothSkel << endl
-//	<< "    h : hand tracking         : " << statusHands << endl
-	
-	<< "    m : drawing masks         : " << statusMask << endl
-	<< "    c : draw cloud points     : " << statusCloud << endl
-	<< "    b : cloud user data       : " << statusCloudData << endl
 	<< endl
 	//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
-	<< "FPS   : " << ofToString(ofGetFrameRate()) << "  " << statusHardware << endl;
+	<< "FPS   : " << ofToString(ofGetFrameRate()) << endl;
 
 	ofDrawBitmapString(msg.str(), 20, 560);
 
@@ -279,24 +257,6 @@ void testApp::keyPressed(int key){
 			ofToggleFullscreen();
 			break;
 
-		case 'b':
-		case 'B':
-			isCPBkgnd = !isCPBkgnd;
-			break;
-		case '9':
-		case '(':
-//			smooth = openNIRecorder.getUserSmoothing();
-			if (smooth - 0.1f > 0.0f) {
-//				openNIRecorder.setUserSmoothing(smooth - 0.1f);
-			}
-			break;
-		case '0':
-		case ')':
-//		smooth = openNIRecorder.getUserSmoothing();	
-			if (smooth + 0.1f <= 1.0f) {
-//				openNIRecorder.setUserSmoothing(smooth + 0.1f);
-			}
-			break;
             
         case '2':
             //XXX recorder.finishMovie(); 
@@ -354,6 +314,57 @@ void testApp::exit(){
 		openNIPlayers[i].stop();
 	}
 
-	Sleep(5000);
+//	Sleep(5000);
 	ofxOpenNI::shutdown();
+}
+
+void testApp::setupGui(){
+	float dim = 16;
+ 
+    gui0 = new ofxUISuperCanvas("Turing Normalizing Machine");
+	
+	bool* b = new bool;
+	*b=false;
+
+	drawVideo=false;
+	gui0->addToggle("drawVideo", &drawVideo)->bindToKey('v');
+
+	gui0->addToggle("drawGui", &drawGui)->bindToKey('g');
+
+	 vector<string> states;
+	states.push_back("Idle"); //video grid
+	states.push_back("Recognition"); //instructions
+	states.push_back("Selection"); //add face layer
+	// start recording around raise hand gesture
+	states.push_back("Confirmation"); //add face layer
+	// present selection
+	// record data:	
+	// time, file, location, selction v/x
+	gui0->addRadio("State", states, OFX_UI_ORIENTATION_VERTICAL, dim, dim)->activateToggle(State.Idle); 
+
+
+
+	
+	
+
+
+	gui0->autoSizeToFitWidgets();
+    ofAddListener(gui0->newGUIEvent,this,&testApp::guiEvent);   
+}
+
+
+void testApp::guiEvent(ofxUIEventArgs &e)
+{
+
+	string name = e.getName();
+	int kind = e.getKind();
+	cout << "got event from: " << name << endl;
+ 
+	 if(name == "State")
+    {
+        ofxUIRadio *radio = (ofxUIRadio *) e.widget;
+        cout << "value" << radio->getValue() << endl;
+		cout << " active name: " << radio->getActiveName() << endl;
+    }
+  
 }
