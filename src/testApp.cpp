@@ -7,11 +7,13 @@
 //--------------------------------------------------------------
 void testApp::setup() {
 
-	isLive			= true;
+	state = State::Idle;
+	spot = ofPoint(0, 0, 2000); // two meter from sensor
+
 	isTracking		= true;
 	isTrackingHands	= true;
 	isRecording		= false;
-	
+
 	n_players = 0;
 
 	setupRecording();
@@ -19,6 +21,9 @@ void testApp::setup() {
 	setupPlayback("E:\\t2.oni");
 	setupPlayback("e:\\t3.oni");
 	setupPlayback("e:\\t4.oni");
+
+
+	drawVideo=false;
 
 	setupGui();
 	ofBackground(0, 0, 0);
@@ -28,11 +33,11 @@ void testApp::setup() {
 void testApp::setupRecording(string _filename) {
 
 	openNIRecorder.setup();
-    openNIRecorder.addDepthStream();
-    openNIRecorder.addImageStream();
-    
+	openNIRecorder.addDepthStream();
+	openNIRecorder.addImageStream();
+
 	openNIRecorder.addUserTracker();
-	
+
 	//openNIRecorder.setUserSmoothing(filterFactor);				// built in openni skeleton smoothing...
 	//openNIRecorder.setMaxNumUsers(1);					// use this to set dynamic max number of users (NB: that a hard upper limit is defined by MAX_NUMBER_USERS in ofxUserGenerator)
 
@@ -40,11 +45,11 @@ void testApp::setupRecording(string _filename) {
 	/*
 	openNIRecorder.addAllHandFocusGestures();    
 	openNIRecorder.setHandSmoothing(filterFactor);
-    
-    openNIRecorder.setMaxNumHands(2);
-	
+
+	openNIRecorder.setMaxNumHands(2);
+
 	openNIRecorder.setRegister(true);
-    openNIRecorder.setMirror(true);
+	openNIRecorder.setMirror(true);
 	*/
 
 	openNIRecorder.start(); //
@@ -55,74 +60,103 @@ void testApp::setupPlayback(string _filename) {
 
 	//openNIPlayers.push_back(ofxOpenNI());
 	//ofxOpenNI& player = openNIPlayers.back();
-	
+
 	openNIPlayers[n_players].setup(_filename.c_str());
-    openNIPlayers[n_players].addDepthStream();
-    openNIPlayers[n_players].addImageStream();
-    openNIPlayers[n_players].start();
+	openNIPlayers[n_players].addDepthStream();
+	openNIPlayers[n_players].addImageStream();
+	openNIPlayers[n_players].start();
 	n_players++;
-	
+
 	//if (n_players >= 4) n_players=0;
 
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
+	userMessage = stringstream();
+
+	ofxProfileSectionPush("openni update live");
+	openNIRecorder.update();
+	ofxProfileSectionPop();
+
+	int nVisibleUsers = 0;
+	// HACK: nite internally counts down 10 seconds, even if user is not visible
+	if(openNIRecorder.trackedUsers.size() > 0)
+	{	
+		for(map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it){
+			ofxOpenNIUser& u = it->second;
+			if (u.isVisible()) nVisibleUsers++;
+		}
+	}
 
 
-#ifdef TARGET_OSX // only working on Mac at the moment
-	hardware.update();
-#endif
 
-	if (isLive) {
-
-		// update all nodes
-
-		ofxProfileSectionPush("openni update live");
-		openNIRecorder.update();
-		ofxProfileSectionPop();
-
-		
-		for (int i=0; i<n_players; i++)
+	if (nVisibleUsers == 0)
+	{
+		if (state == Idle)
 		{
-			stringstream ss;
-			ss << "openni update ";
-			ss << i;
+			userMessage << "Idle";
+		}
+		else  //stop instructions / show warning with countdown
+		{
+			unsigned long long timeout = ofGetSystemTime() - lastTimeSeenUser; // counting up
+			int countdown = stateResetTimeout - timeout;
 
-			ofxProfile::sectionPush(ss.str());
-			openNIPlayers[i].update();
-			ofxProfileSectionPop();
-	
+			userMessage << "Countdown: " << countdown << endl;
+			if (countdown < 0)
+			{
+				state = Idle;
+			}
+		}		
+	}
+	else 
+	{
+		lastTimeSeenUser = ofGetSystemTime();
+
+		switch (state)
+		{
+		case Idle: //this happens only once in the transition
+			state = Recognition;
+			userMessage << "TODO: begin to show instructions";
+			break;
+
+		case Recognition:
+			userMessage << "TODO: show instructions" << endl;
+			userMessage << "waiting for hand Raise" << endl;
+
+
+			//select closest user to the spot
+			for(map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
+			{
+				ofxOpenNIUser& u = it->second;
+				if (u.isVisible())
+				{
+					ofPoint headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
+					userMessage << headPoint << endl;
+
+
+				}
+				
+				
+			}
+
+			break;
+
 		}
 
-        // demo getting depth pixels directly from depth gen
-		
-		
-		// TODO: addDepthThreshold(int _nearThreshold,
+	}
+	
 
-		//XXX depthRangeMask.setFromPixels( openNIRecorder.getDepthPixels(nearThreshold, farThreshold), recordDepth.getWidth(), recordDepth.getHeight(), OF_IMAGE_GRAYSCALE);
 
-		// update tracking/recording nodes
-		//XXX recordUser.update();
-		//XXX if (isRecording) oniRecorder.update();
 
-	} else {
+	for (int i=0; i<n_players; i++)
+	{
+		stringstream ss;
+		ss << "openni update " << i;
 
-		// update all nodes
-		//openNIPlayer.update();
-
-		// demo getting depth pixels directly from depth gen
-		//XXX depthRangeMask.setFromPixels(playDepth.getDepthPixels(nearThreshold, farThreshold),									 playDepth.getWidth(), playDepth.getHeight(), OF_IMAGE_GRAYSCALE);
-
-		// update tracking/recording nodes
-		//XXX if (isTracking) playUser.update();
-
-		// demo getting pixels from user gen
-		//XXX if (isTracking && isMasking) {
-		//XXX allUserMasks.setFromPixels(playUser.getUserPixels(), playUser.getWidth(), playUser.getHeight(), OF_IMAGE_GRAYSCALE);
-		//XXX user1Mask.setFromPixels(playUser.getUserPixels(1), playUser.getWidth(), playUser.getHeight(), OF_IMAGE_GRAYSCALE);
-		//XXX user2Mask.setFromPixels(playUser.getUserPixels(2), playUser.getWidth(), playUser.getHeight(), OF_IMAGE_GRAYSCALE);
-		//XXX }
+		ofxProfileSectionPush(ss.str());
+		openNIPlayers[i].update();
+		ofxProfileSectionPop();
 	}
 }
 
@@ -130,7 +164,7 @@ void testApp::update(){
 void testApp::draw(){
 
 	lastDump = ofxProfile::describe();
-	
+
 	ofxProfileThisFunction();
 
 	ofSetColor(0);
@@ -139,7 +173,7 @@ void testApp::draw(){
 	ofDrawBitmapString( lastDump, ofPoint( 641, 501 ) );
 
 	if (drawVideo) {
-	
+
 		for (int i=0; i<n_players; i++)
 		{
 
@@ -159,8 +193,8 @@ void testApp::draw(){
 		}
 
 		ofPushMatrix();
-		ofTranslate(ofGetScreenWidth() / 2 - openNIRecorder.imageWidth / 2,
-					ofGetScreenHeight() / 2 - openNIRecorder.imageHeight / 2);
+		//ofTranslate(ofGetScreenWidth() / 2 - openNIRecorder.imageWidth / 2,
+		//	ofGetScreenHeight() / 2 - openNIRecorder.imageHeight / 2);
 		ofxProfileSectionPush("draw live");
 		openNIRecorder.draw();
 		ofxProfileSectionPop();
@@ -169,20 +203,21 @@ void testApp::draw(){
 
 	ofSetColor(255, 255, 0);
 
-	string statusPlay		= (string)(isLive ? "LIVE STREAM" : "PLAY STREAM");
 	string statusRec		= (string)(!isRecording ? "READY" : "RECORDING");
-
-	string statusHardware;
 
 	stringstream msg;
 
 	msg
+		<< "User Message: " << userMessage.str() << endl
 		<< "F: Fullscreen" << endl
-	<< "    s : start/stop recording  : " << statusRec << endl
-	<< "    p : playback/live streams : " << statusPlay << endl
-	<< endl
-	//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
-	<< "FPS   : " << ofToString(ofGetFrameRate()) << endl;
+		<< "    s : start/stop recording  : " << statusRec << endl
+		<< endl
+		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
+		<< "FPS   : " << ofToString(ofGetFrameRate()) << endl
+		<< "State : " << state << endl
+		<< "Height: " << openNIRecorder.imageHeight << endl
+		<< "Width : " << openNIRecorder.imageWidth << endl;
+
 
 	ofDrawBitmapString(msg.str(), 20, 560);
 
@@ -194,80 +229,78 @@ void testApp::keyPressed(int key){
 	float smooth;
 
 	switch (key) {
-		
-		case'c':
-			ofxProfile::clear();
-			lastDump = "";
+
+	case'c':
+		ofxProfile::clear();
+		lastDump = "";
 		break;
-	
 
 
-		case 's':
-		case 'S':
-			if (isRecording) {
-				openNIRecorder.stopRecording();
-				isRecording = false;
 
-				//HACKHACK !!!
-				//setupPlayback(lastRecordingFilename);
-				break;
+	case 's':
+	case 'S':
+		if (isRecording) {
+			openNIRecorder.stopRecording();
+			isRecording = false;
 
-
-			} else {
-				lastRecordingFilename = generateFileName();
-				openNIRecorder.startRecording(lastRecordingFilename);
-				isRecording = true;
-				break;
-			}
-			break;
-		case 'p':
-		case 'P':
-
-			//! XXX
-			//! XXX if (openNIRecorder.getCurrentFileName() != "" && !isRecording && isLive) {
-			//! XXX setupPlayback(oniRecorder.getCurrentFileName());
-			//! XXX	isLive = false;
-			//! XXX } else {
-			//! XXX isLive = true;
-			//! XXX }
-			break;
-		case 't':
-		case 'T':
-			isTracking = !isTracking;
-			break;
-		case 'h':
-		case 'H':
-			isTrackingHands = !isTrackingHands;
-			if (!isTrackingHands)
-			{
-				//TODO: start tracking
-			}
-			else
-			{
-//				if(isLive) openNIRecorder.getHandsGenerator().StopTrackingAll();
-			}
-			break;
-		case 'f':
-			isFiltering = !isFiltering;
-//XXX			recordHandTracker.isFiltering = isFiltering;
-//XXX			playHandTracker.isFiltering = isFiltering;
-			break;
-		
-		case 'F':
-			ofToggleFullscreen();
+			//HACKHACK !!!
+			//setupPlayback(lastRecordingFilename);
 			break;
 
-            
-        case '2':
-            //XXX recorder.finishMovie(); 
-            break;
-            
-        case '1':
-            //XXX recorder.startNewRecording(); 
-            break; 
-            
-        default:
-            break;
+
+		} else {
+			lastRecordingFilename = generateFileName();
+			openNIRecorder.startRecording(lastRecordingFilename);
+			isRecording = true;
+			break;
+		}
+		break;
+	case 'p':
+	case 'P':
+
+		//! XXX
+		//! XXX if (openNIRecorder.getCurrentFileName() != "" && !isRecording && isLive) {
+		//! XXX setupPlayback(oniRecorder.getCurrentFileName());
+		//! XXX	isLive = false;
+		//! XXX } else {
+		//! XXX isLive = true;
+		//! XXX }
+		break;
+	case 't':
+	case 'T':
+		isTracking = !isTracking;
+		break;
+	case 'h':
+	case 'H':
+		isTrackingHands = !isTrackingHands;
+		if (!isTrackingHands)
+		{
+			//TODO: start tracking
+		}
+		else
+		{
+			//				if(isLive) openNIRecorder.getHandsGenerator().StopTrackingAll();
+		}
+		break;
+
+	case 'F':
+		ofToggleFullscreen();
+		break;
+
+	case 'g':
+		gui->toggleVisible();
+		break;
+
+	case '2':
+		//XXX recorder.finishMovie(); 
+		break;
+
+	case '1':
+		//XXX recorder.startNewRecording(); 
+		break; 
+
+	default:
+		break;
 	}
 }
 
@@ -276,11 +309,11 @@ string testApp::generateFileName() {
 	string _root = "e:\\kinectRecord";
 
 	string _timestamp = ofToString(ofGetDay()) +
-	ofToString(ofGetMonth()) +
-	ofToString(ofGetYear()) +
-	ofToString(ofGetHours()) +
-	ofToString(ofGetMinutes()) +
-	ofToString(ofGetSeconds());
+		ofToString(ofGetMonth()) +
+		ofToString(ofGetYear()) +
+		ofToString(ofGetHours()) +
+		ofToString(ofGetMinutes()) +
+		ofToString(ofGetSeconds());
 
 	string _filename = (_root + _timestamp + ".oni");
 
@@ -314,24 +347,21 @@ void testApp::exit(){
 		openNIPlayers[i].stop();
 	}
 
-//	Sleep(5000);
+	//	Sleep(5000);
 	ofxOpenNI::shutdown();
 }
 
 void testApp::setupGui(){
 	float dim = 16;
- 
-    gui0 = new ofxUISuperCanvas("Turing Normalizing Machine");
-	
-	bool* b = new bool;
-	*b=false;
 
-	drawVideo=false;
-	gui0->addToggle("drawVideo", &drawVideo)->bindToKey('v');
+	gui = new ofxUISuperCanvas("Turing Normalizing Machine");
 
-	gui0->addToggle("drawGui", &drawGui)->bindToKey('g');
+	gui->addToggle("draw (v)ideo", &drawVideo)->bindToKey('v');
+	gui->addToggle("draw (g)ui", &drawGui)->bindToKey('g');
 
-	 vector<string> states;
+	gui->addSpacer();
+
+	vector<string> states;
 	states.push_back("Idle"); //video grid
 	states.push_back("Recognition"); //instructions
 	states.push_back("Selection"); //add face layer
@@ -340,16 +370,11 @@ void testApp::setupGui(){
 	// present selection
 	// record data:	
 	// time, file, location, selction v/x
-	gui0->addRadio("State", states, OFX_UI_ORIENTATION_VERTICAL, dim, dim)->activateToggle(State.Idle); 
+	//	gui->addRadio("State", states, OFX_UI_ORIENTATION_VERTICAL, dim, dim)->activateToggle(State.Idle); 
 
 
-
-	
-	
-
-
-	gui0->autoSizeToFitWidgets();
-    ofAddListener(gui0->newGUIEvent,this,&testApp::guiEvent);   
+	gui->autoSizeToFitWidgets();
+	ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);   
 }
 
 
@@ -359,12 +384,28 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 	string name = e.getName();
 	int kind = e.getKind();
 	cout << "got event from: " << name << endl;
- 
-	 if(name == "State")
-    {
-        ofxUIRadio *radio = (ofxUIRadio *) e.widget;
-        cout << "value" << radio->getValue() << endl;
+
+	if(name == "State")
+	{
+		ofxUIRadio *radio = (ofxUIRadio *) e.widget;
+		cout << "value" << radio->getValue() << endl;
 		cout << " active name: " << radio->getActiveName() << endl;
-    }
-  
+	}
+
+}
+
+
+std::ostream& operator<<( std::ostream& os, const testApp::State& state )
+{
+#define X(state) case testApp::State::state: os << #state; break;
+	switch(state)
+	{
+		X(Idle);
+		X(Recognition);
+		X(Selection);
+		X(Confirmation);
+	}
+#undef X
+
+	return os;
 }

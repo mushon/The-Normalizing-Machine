@@ -31,9 +31,9 @@ public:
 	bool drawVideo;
 	bool drawGui;
 	
-	struct States
+	struct StateString
 	{
-		States() :
+		StateString() :
 			Idle("Idle"),
 			Recognition("Recognition"),
 			Selection("Selection"),
@@ -41,7 +41,14 @@ public:
 		{
 		}
 		const string Idle, Recognition, Selection, Confirmation;
-	} State;
+	} stateString;
+
+	enum State {
+		Idle, Recognition, Selection, Confirmation
+	};
+	State state;
+	static const unsigned long long stateResetTimeout = 5 * 1000; // 5 seconds
+	unsigned long long lastTimeSeenUser;
 
 	
 
@@ -50,7 +57,6 @@ private:
 	void	setupPlayback(string _filename);
 	string	generateFileName();
 
-	bool isLive;
 	bool isTracking;
 	bool isRecording;
 	bool isTrackingHands;
@@ -62,9 +68,13 @@ private:
 
 	string lastDump;
 
+	stringstream userMessage;
+
+	ofPoint spot;
+
 	
 	void setupGui();
-	ofxUISuperCanvas *gui0;
+	ofxUISuperCanvas* gui;
 	
 };
 
