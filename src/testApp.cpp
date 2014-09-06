@@ -7,7 +7,8 @@
 //--------------------------------------------------------------
 void testApp::setup() {
 
-	state = State::Idle;
+	state = IDLE;
+
 	spot = ofPoint(0, 0, 2000); // two meter from sensor
 
 	isTracking		= true;
@@ -93,10 +94,12 @@ void testApp::update(){
 
 	if (nVisibleUsers == 0)
 	{
-		if (state == Idle)
+		if (state == IDLE)
 		{
 			userMessage << "Idle";
+			selectedUser = SelectedUser(); //reset
 		}
+
 		else  //stop instructions / show warning with countdown
 		{
 			unsigned long long timeout = ofGetSystemTime() - lastTimeSeenUser; // counting up
@@ -105,47 +108,162 @@ void testApp::update(){
 			userMessage << "Countdown: " << countdown << endl;
 			if (countdown < 0)
 			{
-				state = Idle;
+				state = IDLE;
 			}
 		}		
 	}
 	else 
 	{
 		lastTimeSeenUser = ofGetSystemTime();
+		float minDist = 99999;
+		const float SPOT_RADIUS = 300.0f;
 
 		switch (state)
 		{
-		case Idle: //this happens only once in the transition
-			state = Recognition;
-			userMessage << "TODO: begin to show instructions";
-			break;
-
-		case Recognition:
-			userMessage << "TODO: show instructions" << endl;
-			userMessage << "waiting for hand Raise" << endl;
-
-
-			//select closest user to the spot
-			for(map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
+		case IDLE: //this happens only once in the transition
 			{
-				ofxOpenNIUser& u = it->second;
-				if (u.isVisible())
-				{
-					ofPoint headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
-					userMessage << headPoint << endl;
-
-
-				}
-				
-				
+				state = RECOGNITION;
+				userMessage << "TODO: begin to show instructions";
+				break;
 			}
 
-			break;
+		case RECOGNITION:
+			{
+				userMessage << "TODO: show instructions" << endl;
 
+				//select closest user to the spot (if there's more than one user in the scene)
+				for(map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
+				{
+					ofxOpenNIUser& u = it->second;
+					if (u.isVisible())
+					{
+						ofPoint headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
+						userMessage << headPoint << endl;
+
+						float dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z).length(); // discard height(y)
+						if (dist < minDist)
+						{
+							selectedUser.id = it->first;
+							minDist = dist;
+						}
+
+					}
+				}
+
+				if (selectedUser.id != SelectedUser::NO_USER)
+				{
+					state = GOTO_SPOT;
+				}
+			}
+		case GOTO_SPOT:
+			{
+				ofxOpenNIUser& closestUser = openNIRecorder.trackedUsers[selectedUser.id];
+				ofPoint headPoint = closestUser.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
+				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)
+
+
+				if (dist.length() > SPOT_RADIUS) //TODO: extern var (gui)
+				{
+					userMessage << "go to the spot. Please move " 
+						<< (dist.x < 0 ? "Right" : "Left")
+						<< " and "
+						<< (dist.y > 0 ? "Forward" : "Back") 
+						<< endl;
+					//TODO: instruct user to step into spot (visualy? top view)
+				}
+				else
+				{
+					state = RAISE_HAND;
+				}
+				break;
+			}
+		case RAISE_HAND:
+			{
+
+				ofxOpenNIUser& closestUser = openNIRecorder.trackedUsers[selectedUser.id];
+				ofPoint headPoint = closestUser.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
+				ofPoint rightHandPoint = closestUser.getJoints().at(nite::JointType::JOINT_RIGHT_HAND).positionReal;
+
+				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)
+
+
+				if (dist.length() > SPOT_RADIUS) //TODO: extern var (gui)
+				{
+					state = GOTO_SPOT;
+				}
+				else
+				{
+					ofPoint rightShoulder = closestUser.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER).positionReal;
+					if (rightHandPoint.y < rightShoulder.y)
+					{
+						userMessage << "waiting for hand Raise" << endl;
+					}
+					else
+					{
+						state = SELECTION;
+					}
+				}
+
+				break;
+			}
+		case SELECTION:
+			{
+				ofxOpenNIUser& closestUser = openNIRecorder.trackedUsers[selectedUser.id];
+				ofPoint headPoint = closestUser.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
+				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)
+				if (dist.length() > SPOT_RADIUS) //TODO: extern var (gui)
+				{
+					//give timeout?
+					state = GOTO_SPOT;
+				}
+				else
+				{
+					userMessage << "TODO: instructions how to select" << endl;
+					userMessage << "waiting for selection" << endl;
+
+					//compute trajectory (shoulder/hand)
+					ofPoint rightHandPoint = closestUser.getJoints().at(nite::JointType::JOINT_RIGHT_HAND).positionReal;
+					ofPoint rightShoulder = closestUser.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER).positionReal;
+
+					selectedUser.updatePointingDir(rightHandPoint - rightShoulder);
+
+					ofPoint p = selectedUser.pointingDir;
+					userMessage << "pointing dir: " << p << endl;
+
+					// TODO: sanity check if hand is +- at shoulder level
+					ofVec2f v(p.x, p.y);
+
+					float halfTouchScreenSize = 500;
+					v /= halfTouchScreenSize; // virtual screen with size of 2 * halfTouchScreenSize 
+
+					ofVec2f s(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
+					v.map(s, ofVec2f(ofGetScreenWidth(), 0), ofVec2f(0, -1 * ofGetScreenHeight())); // reverse y, assume -1 < v.x, v.y < 1
+					selectedUser.screenPoint = v;
+
+
+					//TODO select mechanism (click/timeout)
+					bool selected = false;
+					if(selected)
+					{
+						//selected item (x out of 4)
+						state = CONFIRMATION;
+
+					}
+
+				}
+
+
+				break;
+
+			}
+		case CONFIRMATION:
+			{
+				break;
+			}
 		}
 
 	}
-	
+
 
 
 
@@ -200,6 +318,80 @@ void testApp::draw(){
 		ofxProfileSectionPop();
 		ofPopMatrix();
 	}
+	if (state == RECOGNITION || state == GOTO_SPOT)
+	{
+		//draw user map
+
+		ofPushMatrix();
+		ofPushStyle();
+		ofSetColor(ofColor::white);
+
+		ofTranslate(10, 480);
+
+		float w = 320;
+		float h = 240;
+
+		float xFactor = w/4000;
+		float zFactor = h/4000;
+
+		ofNoFill();
+		ofRect(0, 0, w, h);
+		ofDrawBitmapString("Sensor", w/2, 0);
+
+		ofVec2f spot2d(w/2 + spot.x * xFactor, spot.z * zFactor);
+
+		ofSetColor(ofColor::red);
+		ofFill();
+
+		ofCircle(spot2d, 18);
+		ofSetColor(ofColor::white);
+
+		for(map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
+		{
+			ofxOpenNIUser& u = it->second;
+			if (u.isVisible())
+			{
+				ofPoint headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
+				ofVec2f v(w/2 + headPoint.x * xFactor, headPoint.z * zFactor);
+				ofCircle(v, 5);
+			}
+		}
+
+		ofPopStyle();
+		ofPopMatrix();
+	}
+
+	if (state == SELECTION)
+	{
+		ofPushStyle();
+
+		ofVec2f v = selectedUser.screenPoint;
+
+		float zVal = -selectedUser.pointingDir.z; //reverse z
+		float minHandShoulderDistance = 100; //10cm
+		float maxHandShoulderDistance = 300; //30cm
+
+		float minCursorSize = 3;
+		float maxCursorSize = 30;
+
+		ofNoFill();
+		ofSetLineWidth(3);
+		ofCircle(v, maxCursorSize);
+
+		float zp = ofMap(zVal, minHandShoulderDistance, maxHandShoulderDistance , 0, 1, true);
+
+		ofColor markerColor(ofColor::red);
+		markerColor.lerp(ofColor::green, zp);
+		ofSetColor(markerColor);
+
+		float zl = ofMap(zVal, minHandShoulderDistance, maxHandShoulderDistance , minCursorSize, maxCursorSize, true);
+
+		ofFill();
+		ofCircle(v, zl);
+
+		ofPopStyle();
+	}
+
 
 	ofSetColor(255, 255, 0);
 
@@ -214,7 +406,7 @@ void testApp::draw(){
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 		<< "FPS   : " << ofToString(ofGetFrameRate()) << endl
-		<< "State : " << state << endl
+		<< "State : " << stateToString(state) << endl
 		<< "Height: " << openNIRecorder.imageHeight << endl
 		<< "Width : " << openNIRecorder.imageWidth << endl;
 
@@ -394,18 +586,3 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 
 }
 
-
-std::ostream& operator<<( std::ostream& os, const testApp::State& state )
-{
-#define X(state) case testApp::State::state: os << #state; break;
-	switch(state)
-	{
-		X(Idle);
-		X(Recognition);
-		X(Selection);
-		X(Confirmation);
-	}
-#undef X
-
-	return os;
-}

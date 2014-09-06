@@ -30,27 +30,68 @@ public:
 	void guiEvent(ofxUIEventArgs &e);
 	bool drawVideo;
 	bool drawGui;
-	
-	struct StateString
-	{
-		StateString() :
-			Idle("Idle"),
-			Recognition("Recognition"),
-			Selection("Selection"),
-			Confirmation("Confirmation")
-		{
-		}
-		const string Idle, Recognition, Selection, Confirmation;
-	} stateString;
 
 	enum State {
-		Idle, Recognition, Selection, Confirmation
+		IDLE, RECOGNITION, GOTO_SPOT, RAISE_HAND, SELECTION, CONFIRMATION
 	};
 	State state;
+
+	const string stateToString(const testApp::State& state )
+	{
+		string str;
+#define X(state) case testApp::State::state: str = #state; break;
+		switch(state)
+		{
+			X(IDLE);
+			X(RECOGNITION);
+			X(GOTO_SPOT);
+			X(RAISE_HAND);
+			X(SELECTION);
+			X(CONFIRMATION);
+		}
+#undef X
+
+		return str;
+	}
+
 	static const unsigned long long stateResetTimeout = 5 * 1000; // 5 seconds
 	unsigned long long lastTimeSeenUser;
 
+	struct SelectedUser
+	{
+		static const int NO_USER = -1;
+		
+		float smoothingFactor;
+
+		int id;
+		ofVec3f pointingDir;
+		ofVec3f pointingVelocity;
+		ofVec2f screenPoint;
+
+		SelectedUser() : 
+			id(NO_USER), smoothingFactor(0.2f)
+		{			
+		}
+
+		void updatePointingDir(ofPoint p)
+		{
+			if (pointingDir == ofVec3f())
+			{
+				pointingDir = p;
+				pointingVelocity = ofVec3f();
+			}
+			else
+			{
+				pointingVelocity = p - pointingDir;
+				pointingDir.interpolate(p, smoothingFactor);
+				
+			}
+		}
+
+	} selectedUser;
 	
+
+
 
 private:
 	void	setupRecording(string _filename = "");
@@ -62,7 +103,7 @@ private:
 	bool isTrackingHands;
 
 	ofxOpenNI openNIRecorder;
-    ofxOpenNI openNIPlayers[4];
+	ofxOpenNI openNIPlayers[4];
 	int n_players;
 	string lastRecordingFilename;
 
@@ -72,10 +113,10 @@ private:
 
 	ofPoint spot;
 
-	
+
 	void setupGui();
 	ofxUISuperCanvas* gui;
-	
+
 };
 
 #endif
