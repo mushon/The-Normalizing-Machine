@@ -30,6 +30,7 @@ public:
 	void guiEvent(ofxUIEventArgs &e);
 	bool drawVideo;
 	bool drawGui;
+	bool drawProfiler;
 
 	enum State {
 		IDLE, RECOGNITION, GOTO_SPOT, RAISE_HAND, SELECTION, CONFIRMATION

@@ -7,6 +7,8 @@
 //--------------------------------------------------------------
 void testApp::setup() {
 
+	ofSetRectMode(OF_RECTMODE_CENTER);
+
 	state = IDLE;
 
 	spot = ofPoint(0, 0, 2000); // two meter from sensor
@@ -281,40 +283,62 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
 
-	lastDump = ofxProfile::describe();
+	if (drawProfiler)
+	{
+		lastDump = ofxProfile::describe();
 
-	ofxProfileThisFunction();
+		ofxProfileThisFunction();
 
-	ofSetColor(0);
-	ofDrawBitmapString( lastDump, ofPoint( 640, 500 ) );
-	ofSetColor(255);
-	ofDrawBitmapString( lastDump, ofPoint( 641, 501 ) );
+		ofSetColor(0);
+		ofDrawBitmapString( lastDump, ofPoint( 640, 500 ) );
+		ofSetColor(255);
+		ofDrawBitmapString( lastDump, ofPoint( 641, 501 ) );
+	}
 
 	if (drawVideo) {
+
+		int margin = 8; // TODO extern to gui
+		int bottomMargin = 56;
+
 
 		for (int i=0; i<n_players; i++)
 		{
 
 			ofPushMatrix();
-			int dx = i%2 + 1;
-			int dy = i/2 + 1;
+			int dx = i%2;
+			int dy = i/2;
+
+			dx = 2*dx + 1; // map 0,1 to 1,3
+			dy = 2*dy + 1;
 
 			float sc = 0.5;
 
-			ofTranslate(dx * ofGetScreenWidth() / 3 - openNIPlayers[i].imageWidth * sc / 2,
-				dy * ofGetScreenHeight() / 3 - openNIPlayers[i].imageHeight * sc / 2);
 
-			ofScale(sc, sc);
-			openNIPlayers[i].drawImage();
+			ofTranslate(dx * (ofGetScreenWidth()) / 4, dy * (ofGetScreenHeight() - bottomMargin) / 4);
+
+			//ofScale(sc, sc);
+
+			//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
+			float w = (ofGetScreenWidth() - margin) / 2; //380
+			float h = (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
+			float sx = (openNIPlayers[i].imageWidth - w) / 2; //130
+			float sy = (openNIPlayers[i].imageHeight - h) / 2; //0
+
+			openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
 
 			ofPopMatrix();
 		}
 
 		ofPushMatrix();
-		//ofTranslate(ofGetScreenWidth() / 2 - openNIRecorder.imageWidth / 2,
-		//	ofGetScreenHeight() / 2 - openNIRecorder.imageHeight / 2);
+		ofTranslate(ofGetScreenWidth() / 2, (ofGetScreenHeight() - bottomMargin) / 2);
 		ofxProfileSectionPush("draw live");
-		openNIRecorder.draw();
+
+		float w = (ofGetScreenWidth() - margin) / 2; //380
+		float h = (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
+		float sx = (openNIRecorder.imageWidth - w) / 2; //130
+		float sy = (openNIRecorder.imageHeight - h) / 2; //0
+
+		openNIRecorder.drawImageSubsection(w, h, sx, sy);
 		ofxProfileSectionPop();
 		ofPopMatrix();
 	}
@@ -548,8 +572,11 @@ void testApp::setupGui(){
 
 	gui = new ofxUISuperCanvas("Turing Normalizing Machine");
 
-	gui->addToggle("draw (v)ideo", &drawVideo)->bindToKey('v');
 	gui->addToggle("draw (g)ui", &drawGui)->bindToKey('g');
+	gui->addToggle("draw (v)ideo", &drawVideo)->bindToKey('v');
+	gui->addToggle("draw (p)rofiler", &drawProfiler)->bindToKey('p');
+
+
 
 	gui->addSpacer();
 
