@@ -28,9 +28,12 @@ public:
 	void exit();
 
 	void guiEvent(ofxUIEventArgs &e);
+	
 	bool drawVideo;
 	bool drawGui;
 	bool drawProfiler;
+	bool drawDepth;
+
 
 	enum State {
 		IDLE, RECOGNITION, GOTO_SPOT, RAISE_HAND, SELECTION, CONFIRMATION
@@ -117,6 +120,9 @@ private:
 
 	void setupGui();
 	ofxUISuperCanvas* gui;
+
+	void startRecording();
+	void stopRecording();
 
 };
 

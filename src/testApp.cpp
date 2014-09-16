@@ -11,7 +11,7 @@ void testApp::setup() {
 
 	state = IDLE;
 
-	spot = ofPoint(0, 0, 2000); // two meter from sensor
+	spot = ofPoint(0, 0, 1600); // two meter from sensor
 
 	isTracking		= true;
 	isTrackingHands	= true;
@@ -20,12 +20,15 @@ void testApp::setup() {
 	n_players = 0;
 
 	setupRecording();
-	setupPlayback("e:\\t111.oni");
+	setupPlayback("e:\\t0.oni");
 	setupPlayback("E:\\t2.oni");
 	setupPlayback("e:\\t3.oni");
 	setupPlayback("e:\\t4.oni");
 
 
+	drawDepth=false;
+	drawGui=false;
+	drawProfiler=false;
 	drawVideo=false;
 
 	setupGui();
@@ -159,8 +162,8 @@ void testApp::update(){
 			}
 		case GOTO_SPOT:
 			{
-				ofxOpenNIUser& closestUser = openNIRecorder.trackedUsers[selectedUser.id];
-				ofPoint headPoint = closestUser.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
+				ofxOpenNIUser& u = openNIRecorder.trackedUsers[selectedUser.id];
+				ofPoint headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
 				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)
 
 
@@ -446,7 +449,7 @@ void testApp::keyPressed(int key){
 
 	switch (key) {
 
-	case'c':
+	case 'c':
 		ofxProfile::clear();
 		lastDump = "";
 		break;
@@ -456,47 +459,17 @@ void testApp::keyPressed(int key){
 	case 's':
 	case 'S':
 		if (isRecording) {
-			openNIRecorder.stopRecording();
-			isRecording = false;
-
-			//HACKHACK !!!
-			//setupPlayback(lastRecordingFilename);
-			break;
-
-
-		} else {
-			lastRecordingFilename = generateFileName();
-			openNIRecorder.startRecording(lastRecordingFilename);
-			isRecording = true;
-			break;
-		}
-		break;
-	case 'p':
-	case 'P':
-
-		//! XXX
-		//! XXX if (openNIRecorder.getCurrentFileName() != "" && !isRecording && isLive) {
-		//! XXX setupPlayback(oniRecorder.getCurrentFileName());
-		//! XXX	isLive = false;
-		//! XXX } else {
-		//! XXX isLive = true;
-		//! XXX }
-		break;
-	case 't':
-	case 'T':
-		isTracking = !isTracking;
-		break;
-	case 'h':
-	case 'H':
-		isTrackingHands = !isTrackingHands;
-		if (!isTrackingHands)
-		{
-			//TODO: start tracking
+			stopRecording();
 		}
 		else
 		{
-			//				if(isLive) openNIRecorder.getHandsGenerator().StopTrackingAll();
+			startRecording();
 		}
+		break;
+
+	case 't':
+	case 'T':
+		isTracking = !isTracking;
 		break;
 
 	case 'F':
@@ -575,7 +548,7 @@ void testApp::setupGui(){
 	gui->addToggle("draw (g)ui", &drawGui)->bindToKey('g');
 	gui->addToggle("draw (v)ideo", &drawVideo)->bindToKey('v');
 	gui->addToggle("draw (p)rofiler", &drawProfiler)->bindToKey('p');
-
+	gui->addToggle("draw (d)epth", &drawDepth)->bindToKey('d');
 
 
 	gui->addSpacer();
@@ -613,3 +586,20 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 
 }
 
+void testApp::startRecording()
+{
+	lastRecordingFilename = generateFileName();
+	openNIRecorder.startRecording(lastRecordingFilename);
+	isRecording = true;
+
+	cout << "startRecording: " << lastRecordingFilename << endl;
+}
+
+void testApp::stopRecording()
+{
+	openNIRecorder.stopRecording();
+	isRecording = false;
+
+	//HACKHACK !!!
+	//setupPlayback(lastRecordingFilename);
+}
