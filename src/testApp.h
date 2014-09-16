@@ -65,31 +65,41 @@ public:
 	{
 		static const int NO_USER = -1;
 		
-		float smoothingFactor;
+		float handSmoothingFactor;
+		float shoulderSmoothingFactor;
+	
 
 		int id;
-		ofVec3f pointingDir;
-		ofVec3f pointingVelocity;
+
+		
+		ofPoint hand;
+		ofPoint shoulder;
+
 		ofVec2f screenPoint;
 
 		SelectedUser() : 
-			id(NO_USER), smoothingFactor(0.2f)
+			id(NO_USER), handSmoothingFactor(0.1f), shoulderSmoothingFactor(0.05f)
 		{			
 		}
 
-		void updatePointingDir(ofPoint p)
+
+		void updatePoints(ofPoint h, ofPoint s)
 		{
-			if (pointingDir == ofVec3f())
+			if (hand == ofVec3f() && shoulder == ofVec3f())
 			{
-				pointingDir = p;
-				pointingVelocity = ofVec3f();
+				hand = h;
+				shoulder = s;
 			}
 			else
 			{
-				pointingVelocity = p - pointingDir;
-				pointingDir.interpolate(p, smoothingFactor);
-				
+				hand.interpolate(h, handSmoothingFactor);
+				shoulder.interpolate(s, shoulderSmoothingFactor);
 			}
+		}
+
+		ofVec3f getPointingDir()
+		{
+			return hand - shoulder;
 		}
 
 	} selectedUser;

@@ -230,9 +230,10 @@ void testApp::update(){
 					ofPoint rightHandPoint = closestUser.getJoints().at(nite::JointType::JOINT_RIGHT_HAND).positionReal;
 					ofPoint rightShoulder = closestUser.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER).positionReal;
 
-					selectedUser.updatePointingDir(rightHandPoint - rightShoulder);
+					selectedUser.updatePoints(rightHandPoint, rightShoulder);
 
-					ofPoint p = selectedUser.pointingDir;
+
+					ofPoint p = selectedUser.getPointingDir();
 					userMessage << "pointing dir: " << p << endl;
 
 					// TODO: sanity check if hand is +- at shoulder level
@@ -400,7 +401,7 @@ void testApp::draw(){
 
 		ofVec2f v = selectedUser.screenPoint;
 
-		float zVal = -selectedUser.pointingDir.z; //reverse z
+		float zVal = -selectedUser.getPointingDir().z; //reverse z
 		float minHandShoulderDistance = 100; //10cm
 		float maxHandShoulderDistance = 300; //30cm
 
