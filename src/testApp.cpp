@@ -342,6 +342,12 @@ void testApp::draw(){
 		float sy = (openNIRecorder.imageHeight - h) / 2; //0
 
 		openNIRecorder.drawImageSubsection(w, h, sx, sy);
+
+		if (drawDepth)
+		{
+			openNIRecorder.drawDepth();
+		}
+
 		ofxProfileSectionPop();
 		ofPopMatrix();
 	}
