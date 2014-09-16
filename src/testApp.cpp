@@ -242,9 +242,18 @@ void testApp::update(){
 					float halfTouchScreenSize = 500;
 					v /= halfTouchScreenSize; // virtual screen with size of 2 * halfTouchScreenSize 
 
-					ofVec2f s(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
-					v.map(s, ofVec2f(ofGetScreenWidth(), 0), ofVec2f(0, -1 * ofGetScreenHeight())); // reverse y, assume -1 < v.x, v.y < 1
-					selectedUser.screenPoint = v;
+					ofVec2f screenCenter(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
+					selectedUser.screenPoint = v.getMapped(screenCenter, ofVec2f(ofGetScreenWidth(), 0), ofVec2f(0, -1 * ofGetScreenHeight())); // reverse y, assume -1 < v.x, v.y < 1
+					
+
+					// TODO check if outside center video (from imageSubsection)
+					// TODO count time for selection
+					int h = 0;
+					if (v.x > 0) h+=1;
+					if (v.y < 0) h+=2;
+
+					selectedUser.hovered = h;
+
 
 
 					//TODO select mechanism (click/timeout)
@@ -315,12 +324,16 @@ void testApp::draw(){
 			dx = 2*dx + 1; // map 0,1 to 1,3
 			dy = 2*dy + 1;
 
-			float sc = 0.5;
-
+			
+			
 
 			ofTranslate(dx * (ofGetScreenWidth()) / 4, dy * (ofGetScreenHeight() - bottomMargin) / 4);
 
-			//ofScale(sc, sc);
+			if (state == SELECTION)
+			{
+				float sc = (i==selectedUser.hovered) ? 1.2 : 0.8; //or uncrop?
+				ofScale(sc, sc);
+			}
 
 			//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
 			float w = (ofGetScreenWidth() - margin) / 2; //380

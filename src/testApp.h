@@ -67,7 +67,7 @@ public:
 		
 		float handSmoothingFactor;
 		float shoulderSmoothingFactor;
-	
+		int hovered;
 
 		int id;
 
