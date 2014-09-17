@@ -6,6 +6,7 @@
 #include "ofxCv.h"
 #include "ofxFaceTracker.h"
 #include "ofxUI.h"
+#include "AppCursor.h"
 
 using namespace ofxCv;
 using namespace cv;
@@ -134,6 +135,7 @@ private:
 	void startRecording();
 	void stopRecording();
 
+	AppCursor cursor;
 };
 
 #endif

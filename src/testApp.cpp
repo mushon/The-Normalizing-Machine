@@ -245,7 +245,8 @@ void testApp::update(){
 					ofVec2f screenCenter(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 					selectedUser.screenPoint = v.getMapped(screenCenter, ofVec2f(ofGetScreenWidth(), 0), ofVec2f(0, -1 * ofGetScreenHeight())); // reverse y, assume -1 < v.x, v.y < 1
 					
-
+					float progress = (ofGetSystemTime() % 1000) / 1000.0;
+					cursor.update(selectedUser.screenPoint, progress);
 					// TODO check if outside center video (from imageSubsection)
 					// TODO count time for selection
 					int h = 0;
@@ -355,6 +356,7 @@ void testApp::draw(){
 		float sx = (openNIRecorder.imageWidth - w) / 2; //130
 		float sy = (openNIRecorder.imageHeight - h) / 2; //0
 
+		ofScale(0.5, 0.5);
 		openNIRecorder.drawImageSubsection(w, h, sx, sy);
 
 		if (drawDepth)
@@ -410,33 +412,7 @@ void testApp::draw(){
 
 	if (state == SELECTION)
 	{
-		ofPushStyle();
-
-		ofVec2f v = selectedUser.screenPoint;
-
-		float zVal = -selectedUser.getPointingDir().z; //reverse z
-		float minHandShoulderDistance = 100; //10cm
-		float maxHandShoulderDistance = 300; //30cm
-
-		float minCursorSize = 3;
-		float maxCursorSize = 30;
-
-		ofNoFill();
-		ofSetLineWidth(3);
-		ofCircle(v, maxCursorSize);
-
-		float zp = ofMap(zVal, minHandShoulderDistance, maxHandShoulderDistance , 0, 1, true);
-
-		ofColor markerColor(ofColor::red);
-		markerColor.lerp(ofColor::green, zp);
-		ofSetColor(markerColor);
-
-		float zl = ofMap(zVal, minHandShoulderDistance, maxHandShoulderDistance , minCursorSize, maxCursorSize, true);
-
-		ofFill();
-		ofCircle(v, zl);
-
-		ofPopStyle();
+		cursor.draw();
 	}
 
 
@@ -459,6 +435,8 @@ void testApp::draw(){
 
 
 	ofDrawBitmapString(msg.str(), 20, 560);
+
+
 
 }
 
