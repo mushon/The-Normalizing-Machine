@@ -534,6 +534,9 @@ void testApp::setupGui(){
 	float dim = 16;
 
 	gui = new ofxUISuperCanvas("Turing Normalizing Machine");
+		// add FPS
+	gui->addFPSSlider("FPS", 30)->setDrawOutline(true);
+	
 
 	gui->addToggle("draw (g)ui", &drawGui)->bindToKey('g');
 	gui->addToggle("draw (v)ideo", &drawVideo)->bindToKey('v');
