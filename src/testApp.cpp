@@ -85,14 +85,33 @@ void testApp::update(){
 	openNIRecorder.update();
 	ofxProfileSectionPop();
 
-	int nVisibleUsers = 0;
+	nVisibleUsers = 0;
+	float minDist = 99999;
 	// HACK: nite internally counts down 10 seconds, even if user is not visible
 	if(openNIRecorder.trackedUsers.size() > 0)
 	{	
 		for(map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it){
 			ofxOpenNIUser& u = it->second;
-			if (u.isVisible()) nVisibleUsers++;
-		}
+			if (u.isVisible())				
+			{
+				nVisibleUsers++;
+
+				ofPoint headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
+				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)    <<<--------------------------might be a hang here, consider other way of choosing
+				if (dist.length() < minDist)
+				{
+					selectedUser.id = it->first;
+					selectedUser.headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
+
+					selectedUser.rightHand = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND).positionReal;
+					selectedUser.rightShoulder = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER).positionReal;
+					selectedUser.dist = dist;
+
+					minDist = dist.length();
+				}
+
+			}
+		} // end for map
 	}
 
 
@@ -107,6 +126,7 @@ void testApp::update(){
 
 		else  //stop instructions / show warning with countdown
 		{
+			// stop recording?
 			unsigned long long timeout = ofGetSystemTime() - lastTimeSeenUser; // counting up
 			int countdown = stateResetTimeout - timeout;
 
@@ -120,63 +140,26 @@ void testApp::update(){
 	else 
 	{
 		lastTimeSeenUser = ofGetSystemTime();
-		float minDist = 99999;
-		const float SPOT_RADIUS = 300.0f;
+
 
 		switch (state)
 		{
 		case IDLE: //this happens only once in the transition
 			{
-				state = RECOGNITION;
+				state = GOTO_SPOT;
 				userMessage << "TODO: begin to show instructions";
 				break;
 			}
 
-		case RECOGNITION:
-			{
-				userMessage << "TODO: show instructions" << endl;
 
-				//select closest user to the spot (if there's more than one user in the scene)
-				for(map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
-				{
-					ofxOpenNIUser& u = it->second;
-					if (u.isVisible())
-					{
-						ofPoint headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
-						userMessage << headPoint << endl;
-
-						float dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z).length(); // discard height(y)
-						if (dist < minDist)
-						{
-							selectedUser.id = it->first;
-							minDist = dist;
-						}
-
-					}
-				}
-
-				if (selectedUser.id != SelectedUser::NO_USER)
-				{
-					state = GOTO_SPOT;
-				}
-			}
 		case GOTO_SPOT:
 			{
-				ofxOpenNIUser& u = openNIRecorder.trackedUsers[selectedUser.id];
-				ofPoint headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
-				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)
-
-
-				if (dist.length() > SPOT_RADIUS) //TODO: extern var (gui)
+				if (selectedUser.id == SelectedUser::NO_USER)
 				{
-					userMessage << "go to the spot. Please move " 
-						<< (dist.x < 0 ? "Right" : "Left")
-						<< " and "
-						<< (dist.y > 0 ? "Forward" : "Back") 
-						<< endl;
-					//TODO: instruct user to step into spot (visualy? top view)
+					state = IDLE;
 				}
-				else
+
+				if (selectedUser.dist.length() < spotRadius)
 				{
 					state = RAISE_HAND;
 				}
@@ -184,22 +167,13 @@ void testApp::update(){
 			}
 		case RAISE_HAND:
 			{
-
-				ofxOpenNIUser& closestUser = openNIRecorder.trackedUsers[selectedUser.id];
-				ofPoint headPoint = closestUser.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
-				ofPoint rightHandPoint = closestUser.getJoints().at(nite::JointType::JOINT_RIGHT_HAND).positionReal;
-
-				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)
-
-
-				if (dist.length() > SPOT_RADIUS) //TODO: extern var (gui)
+				if (selectedUser.dist.length() > spotRadius)
 				{
 					state = GOTO_SPOT;
 				}
 				else
 				{
-					ofPoint rightShoulder = closestUser.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER).positionReal;
-					if (rightHandPoint.y < rightShoulder.y)
+					if (selectedUser.rightHand.y > selectedUser.rightShoulder.y)
 					{
 						userMessage << "waiting for hand Raise" << endl;
 					}
@@ -213,38 +187,29 @@ void testApp::update(){
 			}
 		case SELECTION:
 			{
-				ofxOpenNIUser& closestUser = openNIRecorder.trackedUsers[selectedUser.id];
-				ofPoint headPoint = closestUser.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
-				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)
-				if (dist.length() > SPOT_RADIUS) //TODO: extern var (gui)
+				if (selectedUser.dist.length() > spotRadius)
 				{
 					//give timeout?
 					state = GOTO_SPOT;
 				}
 				else
 				{
-					userMessage << "TODO: instructions how to select" << endl;
-					userMessage << "waiting for selection" << endl;
-
-					//compute trajectory (shoulder/hand)
-					ofPoint rightHandPoint = closestUser.getJoints().at(nite::JointType::JOINT_RIGHT_HAND).positionReal;
-					ofPoint rightShoulder = closestUser.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER).positionReal;
-
-					selectedUser.updatePoints(rightHandPoint, rightShoulder);
-
-
+					selectedUser.updatePoints(selectedUser.rightHand, selectedUser.rightShoulder);
 					ofPoint p = selectedUser.getPointingDir();
-					userMessage << "pointing dir: " << p << endl;
 
 					// TODO: sanity check if hand is +- at shoulder level
 					ofVec2f v(p.x, p.y);
 
-					float halfTouchScreenSize = 500;
+					float halfTouchScreenSize = 300;																	// <<<< There's alot of UI tweaking here, where the window sits (width = shoulders width?)
 					v /= halfTouchScreenSize; // virtual screen with size of 2 * halfTouchScreenSize 
 
+					v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function, 
+					v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function, 
+					//v.y = powf(v.y, 3); // only on x
+
 					ofVec2f screenCenter(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
-					selectedUser.screenPoint = v.getMapped(screenCenter, ofVec2f(ofGetScreenWidth(), 0), ofVec2f(0, -1 * ofGetScreenHeight())); // reverse y, assume -1 < v.x, v.y < 1
-					
+					selectedUser.screenPoint = v.getMapped(screenCenter, ofVec2f(ofGetScreenWidth()/2, 0), ofVec2f(0, -1 * ofGetScreenHeight()/2)); // reverse y, assume -1 < v.x, v.y < 1
+
 					float progress = (ofGetSystemTime() % 1000) / 1000.0;
 					cursor.update(selectedUser.screenPoint, progress);
 					// TODO check if outside center video (from imageSubsection)
@@ -263,7 +228,6 @@ void testApp::update(){
 					{
 						//selected item (x out of 4)
 						state = CONFIRMATION;
-
 					}
 
 				}
@@ -311,8 +275,8 @@ void testApp::draw(){
 			dx = 2*dx + 1; // map 0,1 to 1,3
 			dy = 2*dy + 1;
 
-			
-			
+
+
 
 			ofTranslate(dx * (ofGetScreenWidth()) / 4, dy * (ofGetScreenHeight() - bottomMargin) / 4);
 
@@ -347,38 +311,50 @@ void testApp::draw(){
 
 		if (drawDepth)
 		{
-			openNIRecorder.drawDepth();
+			//openNIRecorder.drawDepth();
+			openNIRecorder.draw();
+
 		}
 
 		ofxProfileSectionPop();
 		ofPopMatrix();
 	}
-	if (state == RECOGNITION || state == GOTO_SPOT)
+	if (state == GOTO_SPOT)
 	{
+
+		userMessage << "go to the spot. Please move " 
+			<< (selectedUser.dist.x < 0 ? "Right" : "Left")
+			<< " and "
+			<< (selectedUser.dist.y > 0 ? "Forward" : "Back") 
+			<< endl;
+		//TODO: instruct user to step into spot (visualy? top view)
+
+
 		//draw user map
 
 		ofPushMatrix();
 		ofPushStyle();
 		ofSetColor(ofColor::white);
 
-		ofTranslate(10, 480);
+		ofTranslate(OFX_UI_GLOBAL_CANVAS_WIDTH / 2, 580);
 
-		float w = 320;
+		float w = OFX_UI_GLOBAL_CANVAS_WIDTH;
 		float h = 240;
 
 		float xFactor = w/4000;
 		float zFactor = h/4000;
 
 		ofNoFill();
-		ofRect(0, 0, w, h);
-		ofDrawBitmapString("Sensor", w/2, 0);
+		ofRect(0, h/2, w, h);
+		ofDrawBitmapString("Sensor", 0, 0);
 
-		ofVec2f spot2d(w/2 + spot.x * xFactor, spot.z * zFactor);
+		ofScale(xFactor, zFactor);
+		ofVec2f spot2d(spot.x, spot.z);
 
 		ofSetColor(ofColor::red);
 		ofFill();
 
-		ofCircle(spot2d, 18);
+		ofCircle(spot2d, spotRadius);
 		ofSetColor(ofColor::white);
 
 		for(map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
@@ -387,8 +363,8 @@ void testApp::draw(){
 			if (u.isVisible())
 			{
 				ofPoint headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
-				ofVec2f v(w/2 + headPoint.x * xFactor, headPoint.z * zFactor);
-				ofCircle(v, 5);
+				ofVec2f v(headPoint.x, headPoint.z);
+				ofCircle(v, 100);
 			}
 		}
 
@@ -398,34 +374,30 @@ void testApp::draw(){
 
 	if (state == SELECTION)
 	{
+		userMessage << "waiting for selection... TODO: instructions how to select" << endl;
+		userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
+
 		cursor.draw();
 	}
 
 
 	ofSetColor(255, 255, 0);
 
-	string statusRec		= (string)(!isRecording ? "READY" : "RECORDING");
-
 	stringstream msg;
-
 	msg
 		<< "User Message: " << userMessage.str() << endl
 		<< "F: Fullscreen" << endl
-		<< "    s : start/stop recording  : " << statusRec << endl
+		<< "s : start/stop recording: " << (isRecording ? "RECORDING":"READY") << endl
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
-		<< "FPS   : " << ofToString(ofGetFrameRate()) << endl
 		<< "State : " << stateToString(state) << endl
 		<< "Height: " << openNIRecorder.imageHeight << endl
 		<< "Width : " << openNIRecorder.imageWidth << endl;
-
-
-	ofDrawBitmapString(msg.str(), 20, 560);
+	ofDrawBitmapStringHighlight(msg.str(), 220, 200);
 
 	if (drawProfiler)
 	{
-		lastDump = ofxProfile::describe();
-		ofDrawBitmapStringHighlight(lastDump, profilerPos);
+		ofDrawBitmapStringHighlight(ofxProfile::describe(), profilerPos);
 	}
 
 
@@ -441,7 +413,6 @@ void testApp::keyPressed(int key){
 
 	case 'c':
 		ofxProfile::clear();
-		lastDump = "";
 		break;
 
 
@@ -519,25 +490,24 @@ void testApp::windowResized(int w, int h){
 }
 
 void testApp::exit(){ 
+	ofLogNotice("testApp exit");
 
 	openNIRecorder.stop(); 
 	for (int i=0; i<n_players; i++)
 	{
 		openNIPlayers[i].stop();
 	}
-
-	//	Sleep(5000);
 	ofxOpenNI::shutdown();
+
+	ofLogNotice("testApp exit OK");
 }
 
 void testApp::setupGui(){
 	float dim = 16;
 
 	gui = new ofxUISuperCanvas("Turing Normalizing Machine");
-		// add FPS
+	// add FPS
 	gui->addFPSSlider("FPS", 30)->setDrawOutline(true);
-	
-
 	gui->addToggle("draw (g)ui", &drawGui)->bindToKey('g');
 	gui->addToggle("draw (v)ideo", &drawVideo)->bindToKey('v');
 	gui->addToggle("draw (p)rofiler", &drawProfiler)->bindToKey('p');
@@ -549,6 +519,8 @@ void testApp::setupGui(){
 	profilerPos = ofxUIVec3f(220, 0);
 	gui->add2DPad("profilerPos", ofxUIVec3f(0, ofGetScreenWidth()), ofxUIVec3f(0, ofGetScreenHeight()), &profilerPos);
 
+	spotRadius = 200;
+	gui->addSlider("spot radius", 0, 1000, &spotRadius);
 
 	vector<string> states;
 	states.push_back("Idle"); //video grid

@@ -39,7 +39,7 @@ public:
 
 
 	enum State {
-		IDLE, RECOGNITION, GOTO_SPOT, RAISE_HAND, SELECTION, CONFIRMATION
+		IDLE, GOTO_SPOT, RAISE_HAND, SELECTION, CONFIRMATION
 	};
 	State state;
 
@@ -50,7 +50,6 @@ public:
 		switch(state)
 		{
 			X(IDLE);
-			X(RECOGNITION);
 			X(GOTO_SPOT);
 			X(RAISE_HAND);
 			X(SELECTION);
@@ -74,9 +73,13 @@ public:
 
 		int id;
 
+		ofPoint rightHand;
+		ofPoint rightShoulder;
+		ofPoint headPoint;
+		ofVec2f dist;
 		
-		ofPoint hand;
-		ofPoint shoulder;
+		ofPoint hand; //filtered
+		ofPoint shoulder; //filtered
 
 		ofVec2f screenPoint;
 
@@ -126,9 +129,12 @@ private:
 
 	string lastDump;
 
+	int nVisibleUsers;
 	stringstream userMessage;
 
 	ofPoint spot;
+	float spotRadius;
+
 
 
 	void setupGui();
