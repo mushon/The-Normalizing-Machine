@@ -285,10 +285,7 @@ void testApp::update(){
 
 	for (int i=0; i<n_players; i++)
 	{
-		stringstream ss;
-		ss << "openni update " << i;
-
-		ofxProfileSectionPush(ss.str());
+		ofxProfileSectionPush(string("openni update ").append(ofToString(i)));
 		openNIPlayers[i].update();
 		ofxProfileSectionPop();
 	}
@@ -296,18 +293,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-
-	if (drawProfiler)
-	{
-		lastDump = ofxProfile::describe();
-
-		ofxProfileThisFunction();
-
-		ofSetColor(0);
-		ofDrawBitmapString( lastDump, ofPoint( 640, 500 ) );
-		ofSetColor(255);
-		ofDrawBitmapString( lastDump, ofPoint( 641, 501 ) );
-	}
+	ofxProfileThisFunction();
 
 	if (drawVideo) {
 
@@ -436,6 +422,12 @@ void testApp::draw(){
 
 	ofDrawBitmapString(msg.str(), 20, 560);
 
+	if (drawProfiler)
+	{
+		lastDump = ofxProfile::describe();
+		ofDrawBitmapStringHighlight(lastDump, profilerPos);
+	}
+
 
 
 }
@@ -550,6 +542,10 @@ void testApp::setupGui(){
 
 
 	gui->addSpacer();
+
+	profilerPos = ofxUIVec3f(220, 0);
+	gui->add2DPad("profilerPos", ofxUIVec3f(0, ofGetScreenWidth()), ofxUIVec3f(0, ofGetScreenHeight()), &profilerPos);
+
 
 	vector<string> states;
 	states.push_back("Idle"); //video grid

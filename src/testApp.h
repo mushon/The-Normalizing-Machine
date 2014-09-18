@@ -32,6 +32,8 @@ public:
 	
 	bool drawVideo;
 	bool drawGui;
+
+	ofPoint profilerPos;
 	bool drawProfiler;
 	bool drawDepth;
 
