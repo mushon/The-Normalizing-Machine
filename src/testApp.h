@@ -11,6 +11,34 @@
 using namespace ofxCv;
 using namespace cv;
 
+class Timer 
+{
+	unsigned long long timeout;
+	unsigned long long last;
+
+public:
+
+	Timer(unsigned long long _timeout = 0) : timeout(_timeout)
+	{
+		reset();
+	}
+
+	void setTimeout(unsigned long long _timeout)
+	{
+		timeout = _timeout;
+	}
+
+	int getCountDown()
+	{
+		int countdown = last + timeout - ofGetSystemTime();
+		return max(0, countdown);
+	}
+
+	void reset()
+	{
+		last = ofGetSystemTime();
+	}		
+};
 
 class testApp : public ofBaseApp{
 
@@ -29,7 +57,7 @@ public:
 	void exit();
 
 	void guiEvent(ofxUIEventArgs &e);
-	
+
 	bool drawVideo;
 	bool drawGui;
 
@@ -60,13 +88,12 @@ public:
 		return str;
 	}
 
-	static const unsigned long long stateResetTimeout = 5 * 1000; // 5 seconds
-	unsigned long long lastTimeSeenUser;
+	Timer lastSeenUser;
 
 	struct SelectedUser
 	{
 		static const int NO_USER = -1;
-		
+
 		float handSmoothingFactor;
 		float shoulderSmoothingFactor;
 		int hovered;
@@ -77,7 +104,7 @@ public:
 		ofPoint rightShoulder;
 		ofPoint headPoint;
 		ofVec2f dist;
-		
+
 		ofPoint hand; //filtered
 		ofPoint shoulder; //filtered
 
@@ -109,7 +136,7 @@ public:
 		}
 
 	} selectedUser;
-	
+
 
 
 

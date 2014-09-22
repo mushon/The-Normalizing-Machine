@@ -31,6 +31,8 @@ void testApp::setup() {
 	drawProfiler=false;
 	drawVideo=false;
 
+	lastSeenUser.setTimeout(5000);
+
 	setupGui();
 	ofBackground(0, 0, 0);
 
@@ -127,11 +129,7 @@ void testApp::update(){
 		else  //stop instructions / show warning with countdown
 		{
 			// stop recording?
-			unsigned long long timeout = ofGetSystemTime() - lastTimeSeenUser; // counting up
-			int countdown = stateResetTimeout - timeout;
-
-			userMessage << "Countdown: " << countdown << endl;
-			if (countdown < 0)
+			if (lastSeenUser.getCountDown() < 0)
 			{
 				state = IDLE;
 			}
@@ -139,7 +137,8 @@ void testApp::update(){
 	}
 	else 
 	{
-		lastTimeSeenUser = ofGetSystemTime();
+		lastSeenUser.reset();
+		
 
 
 		switch (state)
@@ -392,7 +391,10 @@ void testApp::draw(){
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 		<< "State : " << stateToString(state) << endl
 		<< "Height: " << openNIRecorder.imageHeight << endl
-		<< "Width : " << openNIRecorder.imageWidth << endl;
+		<< "Width : " << openNIRecorder.imageWidth << endl
+		<< lastSeenUser.getCountDown() << endl;
+
+
 	ofDrawBitmapStringHighlight(msg.str(), 220, 200);
 
 	if (drawProfiler)
@@ -519,7 +521,7 @@ void testApp::setupGui(){
 	profilerPos = ofxUIVec3f(220, 0);
 	gui->add2DPad("profilerPos", ofxUIVec3f(0, ofGetScreenWidth()), ofxUIVec3f(0, ofGetScreenHeight()), &profilerPos);
 
-	spotRadius = 200;
+	spotRadius = 400;
 	gui->addSlider("spot radius", 0, 1000, &spotRadius);
 
 	vector<string> states;
