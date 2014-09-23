@@ -88,11 +88,14 @@ void testApp::update(){
 	ofxProfileSectionPop();
 
 	nVisibleUsers = 0;
-	float minDist = 99999;
+	ofVec2f minDist = ofVec2f(99999, 99999);
+	float minId = SelectedUser::NO_USER;
+
 	// HACK: nite internally counts down 10 seconds, even if user is not visible
 	if(openNIRecorder.trackedUsers.size() > 0)
 	{	
-		for(map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it){
+		for(map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
+		{
 			ofxOpenNIUser& u = it->second;
 			if (u.isVisible())				
 			{
@@ -100,20 +103,26 @@ void testApp::update(){
 
 				ofPoint headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
 				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)    <<<--------------------------might be a hang here, consider other way of choosing
-				if (dist.length() < minDist)
+				if (dist.length() < minDist.length())
 				{
-					selectedUser.id = it->first;
-					selectedUser.headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
-
-					selectedUser.rightHand = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND).positionReal;
-					selectedUser.rightShoulder = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER).positionReal;
-					selectedUser.dist = dist;
-
-					minDist = dist.length();
+					minId = it->first;
+					minDist = dist;
 				}
-
 			}
 		} // end for map
+
+		if (minId != SelectedUser::NO_USER)
+		{
+			// keep track uf id (if changes in the middle)
+			selectedUser.id = minId;
+			selectedUser.dist = minDist;
+			ofxOpenNIUser& u = openNIRecorder.trackedUsers.at(minId);
+			
+			selectedUser.headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
+			ofPoint rightHand = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND).positionReal;
+			ofPoint rightShoulder = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER).positionReal;
+			selectedUser.updatePoints(rightHand, rightShoulder);
+		}
 	}
 
 
@@ -138,8 +147,6 @@ void testApp::update(){
 	else 
 	{
 		lastSeenUser.reset();
-		
-
 
 		switch (state)
 		{
@@ -172,13 +179,21 @@ void testApp::update(){
 				}
 				else
 				{
-					if (selectedUser.rightHand.y > selectedUser.rightShoulder.y)
+					if (selectedUser.rightHand.y < selectedUser.rightShoulder.y)
 					{
 						userMessage << "waiting for hand Raise" << endl;
 					}
 					else
 					{
-						state = SELECTION;
+						if (selectedUser.isSteady())
+						{
+							state = SELECTION;
+							selectedUser.hovered = -1;
+						}
+						else
+						{
+							userMessage << "Hold Steady" << endl;
+						}
 					}
 				}
 
@@ -193,7 +208,6 @@ void testApp::update(){
 				}
 				else
 				{
-					selectedUser.updatePoints(selectedUser.rightHand, selectedUser.rightShoulder);
 					ofPoint p = selectedUser.getPointingDir();
 
 					// TODO: sanity check if hand is +- at shoulder level
@@ -209,7 +223,9 @@ void testApp::update(){
 					ofVec2f screenCenter(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 					selectedUser.screenPoint = v.getMapped(screenCenter, ofVec2f(ofGetScreenWidth()/2, 0), ofVec2f(0, -1 * ofGetScreenHeight()/2)); // reverse y, assume -1 < v.x, v.y < 1
 
-					float progress = (ofGetSystemTime() % 1000) / 1000.0;
+					float progress = selectedUser.steadySelect.getProgress();
+					//(ofGetSystemTime() % 1000) / 1000.0;
+					
 					cursor.update(selectedUser.screenPoint, progress);
 					// TODO check if outside center video (from imageSubsection)
 					// TODO count time for selection
@@ -217,7 +233,13 @@ void testApp::update(){
 					if (v.x > 0) h+=1;
 					if (v.y < 0) h+=2;
 
-					selectedUser.hovered = h;
+					if (selectedUser.hovered != h) //changed selection
+					{
+						selectedUser.hovered = h;
+						selectedUser.steadySelect.reset();
+						selectedUser.steadyResetWhenMove = true;
+					}
+
 
 
 
@@ -242,9 +264,6 @@ void testApp::update(){
 		}
 
 	}
-
-
-
 
 	for (int i=0; i<n_players; i++)
 	{
@@ -324,7 +343,7 @@ void testApp::draw(){
 		userMessage << "go to the spot. Please move " 
 			<< (selectedUser.dist.x < 0 ? "Right" : "Left")
 			<< " and "
-			<< (selectedUser.dist.y > 0 ? "Forward" : "Back") 
+			<< (selectedUser.dist.y > 0 ? "Forward" : "Back") << endl
 			<< endl;
 		//TODO: instruct user to step into spot (visualy? top view)
 
@@ -395,11 +414,11 @@ void testApp::draw(){
 		<< lastSeenUser.getCountDown() << endl;
 
 
-	ofDrawBitmapStringHighlight(msg.str(), 220, 200);
+	ofDrawBitmapString(msg.str(), 220, 200);
 
 	if (drawProfiler)
 	{
-		ofDrawBitmapStringHighlight(ofxProfile::describe(), profilerPos);
+		ofDrawBitmapString(ofxProfile::describe(), profilerPos);
 	}
 
 

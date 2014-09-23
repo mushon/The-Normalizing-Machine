@@ -8,37 +8,12 @@
 #include "ofxUI.h"
 #include "AppCursor.h"
 
+#include "SelectedUser.h"
+#include "AppTimer.h"
+
+
 using namespace ofxCv;
 using namespace cv;
-
-class Timer 
-{
-	unsigned long long timeout;
-	unsigned long long last;
-
-public:
-
-	Timer(unsigned long long _timeout = 0) : timeout(_timeout)
-	{
-		reset();
-	}
-
-	void setTimeout(unsigned long long _timeout)
-	{
-		timeout = _timeout;
-	}
-
-	int getCountDown()
-	{
-		int countdown = last + timeout - ofGetSystemTime();
-		return max(0, countdown);
-	}
-
-	void reset()
-	{
-		last = ofGetSystemTime();
-	}		
-};
 
 class testApp : public ofBaseApp{
 
@@ -88,57 +63,8 @@ public:
 		return str;
 	}
 
-	Timer lastSeenUser;
-
-	struct SelectedUser
-	{
-		static const int NO_USER = -1;
-
-		float handSmoothingFactor;
-		float shoulderSmoothingFactor;
-		int hovered;
-
-		int id;
-
-		ofPoint rightHand;
-		ofPoint rightShoulder;
-		ofPoint headPoint;
-		ofVec2f dist;
-
-		ofPoint hand; //filtered
-		ofPoint shoulder; //filtered
-
-		ofVec2f screenPoint;
-
-		SelectedUser() : 
-			id(NO_USER), handSmoothingFactor(0.1f), shoulderSmoothingFactor(0.05f)
-		{			
-		}
-
-
-		void updatePoints(ofPoint h, ofPoint s)
-		{
-			if (hand == ofVec3f() && shoulder == ofVec3f())
-			{
-				hand = h;
-				shoulder = s;
-			}
-			else
-			{
-				hand.interpolate(h, handSmoothingFactor);
-				shoulder.interpolate(s, shoulderSmoothingFactor);
-			}
-		}
-
-		ofVec3f getPointingDir()
-		{
-			return hand - shoulder;
-		}
-
-	} selectedUser;
-
-
-
+	AppTimer lastSeenUser;
+	SelectedUser selectedUser;
 
 private:
 	void	setupRecording(string _filename = "");

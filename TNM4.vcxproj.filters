@@ -929,6 +929,12 @@
     <ClInclude Include="src\AppCursor.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\AppTimer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SelectedUser.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

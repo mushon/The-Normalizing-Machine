@@ -229,6 +229,8 @@
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWidgetWithLabel.h" />
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWrapper.h" />
     <ClInclude Include="src\AppCursor.h" />
+    <ClInclude Include="src\AppTimer.h" />
+    <ClInclude Include="src\SelectedUser.h" />
     <ClInclude Include="src\testApp.h" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvBlob.h" />
     <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvColorImage.h" />
