@@ -216,31 +216,37 @@ void testApp::update(){
 					float halfTouchScreenSize = 300;																	// <<<< There's alot of UI tweaking here, where the window sits (width = shoulders width?)
 					v /= halfTouchScreenSize; // virtual screen with size of 2 * halfTouchScreenSize 
 
-					v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function, 
-					v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function, 
+					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function, 
+					//v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function, 
 					//v.y = powf(v.y, 3); // only on x
 
 					ofVec2f screenCenter(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 					selectedUser.screenPoint = v.getMapped(screenCenter, ofVec2f(ofGetScreenWidth()/2, 0), ofVec2f(0, -1 * ofGetScreenHeight()/2)); // reverse y, assume -1 < v.x, v.y < 1
 
-					float progress = selectedUser.steadySelect.getProgress();
-					//(ofGetSystemTime() % 1000) / 1000.0;
+
+					float progress = selectedUser.getProgress();
 					
 					cursor.update(selectedUser.screenPoint, progress);
-					// TODO check if outside center video (from imageSubsection)
-					// TODO count time for selection
-					int h = 0;
-					if (v.x > 0) h+=1;
-					if (v.y < 0) h+=2;
 
-					if (selectedUser.hovered != h) //changed selection
+					int hover = 0;
+					if (v.x > 0) hover+=1;
+					if (v.y < 0) hover+=2;
+
+					float w = (ofGetScreenWidth() - margin) / 2; //380
+					float height = (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
+
+					if (abs(selectedUser.screenPoint.x - (ofGetScreenWidth()/2)) < w/4 && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < height/4) //inside middle frame
 					{
-						selectedUser.hovered = h;
-						selectedUser.steadySelect.reset();
-						selectedUser.steadyResetWhenMove = true;
+						hover = SelectedUser::NO_HOVER; // no hover
 					}
 
-
+					if (hover == SelectedUser::NO_HOVER || selectedUser.hovered != hover) //changed selection
+					{
+						selectedUser.hovered = hover;
+						selectedUser.steady.reset();
+						selectedUser.selectTimer.reset();
+						selectedUser.waitForSteady = true;
+					}
 
 
 					//TODO select mechanism (click/timeout)
@@ -279,10 +285,14 @@ void testApp::draw(){
 
 	if (drawVideo) {
 
-		int margin = 8; // TODO extern to gui
-		int bottomMargin = 56;
+		
+		//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
+		float w = (ofGetScreenWidth() - margin) / 2; //380
+		float h = (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
+		float sx = (openNIRecorder.imageWidth - w) / 2; //130
+		float sy = (openNIRecorder.imageHeight - h) / 2; //0
 
-
+		
 		for (int i=0; i<n_players; i++)
 		{
 
@@ -293,23 +303,23 @@ void testApp::draw(){
 			dx = 2*dx + 1; // map 0,1 to 1,3
 			dy = 2*dy + 1;
 
-
-
-
 			ofTranslate(dx * (ofGetScreenWidth()) / 4, dy * (ofGetScreenHeight() - bottomMargin) / 4);
 
-			if (state == SELECTION)
+			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
-				float sc = (i==selectedUser.hovered) ? 1.2 : 0.8; //or uncrop?
+				ofVec2f p = selectedUser.screenPoint;
+				p -= ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
+				p.x = fabs(p.x);
+				p.y = fabs(p.y);
+
+				float x = ofMap(p.x, w/4, ofGetScreenWidth()/4, 0.0f, 1.0f, true);
+				float y = ofMap(p.y, h/4, ofGetScreenHeight()/4, 0.0f, 1.0f, true);
+
+				float s = (x*y)/2;
+				float sc = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
 				ofScale(sc, sc);
 			}
-
-			//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
-			float w = (ofGetScreenWidth() - margin) / 2; //380
-			float h = (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
-			float sx = (openNIPlayers[i].imageWidth - w) / 2; //130
-			float sy = (openNIPlayers[i].imageHeight - h) / 2; //0
-
+		
 			openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
 
 			ofPopMatrix();
@@ -319,11 +329,7 @@ void testApp::draw(){
 		ofTranslate(ofGetScreenWidth() / 2, (ofGetScreenHeight() - bottomMargin) / 2);
 		ofxProfileSectionPush("draw live");
 
-		float w = (ofGetScreenWidth() - margin) / 2; //380
-		float h = (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
-		float sx = (openNIRecorder.imageWidth - w) / 2; //130
-		float sy = (openNIRecorder.imageHeight - h) / 2; //0
-
+		
 		ofScale(0.5, 0.5);
 		openNIRecorder.drawImageSubsection(w, h, sx, sy);
 
@@ -538,10 +544,17 @@ void testApp::setupGui(){
 	gui->addSpacer();
 
 	profilerPos = ofxUIVec3f(220, 0);
-	gui->add2DPad("profilerPos", ofxUIVec3f(0, ofGetScreenWidth()), ofxUIVec3f(0, ofGetScreenHeight()), &profilerPos);
+	//gui->add2DPad("profilerPos", ofxUIVec3f(0, ofGetScreenWidth()), ofxUIVec3f(0, ofGetScreenHeight()), &profilerPos);
 
 	spotRadius = 400;
 	gui->addSlider("spot radius", 0, 1000, &spotRadius);
+
+	margin = 8;
+	gui->addIntSlider("margin", 0, 24, &margin);
+	
+	bottomMargin = 56;
+	gui->addIntSlider("margin", 0, 100, &bottomMargin);
+	
 
 	vector<string> states;
 	states.push_back("Idle"); //video grid

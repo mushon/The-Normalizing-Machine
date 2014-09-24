@@ -7,6 +7,7 @@ class SelectedUser
 {
 public:
 		static const int NO_USER = -1;
+		static const int NO_HOVER = -1;
 
 		float handSmoothingFactor;
 		float shoulderSmoothingFactor;
@@ -27,13 +28,12 @@ public:
 		ofVec2f screenPoint;
 
 		AppTimer steady;
-		AppTimer steadySelect;
-		bool steadyResetWhenMove;
+		AppTimer selectTimer;
+		bool waitForSteady;
 
 		SelectedUser() : 
-			id(NO_USER), handSmoothingFactor(0.1f), shoulderSmoothingFactor(0.05f), steady(1000), steadySelect(5000)
+			id(NO_USER), handSmoothingFactor(0.1f), shoulderSmoothingFactor(0.05f), steady(300), selectTimer(5000), waitForSteady(true)
 		{
-			steadyResetWhenMove = true;
 		}
 
 
@@ -54,7 +54,14 @@ public:
 			if (!isHandSteady())
 			{
 				steady.reset();
-				if (steadyResetWhenMove) steadySelect.reset();
+			}
+			if (isSteady())
+			{
+				waitForSteady = false;
+			}
+			if (waitForSteady)
+			{
+				selectTimer.reset();
 			}
 
 			rightHand = h;
@@ -71,5 +78,11 @@ public:
 		}
 
 		bool isSteady() {return steady.getCountDown() <= 0;}
+
+
+		float getProgress()
+		{
+			return waitForSteady ? 1.0f : selectTimer.getProgress();
+		}
 
 };

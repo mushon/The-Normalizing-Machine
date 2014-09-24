@@ -88,7 +88,8 @@ private:
 	ofPoint spot;
 	float spotRadius;
 
-
+	int margin;
+	int bottomMargin;
 
 	void setupGui();
 	ofxUISuperCanvas* gui;
