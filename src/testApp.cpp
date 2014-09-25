@@ -11,10 +11,6 @@ void testApp::setup() {
 
 	state = IDLE;
 
-	spot = ofPoint(0, 0, 1600); // two meter from sensor
-
-	isTracking		= true;
-	isTrackingHands	= true;
 	isRecording		= false;
 
 	n_players = 0;
@@ -36,12 +32,12 @@ void testApp::setup() {
 	yesIcon.loadImage("assets/i-yes-40.png");
 	noIcon.loadImage("assets/i-no-40.png");
 
-	
+
 	//ofTrueTypeFont::setGlobalDpi(72);
 	verdana.loadFont("fonts/verdana.ttf", 50, true, true);
 	verdana.setLineHeight(54.0f);
 	//verdana.setLetterSpacing(1.037);
-	
+
 	setupGui();
 	ofBackground(0, 0, 0);
 
@@ -108,9 +104,15 @@ void testApp::update(){
 			ofxOpenNIUser& u = it->second;
 			if (u.isVisible())				
 			{
+				ofxOpenNIJoint j = u.getJoints().at(nite::JointType::JOINT_HEAD);
+
+				if (j.positionConfidence < 0.5) continue;
+
+				ofPoint headPoint = j.positionReal;
 				nVisibleUsers++;
 
-				ofPoint headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
+
+				userMessage << it->first << ":" << headPoint << endl;
 				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)    <<<--------------------------might be a hang here, consider other way of choosing
 				if (dist.length() < minDist.length())
 				{
@@ -132,6 +134,10 @@ void testApp::update(){
 			ofPoint rightShoulder = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER).positionReal;
 			selectedUser.updatePoints(rightHand, rightShoulder);
 		}
+		else
+		{
+			selectedUser = SelectedUser(); //reset
+		}
 	}
 
 
@@ -140,11 +146,9 @@ void testApp::update(){
 	{
 		if (state == IDLE)
 		{
-			userMessage << "Idle";
-			selectedUser = SelectedUser(); //reset
+			//TODO: idle animations
 		}
-
-		else  //stop instructions / show warning with countdown
+		else  //user left in the middle of interacion - stop instructions / show warning with countdown
 		{
 			// stop recording?
 			if (lastSeenUser.getCountDown() < 0)
@@ -152,6 +156,10 @@ void testApp::update(){
 				state = IDLE;
 			}
 		}		
+	}
+	else if (nVisibleUsers > 1 || simulateMoreThanOne)
+	{
+		state = MORE_THAN_ONE;
 	}
 	else 
 	{
@@ -166,7 +174,6 @@ void testApp::update(){
 				break;
 			}
 
-
 		case GOTO_SPOT:
 			{
 				if (selectedUser.id == SelectedUser::NO_USER)
@@ -180,6 +187,7 @@ void testApp::update(){
 				}
 				break;
 			}
+
 		case RAISE_HAND:
 			{
 				if (selectedUser.dist.length() > spotRadius)
@@ -276,6 +284,11 @@ void testApp::update(){
 			{
 				break;
 			}
+
+		case MORE_THAN_ONE:
+			{
+				state = IDLE;
+			}
 		}
 
 	}
@@ -296,23 +309,33 @@ void testApp::draw(){
 
 
 		//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
-		float w = (ofGetScreenWidth() - margin) / 2; //380
-		float h = (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
-		float sx = (openNIRecorder.imageWidth - w) / 2; //130
-		float sy = (openNIRecorder.imageHeight - h) / 2; //0
+		float w = (ofGetScreenWidth() - margin) / 2;					//380
+		float h = (ofGetScreenHeight() - margin - bottomMargin) / 2;	//480
+		float sx = (openNIRecorder.imageWidth - w) / 2;					//130
+		float sy = (openNIRecorder.imageHeight - h) / 2;				//0
 
 
 		for (int i=0; i<n_players; i++)
 		{
 
 			ofPushMatrix();
+			// video order:
+			// 0 1
+			// 2 3
 			int dx = i%2;
 			int dy = i/2;
 
-			dx = 2*dx + 1; // map 0,1 to 1,3
-			dy = 2*dy + 1;
+			dx = 2*dx - 1; // map 0,1 to -1,1
+			dy = 2*dy - 1;
 
-			ofTranslate(dx * (ofGetScreenWidth()) / 4, dy * (ofGetScreenHeight() - bottomMargin) / 4);
+			float sc = 1.0f;
+			if (state == MORE_THAN_ONE)
+			{
+				sc = 0.66;
+				
+			}
+
+			ofTranslate(ofGetScreenWidth()/2 + (dx * w/2 * sc), (ofGetScreenHeight() - bottomMargin)/2 + (dy * h/2 * sc));
 
 			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
@@ -325,23 +348,31 @@ void testApp::draw(){
 				float y = ofMap(p.y, h/4, ofGetScreenHeight()/4, 0.0f, 1.0f, true);
 
 				float s = (x*y)/2;
-				float sc = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
-				ofScale(sc, sc);
+				sc = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
+
 			}
 
+			ofScale(sc, sc);
+
 			openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
+			if (state == MORE_THAN_ONE)
+			{
+				// cover with 50% black
+				int alphaImage = 128;
+				ofSetColor(ofColor::black, alphaImage);
+				ofFill();
+				ofRect(0,0, w, h);
+			}
 
 			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
-				int alpha = 255 * ofMap(selectedUser.getProgress(), 0.3, 0.7, 1, 0, true);
+				int alphaIcon = 255 * ofMap(selectedUser.getProgress(), 0.3, 0.7, 1, 0, true);
 
 				ofEnableAlphaBlending();
-				ofSetColor(255, 255, 255, alpha);
+				ofSetColor(255, 255, 255, alphaIcon);
 				ofImage& icon = (i==selectedUser.hovered) ? yesIcon : noIcon;
 				icon.draw(0, -h/4);
 				ofDisableAlphaBlending();
-				
-
 			}
 
 			ofPopMatrix();
@@ -352,7 +383,18 @@ void testApp::draw(){
 		ofxProfileSectionPush("draw live");
 
 
-		ofScale(0.5, 0.5);
+		float sc2 = 0.5;
+		if (state == MORE_THAN_ONE)
+		{
+			sc2 = 1;
+		}
+		ofScale(sc2, sc2);
+		if (state == MORE_THAN_ONE)
+		{
+			ofSetColor(ofColor::black);
+			ofFill();
+			ofRect(0,0, w + 2*margin, h + 2*margin);
+		}		
 		openNIRecorder.drawImageSubsection(w, h, sx, sy);
 
 
@@ -433,7 +475,7 @@ void testApp::draw(){
 		//userMessage << "waiting for selection... TODO: instructions how to select" << endl;
 		//userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
 
-		
+
 
 		cursor.draw();
 	}
@@ -468,8 +510,6 @@ void testApp::draw(){
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
 
-	float smooth;
-
 	switch (key) {
 
 	case 'c':
@@ -489,11 +529,6 @@ void testApp::keyPressed(int key){
 		}
 		break;
 
-	case 't':
-	case 'T':
-		isTracking = !isTracking;
-		break;
-
 	case 'F':
 		ofToggleFullscreen();
 		break;
@@ -501,14 +536,6 @@ void testApp::keyPressed(int key){
 	case 'g':
 		gui->toggleVisible();
 		break;
-
-	case '2':
-		//XXX recorder.finishMovie(); 
-		break;
-
-	case '1':
-		//XXX recorder.startNewRecording(); 
-		break; 
 
 	default:
 		break;
@@ -574,6 +601,11 @@ void testApp::setupGui(){
 	gui->addToggle("draw (p)rofiler", &drawProfiler)->bindToKey('p');
 	gui->addToggle("draw (d)epth", &drawDepth)->bindToKey('d');
 
+	simulateMoreThanOne = false;
+	gui->addToggle("simulate (m)ore 1", &simulateMoreThanOne)->bindToKey('m');
+
+
+
 
 	gui->addSpacer();
 
@@ -582,6 +614,10 @@ void testApp::setupGui(){
 
 	spotRadius = 400;
 	gui->addSlider("spot radius", 0, 1000, &spotRadius);
+
+	spotZ = 1600; // distance from sensor [mm]
+	gui->addIntSlider("spot Z", 500, 3000, &spotZ);
+	spot = ofPoint(0, 0, spotZ); 
 
 	margin = 8;
 	gui->addIntSlider("margin", 0, 24, &margin);

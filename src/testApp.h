@@ -42,7 +42,7 @@ public:
 
 
 	enum State {
-		IDLE, GOTO_SPOT, RAISE_HAND, SELECTION, CONFIRMATION
+		IDLE, GOTO_SPOT, RAISE_HAND, SELECTION, CONFIRMATION, MORE_THAN_ONE
 	};
 	State state;
 
@@ -57,6 +57,9 @@ public:
 			X(RAISE_HAND);
 			X(SELECTION);
 			X(CONFIRMATION);
+			X(MORE_THAN_ONE);
+		default:
+			str = "undefined";
 		}
 #undef X
 
@@ -65,15 +68,15 @@ public:
 
 	AppTimer lastSeenUser;
 	SelectedUser selectedUser;
+	
+	
 
 private:
 	void	setupRecording(string _filename = "");
 	void	setupPlayback(string _filename);
 	string	generateFileName();
 
-	bool isTracking;
 	bool isRecording;
-	bool isTrackingHands;
 
 	ofxOpenNI openNIRecorder;
 	ofxOpenNI openNIPlayers[4];
@@ -87,6 +90,7 @@ private:
 
 	ofPoint spot;
 	float spotRadius;
+	int spotZ;
 
 	int margin;
 	int bottomMargin;
@@ -105,6 +109,8 @@ private:
 	void stopRecording();
 
 	AppCursor cursor;
+
+	bool simulateMoreThanOne; // for debugging purposes
 };
 
 #endif
