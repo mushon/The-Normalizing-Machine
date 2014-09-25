@@ -25,12 +25,16 @@ void testApp::setup() {
 	drawDepth=false;
 	drawGui=false;
 	drawProfiler=false;
-	drawVideo=false;
+	drawVideo=true;
 
 	lastSeenUser.setTimeout(5000);
 
 	yesIcon.loadImage("assets/i-yes-40.png");
 	noIcon.loadImage("assets/i-no-40.png");
+
+	txt_pointing.loadImage("assets/txt_pointing.png");
+	txt_position.loadImage("assets/txt_position.png");
+	txt_prompt.loadImage("assets/txt_prompt.png");
 
 
 	//ofTrueTypeFont::setGlobalDpi(72);
@@ -398,14 +402,27 @@ void testApp::draw(){
 		openNIRecorder.drawImageSubsection(w, h, sx, sy);
 
 
-		ofPushMatrix();
-		ofScale(1, 1);
-		string txt = "who is the\nnormal one?";
-		ofRectangle bounds = verdana.getStringBoundingBox(txt, 0, 0);
-		//ofTranslate(110 + bounds.width/2, 500 + bounds.height / 2, 0);
-		verdana.drawString(txt, -bounds.width/2, bounds.height/2 - (h/2 * 0.8));
-		ofPopMatrix();
+		
+		if (state == GOTO_SPOT)
+		{	
+			ofPushMatrix();
+			
+			ofScale(1, 1);
 
+			ofSetLineWidth(5);
+			ofSetColor(ofColor::green);
+			ofLine(0, -h/2, 0, h/2);
+
+			ofPoint pos(0, -h/2 + txt_position.getHeight()/2);
+			ofSetColor(ofColor::black, 128);
+			ofFill();
+			ofRect(pos, txt_position.getWidth(), txt_position.getHeight()); // text background
+			
+			ofSetColor(ofColor::white);
+			txt_position.draw(pos);
+
+			ofPopMatrix();
+		}
 
 		if (drawDepth)
 		{
@@ -426,10 +443,9 @@ void testApp::draw(){
 			<< (selectedUser.dist.y > 0 ? "Forward" : "Back") << endl
 			<< endl;
 		//TODO: instruct user to step into spot (visualy? top view)
-
-
+		
+		
 		//draw user map
-
 		ofPushMatrix();
 		ofPushStyle();
 		ofSetColor(ofColor::white);

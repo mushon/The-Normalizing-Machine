@@ -100,6 +100,12 @@ private:
 	ofImage yesIcon;
 	ofImage noIcon;
 
+	ofImage txt_pointing;
+	ofImage txt_position;
+	ofImage txt_prompt;
+
+
+
 	ofTrueTypeFont	verdana;
 
 	void setupGui();
