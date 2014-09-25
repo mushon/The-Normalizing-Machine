@@ -117,7 +117,7 @@ void testApp::update(){
 			selectedUser.id = minId;
 			selectedUser.dist = minDist;
 			ofxOpenNIUser& u = openNIRecorder.trackedUsers.at(minId);
-			
+
 			selectedUser.headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
 			ofPoint rightHand = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND).positionReal;
 			ofPoint rightShoulder = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER).positionReal;
@@ -212,9 +212,7 @@ void testApp::update(){
 
 					// TODO: sanity check if hand is +- at shoulder level
 					ofVec2f v(p.x, p.y);
-
-					float halfTouchScreenSize = 300;																	// <<<< There's alot of UI tweaking here, where the window sits (width = shoulders width?)
-					v /= halfTouchScreenSize; // virtual screen with size of 2 * halfTouchScreenSize 
+					v /= (touchScreenSize / 2); // <<<< There's alot of UI tweaking here, where the window sits (width = shoulders width?)
 
 					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function, 
 					//v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function, 
@@ -223,9 +221,7 @@ void testApp::update(){
 					ofVec2f screenCenter(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 					selectedUser.screenPoint = v.getMapped(screenCenter, ofVec2f(ofGetScreenWidth()/2, 0), ofVec2f(0, -1 * ofGetScreenHeight()/2)); // reverse y, assume -1 < v.x, v.y < 1
 
-
 					float progress = selectedUser.getProgress();
-					
 					cursor.update(selectedUser.screenPoint, progress);
 
 					int hover = 0;
@@ -285,14 +281,14 @@ void testApp::draw(){
 
 	if (drawVideo) {
 
-		
+
 		//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
 		float w = (ofGetScreenWidth() - margin) / 2; //380
 		float h = (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
 		float sx = (openNIRecorder.imageWidth - w) / 2; //130
 		float sy = (openNIRecorder.imageHeight - h) / 2; //0
 
-		
+
 		for (int i=0; i<n_players; i++)
 		{
 
@@ -319,7 +315,7 @@ void testApp::draw(){
 				float sc = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
 				ofScale(sc, sc);
 			}
-		
+
 			openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
 
 			ofPopMatrix();
@@ -329,7 +325,7 @@ void testApp::draw(){
 		ofTranslate(ofGetScreenWidth() / 2, (ofGetScreenHeight() - bottomMargin) / 2);
 		ofxProfileSectionPush("draw live");
 
-		
+
 		ofScale(0.5, 0.5);
 		openNIRecorder.drawImageSubsection(w, h, sx, sy);
 
@@ -551,10 +547,13 @@ void testApp::setupGui(){
 
 	margin = 8;
 	gui->addIntSlider("margin", 0, 24, &margin);
-	
+
 	bottomMargin = 56;
 	gui->addIntSlider("margin", 0, 100, &bottomMargin);
-	
+
+	touchScreenSize = 600;		// virtual screen 
+	gui->addSlider("touchScreenSize", 100, 1000, &touchScreenSize);
+
 
 	vector<string> states;
 	states.push_back("Idle"); //video grid
