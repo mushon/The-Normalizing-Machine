@@ -96,6 +96,8 @@ private:
 	ofImage yesIcon;
 	ofImage noIcon;
 
+	ofTrueTypeFont	verdana;
+
 	void setupGui();
 	ofxUISuperCanvas* gui;
 

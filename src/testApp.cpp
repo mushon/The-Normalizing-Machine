@@ -36,7 +36,12 @@ void testApp::setup() {
 	yesIcon.loadImage("assets/i-yes-40.png");
 	noIcon.loadImage("assets/i-no-40.png");
 
-
+	
+	//ofTrueTypeFont::setGlobalDpi(72);
+	verdana.loadFont("fonts/verdana.ttf", 50, true, true);
+	verdana.setLineHeight(54.0f);
+	//verdana.setLetterSpacing(1.037);
+	
 	setupGui();
 	ofBackground(0, 0, 0);
 
@@ -349,6 +354,16 @@ void testApp::draw(){
 
 		ofScale(0.5, 0.5);
 		openNIRecorder.drawImageSubsection(w, h, sx, sy);
+
+
+		ofPushMatrix();
+		ofScale(1, 1);
+		string txt = "who is the\nnormal one?";
+		ofRectangle bounds = verdana.getStringBoundingBox(txt, 0, 0);
+		//ofTranslate(110 + bounds.width/2, 500 + bounds.height / 2, 0);
+		verdana.drawString(txt, -bounds.width/2, bounds.height/2 - (h/2 * 0.8));
+		ofPopMatrix();
+
 
 		if (drawDepth)
 		{
