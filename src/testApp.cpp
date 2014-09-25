@@ -200,7 +200,7 @@ void testApp::update(){
 				}
 				else
 				{
-					if (selectedUser.rightHand.y < selectedUser.rightShoulder.y)
+					if (selectedUser.rightHand.z < selectedUser.rightShoulder.z + 100)
 					{
 						userMessage << "waiting for hand Raise" << endl;
 					}
@@ -336,7 +336,7 @@ void testApp::draw(){
 			if (state == MORE_THAN_ONE)
 			{
 				sc = 0.66;
-				
+
 			}
 
 			ofTranslate(ofGetScreenWidth()/2 + (dx * w/2 * sc), (ofGetScreenHeight() - bottomMargin)/2 + (dy * h/2 * sc));
@@ -401,28 +401,37 @@ void testApp::draw(){
 		}		
 		openNIRecorder.drawImageSubsection(w, h, sx, sy);
 
-
-		
 		if (state == GOTO_SPOT)
 		{	
 			ofPushMatrix();
-			
+
 			ofScale(1, 1);
 
 			ofSetLineWidth(5);
 			ofSetColor(ofColor::green);
 			ofLine(0, -h/2, 0, h/2);
 
-			ofPoint pos(0, -h/2 + txt_position.getHeight()/2);
-			ofSetColor(ofColor::black, 128);
-			ofFill();
-			ofRect(pos, txt_position.getWidth(), txt_position.getHeight()); // text background
-			
-			ofSetColor(ofColor::white);
-			txt_position.draw(pos);
-
+			drawOverheadText(txt_position, h);
 			ofPopMatrix();
 		}
+
+
+		if (state == RAISE_HAND)
+		{
+			drawOverheadText(txt_prompt, h);
+		}
+
+		if (state == SELECTION)
+		{
+			int alphaIcon = 255 * ofMap(selectedUser.getProgress(), 0.3, 0.7, 1, 0, true);
+
+			ofEnableAlphaBlending();
+			ofSetColor(255, 255, 255, alphaIcon);
+			drawOverheadText(txt_pointing, h);
+			ofDisableAlphaBlending();
+		}
+
+
 
 		if (drawDepth)
 		{
@@ -443,8 +452,8 @@ void testApp::draw(){
 			<< (selectedUser.dist.y > 0 ? "Forward" : "Back") << endl
 			<< endl;
 		//TODO: instruct user to step into spot (visualy? top view)
-		
-		
+
+
 		//draw user map
 		ofPushMatrix();
 		ofPushStyle();
@@ -694,4 +703,15 @@ void testApp::stopRecording()
 
 	//HACKHACK !!!
 	//setupPlayback(lastRecordingFilename);
+}
+
+void testApp::drawOverheadText(ofImage& txt, int h)
+{
+	ofPoint pos(0, -h/2 + txt.getHeight()/2);
+	ofSetColor(ofColor::black, 128);
+	ofFill();
+	//ofRect(pos, txt.getWidth(), txt.getHeight()); // text background
+
+	ofSetColor(ofColor::white);
+	txt.draw(pos);
 }

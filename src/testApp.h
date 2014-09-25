@@ -103,7 +103,7 @@ private:
 	ofImage txt_pointing;
 	ofImage txt_position;
 	ofImage txt_prompt;
-
+	void drawOverheadText(ofImage&, int h);
 
 
 	ofTrueTypeFont	verdana;
