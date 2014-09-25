@@ -92,6 +92,10 @@ private:
 	int bottomMargin;
 
 	float touchScreenSize; // virtual screen 
+
+	ofImage yesIcon;
+	ofImage noIcon;
+
 	void setupGui();
 	ofxUISuperCanvas* gui;
 

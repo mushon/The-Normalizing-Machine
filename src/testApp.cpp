@@ -33,6 +33,10 @@ void testApp::setup() {
 
 	lastSeenUser.setTimeout(5000);
 
+	yesIcon.loadImage("assets/i-yes-40.png");
+	noIcon.loadImage("assets/i-no-40.png");
+
+
 	setupGui();
 	ofBackground(0, 0, 0);
 
@@ -233,7 +237,11 @@ void testApp::update(){
 
 					if (abs(selectedUser.screenPoint.x - (ofGetScreenWidth()/2)) < w/4 && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < height/4) //inside middle frame
 					{
-						hover = SelectedUser::NO_HOVER; // no hover
+						hover = SelectedUser::NO_HOVER;
+					}
+					if (v.y < -1.2) // hand down
+					{
+						hover = SelectedUser::NO_HOVER;
 					}
 
 					if (hover == SelectedUser::NO_HOVER || selectedUser.hovered != hover) //changed selection
@@ -318,6 +326,19 @@ void testApp::draw(){
 
 			openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
 
+			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
+			{
+				int alpha = 255 * ofMap(selectedUser.getProgress(), 0.3, 0.7, 1, 0, true);
+
+				ofEnableAlphaBlending();
+				ofSetColor(255, 255, 255, alpha);
+				ofImage& icon = (i==selectedUser.hovered) ? yesIcon : noIcon;
+				icon.draw(0, -h/4);
+				ofDisableAlphaBlending();
+				
+
+			}
+
 			ofPopMatrix();
 		}
 
@@ -394,8 +415,10 @@ void testApp::draw(){
 
 	if (state == SELECTION)
 	{
-		userMessage << "waiting for selection... TODO: instructions how to select" << endl;
-		userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
+		//userMessage << "waiting for selection... TODO: instructions how to select" << endl;
+		//userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
+
+		
 
 		cursor.draw();
 	}
