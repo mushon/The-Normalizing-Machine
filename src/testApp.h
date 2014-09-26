@@ -92,6 +92,8 @@ private:
 	float spotRadius;
 	int spotZ;
 
+	int handShoulderDistance;
+		
 	int margin;
 	int bottomMargin;
 

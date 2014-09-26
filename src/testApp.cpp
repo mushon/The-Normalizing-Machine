@@ -200,7 +200,7 @@ void testApp::update(){
 				}
 				else
 				{
-					if (selectedUser.rightHand.z < selectedUser.rightShoulder.z + 100)
+					if (selectedUser.rightHand.z < selectedUser.rightShoulder.z + handShoulderDistance)
 					{
 						userMessage << "waiting for hand Raise" << endl;
 					}
@@ -643,6 +643,11 @@ void testApp::setupGui(){
 	spotZ = 1600; // distance from sensor [mm]
 	gui->addIntSlider("spot Z", 500, 3000, &spotZ);
 	spot = ofPoint(0, 0, spotZ); 
+
+	handShoulderDistance = 200;
+	gui->addIntSlider("handShoulderDistance", 100, 500, &handShoulderDistance);
+	
+
 
 	margin = 8;
 	gui->addIntSlider("margin", 0, 24, &margin);
