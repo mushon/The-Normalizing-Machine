@@ -7,8 +7,6 @@
 //--------------------------------------------------------------
 void testApp::setup() {
 
-	ofSetRectMode(OF_RECTMODE_CENTER);
-
 	state = IDLE;
 
 	isRecording		= false;
@@ -41,6 +39,8 @@ void testApp::setup() {
 	verdana.loadFont("fonts/verdana.ttf", 50, true, true);
 	verdana.setLineHeight(54.0f);
 	//verdana.setLetterSpacing(1.037);
+
+	ofEnableAlphaBlending();
 
 	setupGui();
 	ofBackground(0, 0, 0);
@@ -194,7 +194,7 @@ void testApp::update(){
 
 		case RAISE_HAND:
 			{
-				if (selectedUser.dist.length() > spotRadius)
+				if (selectedUser.dist.length() > spotRadius + spotRadiusHysteresis)
 				{
 					state = GOTO_SPOT;
 				}
@@ -222,7 +222,7 @@ void testApp::update(){
 			}
 		case SELECTION:
 			{
-				if (selectedUser.dist.length() > spotRadius)
+				if (selectedUser.dist.length() > spotRadius + spotRadiusHysteresis)
 				{
 					//give timeout?
 					state = GOTO_SPOT;
@@ -307,6 +307,8 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+	ofSetRectMode(OF_RECTMODE_CENTER);
+
 	ofxProfileThisFunction();
 
 	if (drawVideo) {
@@ -339,8 +341,7 @@ void testApp::draw(){
 
 			}
 
-			ofTranslate(ofGetScreenWidth()/2 + (dx * w/2 * sc), (ofGetScreenHeight() - bottomMargin)/2 + (dy * h/2 * sc));
-
+			
 			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
 				ofVec2f p = selectedUser.screenPoint;
@@ -356,9 +357,12 @@ void testApp::draw(){
 
 			}
 
+			ofTranslate(ofGetScreenWidth()/2 + (dx * w/2 * sc), (ofGetScreenHeight() - bottomMargin)/2 + (dy * h/2 * sc));
 			ofScale(sc, sc);
 
 			openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
+
+
 			if (state == MORE_THAN_ONE)
 			{
 				// cover with 50% black
@@ -371,12 +375,10 @@ void testApp::draw(){
 			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
 				int alphaIcon = 255 * ofMap(selectedUser.getProgress(), 0.3, 0.7, 1, 0, true);
-
-				ofEnableAlphaBlending();
+				
 				ofSetColor(255, 255, 255, alphaIcon);
 				ofImage& icon = (i==selectedUser.hovered) ? yesIcon : noIcon;
-				icon.draw(0, -h/4);
-				ofDisableAlphaBlending();
+				icon.draw(0, -h/3);
 			}
 
 			ofPopMatrix();
@@ -387,6 +389,7 @@ void testApp::draw(){
 		ofxProfileSectionPush("draw live");
 
 
+		ofPushMatrix();
 		float sc2 = 0.5;
 		if (state == MORE_THAN_ONE)
 		{
@@ -400,128 +403,100 @@ void testApp::draw(){
 			ofRect(0,0, w + 2*margin, h + 2*margin);
 		}		
 		openNIRecorder.drawImageSubsection(w, h, sx, sy);
+		ofPopMatrix();
 
 		if (state == GOTO_SPOT)
 		{	
+
+			userMessage << "go to the spot. Please move " 
+				<< (abs(selectedUser.dist.x - spotRadius < 0) ? "Right" : "Left")
+				<< (abs(selectedUser.dist.x - spotRadius < 0) && abs(selectedUser.dist.y - spotRadius < 0) ? " and " : "")
+				<< (abs(selectedUser.dist.y - spotRadius < 0)? "Forward" : "Back") << endl
+				<< endl;
+
+			ofSetLineWidth(3);
+			ofSetColor(ofColor::green, userMapAlpha);
+			ofLine(0, -h/2*sc2, 0, h/2*sc2);
+
+			drawOverheadText(txt_position, h*sc2);
+
+			//TODO: instruct user to step into spot (visualy? top view)
+			//draw user map
+			float maxZ = 4000.0f;		
+			float factor = h*sc2/maxZ;
+
 			ofPushMatrix();
+			ofPushStyle();
+			ofTranslate(0 , -h/2*sc2);
 
-			ofScale(1, 1);
+			ofScale(factor, factor);
+			ofVec2f spot2d(spot.x, spot.z);
 
+			ofSetColor(ofColor::green, userMapAlpha);
+			ofFill();
+			ofCircle(spot2d, spotRadius);
+			ofNoFill();
+			ofCircle(spot2d,spotRadius + spotRadiusHysteresis);
+
+
+
+			ofLine(spot2d.x, spot2d.y, -spotRadius, spotRadius);
+
+			ofNoFill();
 			ofSetLineWidth(5);
-			ofSetColor(ofColor::green);
-			ofLine(0, -h/2, 0, h/2);
+			ofSetColor(ofColor::white, userMapAlpha);
 
-			drawOverheadText(txt_position, h);
+			ofVec2f v(selectedUser.headPoint.x, selectedUser.headPoint.z);
+			ofCircle(v, 200);
+
+
+			ofPopStyle();
 			ofPopMatrix();
+
+			//draw arrow
 		}
+
 
 
 		if (state == RAISE_HAND)
 		{
-			drawOverheadText(txt_prompt, h);
+			drawOverheadText(txt_prompt, h*sc2);
 		}
 
 		if (state == SELECTION)
 		{
 			int alphaIcon = 255 * ofMap(selectedUser.getProgress(), 0.3, 0.7, 1, 0, true);
 
-			ofEnableAlphaBlending();
 			ofSetColor(255, 255, 255, alphaIcon);
-			drawOverheadText(txt_pointing, h);
-			ofDisableAlphaBlending();
+			drawOverheadText(txt_pointing, h*sc2);
+			
 		}
 
 
 
-		if (drawDepth)
-		{
-			//openNIRecorder.drawDepth();
-			openNIRecorder.draw();
 
-		}
 
 		ofxProfileSectionPop();
 		ofPopMatrix();
-	}
-	if (state == GOTO_SPOT)
-	{
 
-		userMessage << "go to the spot. Please move " 
-			<< (selectedUser.dist.x < 0 ? "Right" : "Left")
-			<< " and "
-			<< (selectedUser.dist.y > 0 ? "Forward" : "Back") << endl
-			<< endl;
-		//TODO: instruct user to step into spot (visualy? top view)
-
-
-		//draw user map
-		ofPushMatrix();
-		ofPushStyle();
-		ofSetColor(ofColor::white);
-
-		ofTranslate(OFX_UI_GLOBAL_CANVAS_WIDTH / 2, 580);
-
-		float w = OFX_UI_GLOBAL_CANVAS_WIDTH;
-		float h = 240;
-
-		float xFactor = w/4000;
-		float zFactor = h/4000;
-
-		ofNoFill();
-		ofRect(0, h/2, w, h);
-		ofDrawBitmapString("Sensor", 0, 0);
-
-		ofScale(xFactor, zFactor);
-		ofVec2f spot2d(spot.x, spot.z);
-
-		ofSetColor(ofColor::red);
-		ofFill();
-
-		ofCircle(spot2d, spotRadius);
-		ofSetColor(ofColor::white);
-
-		for(map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
-		{
-			ofxOpenNIUser& u = it->second;
-			if (u.isVisible())
-			{
-				ofPoint headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
-				ofVec2f v(headPoint.x, headPoint.z);
-				ofCircle(v, 100);
-			}
-		}
-
-		ofPopStyle();
-		ofPopMatrix();
 	}
 
 	if (state == SELECTION)
 	{
 		//userMessage << "waiting for selection... TODO: instructions how to select" << endl;
 		//userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
-
-
-
 		cursor.draw();
 	}
 
 
-	ofSetColor(255, 255, 0);
+	if (drawDepth)
+	{
+		ofSetRectMode(OF_RECTMODE_CORNER);
+		//openNIRecorder.drawDepth();
+		openNIRecorder.draw();
+	}
 
-	stringstream msg;
-	msg
-		<< "User Message: " << userMessage.str() << endl
-		<< "F: Fullscreen" << endl
-		<< "s : start/stop recording: " << (isRecording ? "RECORDING":"READY") << endl
-		<< endl
-		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
-		<< "State : " << stateToString(state) << endl
-		<< "Height: " << openNIRecorder.imageHeight << endl
-		<< "Width : " << openNIRecorder.imageWidth << endl
-		<< lastSeenUser.getCountDown() << endl;
-
-
-	ofDrawBitmapString(msg.str(), 220, 200);
+	drawDebugText();
 
 	if (drawProfiler)
 	{
@@ -639,14 +614,19 @@ void testApp::setupGui(){
 
 	spotRadius = 400;
 	gui->addSlider("spot radius", 0, 1000, &spotRadius);
+	spotRadiusHysteresis = 100;
+	gui->addSlider("sr Hysteresis", 0, 300, &spotRadiusHysteresis);
 
-	spotZ = 1600; // distance from sensor [mm]
-	gui->addIntSlider("spot Z", 500, 3000, &spotZ);
-	spot = ofPoint(0, 0, spotZ); 
+	spot.z = 1600; // distance from sensor [mm]
+	gui->addSlider("spot Z", 500, 3000, &spot.z);
+
+	userMapAlpha = 60;
+	gui->addIntSlider("userMapAlpha", 0, 255, &userMapAlpha);
+
 
 	handShoulderDistance = 200;
 	gui->addIntSlider("handShoulderDistance", 100, 500, &handShoulderDistance);
-	
+
 
 
 	margin = 8;
@@ -719,4 +699,26 @@ void testApp::drawOverheadText(ofImage& txt, int h)
 
 	ofSetColor(ofColor::white);
 	txt.draw(pos);
+}
+
+void testApp::drawDebugText()
+{
+
+	ofSetColor(255, 255, 0);
+
+	stringstream msg;
+	msg
+		<< "F: Fullscreen" << endl
+		<< "s : start/stop recording: " << (isRecording ? "RECORDING":"READY") << endl
+		<< endl
+		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
+		<< "State : " << stateToString(state) << endl
+		<< "Height: " << openNIRecorder.imageHeight << endl
+		<< "Width : " << openNIRecorder.imageWidth << endl
+		<< lastSeenUser.getCountDown() << endl
+		<< "User Message: " << userMessage.str() << endl
+		;
+
+	ofDrawBitmapString(msg.str(), 220, 200);
+
 }

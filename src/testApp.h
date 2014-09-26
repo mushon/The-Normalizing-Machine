@@ -90,10 +90,14 @@ private:
 
 	ofPoint spot;
 	float spotRadius;
-	int spotZ;
+	float spotRadiusHysteresis;
 
+	int userMapAlpha;
 	int handShoulderDistance;
 		
+	void drawDebugText();
+
+
 	int margin;
 	int bottomMargin;
 
