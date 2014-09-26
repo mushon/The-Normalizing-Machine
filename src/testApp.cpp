@@ -132,11 +132,21 @@ void testApp::update(){
 			selectedUser.id = minId;
 			selectedUser.dist = minDist;
 			ofxOpenNIUser& u = openNIRecorder.trackedUsers.at(minId);
-
+					
 			selectedUser.headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
-			ofPoint rightHand = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND).positionReal;
-			ofPoint rightShoulder = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER).positionReal;
-			selectedUser.updatePoints(rightHand, rightShoulder);
+
+			ofxOpenNIJoint rhj = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND);
+			ofxOpenNIJoint rsj = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
+			if (rhj.positionConfidence < 0.5 || rsj.positionConfidence < 0.5)
+			{
+				selectedUser.resetHandPoints();
+			}
+			else
+			{
+				ofPoint rightHand = rhj.positionReal;
+				ofPoint rightShoulder = rsj.positionReal;
+				selectedUser.updatePoints(rightHand, rightShoulder);
+			}
 		}
 		else
 		{

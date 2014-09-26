@@ -36,6 +36,13 @@ public:
 		{
 		}
 
+		void resetHandPoints()
+		{
+			hand = ofVec3f();
+			shoulder = ofVec3f();
+			rightHandVelocity = ofVec3f();
+			waitForSteady = true;
+		}
 
 		void updatePoints(ofPoint h, ofPoint s)
 		{
