@@ -19,7 +19,8 @@ void testApp::setup() {
 	//setupPlayback("e:\\t3.oni");
 	for (int i=0; i<25; ++i)
 	{
-		setupPlayback("e:\\t4.oni");
+		string filename = "records/t1.oni";
+		setupPlayback(ofToDataPath(filename));
 	}
 
 
@@ -310,10 +311,13 @@ void testApp::update(){
 
 	}
 
-	for (int i=0; i<n_players; i++)
+	int t = sqrt(n_players);
+	for (int i=0; i<t; i++)
 	{
+		int j = rand() % MAX_PLAYERS;
+
 		ofxProfileSectionPush(string("openni update ").append(ofToString(i)));
-		openNIPlayers[i].update();
+		openNIPlayers[j].update();
 		ofxProfileSectionPop();
 	}
 }
