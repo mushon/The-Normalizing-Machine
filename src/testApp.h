@@ -15,7 +15,29 @@
 using namespace ofxCv;
 using namespace cv;
 
+struct RecordedData
+{
+	RecordedData()
+	{
+		time = ofGetUnixTime();
+	}
+	// record data:	
+	unsigned int time; //primary key : id
+	unsigned int v;
+	unsigned int x[3];
+
+	unsigned int vScore;
+	unsigned int xScore;
+	
+	// time, file, location, selection v/x
+
+};
+
 class testApp : public ofBaseApp{
+
+	vector<RecordedData> dataset; // the whole shablang
+	// on startup, find dirs (xml?)
+	// load recordings
 
 public:
 	void setup();
@@ -129,5 +151,6 @@ private:
 
 	bool simulateMoreThanOne; // for debugging purposes
 };
+
 
 #endif

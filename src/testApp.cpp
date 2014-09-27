@@ -702,8 +702,6 @@ void testApp::setupGui(){
 	// start recording around raise hand gesture
 	states.push_back("Confirmation"); //add face layer
 	// present selection
-	// record data:	
-	// time, file, location, selction v/x
 	//	gui->addRadio("State", states, OFX_UI_ORIENTATION_VERTICAL, dim, dim)->activateToggle(State.Idle); 
 
 
