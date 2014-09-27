@@ -472,7 +472,7 @@ void testApp::draw(){
 
 
 
-			ofLine(spot2d.x, spot2d.y, -spotRadius, spotRadius);
+			ofLine(spot2d.x - spotRadius, spot2d.y,spot2d.x + spotRadius, spot2d.y);
 
 			ofNoFill();
 			ofSetLineWidth(5);
