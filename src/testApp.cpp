@@ -224,6 +224,7 @@ void testApp::update(){
 					// TODO: sanity check if hand is +- at shoulder level
 					ofVec2f v(p.x, p.y);
 					v /= (touchScreenSize / 2); // <<<< There's alot of UI tweaking here, where the window sits (width = shoulders width?)
+					selectedUser.screenPoint01 = v;
 
 					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function, 
 					//v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function, 
@@ -376,9 +377,9 @@ void testApp::draw(){
 				float x = ofMap(fabs(p.x), w/4, ofGetScreenWidth()/4, 0.0f, 1.0f, true);
 				float y = ofMap(fabs(p.y), h/4, ofGetScreenHeight()/4, 0.0f, 1.0f, true);
 
-				if (p.y < -1)
+				if (selectedUser.screenPoint01.y < -1)
 				{
-					y = ofMap(p.y, -1, minBottomScreen, 1.0f, 0.0f, true); // fix jitter when hand is too low
+					y = ofMap(selectedUser.screenPoint01.y, -1, minBottomScreen, 1.0f, 0.0f, true); // fix jitter when hand is too low
 				}
 
 				float s01 = (x*y); // score
