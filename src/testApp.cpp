@@ -18,7 +18,7 @@ void testApp::setup() {
 	//setupPlayback("E:\\t2.oni");
 	//setupPlayback("e:\\t3.oni");
 	for (int i=0; i<25; ++i)
-	{
+	{ 
 		string filename = "records/t1.oni";
 		setupPlayback(ofToDataPath(filename));
 	}
@@ -325,11 +325,10 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
 	
-		int s = 5;
-	int w = ofGetScreenWidth() / (s+1);
-	int h = ofGetScreenHeight() / (s+1);
-	float sx = (openNIRecorder.imageWidth - w) / 2;					//130
-	float sy = (openNIRecorder.imageHeight - h) / 2;				//0
+/*	int w = ofGetScreenWidth() / s;
+	int h = ofGetScreenHeight() / s;
+	float iw = openNIRecorder.imageWidth;					//130
+	float ih = openNIRecorder.imageHeight;				//0
 
 	for (int i=0; i<n_players; i++)
 	{
@@ -337,23 +336,29 @@ void testApp::draw(){
 		int x = i%s;
 		int y = i/s;
 		ofTranslate(x*w, y*h);
-		openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
+		ofScale(w / iw, h / ih);
+		openNIPlayers[i].drawImage();
 		ofPopMatrix();
 	}
 	return;
-
-			ofSetRectMode(OF_RECTMODE_CENTER);
+	*/
+	
+	//ofSetRectMode(OF_RECTMODE_CENTER);
 
 	ofxProfileThisFunction();
 
 	if (drawVideo) {
 
+		int s = 5;
 
 		//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
-		float w = (ofGetScreenWidth() - margin) / 2;					//380
-		float h = (ofGetScreenHeight() - margin - bottomMargin) / 2;	//480
+		float w = (ofGetScreenWidth() - (s-1) * margin) / s;					//380
+		float h = (ofGetScreenHeight() -(s-1) * margin - bottomMargin) / s;	//480
 		float sx = (openNIRecorder.imageWidth - w) / 2;					//130
 		float sy = (openNIRecorder.imageHeight - h) / 2;				//0
+
+		float iw = openNIRecorder.imageWidth;					//130
+		float ih = openNIRecorder.imageHeight;				//0
 
 
 		for (int i=0; i<n_players; i++)
@@ -363,11 +368,19 @@ void testApp::draw(){
 			// video order:
 			// 0 1
 			// 2 3
-			int dx = i%2;
-			int dy = i/2;
+			int x = i%s;
+			int y = i/s;
 
-			dx = 2*dx - 1; // map 0,1 to -1,1
-			dy = 2*dy - 1;
+			ofTranslate(x*w, y*h);
+			ofScale(2 * w / iw, 2 * h / ih);
+			openNIPlayers[i].drawImage();
+//			openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
+
+			ofPopMatrix();
+			continue;
+
+			int dx = 2*x - 1; // map 0,1 to -1,1
+			int dy = 2*y - 1;
 
 			playbackScale = 1.0f;
 			if (state == MORE_THAN_ONE)
