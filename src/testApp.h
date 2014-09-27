@@ -20,13 +20,15 @@ struct RecordedData
 	RecordedData()
 	{
 		time = ofGetUnixTime();
+		for (int i=0; i<4; i++) selection[i] = false;
 	}
 	// record data:	
 	unsigned int time; //primary key : id
-	unsigned int v;
-	unsigned int x[3];
+	
+	unsigned int others[4];
+	bool selection[4];
 
-	unsigned int vScore;
+	unsigned int vScore; //how many scored you. to be updated globally
 	unsigned int xScore;
 	
 	// time, file, location, selection v/x
@@ -151,6 +153,7 @@ private:
 	ofxUISuperCanvas* gui;
 
 	void startRecording();
+	void saveRecording();
 	void stopRecording();
 
 	AppCursor cursor;

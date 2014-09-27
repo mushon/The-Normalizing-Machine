@@ -711,6 +711,32 @@ void testApp::startRecording()
 	cout << "startRecording: " << lastRecordingFilename << endl;
 }
 
+void testApp::saveRecording()
+{
+	stopRecording();
+
+	RecordedData r;
+	
+	r.selection[selectedUser.hovered] = true;
+
+	for (int i=0; i<4; i++)
+	{
+		//r.others[i] = currentIds[i];
+	}
+
+	// when recording is complete, save his selection data, process face frames and save to data,
+	// update other selected x/v in db
+	// select 25 :current25
+	// meanwhile in 'position yourself'
+	// select 4 :current4
+	// when to start recording? (each hoverChange abort and start over) 
+	// void abortRecording() // delete file
+	// 
+
+
+}
+
+
 void testApp::stopRecording()
 {
 	openNIRecorder.stopRecording();
