@@ -763,7 +763,7 @@ void testApp::loadLibrary()
 		string filename;
 		if (testLoadLibrary) 
 		{
-			filename = "records/t1.oni";
+			filename = "records/t2.oni";
 		}
 		else
 		{
