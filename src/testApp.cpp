@@ -14,10 +14,13 @@ void testApp::setup() {
 	n_players = 0;
 
 	setupRecording();
-	setupPlayback("e:\\t0.oni");
-	setupPlayback("E:\\t2.oni");
-	setupPlayback("e:\\t3.oni");
-	setupPlayback("e:\\t4.oni");
+	//setupPlayback("e:\\t0.oni");
+	//setupPlayback("E:\\t2.oni");
+	//setupPlayback("e:\\t3.oni");
+	for (int i=0; i<25; ++i)
+	{
+		setupPlayback("e:\\t4.oni");
+	}
 
 
 	drawDepth=false;
@@ -317,7 +320,25 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	ofSetRectMode(OF_RECTMODE_CENTER);
+	
+		int s = 5;
+	int w = ofGetScreenWidth() / (s+1);
+	int h = ofGetScreenHeight() / (s+1);
+	float sx = (openNIRecorder.imageWidth - w) / 2;					//130
+	float sy = (openNIRecorder.imageHeight - h) / 2;				//0
+
+	for (int i=0; i<n_players; i++)
+	{
+		ofPushMatrix();
+		int x = i%s;
+		int y = i/s;
+		ofTranslate(x*w, y*h);
+		openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
+		ofPopMatrix();
+	}
+	return;
+
+			ofSetRectMode(OF_RECTMODE_CENTER);
 
 	ofxProfileThisFunction();
 

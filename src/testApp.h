@@ -78,8 +78,9 @@ private:
 
 	bool isRecording;
 
+	static const int MAX_PLAYERS = 25;
 	ofxOpenNI openNIRecorder;
-	ofxOpenNI openNIPlayers[4];
+	ofxOpenNI openNIPlayers[MAX_PLAYERS];
 	int n_players;
 	
 	float playbackScale;
