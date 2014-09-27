@@ -316,7 +316,7 @@ void testApp::update(){
 	{
 		int j = rand() % MAX_PLAYERS;
 
-		ofxProfileSectionPush(string("openni update ").append(ofToString(i)));
+		ofxProfileSectionPush(string("openni update ").append(ofToString(j)));
 		openNIPlayers[j].update();
 		ofxProfileSectionPop();
 	}
