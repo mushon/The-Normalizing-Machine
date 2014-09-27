@@ -266,7 +266,7 @@ void testApp::update(){
 					{
 						hover = SelectedUser::NO_HOVER;
 					}
-					if (v.y < -1.2) // hand down
+					if (v.y < minBottomScreen) // hand down
 					{
 						hover = SelectedUser::NO_HOVER;
 					}
@@ -344,10 +344,10 @@ void testApp::draw(){
 			dx = 2*dx - 1; // map 0,1 to -1,1
 			dy = 2*dy - 1;
 
-			float sc = 1.0f;
+			playbackScale = 1.0f;
 			if (state == MORE_THAN_ONE)
 			{
-				sc = 0.66;
+				playbackScale = 0.66;
 
 			}
 
@@ -356,19 +356,24 @@ void testApp::draw(){
 			{
 				ofVec2f p = selectedUser.screenPoint;
 				p -= ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
-				p.x = fabs(p.x);
-				p.y = fabs(p.y);
 
-				float x = ofMap(p.x, w/4, ofGetScreenWidth()/4, 0.0f, 1.0f, true);
-				float y = ofMap(p.y, h/4, ofGetScreenHeight()/4, 0.0f, 1.0f, true);
+				float x = ofMap(fabs(p.x), w/4, ofGetScreenWidth()/4, 0.0f, 1.0f, true);
+				float y = ofMap(fabs(p.y), h/4, ofGetScreenHeight()/4, 0.0f, 1.0f, true);
 
-				float s = (x*y)/2;
-				sc = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
+				if (p.y < -1)
+				{
+					y = ofMap(p.y, -1, minBottomScreen, 1.0f, 0.0f, true); // fix jitter when hand is too low
+				}
+
+				float s01 = (x*y); // score
+				float maxExpand = 0.3;
+				float s = maxExpand * s01; 
+				playbackScale = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
 
 			}
 
-			ofTranslate(ofGetScreenWidth()/2 + (dx * w/2 * sc), (ofGetScreenHeight() - bottomMargin)/2 + (dy * h/2 * sc));
-			ofScale(sc, sc);
+			ofTranslate(ofGetScreenWidth()/2 + (dx * w/2 * playbackScale), (ofGetScreenHeight() - bottomMargin)/2 + (dy * h/2 * playbackScale));
+			ofScale(playbackScale, playbackScale);
 
 			openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
 
@@ -636,6 +641,9 @@ void testApp::setupGui(){
 
 	handShoulderDistance = 200;
 	gui->addIntSlider("handShoulderDistance", 100, 500, &handShoulderDistance);
+	
+	minBottomScreen = -1.2;
+	gui->addSlider("minBottomScreen", -2, -1, &minBottomScreen);
 
 
 

@@ -81,6 +81,9 @@ private:
 	ofxOpenNI openNIRecorder;
 	ofxOpenNI openNIPlayers[4];
 	int n_players;
+	
+	float playbackScale;
+
 	string lastRecordingFilename;
 
 	string lastDump;
@@ -94,7 +97,8 @@ private:
 
 	int userMapAlpha;
 	int handShoulderDistance;
-		
+	float minBottomScreen;
+
 	void drawDebugText();
 
 
