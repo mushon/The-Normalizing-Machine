@@ -261,7 +261,7 @@ void testApp::update(){
 
 
 					//TODO select mechanism (click/timeout)
-					bool selected = false;
+					bool selected = (selectedUser.selectTimer.getCountDown() == 0);
 					if(selected)
 					{
 						//selected item (x out of 4)
@@ -276,6 +276,8 @@ void testApp::update(){
 			}
 		case CONFIRMATION:
 			{
+				//animate back to idle
+				state = IDLE;
 				break;
 			}
 
