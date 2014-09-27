@@ -309,15 +309,7 @@ void testApp::draw(){
 
 	if (drawVideo) {
 
-		if (state == IDLE)
-		{
-			playersRowSize = 5;
-		}
-		else
-		{
-			playersRowSize = 2;
-		}
-		
+		playersRowSize = 2;	
 		const int& s = playersRowSize;
 
 		//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
@@ -339,15 +331,7 @@ void testApp::draw(){
 			// 2 3
 			int x = i%s;
 			int y = i/s;
-
-			ofTranslate(x*(w+margin), y*(h+margin));
-			ofScale(2 * w / iw, 2 * h / ih);
-			players[i].drawImage();
-			//			players[i].drawImageSubsection(w, h, sx, sy);
-
-			ofPopMatrix();
-			continue;
-
+			
 			int dx = 2*x - 1; // map 0,1 to -1,1
 			int dy = 2*y - 1;
 
@@ -355,9 +339,7 @@ void testApp::draw(){
 			if (state == MORE_THAN_ONE)
 			{
 				playbackScale = 0.66;
-
 			}
-
 
 			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
@@ -376,7 +358,6 @@ void testApp::draw(){
 				float maxExpand = 0.3;
 				float s = maxExpand * s01; 
 				playbackScale = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
-
 			}
 
 			ofTranslate(ofGetScreenWidth()/2 + (dx * w/2 * playbackScale), (ofGetScreenHeight() - bottomMargin)/2 + (dy * h/2 * playbackScale));
@@ -800,5 +781,4 @@ void testApp::loadLibrary()
 	}
 
 	// TODO: load face data
-}
 }
