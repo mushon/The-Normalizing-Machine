@@ -371,7 +371,7 @@ void testApp::draw(){
 			int x = i%s;
 			int y = i/s;
 
-			ofTranslate(x*w, y*h);
+			ofTranslate(x*(w+margin), y*(h+margin));
 			ofScale(2 * w / iw, 2 * h / ih);
 			openNIPlayers[i].drawImage();
 //			openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
