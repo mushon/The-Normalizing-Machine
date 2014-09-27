@@ -6,24 +6,16 @@
 
 //--------------------------------------------------------------
 void testApp::setup() {
-
-	state = IDLE;
-
 	isRecording		= false;
 
-	n_players = 0;
 
 	setupRecording();
-	setupPlayback("e:\\t0.oni");
-	setupPlayback("E:\\t2.oni");
-	setupPlayback("e:\\t3.oni");
-	setupPlayback("e:\\t4.oni");
-
 
 	drawDepth=false;
 	drawGui=false;
 	drawProfiler=false;
 	drawVideo=true;
+	testLoadLibrary = true;
 
 	lastSeenUser.setTimeout(5000);
 
@@ -45,6 +37,10 @@ void testApp::setup() {
 	setupGui();
 	ofBackground(0, 0, 0);
 
+	//restart()
+	n_players = 0;
+	loadLibrary();
+	state = IDLE;
 }
 
 void testApp::setupRecording(string _filename) {
@@ -52,39 +48,22 @@ void testApp::setupRecording(string _filename) {
 	openNIRecorder.setup();
 	openNIRecorder.addDepthStream();
 	openNIRecorder.addImageStream();
-
 	openNIRecorder.addUserTracker();
-
-	//openNIRecorder.setUserSmoothing(filterFactor);				// built in openni skeleton smoothing...
-	//openNIRecorder.setMaxNumUsers(1);					// use this to set dynamic max number of users (NB: that a hard upper limit is defined by MAX_NUMBER_USERS in ofxUserGenerator)
-
 	openNIRecorder.addHandsTracker();
-	/*
-	openNIRecorder.addAllHandFocusGestures();    
-	openNIRecorder.setHandSmoothing(filterFactor);
-
-	openNIRecorder.setMaxNumHands(2);
-
-	openNIRecorder.setRegister(true);
-	openNIRecorder.setMirror(true);
-	*/
-
 	openNIRecorder.start(); //
 }
 
 void testApp::setupPlayback(string _filename) {
 	//openNIPlayer.stop();
 
-	//openNIPlayers.push_back(ofxOpenNI());
-	//ofxOpenNI& player = openNIPlayers.back();
-
-	openNIPlayers[n_players].setup(_filename.c_str());
-	openNIPlayers[n_players].addDepthStream();
-	openNIPlayers[n_players].addImageStream();
-	openNIPlayers[n_players].start();
+	
+	ofxOpenNI& player = players[n_players];
 	n_players++;
 
-	//if (n_players >= 4) n_players=0;
+	player.setup(_filename.c_str());
+	player.addDepthStream();
+	player.addImageStream();
+	player.start();
 
 }
 
@@ -132,7 +111,7 @@ void testApp::update(){
 			selectedUser.id = minId;
 			selectedUser.dist = minDist;
 			ofxOpenNIUser& u = openNIRecorder.trackedUsers.at(minId);
-					
+
 			selectedUser.headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
 
 			ofxOpenNIJoint rhj = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND);
@@ -244,6 +223,7 @@ void testApp::update(){
 					// TODO: sanity check if hand is +- at shoulder level
 					ofVec2f v(p.x, p.y);
 					v /= (touchScreenSize / 2); // <<<< There's alot of UI tweaking here, where the window sits (width = shoulders width?)
+					selectedUser.screenPoint01 = v;
 
 					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function, 
 					//v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function, 
@@ -281,7 +261,7 @@ void testApp::update(){
 
 
 					//TODO select mechanism (click/timeout)
-					bool selected = false;
+					bool selected = (selectedUser.selectTimer.getCountDown() == 0);
 					if(selected)
 					{
 						//selected item (x out of 4)
@@ -296,6 +276,8 @@ void testApp::update(){
 			}
 		case CONFIRMATION:
 			{
+				//animate back to idle
+				state = IDLE;
 				break;
 			}
 
@@ -310,7 +292,7 @@ void testApp::update(){
 	for (int i=0; i<n_players; i++)
 	{
 		ofxProfileSectionPush(string("openni update ").append(ofToString(i)));
-		openNIPlayers[i].update();
+		players[i].update();
 		ofxProfileSectionPop();
 	}
 }
@@ -331,7 +313,7 @@ void testApp::draw(){
 		float sy = (openNIRecorder.imageHeight - h) / 2;				//0
 
 
-		for (int i=0; i<n_players; i++)
+		for (int i=0; i < 4; i++)
 		{
 
 			ofPushMatrix();
@@ -360,22 +342,21 @@ void testApp::draw(){
 				float x = ofMap(fabs(p.x), w/4, ofGetScreenWidth()/4, 0.0f, 1.0f, true);
 				float y = ofMap(fabs(p.y), h/4, ofGetScreenHeight()/4, 0.0f, 1.0f, true);
 
-				if (p.y < -1)
+				if (selectedUser.screenPoint01.y < -1)
 				{
-					y = ofMap(p.y, -1, minBottomScreen, 1.0f, 0.0f, true); // fix jitter when hand is too low
+					y = ofMap(selectedUser.screenPoint01.y, -1, minBottomScreen, 1.0f, 0.0f, true); // fix jitter when hand is too low
 				}
 
 				float s01 = (x*y); // score
 				float maxExpand = 0.3;
 				float s = maxExpand * s01; 
 				playbackScale = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
-
 			}
 
 			ofTranslate(ofGetScreenWidth()/2 + (dx * w/2 * playbackScale), (ofGetScreenHeight() - bottomMargin)/2 + (dy * h/2 * playbackScale));
 			ofScale(playbackScale, playbackScale);
 
-			openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
+			players[i].drawImageSubsection(w, h, sx, sy);
 
 
 			if (state == MORE_THAN_ONE)
@@ -390,7 +371,7 @@ void testApp::draw(){
 			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
 				int alphaIcon = 255 * ofMap(selectedUser.getProgress(), 0.3, 0.7, 1, 0, true);
-				
+
 				ofSetColor(255, 255, 255, alphaIcon);
 				ofImage& icon = (i==selectedUser.hovered) ? yesIcon : noIcon;
 				icon.draw(0, -h/3);
@@ -455,7 +436,7 @@ void testApp::draw(){
 
 
 
-			ofLine(spot2d.x, spot2d.y, -spotRadius, spotRadius);
+			ofLine(spot2d.x - spotRadius, spot2d.y,spot2d.x + spotRadius, spot2d.y);
 
 			ofNoFill();
 			ofSetLineWidth(5);
@@ -484,7 +465,7 @@ void testApp::draw(){
 
 			ofSetColor(255, 255, 255, alphaIcon);
 			drawOverheadText(txt_pointing, h*sc2);
-			
+
 		}
 
 
@@ -598,7 +579,7 @@ void testApp::exit(){
 	openNIRecorder.stop(); 
 	for (int i=0; i<n_players; i++)
 	{
-		openNIPlayers[i].stop();
+		players[i].stop();
 	}
 	ofxOpenNI::shutdown();
 
@@ -641,7 +622,7 @@ void testApp::setupGui(){
 
 	handShoulderDistance = 200;
 	gui->addIntSlider("handShoulderDistance", 100, 500, &handShoulderDistance);
-	
+
 	minBottomScreen = -1.2;
 	gui->addSlider("minBottomScreen", -2, -1, &minBottomScreen);
 
@@ -664,8 +645,6 @@ void testApp::setupGui(){
 	// start recording around raise hand gesture
 	states.push_back("Confirmation"); //add face layer
 	// present selection
-	// record data:	
-	// time, file, location, selction v/x
 	//	gui->addRadio("State", states, OFX_UI_ORIENTATION_VERTICAL, dim, dim)->activateToggle(State.Idle); 
 
 
@@ -698,6 +677,32 @@ void testApp::startRecording()
 
 	cout << "startRecording: " << lastRecordingFilename << endl;
 }
+
+void testApp::saveRecording()
+{
+	stopRecording();
+
+	RecordedData r;
+	
+	r.selection[selectedUser.hovered] = true;
+
+	for (int i=0; i<4; i++)
+	{
+		//r.others[i] = currentIds[i];
+	}
+
+	// when recording is complete, save his selection data, process face frames and save to data,
+	// update other selected x/v in db
+	// select 25 :current25
+	// meanwhile in 'position yourself'
+	// select 4 :current4
+	// when to start recording? (each hoverChange abort and start over) 
+	// void abortRecording() // delete file
+	// 
+
+
+}
+
 
 void testApp::stopRecording()
 {
@@ -739,4 +744,34 @@ void testApp::drawDebugText()
 
 	ofDrawBitmapString(msg.str(), 220, 200);
 
+}
+
+
+void testApp::loadLibrary()
+{
+	dir.listDir("records/");
+	dir.sort(); // in linux the file system doesn't return file lists ordered in alphabetical order
+
+	//allocate the vector to have as many ofImages as files
+	int n = min(MAX_PLAYERS, dir.size());
+	
+	if (testLoadLibrary) n = MAX_PLAYERS;
+
+	// iterate through the files and load them
+	for(int i = 0; i < n; i++)
+	{
+		string filename;
+		if (testLoadLibrary) 
+		{
+			filename = "records/t1.oni";
+		}
+		else
+		{
+			filename = dir.getPath(i);
+		}
+
+		setupPlayback(ofToDataPath(filename));
+	}
+
+	// TODO: load face data
 }

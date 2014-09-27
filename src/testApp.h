@@ -15,7 +15,31 @@
 using namespace ofxCv;
 using namespace cv;
 
+struct RecordedData
+{
+	RecordedData()
+	{
+		time = ofGetUnixTime();
+		for (int i=0; i<4; i++) selection[i] = false;
+	}
+	// record data:	
+	unsigned int time; //primary key : id
+	
+	unsigned int others[4];
+	bool selection[4];
+
+	unsigned int vScore; //how many scored you. to be updated globally
+	unsigned int xScore;
+	
+	// time, file, location, selection v/x
+
+};
+
 class testApp : public ofBaseApp{
+
+	vector<RecordedData> dataset; // the whole shablang
+	// on startup, find dirs (xml?)
+	// load recordings
 
 public:
 	void setup();
@@ -78,8 +102,18 @@ private:
 
 	bool isRecording;
 
+	static const unsigned int MAX_PLAYERS = 25;
 	ofxOpenNI openNIRecorder;
-	ofxOpenNI openNIPlayers[4];
+	//ofxOpenNI openNIPlayers[MAX_PLAYERS];
+	
+	ofDirectory dir;
+	ofxOpenNI players[MAX_PLAYERS];
+	void loadLibrary();
+	bool testLoadLibrary;
+
+	int playersRowSize;
+
+
 	int n_players;
 	
 	float playbackScale;
@@ -122,11 +156,13 @@ private:
 	ofxUISuperCanvas* gui;
 
 	void startRecording();
+	void saveRecording();
 	void stopRecording();
 
 	AppCursor cursor;
 
 	bool simulateMoreThanOne; // for debugging purposes
 };
+
 
 #endif

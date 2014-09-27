@@ -26,6 +26,7 @@ public:
 		ofPoint shoulder; //filtered
 
 		ofVec2f screenPoint;
+		ofVec2f screenPoint01;
 
 		AppTimer steady;
 		AppTimer selectTimer;
