@@ -14,15 +14,8 @@ void testApp::setup() {
 	n_players = 0;
 
 	setupRecording();
-	//setupPlayback("e:\\t0.oni");
-	//setupPlayback("E:\\t2.oni");
-	//setupPlayback("e:\\t3.oni");
-	for (int i=0; i<25; ++i)
-	{ 
-		string filename = "records/t1.oni";
-		setupPlayback(ofToDataPath(filename));
-	}
 
+	loadLibrary();
 
 	drawDepth=false;
 	drawGui=false;
@@ -56,39 +49,22 @@ void testApp::setupRecording(string _filename) {
 	openNIRecorder.setup();
 	openNIRecorder.addDepthStream();
 	openNIRecorder.addImageStream();
-
 	openNIRecorder.addUserTracker();
-
-	//openNIRecorder.setUserSmoothing(filterFactor);				// built in openni skeleton smoothing...
-	//openNIRecorder.setMaxNumUsers(1);					// use this to set dynamic max number of users (NB: that a hard upper limit is defined by MAX_NUMBER_USERS in ofxUserGenerator)
-
 	openNIRecorder.addHandsTracker();
-	/*
-	openNIRecorder.addAllHandFocusGestures();    
-	openNIRecorder.setHandSmoothing(filterFactor);
-
-	openNIRecorder.setMaxNumHands(2);
-
-	openNIRecorder.setRegister(true);
-	openNIRecorder.setMirror(true);
-	*/
-
 	openNIRecorder.start(); //
 }
 
 void testApp::setupPlayback(string _filename) {
 	//openNIPlayer.stop();
 
-	//openNIPlayers.push_back(ofxOpenNI());
-	//ofxOpenNI& player = openNIPlayers.back();
-
-	openNIPlayers[n_players].setup(_filename.c_str());
-	openNIPlayers[n_players].addDepthStream();
-	openNIPlayers[n_players].addImageStream();
-	openNIPlayers[n_players].start();
+	
+	ofxOpenNI& player = players[n_players];
 	n_players++;
 
-	//if (n_players >= 4) n_players=0;
+	player.setup(_filename.c_str());
+	player.addDepthStream();
+	player.addImageStream();
+	player.start();
 
 }
 
@@ -136,7 +112,7 @@ void testApp::update(){
 			selectedUser.id = minId;
 			selectedUser.dist = minDist;
 			ofxOpenNIUser& u = openNIRecorder.trackedUsers.at(minId);
-					
+
 			selectedUser.headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
 
 			ofxOpenNIJoint rhj = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND);
@@ -317,32 +293,32 @@ void testApp::update(){
 		int j = rand() % MAX_PLAYERS;
 
 		ofxProfileSectionPush(string("openni update ").append(ofToString(j)));
-		openNIPlayers[j].update();
+		players[j].update();
 		ofxProfileSectionPop();
 	}
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	
-/*	int w = ofGetScreenWidth() / s;
+
+	/*	int w = ofGetScreenWidth() / s;
 	int h = ofGetScreenHeight() / s;
 	float iw = openNIRecorder.imageWidth;					//130
 	float ih = openNIRecorder.imageHeight;				//0
 
 	for (int i=0; i<n_players; i++)
 	{
-		ofPushMatrix();
-		int x = i%s;
-		int y = i/s;
-		ofTranslate(x*w, y*h);
-		ofScale(w / iw, h / ih);
-		openNIPlayers[i].drawImage();
-		ofPopMatrix();
+	ofPushMatrix();
+	int x = i%s;
+	int y = i/s;
+	ofTranslate(x*w, y*h);
+	ofScale(w / iw, h / ih);
+	players[i].drawImage();
+	ofPopMatrix();
 	}
 	return;
 	*/
-	
+
 	//ofSetRectMode(OF_RECTMODE_CENTER);
 
 	ofxProfileThisFunction();
@@ -373,8 +349,8 @@ void testApp::draw(){
 
 			ofTranslate(x*(w+margin), y*(h+margin));
 			ofScale(2 * w / iw, 2 * h / ih);
-			openNIPlayers[i].drawImage();
-//			openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
+			players[i].drawImage();
+			//			players[i].drawImageSubsection(w, h, sx, sy);
 
 			ofPopMatrix();
 			continue;
@@ -389,7 +365,7 @@ void testApp::draw(){
 
 			}
 
-			
+
 			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
 				ofVec2f p = selectedUser.screenPoint;
@@ -413,7 +389,7 @@ void testApp::draw(){
 			ofTranslate(ofGetScreenWidth()/2 + (dx * w/2 * playbackScale), (ofGetScreenHeight() - bottomMargin)/2 + (dy * h/2 * playbackScale));
 			ofScale(playbackScale, playbackScale);
 
-			openNIPlayers[i].drawImageSubsection(w, h, sx, sy);
+			players[i].drawImageSubsection(w, h, sx, sy);
 
 
 			if (state == MORE_THAN_ONE)
@@ -428,7 +404,7 @@ void testApp::draw(){
 			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
 				int alphaIcon = 255 * ofMap(selectedUser.getProgress(), 0.3, 0.7, 1, 0, true);
-				
+
 				ofSetColor(255, 255, 255, alphaIcon);
 				ofImage& icon = (i==selectedUser.hovered) ? yesIcon : noIcon;
 				icon.draw(0, -h/3);
@@ -522,7 +498,7 @@ void testApp::draw(){
 
 			ofSetColor(255, 255, 255, alphaIcon);
 			drawOverheadText(txt_pointing, h*sc2);
-			
+
 		}
 
 
@@ -636,7 +612,7 @@ void testApp::exit(){
 	openNIRecorder.stop(); 
 	for (int i=0; i<n_players; i++)
 	{
-		openNIPlayers[i].stop();
+		players[i].stop();
 	}
 	ofxOpenNI::shutdown();
 
@@ -679,7 +655,7 @@ void testApp::setupGui(){
 
 	handShoulderDistance = 200;
 	gui->addIntSlider("handShoulderDistance", 100, 500, &handShoulderDistance);
-	
+
 	minBottomScreen = -1.2;
 	gui->addSlider("minBottomScreen", -2, -1, &minBottomScreen);
 
@@ -775,4 +751,24 @@ void testApp::drawDebugText()
 
 	ofDrawBitmapString(msg.str(), 220, 200);
 
+}
+
+
+void testApp::loadLibrary()
+{
+	dir.listDir("records/");
+	dir.sort(); // in linux the file system doesn't return file lists ordered in alphabetical order
+
+	//allocate the vector to have as many ofImages as files
+	int n = min(MAX_PLAYERS, dir.size());
+	
+	// you can now iterate through the files and load them into the ofImage vector
+	for(int i = 0; i < n; i++)
+	{
+		string filename = "records/t1.oni";
+		filename = dir.getPath(i);
+		setupPlayback(ofToDataPath(filename));
+	}
+
+	// TODO: load data
 }

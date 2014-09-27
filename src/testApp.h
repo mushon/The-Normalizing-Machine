@@ -100,9 +100,15 @@ private:
 
 	bool isRecording;
 
-	static const int MAX_PLAYERS = 25;
+	static const unsigned int MAX_PLAYERS = 25;
 	ofxOpenNI openNIRecorder;
-	ofxOpenNI openNIPlayers[MAX_PLAYERS];
+	//ofxOpenNI openNIPlayers[MAX_PLAYERS];
+	
+	ofDirectory dir;
+	ofxOpenNI players[MAX_PLAYERS];
+	void loadLibrary();
+
+
 	int n_players;
 	
 	float playbackScale;
