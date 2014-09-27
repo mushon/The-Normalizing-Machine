@@ -6,21 +6,16 @@
 
 //--------------------------------------------------------------
 void testApp::setup() {
-
-	state = IDLE;
-
 	isRecording		= false;
 
-	n_players = 0;
 
 	setupRecording();
-
-	loadLibrary();
 
 	drawDepth=false;
 	drawGui=false;
 	drawProfiler=false;
 	drawVideo=true;
+	testLoadLibrary = true;
 
 	lastSeenUser.setTimeout(5000);
 
@@ -42,6 +37,10 @@ void testApp::setup() {
 	setupGui();
 	ofBackground(0, 0, 0);
 
+	//restart()
+	n_players = 0;
+	loadLibrary();
+	state = IDLE;
 }
 
 void testApp::setupRecording(string _filename) {
@@ -304,31 +303,22 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
 
-	/*	int w = ofGetScreenWidth() / s;
-	int h = ofGetScreenHeight() / s;
-	float iw = openNIRecorder.imageWidth;					//130
-	float ih = openNIRecorder.imageHeight;				//0
-
-	for (int i=0; i<n_players; i++)
-	{
-	ofPushMatrix();
-	int x = i%s;
-	int y = i/s;
-	ofTranslate(x*w, y*h);
-	ofScale(w / iw, h / ih);
-	players[i].drawImage();
-	ofPopMatrix();
-	}
-	return;
-	*/
-
-	//ofSetRectMode(OF_RECTMODE_CENTER);
+	ofSetRectMode(OF_RECTMODE_CENTER);
 
 	ofxProfileThisFunction();
 
 	if (drawVideo) {
 
-		int s = 5;
+		if (state == IDLE)
+		{
+			playersRowSize = 5;
+		}
+		else
+		{
+			playersRowSize = 2;
+		}
+		
+		const int& s = playersRowSize;
 
 		//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
 		float w = (ofGetScreenWidth() - (s-1) * margin) / s;					//380
@@ -791,13 +781,24 @@ void testApp::loadLibrary()
 	//allocate the vector to have as many ofImages as files
 	int n = min(MAX_PLAYERS, dir.size());
 	
-	// you can now iterate through the files and load them into the ofImage vector
+	if (testLoadLibrary) n = MAX_PLAYERS;
+
+	// iterate through the files and load them
 	for(int i = 0; i < n; i++)
 	{
-		string filename = "records/t1.oni";
-		filename = dir.getPath(i);
+		string filename;
+		if (testLoadLibrary) 
+		{
+			filename = "records/t1.oni";
+		}
+		else
+		{
+			filename = dir.getPath(i);
+		}
+
 		setupPlayback(ofToDataPath(filename));
 	}
 
-	// TODO: load data
+	// TODO: load face data
+}
 }

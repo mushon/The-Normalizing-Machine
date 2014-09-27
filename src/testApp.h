@@ -109,6 +109,9 @@ private:
 	ofDirectory dir;
 	ofxOpenNI players[MAX_PLAYERS];
 	void loadLibrary();
+	bool testLoadLibrary;
+
+	int playersRowSize;
 
 
 	int n_players;
