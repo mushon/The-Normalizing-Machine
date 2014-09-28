@@ -33,15 +33,21 @@ public:
 		bool waitForSteady;
 
 		SelectedUser() : 
-			id(NO_USER), handSmoothingFactor(0.1f), shoulderSmoothingFactor(0.05f), steady(300), selectTimer(5000), waitForSteady(true)
+			handSmoothingFactor(0.1f), shoulderSmoothingFactor(0.05f), steady(300), selectTimer(5000)
 		{
+			reset();
 		}
 
-		void resetHandPoints()
+		void reset()
 		{
 			hand = ofVec3f();
 			shoulder = ofVec3f();
 			rightHandVelocity = ofVec3f();
+			
+			id = NO_USER;
+			hovered = NO_HOVER;
+			steady.reset();
+			selectTimer.reset();
 			waitForSteady = true;
 		}
 
@@ -87,10 +93,11 @@ public:
 
 		bool isSteady() {return steady.getCountDown() <= 0;}
 
-
 		float getProgress()
 		{
 			return waitForSteady ? 1.0f : selectTimer.getProgress();
 		}
+
+
 
 };

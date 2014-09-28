@@ -10,6 +10,7 @@
 
 #include "SelectedUser.h"
 #include "AppTimer.h"
+#include "ofxJSON\src\ofxJSON.h"
 
 
 using namespace ofxCv;
@@ -17,27 +18,67 @@ using namespace cv;
 
 struct RecordedData
 {
+	static const int N_OTHERS = 4;
 	RecordedData()
 	{
-		time = ofGetUnixTime();
-		for (int i=0; i<4; i++) selection[i] = false;
 	}
-	// record data:	
-	unsigned int time; //primary key : id
-	
-	unsigned int others[4];
-	bool selection[4];
 
-	unsigned int vScore; //how many scored you. to be updated globally
-	unsigned int xScore;
-	
+	RecordedData(Json::Value v)
+	{
+		id = v["id"].asString();
+
+		for (int i=0; i<N_OTHERS; i++)
+		{
+			othersId[i] = v["others"][i]["id"].asString();
+			othersSelection[i] = v["others"][i]["selection"].asBool();
+		}
+		vScore = v["vScore"].asInt();
+		xScore = v["xScore"].asInt();
+	}
+
+	Json::Value toJson()
+	{
+		Json::Value v;
+		v["id"] = id;
+
+		for (int i=0; i<N_OTHERS; i++)
+		{
+			Json::Value other;
+			other["id"] = othersId[i];
+			other["selection"] = othersSelection[i];
+			v["others"].append(other);
+		}
+
+		v["vScore"] = vScore;
+		v["xScore"] = xScore;
+
+		return v;
+	}
+
+	bool operator <(const RecordedData& rhs)
+	{
+		return this->id < rhs.id;
+	}
+
+	string id; //timestamp: ofGetTimestampString returns in this format: 2011-01-15-18-29-35-299
+	string othersId[N_OTHERS];
+	bool othersSelection[N_OTHERS];
+
+	int vScore; //how many scored you. to be updated globally
+	int xScore;
+
 	// time, file, location, selection v/x
 	string location; 
 };
 
 class testApp : public ofBaseApp{
 
-	vector<RecordedData> dataset; // the whole shablang
+	typedef map<string, RecordedData> DataSet;
+	DataSet dataset; // the whole shablang
+	ofxJSONElement datasetJson;
+	string datasetJsonFilename;
+
+	RecordedData currData;
 	// on startup, find dirs (xml?)
 	// load recordings
 
@@ -92,8 +133,8 @@ public:
 
 	AppTimer lastSeenUser;
 	SelectedUser selectedUser;
-	
-	
+
+
 
 private:
 	void	setupRecording(string _filename = "");
@@ -104,18 +145,13 @@ private:
 
 	static const unsigned int MAX_PLAYERS = 25;
 	ofxOpenNI openNIRecorder;
-	//ofxOpenNI openNIPlayers[MAX_PLAYERS];
-	
+
 	ofDirectory dir;
 	ofxOpenNI players[MAX_PLAYERS];
-	void loadLibrary();
-	bool testLoadLibrary;
 
 	int playersRowSize;
-
-
 	int n_players;
-	
+
 	float playbackScale;
 
 	string lastRecordingFilename;
@@ -155,13 +191,28 @@ private:
 	void setupGui();
 	ofxUISuperCanvas* gui;
 
+	string recDir;
+	
 	void startRecording();
 	void saveRecording();
 	void stopRecording();
+	void abortRecording();
 
 	AppCursor cursor;
 
 	bool simulateMoreThanOne; // for debugging purposes
+
+
+	bool testLoadLibrary;
+	void loadLibrary();
+	void saveLibrary();
+
+	void saveSessionToDataSet();
+
+	void updateScores();
+	void select25();
+	void select4();
+
 };
 
 

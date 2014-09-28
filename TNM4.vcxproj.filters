@@ -250,6 +250,12 @@
     <ClCompile Include="src\AppCursor.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\ofxJSON\libs\jsoncpp\src\jsoncpp.cpp">
+      <Filter>addons\ofxJSON</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofxJSON\src\ofxJSONElement.cpp">
+      <Filter>addons\ofxJSON</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -395,6 +401,9 @@
     </Filter>
     <Filter Include="addons\ofxUI">
       <UniqueIdentifier>{f1f5b996-f367-433e-b8d0-6d6125d24505}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxJSON">
+      <UniqueIdentifier>{683bc309-92e3-4cea-a5be-daa0a04c972d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -934,6 +943,18 @@
     </ClInclude>
     <ClInclude Include="src\SelectedUser.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxJSON\libs\jsoncpp\include\json\json-forwards.h">
+      <Filter>addons\ofxJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxJSON\libs\jsoncpp\include\json\json.h">
+      <Filter>addons\ofxJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxJSON\src\ofxJSON.h">
+      <Filter>addons\ofxJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofxJSON\src\ofxJSONElement.h">
+      <Filter>addons\ofxJSON</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

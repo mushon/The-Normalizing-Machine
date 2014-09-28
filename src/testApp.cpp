@@ -6,9 +6,8 @@
 
 //--------------------------------------------------------------
 void testApp::setup() {
+
 	isRecording		= false;
-
-
 	setupRecording();
 
 	drawDepth=false;
@@ -35,6 +34,7 @@ void testApp::setup() {
 	ofEnableAlphaBlending();
 
 	setupGui();
+
 	ofBackground(0, 0, 0);
 
 	//restart()
@@ -50,11 +50,11 @@ void testApp::setupRecording(string _filename) {
 	openNIRecorder.addImageStream();
 	openNIRecorder.addUserTracker();
 	openNIRecorder.addHandsTracker();
-	openNIRecorder.start(); //
+	openNIRecorder.start();
 }
 
 void testApp::setupPlayback(string _filename) {
-	//openNIPlayer.stop();
+	//player.stop();
 
 	
 	ofxOpenNI& player = players[n_players];
@@ -118,7 +118,7 @@ void testApp::update(){
 			ofxOpenNIJoint rsj = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
 			if (rhj.positionConfidence < 0.5 || rsj.positionConfidence < 0.5)
 			{
-				selectedUser.resetHandPoints();
+				selectedUser.reset();
 			}
 			else
 			{
@@ -197,8 +197,8 @@ void testApp::update(){
 					{
 						if (selectedUser.isSteady())
 						{
+							selectedUser.reset();
 							state = SELECTION;
-							selectedUser.hovered = -1;
 						}
 						else
 						{
@@ -257,14 +257,20 @@ void testApp::update(){
 						selectedUser.steady.reset();
 						selectedUser.selectTimer.reset();
 						selectedUser.waitForSteady = true;
+						if (isRecording) abortRecording();
 					}
 
+
+					if (!isRecording && selectedUser.selectTimer.getCountDown() < 3000)
+					{
+						startRecording();
+					}
 
 					//TODO select mechanism (click/timeout)
 					bool selected = (selectedUser.selectTimer.getCountDown() == 0);
 					if(selected)
 					{
-						//selected item (x out of 4)
+						saveRecording();
 						state = RESULT;
 					}
 
@@ -539,20 +545,10 @@ void testApp::keyPressed(int key){
 }
 
 string testApp::generateFileName() {
-
-	string _root = "e:\\kinectRecord";
-
-	string _timestamp = ofToString(ofGetDay()) +
-		ofToString(ofGetMonth()) +
-		ofToString(ofGetYear()) +
-		ofToString(ofGetHours()) +
-		ofToString(ofGetMinutes()) +
-		ofToString(ofGetSeconds());
-
-	string _filename = (_root + _timestamp + ".oni");
-
-	return _filename;
-
+	string timeFormat = "%Y_%m_%d_%H_%M_%S_%i";
+	string name = ofGetTimestampString(timeFormat);
+	string filename = (name + ".oni");
+	return filename;
 }
 
 void testApp::keyReleased(int key){
@@ -590,6 +586,16 @@ void testApp::setupGui(){
 	float dim = 16;
 
 	gui = new ofxUISuperCanvas("Turing Normalizing Machine");
+	
+	gui->addLabelButton("Save XML", false);
+
+	recDir = "e:/records/";
+	gui->addLabel("Rec Dir", recDir);
+
+	datasetJsonFilename = "dataset.json";
+	gui->addLabel("datasetJsonFilename", datasetJsonFilename);
+
+
 	// add FPS
 	gui->addFPSSlider("FPS", 30)->setDrawOutline(true);
 	gui->addToggle("draw (g)ui", &drawGui)->bindToKey('g');
@@ -600,7 +606,7 @@ void testApp::setupGui(){
 	simulateMoreThanOne = false;
 	gui->addToggle("simulate (m)ore 1", &simulateMoreThanOne)->bindToKey('m');
 
-
+	
 
 
 	gui->addSpacer();
@@ -650,6 +656,8 @@ void testApp::setupGui(){
 
 	gui->autoSizeToFitWidgets();
 	ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);   
+
+	gui->loadSettings(ofToDataPath("gui/settings.xml"));
 }
 
 
@@ -667,29 +675,31 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 		cout << " active name: " << radio->getActiveName() << endl;
 	}
 
+	if(name == "Save XML" && e.getButton()->getValue())
+	{
+		gui->saveSettings(ofToDataPath("gui/settings.xml"));
+	}
+
+
+
 }
 
 void testApp::startRecording()
 {
 	lastRecordingFilename = generateFileName();
-	openNIRecorder.startRecording(lastRecordingFilename);
+	cout << "startRecording: " << recDir + lastRecordingFilename << endl;	
+	openNIRecorder.startRecording(recDir + lastRecordingFilename);
 	isRecording = true;
-
-	cout << "startRecording: " << lastRecordingFilename << endl;
+	cout << "startRecording: OK" << endl;
 }
 
 void testApp::saveRecording()
 {
 	stopRecording();
 
-	RecordedData r;
-	
-	r.selection[selectedUser.hovered] = true;
-
-	for (int i=0; i<4; i++)
-	{
-		//r.others[i] = currentIds[i];
-	}
+	saveSessionToDataSet();	
+	updateScores();
+	saveLibrary();
 
 	// when recording is complete, save his selection data, process face frames and save to data,
 	// update other selected x/v in db
@@ -706,11 +716,20 @@ void testApp::saveRecording()
 
 void testApp::stopRecording()
 {
+	cout << "stopRecording: " << lastRecordingFilename << endl;
 	openNIRecorder.stopRecording();
 	isRecording = false;
+	cout << "stopRecording: " << "OK" << endl;
 
 	//HACKHACK !!!
 	//setupPlayback(lastRecordingFilename);
+}
+
+void testApp::abortRecording()
+{
+	cout << "abortRecording: " << lastRecordingFilename << endl;
+	stopRecording();
+	//delete file?
 }
 
 void testApp::drawOverheadText(ofImage& txt, int h)
@@ -746,8 +765,75 @@ void testApp::drawDebugText()
 
 }
 
+void testApp::saveSessionToDataSet()
+{
+	currData.id = lastRecordingFilename;
+	for (int i=0; i<RecordedData::N_OTHERS; i++)
+	{
+			currData.othersSelection[i] = false;
+	}
+	currData.othersSelection[selectedUser.hovered] = true;
+	currData.location = "Athens"; //TODO add textEdit w/load save
+	currData.vScore = 0;
+	currData.xScore = 0;
+
+	dataset[currData.id] = currData;
+}
+
+void testApp::saveLibrary()
+{
+	cout << "saveLibrary:" << endl;
+	datasetJson.clear();
+	for (DataSet::iterator it = dataset.begin(); it != dataset.end(); it++)
+	{
+		datasetJson.append(it->second.toJson());
+	}
+
+	bool success = datasetJson.save(recDir + datasetJsonFilename, true);
+	cout << ("saveLibrary", success ? "OK":"FAIL") << endl;
+}
 
 void testApp::loadLibrary()
+{
+	std::string url = recDir + datasetJsonFilename;
+
+    // Now parse the JSON
+    bool parsingSuccessful = datasetJson.open(url);
+
+    if (parsingSuccessful) 
+    {
+        ofLogNotice("loadLibrary") << datasetJson.getRawString(true);
+    } else {
+        ofLogNotice("loadLibrary") << "Failed to parse JSON.";
+    }
+
+	for(unsigned int i = 0; i < datasetJson.size(); ++i)
+    {
+		Json::Value v;
+		string id = v["id"].asString(); 
+		dataset[id] = RecordedData(v);
+    }
+}
+
+void testApp::select25()
+{
+	//sort by rank
+	//5: take last 5
+	//2: take highest and lowest score
+	//18: random
+}
+
+void testApp::select4()
+{
+	// 1 last one
+	// 2 least times scored
+	// 1 random
+
+//	currData.othersId[0] = 
+
+}
+
+/*
 {
 	dir.listDir("records/");
 	dir.sort(); // in linux the file system doesn't return file lists ordered in alphabetical order
@@ -774,4 +860,10 @@ void testApp::loadLibrary()
 	}
 
 	// TODO: load face data
+}
+*/
+
+void testApp::updateScores()
+{
+
 }
