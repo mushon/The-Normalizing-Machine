@@ -32,7 +32,7 @@ struct RecordedData
 	unsigned int xScore;
 	
 	// time, file, location, selection v/x
-
+	string location; 
 };
 
 class testApp : public ofBaseApp{
@@ -66,7 +66,7 @@ public:
 
 
 	enum State {
-		IDLE, GOTO_SPOT, RAISE_HAND, SELECTION, CONFIRMATION, MORE_THAN_ONE
+		IDLE, GOTO_SPOT, RAISE_HAND, SELECTION, RESULT, MORE_THAN_ONE
 	};
 	State state;
 
@@ -80,7 +80,7 @@ public:
 			X(GOTO_SPOT);
 			X(RAISE_HAND);
 			X(SELECTION);
-			X(CONFIRMATION);
+			X(RESULT);
 			X(MORE_THAN_ONE);
 		default:
 			str = "undefined";

@@ -265,7 +265,7 @@ void testApp::update(){
 					if(selected)
 					{
 						//selected item (x out of 4)
-						state = CONFIRMATION;
+						state = RESULT;
 					}
 
 				}
@@ -274,7 +274,7 @@ void testApp::update(){
 				break;
 
 			}
-		case CONFIRMATION:
+		case RESULT:
 			{
 				//animate back to idle
 				state = IDLE;
@@ -643,7 +643,7 @@ void testApp::setupGui(){
 	states.push_back("Recognition"); //instructions
 	states.push_back("Selection"); //add face layer
 	// start recording around raise hand gesture
-	states.push_back("Confirmation"); //add face layer
+	states.push_back("RESULT"); //add face layer
 	// present selection
 	//	gui->addRadio("State", states, OFX_UI_ORIENTATION_VERTICAL, dim, dim)->activateToggle(State.Idle); 
 
