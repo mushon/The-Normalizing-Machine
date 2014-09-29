@@ -41,6 +41,7 @@ void testApp::setup() {
 	n_players = 0;
 	loadLibrary();
 	state = IDLE;
+	select4();
 }
 
 void testApp::setupRecording(string _filename) {
@@ -55,8 +56,8 @@ void testApp::setupRecording(string _filename) {
 
 void testApp::setupPlayback(string _filename) {
 	//player.stop();
+	cout << "setupPlayback: " << _filename << endl;
 
-	
 	ofxOpenNI& player = players[n_players];
 	n_players++;
 
@@ -339,7 +340,7 @@ void testApp::draw(){
 
 			}
 
-			
+
 			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
 				ofVec2f p = selectedUser.screenPoint;
@@ -586,7 +587,7 @@ void testApp::setupGui(){
 	float dim = 16;
 
 	gui = new ofxUISuperCanvas("Turing Normalizing Machine");
-	
+
 	gui->addLabelButton("Save XML", false);
 
 	recDir = "e:/records/";
@@ -606,7 +607,7 @@ void testApp::setupGui(){
 	simulateMoreThanOne = false;
 	gui->addToggle("simulate (m)ore 1", &simulateMoreThanOne)->bindToKey('m');
 
-	
+
 
 
 	gui->addSpacer();
@@ -719,7 +720,7 @@ void testApp::stopRecording()
 	cout << "stopRecording: " << lastRecordingFilename << endl;
 	openNIRecorder.stopRecording();
 	isRecording = false;
-	cout << "stopRecording: " << "OK" << endl;
+	//	cout << "stopRecording: " << "OK" << endl;
 
 	//HACKHACK !!!
 	//setupPlayback(lastRecordingFilename);
@@ -770,26 +771,30 @@ void testApp::saveSessionToDataSet()
 	currData.id = lastRecordingFilename;
 	for (int i=0; i<RecordedData::N_OTHERS; i++)
 	{
-			currData.othersSelection[i] = false;
+		currData.othersSelection[i] = false;
 	}
 	currData.othersSelection[selectedUser.hovered] = true;
 	currData.location = "Athens"; //TODO add textEdit w/load save
 	currData.vScore = 0;
 	currData.xScore = 0;
 
-	dataset[currData.id] = currData;
+	dataset.push_back(currData);
 }
 
 void testApp::saveLibrary()
 {
 	cout << "saveLibrary:" << endl;
-	datasetJson.clear();
+
+	ofxJSONElement json;
 	for (DataSet::iterator it = dataset.begin(); it != dataset.end(); it++)
 	{
-		datasetJson.append(it->second.toJson());
+		if (it->id != "")
+		{
+			json.append(it->toJson());
+		}
 	}
 
-	bool success = datasetJson.save(recDir + datasetJsonFilename, true);
+	bool success = json.save(recDir + datasetJsonFilename, true);
 	cout << ("saveLibrary", success ? "OK":"FAIL") << endl;
 }
 
@@ -797,22 +802,22 @@ void testApp::loadLibrary()
 {
 	std::string url = recDir + datasetJsonFilename;
 
-    // Now parse the JSON
-    bool parsingSuccessful = datasetJson.open(url);
+	// Now parse the JSON
+	bool parsingSuccessful = datasetJson.open(url);
 
-    if (parsingSuccessful) 
-    {
-        ofLogNotice("loadLibrary") << datasetJson.getRawString(true);
-    } else {
-        ofLogNotice("loadLibrary") << "Failed to parse JSON.";
-    }
+	if (parsingSuccessful) 
+	{
+		ofLogNotice("loadLibrary") << datasetJson.getRawString(true);
+	} else {
+		ofLogNotice("loadLibrary") << "Failed to parse JSON.";
+	}
 
 	for(unsigned int i = 0; i < datasetJson.size(); ++i)
-    {
-		Json::Value v;
+	{
+		Json::Value v = datasetJson[i];
 		string id = v["id"].asString(); 
-		dataset[id] = RecordedData(v);
-    }
+		dataset.push_back(RecordedData(v));
+	}
 }
 
 void testApp::select25()
@@ -823,43 +828,106 @@ void testApp::select25()
 	//18: random
 }
 
+
+bool sortById(const RecordedData& lhs, const RecordedData& rhs)
+{
+	return lhs.id < rhs.id;
+}
+bool sortByScoreCount(const RecordedData& lhs, const RecordedData& rhs)
+{
+	return lhs.scoreCount() < rhs.scoreCount();
+}
+
+
 void testApp::select4()
 {
 	// 1 last one
 	// 2 least times scored
 	// 1 random
 
-//	currData.othersId[0] = 
+	DataSet::iterator maxit;
 
+	maxit = std::max_element(dataset.begin(), dataset.end(), sortById); //latest
+	currData.othersId[0] = maxit->id;
+
+	DataSet::iterator leastScored1;
+	leastScored1 = std::min_element(dataset.begin(), dataset.end(), sortByScoreCount);
+
+	DataSet::iterator leastScored2;
+	leastScored2 = std::max_element(dataset.begin(), dataset.end(), sortByScoreCount);
+	
+	for (DataSet::iterator it = dataset.begin(); it != dataset.end(); it++)
+	{
+		if (it == maxit)
+			continue;
+
+		if (it == leastScored1)
+			continue;
+
+		if (it->scoreCount() < leastScored2->scoreCount())
+		{
+			leastScored2 = it;
+		}
+	}
+
+
+	currData.othersId[1] = leastScored1->id;
+	currData.othersId[2] = leastScored2->id;
+
+	//random
+	DataSet::iterator randit = std::min_element(dataset.begin(), dataset.end(), sortById); //first, just as a fallback
+	
+	int r = rand() % dataset.size();
+	for (int j=0; j<r; j++)
+	{
+		randit++;
+	}
+	for (int i=0;i<dataset.size();i++)
+	{
+		if (randit == dataset.end())
+			randit = dataset.begin(); 
+
+		if (randit != maxit && randit != leastScored1 && randit != leastScored2)
+		{
+			break;
+		}
+		randit++;
+	}
+	currData.othersId[3] = randit->id;
+
+	for (int i=0; i<4; i++)
+	{
+		setupPlayback(recDir + currData.othersId[i]);
+	}
 }
 
 /*
 {
-	dir.listDir("records/");
-	dir.sort(); // in linux the file system doesn't return file lists ordered in alphabetical order
+dir.listDir("records/");
+dir.sort(); // in linux the file system doesn't return file lists ordered in alphabetical order
 
-	//allocate the vector to have as many ofImages as files
-	int n = min(MAX_PLAYERS, dir.size());
-	
-	if (testLoadLibrary) n = MAX_PLAYERS;
+//allocate the vector to have as many ofImages as files
+int n = min(MAX_PLAYERS, dir.size());
 
-	// iterate through the files and load them
-	for(int i = 0; i < n; i++)
-	{
-		string filename;
-		if (testLoadLibrary) 
-		{
-			filename = "records/t2.oni";
-		}
-		else
-		{
-			filename = dir.getPath(i);
-		}
+if (testLoadLibrary) n = MAX_PLAYERS;
 
-		setupPlayback(ofToDataPath(filename));
-	}
+// iterate through the files and load them
+for(int i = 0; i < n; i++)
+{
+string filename;
+if (testLoadLibrary) 
+{
+filename = "records/t2.oni";
+}
+else
+{
+filename = dir.getPath(i);
+}
 
-	// TODO: load face data
+setupPlayback(ofToDataPath(filename));
+}
+
+// TODO: load face data
 }
 */
 

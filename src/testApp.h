@@ -55,15 +55,12 @@ struct RecordedData
 		return v;
 	}
 
-	bool operator <(const RecordedData& rhs)
-	{
-		return this->id < rhs.id;
-	}
 
 	string id; //timestamp: ofGetTimestampString returns in this format: 2011-01-15-18-29-35-299
 	string othersId[N_OTHERS];
 	bool othersSelection[N_OTHERS];
 
+	int scoreCount() const {return vScore + xScore;}
 	int vScore; //how many scored you. to be updated globally
 	int xScore;
 
