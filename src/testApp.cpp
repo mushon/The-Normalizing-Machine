@@ -16,6 +16,7 @@ void testApp::setup() {
 	drawGui=false;
 	drawProfiler=false;
 	drawVideo=true;
+	drawText=false;
 	testLoadLibrary = true;
 
 	lastSeenUser.setTimeout(5000);
@@ -658,7 +659,10 @@ void testApp::setupGui(){
 	gui->autoSizeToFitWidgets();
 	ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);   
 
+	gui->saveSettings(ofToDataPath("gui/default_settings.xml"));
 	gui->loadSettings(ofToDataPath("gui/settings.xml"));
+
+	gui->setVisible(drawGui);
 }
 
 
