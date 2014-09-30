@@ -46,8 +46,8 @@ void testApp::setup() {
 	select4();
 }
 
-void testApp::setupRecording(string _filename) {
-
+void testApp::setupRecording(string _filename)
+{
 	openNIRecorder.setup();
 	openNIRecorder.addDepthStream();
 	openNIRecorder.addImageStream();
@@ -424,7 +424,7 @@ void testApp::draw(){
 			ofSetColor(ofColor::green, userMapAlpha);
 			ofLine(0, -h/2*sc2, 0, h/2*sc2);
 
-			drawOverheadText(txt_position, h*sc2);
+			drawOverheadText(txt_position, 0, -sc2*h/2 + txt_position.getHeight()/2);
 
 			//TODO: instruct user to step into spot (visualy? top view)
 			//draw user map
@@ -462,11 +462,9 @@ void testApp::draw(){
 			//draw arrow
 		}
 
-
-
 		if (state == RAISE_HAND)
 		{
-			drawOverheadText(txt_prompt, h*sc2);
+			drawOverheadText(txt_prompt, 0, -sc2*h/2 + txt_prompt.getHeight()/2);
 		}
 
 		if (state == SELECTION)
@@ -474,8 +472,7 @@ void testApp::draw(){
 			int alphaIcon = 255 * ofMap(selectedUser.getProgress(), 0.3, 0.7, 1, 0, true);
 
 			ofSetColor(255, 255, 255, alphaIcon);
-			drawOverheadText(txt_pointing, h*sc2);
-
+			drawOverheadText(txt_pointing, 0, -sc2*h/2 + txt_pointing.getHeight()/2);
 		}
 
 
@@ -502,7 +499,10 @@ void testApp::draw(){
 		openNIRecorder.draw();
 	}
 
-	drawDebugText();
+	if (drawText)
+	{
+		drawDebugText();
+	}
 
 	if (drawProfiler)
 	{
@@ -741,9 +741,10 @@ void testApp::abortRecording()
 	//delete file?
 }
 
-void testApp::drawOverheadText(ofImage& txt, int h)
+void testApp::drawOverheadText(ofImage& txt, int x, int y)
 {
-	ofPoint pos(0, -h/2 + txt.getHeight()/2);
+//	ofPoint pos(0, -h/2 + txt.getHeight()/2);
+	ofPoint pos(x,y);
 	ofSetColor(ofColor::black, textAlpha);
 	ofFill();
 	ofRect(pos, txt.getWidth(), txt.getHeight()); // text background

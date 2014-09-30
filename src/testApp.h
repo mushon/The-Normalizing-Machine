@@ -168,6 +168,7 @@ private:
 	int handShoulderDistance;
 	float minBottomScreen;
 
+	bool drawText;
 	void drawDebugText();
 
 
@@ -182,7 +183,7 @@ private:
 	ofImage txt_pointing;
 	ofImage txt_position;
 	ofImage txt_prompt;
-	void drawOverheadText(ofImage&, int h);
+	void drawOverheadText(ofImage&, int x, int y);
 
 
 	ofTrueTypeFont	verdana;
