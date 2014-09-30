@@ -148,7 +148,7 @@ void testApp::update(){
 		else  //user left in the middle of interacion - stop instructions / show warning with countdown
 		{
 			// stop recording?
-			if (lastSeenUser.getCountDown() < 0)
+			if (lastSeenUser.getCountDown() == 0)
 			{
 				state = IDLE;
 			}
