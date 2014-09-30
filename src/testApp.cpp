@@ -217,6 +217,7 @@ void testApp::update(){
 			{
 				if (selectedUser.dist.length() > spotRadius + spotRadiusHysteresis)
 				{
+					if (isRecording) abortRecording();
 					//give timeout?
 					state = GOTO_SPOT;
 				}
@@ -285,6 +286,7 @@ void testApp::update(){
 		case RESULT:
 			{
 				//animate back to idle
+				//change from live to recording
 				state = IDLE;
 				break;
 			}
