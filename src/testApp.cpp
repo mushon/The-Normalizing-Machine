@@ -385,6 +385,11 @@ void testApp::draw(){
 				ofSetColor(255, 255, 255, alphaIcon);
 				ofImage& icon = (i==selectedUser.hovered) ? yesIcon : noIcon;
 				icon.draw(0, -h/3);
+
+				if (i==selectedUser.hovered)
+				{
+					drawOverheadText(txt_pointing, playbackScale / 2 * (-w + txt_pointing.getWidth()), -dy * playbackScale/2 * (-h + txt_pointing.getHeight()));
+				}
 			}
 
 			ofPopMatrix();
@@ -424,7 +429,7 @@ void testApp::draw(){
 			ofSetColor(ofColor::green, userMapAlpha);
 			ofLine(0, -h/2*sc2, 0, h/2*sc2);
 
-			drawOverheadText(txt_position, 0, -sc2*h/2 + txt_position.getHeight()/2);
+			drawOverheadText(txt_position, -sc2*w/2 + txt_position.getWidth()/2, -sc2*h/2 + txt_position.getHeight()/2);
 
 			//TODO: instruct user to step into spot (visualy? top view)
 			//draw user map
@@ -464,24 +469,11 @@ void testApp::draw(){
 
 		if (state == RAISE_HAND)
 		{
-			drawOverheadText(txt_prompt, 0, -sc2*h/2 + txt_prompt.getHeight()/2);
+			drawOverheadText(txt_prompt, -sc2*w/2 + txt_prompt.getWidth()/2, -sc2*h/2 + txt_prompt.getHeight()/2);
 		}
-
-		if (state == SELECTION)
-		{
-			int alphaIcon = 255 * ofMap(selectedUser.getProgress(), 0.3, 0.7, 1, 0, true);
-
-			ofSetColor(255, 255, 255, alphaIcon);
-			drawOverheadText(txt_pointing, 0, -sc2*h/2 + txt_pointing.getHeight()/2);
-		}
-
-
-
-
 
 		ofxProfileSectionPop();
 		ofPopMatrix();
-
 	}
 
 	if (state == SELECTION)
@@ -608,15 +600,9 @@ void testApp::setupGui(){
 	gui->addToggle("draw (d)epth", &drawDepth)->bindToKey('d');
 	gui->addToggle("draw (t)ext", &drawText)->bindToKey('t');
 
-	textAlpha = 150;
-	gui->addIntSlider("userMapAlpha", 0, 255, &textAlpha);
-
 
 	simulateMoreThanOne = false;
 	gui->addToggle("simulate (m)ore 1", &simulateMoreThanOne)->bindToKey('m');
-
-
-
 
 	gui->addSpacer();
 
@@ -633,6 +619,8 @@ void testApp::setupGui(){
 
 	userMapAlpha = 60;
 	gui->addIntSlider("userMapAlpha", 0, 255, &userMapAlpha);
+	textAlpha = 150;
+	gui->addIntSlider("textAlpha", 0, 255, &textAlpha);
 
 
 	handShoulderDistance = 200;
