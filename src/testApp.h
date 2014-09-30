@@ -140,7 +140,7 @@ private:
 
 	bool isRecording;
 
-	static const unsigned int MAX_PLAYERS = 25;
+	static const unsigned int MAX_PLAYERS = 4;
 	ofxOpenNI openNIRecorder;
 
 	ofDirectory dir;

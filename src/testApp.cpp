@@ -318,9 +318,13 @@ void testApp::draw(){
 		//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
 		float w = (ofGetScreenWidth() - margin) / 2;					//380
 		float h = (ofGetScreenHeight() - margin - bottomMargin) / 2;	//480
-		float sx = (openNIRecorder.imageWidth - w) / 2;					//130
-		float sy = (openNIRecorder.imageHeight - h) / 2;				//0
+		float sx = (players[0].imageWidth - w) / 2;					//130
+		float sy = (players[0].imageHeight - h) / 2;				//0
 
+		userMessage << "w" << w << endl;
+		userMessage << "h" << h << endl;
+		userMessage << "sx" << sx << endl;
+		userMessage << "sy" << sy << endl;
 
 		for (int i=0; i < 4; i++)
 		{
@@ -339,7 +343,6 @@ void testApp::draw(){
 			if (state == MORE_THAN_ONE)
 			{
 				playbackScale = 0.66;
-
 			}
 
 
@@ -857,7 +860,7 @@ void testApp::select4()
 
 	DataSet::iterator leastScored2;
 	leastScored2 = std::max_element(dataset.begin(), dataset.end(), sortByScoreCount);
-	
+
 	for (DataSet::iterator it = dataset.begin(); it != dataset.end(); it++)
 	{
 		if (it == maxit)
@@ -878,7 +881,7 @@ void testApp::select4()
 
 	//random
 	DataSet::iterator randit = std::min_element(dataset.begin(), dataset.end(), sortById); //first, just as a fallback
-	
+
 	int r = rand() % dataset.size();
 	for (int j=0; j<r; j++)
 	{
