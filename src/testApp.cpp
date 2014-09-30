@@ -363,8 +363,13 @@ void testApp::draw(){
 				playbackScale = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
 			}
 
-			ofTranslate(ofGetScreenWidth()/2 + (dx * w/2 * playbackScale), (ofGetScreenHeight() - bottomMargin)/2 + (dy * h/2 * playbackScale));
+			ofTranslate(ofGetScreenWidth()/2 + (dx * (w+margin)/2 * playbackScale), (ofGetScreenHeight() - bottomMargin)/2 + (dy * (h+margin)/2 * playbackScale));
 			ofScale(playbackScale, playbackScale);
+
+			ofRectangle border(0, 0, w+margin, h+margin);
+			ofFill();
+			ofSetColor(ofColor::black);
+			ofRect(border);
 
 			players[i].drawImageSubsection(w, h, sx, sy);
 
@@ -407,12 +412,11 @@ void testApp::draw(){
 			sc2 = 1;
 		}
 		ofScale(sc2, sc2);
-		if (state == MORE_THAN_ONE)
-		{
-			ofSetColor(ofColor::black);
-			ofFill();
-			ofRect(0,0, w + 2*margin, h + 2*margin);
-		}		
+
+		ofSetColor(ofColor::black);
+		ofFill();
+		ofRect(0,0, w + 2*margin/sc2, h + 2*margin/sc2);
+		
 		openNIRecorder.drawImageSubsection(w, h, sx, sy);
 		ofPopMatrix();
 
@@ -634,8 +638,8 @@ void testApp::setupGui(){
 	margin = 8;
 	gui->addIntSlider("margin", 0, 24, &margin);
 
-	bottomMargin = 56;
-	gui->addIntSlider("margin", 0, 100, &bottomMargin);
+	bottomMargin = 0;
+	gui->addIntSlider("bottomMargin", 0, 100, &bottomMargin);
 
 	touchScreenSize = 600;		// virtual screen 
 	gui->addSlider("touchScreenSize", 100, 1000, &touchScreenSize);
