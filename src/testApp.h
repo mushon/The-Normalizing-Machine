@@ -163,6 +163,8 @@ private:
 	float spotRadiusHysteresis;
 
 	int userMapAlpha;
+	int textAlpha;
+
 	int handShoulderDistance;
 	float minBottomScreen;
 

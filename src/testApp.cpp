@@ -278,8 +278,6 @@ void testApp::update(){
 					}
 
 				}
-
-
 				break;
 
 			}
@@ -608,6 +606,11 @@ void testApp::setupGui(){
 	gui->addToggle("draw (v)ideo", &drawVideo)->bindToKey('v');
 	gui->addToggle("draw (p)rofiler", &drawProfiler)->bindToKey('p');
 	gui->addToggle("draw (d)epth", &drawDepth)->bindToKey('d');
+	gui->addToggle("draw (t)ext", &drawText)->bindToKey('t');
+
+	textAlpha = 150;
+	gui->addIntSlider("userMapAlpha", 0, 255, &textAlpha);
+
 
 	simulateMoreThanOne = false;
 	gui->addToggle("simulate (m)ore 1", &simulateMoreThanOne)->bindToKey('m');
@@ -741,11 +744,11 @@ void testApp::abortRecording()
 void testApp::drawOverheadText(ofImage& txt, int h)
 {
 	ofPoint pos(0, -h/2 + txt.getHeight()/2);
-	ofSetColor(ofColor::black, 128);
+	ofSetColor(ofColor::black, textAlpha);
 	ofFill();
-	//ofRect(pos, txt.getWidth(), txt.getHeight()); // text background
+	ofRect(pos, txt.getWidth(), txt.getHeight()); // text background
 
-	ofSetColor(ofColor::white);
+	ofSetColor(ofColor::white, 255);
 	txt.draw(pos);
 }
 
