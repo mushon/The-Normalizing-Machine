@@ -7,6 +7,8 @@
 //--------------------------------------------------------------
 void testApp::setup() {
 
+	openni::Status rc = OpenNI::initialize();
+
 	isRecording		= false;
 	setupRecording();
 
