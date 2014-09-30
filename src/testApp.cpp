@@ -573,11 +573,12 @@ void testApp::windowResized(int w, int h){
 void testApp::exit(){ 
 	ofLogNotice("testApp exit");
 
-	openNIRecorder.stop(); 
 	for (int i=0; i<n_players; i++)
 	{
 		players[i].stop();
 	}
+	openNIRecorder.stop(); 
+
 	ofxOpenNI::shutdown();
 
 	ofLogNotice("testApp exit OK");
