@@ -594,7 +594,10 @@ void testApp::setupGui(){
 
 	gui->addLabelButton("Save XML", false);
 
-	recDir = "e:/records/";
+//	recDir = "e:/records/";
+//	recDir = ofToDataPath("/records/");
+	recDir = "C:/Users/SE_Shenkar/Dropbox/records/";
+
 	gui->addLabel("Rec Dir", recDir);
 
 	datasetJsonFilename = "dataset.json";
