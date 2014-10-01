@@ -7,6 +7,7 @@
 //--------------------------------------------------------------
 void testApp::setup() {
 
+	ofSetFrameRate(30);
 	ofxOpenNI::shutdown();
 	openni::Status rc = OpenNI::initialize();
 
