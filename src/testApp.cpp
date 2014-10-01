@@ -648,7 +648,7 @@ void testApp::setupGui(){
 	margin = 8;
 	gui->addIntSlider("margin", 0, 24, &margin);
 
-	bottomMargin = 0;
+	bottomMargin = 56;
 	gui->addIntSlider("bottomMargin", 0, 100, &bottomMargin);
 
 	touchScreenSize = 600;		// virtual screen 
