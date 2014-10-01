@@ -285,6 +285,7 @@ void testApp::update(){
 			}
 		case RESULT:
 			{
+				//draw score
 				//animate back to idle
 				//change from live to recording
 				state = IDLE;
@@ -474,7 +475,7 @@ void testApp::draw(){
 			//draw arrow
 		}
 
-		if (state == RAISE_HAND)
+		if (state == RAISE_HAND || state == SELECTION)
 		{
 			drawOverheadText(txt_prompt, -sc2*w/2 + txt_prompt.getWidth()/2, -sc2*h/2 + txt_prompt.getHeight()/2);
 		}
