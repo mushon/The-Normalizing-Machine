@@ -7,6 +7,7 @@
 //--------------------------------------------------------------
 void testApp::setup() {
 
+	ofxOpenNI::shutdown();
 	openni::Status rc = OpenNI::initialize();
 
 	isRecording		= false;
@@ -53,7 +54,7 @@ void testApp::setupRecording(string _filename)
 	openNIRecorder.addDepthStream();
 	openNIRecorder.addImageStream();
 	openNIRecorder.addUserTracker();
-	openNIRecorder.addHandsTracker();
+//	openNIRecorder.addHandsTracker();
 	openNIRecorder.start();
 }
 
@@ -65,7 +66,7 @@ void testApp::setupPlayback(string _filename) {
 	n_players++;
 
 	player.setup(_filename.c_str());
-	player.addDepthStream();
+	//player.addDepthStream();
 	player.addImageStream();
 	player.start();
 
