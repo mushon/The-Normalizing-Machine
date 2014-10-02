@@ -21,7 +21,7 @@ void testApp::setup() {
 	drawText=false;
 	testLoadLibrary = true;
 
-	lastSeenUser.setTimeout(5000);
+	lastSeenUser.setTimeout(3000);
 
 	yesIcon20.loadImage("assets/i-yes-20.png");
 	noIcon20.loadImage("assets/i-no-20.png");
@@ -287,7 +287,7 @@ void testApp::update(){
 					}
 
 
-					if (!isRecording && selectedUser.selectTimer.getCountDown() < 3000)
+					if (!isRecording && selectedUser.selectTimer.getCountDown() < 6000)
 					{
 						startRecording();
 					}

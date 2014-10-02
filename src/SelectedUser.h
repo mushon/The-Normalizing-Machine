@@ -33,7 +33,7 @@ public:
 		bool waitForSteady;
 
 		SelectedUser() : 
-			handSmoothingFactor(0.1f), shoulderSmoothingFactor(0.05f), steady(300), selectTimer(5000)
+			handSmoothingFactor(0.1f), shoulderSmoothingFactor(0.05f), steady(300), selectTimer(8000)
 		{
 			reset();
 		}
