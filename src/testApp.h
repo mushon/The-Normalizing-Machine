@@ -59,6 +59,7 @@ struct RecordedData
 	string id; //timestamp: ofGetTimestampString returns in this format: 2011-01-15-18-29-35-299
 	string othersId[N_OTHERS];
 	bool othersSelection[N_OTHERS];
+	RecordedData* othersPtr[N_OTHERS];
 
 	int scoreCount() const {return vScore + xScore;}
 	int vScore; //how many scored you. to be updated globally
@@ -179,6 +180,8 @@ private:
 
 	ofImage yesIcon;
 	ofImage noIcon;
+	ofImage yesIcon20;
+	ofImage noIcon20;
 
 	ofImage txt_pointing;
 	ofImage txt_position;

@@ -23,6 +23,9 @@ void testApp::setup() {
 
 	lastSeenUser.setTimeout(5000);
 
+	yesIcon20.loadImage("assets/i-yes-20.png");
+	noIcon20.loadImage("assets/i-no-20.png");
+
 	yesIcon.loadImage("assets/i-yes-40.png");
 	noIcon.loadImage("assets/i-no-40.png");
 
@@ -156,6 +159,7 @@ void testApp::update(){
 			}
 		}		
 	}
+	
 	else if (nVisibleUsers > 1 || simulateMoreThanOne)
 	{
 		state = MORE_THAN_ONE;
@@ -290,7 +294,10 @@ void testApp::update(){
 				//draw score
 				//animate back to idle
 				//change from live to recording
-				state = IDLE;
+				if (selectedUser.dist.length() > spotRadius + spotRadiusHysteresis)
+				{
+					state = IDLE;
+				}				
 				break;
 			}
 
@@ -400,6 +407,17 @@ void testApp::draw(){
 				if (i==selectedUser.hovered)
 				{
 					drawOverheadText(txt_pointing, playbackScale / 2 * (-w + txt_pointing.getWidth()), -dy * playbackScale/2 * (-h + txt_pointing.getHeight()));
+				}
+			}
+
+			if (state == RESULT)
+			{
+				RecordedData* other = currData.othersPtr[i];
+				
+				for (int j=0;j<other->scoreCount();j++)
+				{
+					ofImage& icon = (j < other->vScore) ? yesIcon20 : noIcon20;
+					icon.draw((-other->scoreCount()/ 2 + j) * icon.width, 0);
 				}
 			}
 
@@ -868,6 +886,8 @@ void testApp::select4()
 
 	maxit = std::max_element(dataset.begin(), dataset.end(), sortById); //latest
 	currData.othersId[0] = maxit->id;
+	currData.othersPtr[0] = maxit._Ptr;
+
 
 	DataSet::iterator leastScored1;
 	leastScored1 = std::min_element(dataset.begin(), dataset.end(), sortByScoreCount);
@@ -893,6 +913,9 @@ void testApp::select4()
 	currData.othersId[1] = leastScored1->id;
 	currData.othersId[2] = leastScored2->id;
 
+	currData.othersPtr[1] = leastScored1._Ptr;
+	currData.othersPtr[2] = leastScored2._Ptr;
+
 	//random
 	DataSet::iterator randit = std::min_element(dataset.begin(), dataset.end(), sortById); //first, just as a fallback
 
@@ -913,6 +936,7 @@ void testApp::select4()
 		randit++;
 	}
 	currData.othersId[3] = randit->id;
+	currData.othersPtr[3] = randit._Ptr;
 
 	for (int i=0; i<4; i++)
 	{
