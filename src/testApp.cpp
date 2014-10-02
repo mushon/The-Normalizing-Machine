@@ -479,7 +479,7 @@ void testApp::draw(){
 
 			ofPushMatrix();
 			float sc2 = 0.5;
-			if (state == MORE_THAN_ONE)
+			if (state == MORE_THAN_ONE || state == GOTO_SPOT)
 			{
 				sc2 = 1;
 			}
