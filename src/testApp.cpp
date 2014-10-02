@@ -428,11 +428,22 @@ void testApp::draw(){
 
 			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
-				int alphaIcon = 255 * ofMap(selectedUser.getProgress(), 0.3, 0.7, 1, 0, true);
-
-				ofSetColor(255, 255, 255, alphaIcon);
 				ofImage& icon = (i==selectedUser.hovered) ? yesIcon : noIcon;
-				icon.draw(0, -h/3);
+
+				float transitionLength = 0.1;		
+				float transitionBegin = (i==selectedUser.hovered) ? 0.4 : 0.5 + 0.05 * i;				
+				int alphaIcon = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 255, true);
+				
+				//float iconScale = ofMap(selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 1.0f, 0.0f, true);
+				float iconTrans = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, h * 0.75 + icon.height * 2, 0.0f, true);
+
+				//ofSetColor(255, 255, 255, alphaIcon);
+				ofPushMatrix();
+				ofTranslate(0, iconTrans);
+				//ofScale(iconScale, iconScale);
+				ofSetColor(255, 255, 255, alphaIcon);
+				icon.draw(0, 0);
+				ofPopMatrix();
 
 				if (i==selectedUser.hovered)
 				{
@@ -446,8 +457,10 @@ void testApp::draw(){
 
 				for (int j=0;j<other->scoreCount();j++)
 				{
+					int iconSpacing = 5;
 					ofImage& icon = (j < other->vScore) ? yesIcon20 : noIcon20;
-					icon.draw((float(-other->scoreCount())/ 2 + j) * icon.width, -h/3);
+					icon.draw(
+						(-(other->scoreCount() - 1) / 2 + j) * (icon.width + iconSpacing), 0);
 				}
 			}
 
