@@ -436,7 +436,10 @@ void testApp::draw(){
 				int alphaIcon = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 255, true);
 				
 				//float iconScale = ofMap(selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 1.0f, 0.0f, true);
-				float iconTrans = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, h * 0.75 + icon.height * 2, 0.0f, true);
+				float iconTrans = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 1, true);
+				iconTrans = sqrt(iconTrans);
+				iconTrans = ofMap(iconTrans, 0, 1, h * 0.75 + icon.height * 2, 0.0f, true);
+
 
 				//ofSetColor(255, 255, 255, alphaIcon);
 				ofPushMatrix();
