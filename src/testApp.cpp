@@ -449,7 +449,7 @@ void testApp::draw(){
 				for (int j=0;j<other->scoreCount();j++)
 				{
 					ofImage& icon = (j < other->vScore) ? yesIcon20 : noIcon20;
-					icon.draw((-other->scoreCount()/ 2 + j) * icon.width, 0);
+					icon.draw((float(-other->scoreCount())/ 2 + j) * icon.width, -h/3);
 				}
 			}
 
