@@ -21,6 +21,21 @@ struct RecordedData
 	static const int N_OTHERS = 4;
 	RecordedData()
 	{
+		id = "";
+
+		for (int i=0;i<N_OTHERS;i++)
+		{
+			othersId[i] = "";
+			othersSelection[i] = false;
+			othersPtr[i] = NULL;
+		}
+
+		vScore = 0;
+		xScore = 0;
+
+		// time, file, location, selection v/x
+		location = ""; 
+
 	}
 
 	RecordedData(Json::Value v)
