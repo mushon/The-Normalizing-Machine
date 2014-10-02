@@ -936,9 +936,19 @@ void testApp::select4()
 	currData.othersId[0] = maxit->id;
 	currData.othersPtr[0] = &(*maxit);
 
+	DataSet::iterator leastScored1 = std::max_element(dataset.begin(), dataset.end(), sortByScoreCount);
+	DataSet::iterator first = dataset.begin();
+	DataSet::iterator last = dataset.end();
 
-	DataSet::iterator leastScored1;
-	leastScored1 = std::min_element(dataset.begin(), dataset.end(), sortByScoreCount);
+	if (first!=last)
+	{
+		while (++first!=last)
+		{
+			if (first != maxit && sortByScoreCount(*first,*leastScored1))    // or: if (comp(*first,*smallest)) for version (2)
+				leastScored1=first;
+		}
+	}
+
 
 	DataSet::iterator leastScored2;
 	leastScored2 = std::max_element(dataset.begin(), dataset.end(), sortByScoreCount);
