@@ -404,7 +404,7 @@ void testApp::draw(){
 			}
 
 			ofTranslate(ofGetScreenWidth()/2, ofGetScreenHeight()/2);
-			ofTranslate(dx * (w+margin)/2 * playbackScale, bottomMargin/2 + (dy * (h+margin)/2 * playbackScale));
+			ofTranslate(dx * (w+margin)/2 * playbackScale, dy * (h+margin)/2 * playbackScale);
 
 			ofScale(playbackScale, playbackScale);
 
@@ -436,7 +436,7 @@ void testApp::draw(){
 
 				if (i==selectedUser.hovered)
 				{
-					drawOverheadText(txt_pointing, playbackScale * (-w/2 + txt_pointing.getWidth()), -dy * playbackScale * (-h/2 + txt_pointing.getHeight()));
+					drawOverheadText(txt_pointing, -dx * (-w + txt_pointing.getWidth()) / 2, (h - txt_pointing.getHeight()) / 2);
 				}
 			}
 
@@ -459,7 +459,7 @@ void testApp::draw(){
 		{
 			//draw live frame
 			ofPushMatrix();
-			ofTranslate(ofGetScreenWidth() / 2, (ofGetScreenHeight() - bottomMargin) / 2);
+			ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 			ofxProfileSectionPush("draw live");
 
 
@@ -538,7 +538,7 @@ void testApp::draw(){
 				drawOverheadText(txt_toomany, -sc2*w/2 + txt_toomany.getWidth()/2, -sc2*h/2 + txt_toomany.getHeight()/2);
 			}
 
-			if (state == RAISE_HAND || state == SELECTION)
+			if (state == RAISE_HAND)
 			{
 				drawOverheadText(txt_prompt, -sc2*w/2 + txt_prompt.getWidth()/2, -sc2*h/2 + txt_prompt.getHeight()/2);
 			}
