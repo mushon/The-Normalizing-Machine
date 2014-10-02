@@ -76,6 +76,17 @@ void testApp::setupPlayback(string _filename) {
 
 }
 
+void testApp::begin()
+{
+	for (int i=0; i<n_players; i++)
+	{
+		players[i].stop();
+	}
+	n_players = 0;
+	currData = RecordedData();
+	select4();
+	state = IDLE;
+}
 //--------------------------------------------------------------
 void testApp::update(){
 	userMessage = stringstream();
@@ -156,6 +167,10 @@ void testApp::update(){
 			if (lastSeenUser.getCountDown() == 0)
 			{
 				state = IDLE;
+			}
+			if (state==RESULT)
+			{
+				begin();
 			}
 		}		
 	}
@@ -296,7 +311,8 @@ void testApp::update(){
 				//change from live to recording
 				if (selectedUser.dist.length() > spotRadius + spotRadiusHysteresis)
 				{
-					state = IDLE;
+					ofLogNotice("RESULT -> IDLE");
+					begin();
 				}				
 				break;
 			}
@@ -743,10 +759,11 @@ void testApp::saveRecording()
 {
 	ofLogNotice("saveRecording");
 	stopRecording();
-
+	ofSleepMillis(100);
 	saveSessionToDataSet();	
 	updateScores();
 	saveLibrary();
+	ofSleepMillis(100);
 	ofLogNotice("saveRecording") << "OK";
 
 	// when recording is complete, save his selection data, process face frames and save to data,

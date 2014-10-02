@@ -82,6 +82,7 @@ class testApp : public ofBaseApp{
 
 public:
 	void setup();
+	void begin();
 	void update();
 	void draw();
 
