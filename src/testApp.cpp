@@ -345,13 +345,9 @@ void testApp::draw(){
 		//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
 		float w = (ofGetScreenWidth() - margin) / 2;					//380
 		float h = (ofGetScreenHeight() - margin - bottomMargin) / 2;	//480
-		float sx = (players[0].imageWidth - w) / 2;					//130
-		float sy = (players[0].imageHeight - h) / 2;				//0
 
 		userMessage << "w" << w << endl;
 		userMessage << "h" << h << endl;
-		userMessage << "sx" << sx << endl;
-		userMessage << "sy" << sy << endl;
 
 		ofPoint globalTranslation;
 		float maxExpand = 0.2;
@@ -407,7 +403,8 @@ void testApp::draw(){
 				playbackScale = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
 			}
 
-			ofTranslate(ofGetScreenWidth()/2 + (dx * (w+margin)/2 * playbackScale), (ofGetScreenHeight() - bottomMargin)/2 + (dy * (h+margin)/2 * playbackScale));
+			ofTranslate(ofGetScreenWidth()/2, ofGetScreenHeight()/2);
+			ofTranslate(dx * (w+margin)/2 * playbackScale, bottomMargin/2 + (dy * (h+margin)/2 * playbackScale));
 
 			ofScale(playbackScale, playbackScale);
 
@@ -416,7 +413,8 @@ void testApp::draw(){
 			ofSetColor(ofColor::black);
 			ofRect(border);
 
-			players[i].drawImageSubsection(w, h, sx, sy);
+//			players[i].drawImage();
+			players[i].drawImageSubsection(w, h, 0, 0);
 
 
 			if (state == MORE_THAN_ONE)
@@ -479,7 +477,7 @@ void testApp::draw(){
 			ofRect(0,0, w + 2*margin/sc2, h + 2*margin/sc2);
 
 
-			openNIRecorder.drawImageSubsection(w, h, sx, sy);
+			openNIRecorder.drawImageSubsection(w, h, 0, 0);
 			ofPopMatrix();
 
 			//draw overlays
@@ -841,8 +839,8 @@ void testApp::drawDebugText()
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 		<< "State : " << stateToString(state) << endl
-		<< "Height: " << openNIRecorder.imageHeight << endl
-		<< "Width : " << openNIRecorder.imageWidth << endl
+		<< "Height: " << openNIRecorder.getImageFrame().getHeight() << endl
+		<< "Width : " << openNIRecorder.getImageFrame().getWidth() << endl
 		<< lastSeenUser.getCountDown() << endl
 		<< "User Message: " << userMessage.str() << endl
 		;
