@@ -424,89 +424,98 @@ void testApp::draw(){
 			ofPopMatrix();
 		}
 
-		ofPushMatrix();
-		ofTranslate(ofGetScreenWidth() / 2, (ofGetScreenHeight() - bottomMargin) / 2);
-		ofxProfileSectionPush("draw live");
 
-
-		ofPushMatrix();
-		float sc2 = 0.5;
-		if (state == MORE_THAN_ONE)
+		if (state == GOTO_SPOT || state == RAISE_HAND || state == SELECTION || state == MORE_THAN_ONE) // not on IDLE or RESULT
 		{
-			sc2 = 1;
-		}
-		ofScale(sc2, sc2);
+			//draw live frame
+			ofPushMatrix();
+			ofTranslate(ofGetScreenWidth() / 2, (ofGetScreenHeight() - bottomMargin) / 2);
+			ofxProfileSectionPush("draw live");
 
-		ofSetColor(ofColor::black);
-		ofFill();
-		ofRect(0,0, w + 2*margin/sc2, h + 2*margin/sc2);
-		
-		openNIRecorder.drawImageSubsection(w, h, sx, sy);
-		ofPopMatrix();
-
-		if (state == GOTO_SPOT)
-		{	
-
-			userMessage << "go to the spot. Please move " 
-				<< (abs(selectedUser.dist.x - spotRadius < 0) ? "Right" : "Left")
-				<< (abs(selectedUser.dist.x - spotRadius < 0) && abs(selectedUser.dist.y - spotRadius < 0) ? " and " : "")
-				<< (abs(selectedUser.dist.y - spotRadius < 0)? "Forward" : "Back") << endl
-				<< endl;
-
-			ofSetLineWidth(3);
-			ofSetColor(ofColor::green, userMapAlpha);
-			ofLine(0, -h/2*sc2, 0, h/2*sc2);
-
-			drawOverheadText(txt_position, -sc2*w/2 + txt_position.getWidth()/2, -sc2*h/2 + txt_position.getHeight()/2);
-
-			//TODO: instruct user to step into spot (visualy? top view)
-			//draw user map
-			float maxZ = 4000.0f;		
-			float factor = h*sc2/maxZ;
 
 			ofPushMatrix();
-			ofPushStyle();
-			ofTranslate(0 , -h/2*sc2);
+			float sc2 = 0.5;
+			if (state == MORE_THAN_ONE)
+			{
+				sc2 = 1;
+			}
+			ofScale(sc2, sc2);
 
-			ofScale(factor, factor);
-			ofVec2f spot2d(spot.x, spot.z);
-
-			ofSetColor(ofColor::green, userMapAlpha);
+			//border
+			ofSetColor(ofColor::black);
 			ofFill();
-			ofCircle(spot2d, spotRadius);
-			ofNoFill();
-			ofCircle(spot2d,spotRadius + spotRadiusHysteresis);
+			ofRect(0,0, w + 2*margin/sc2, h + 2*margin/sc2);
 
-
-
-			ofLine(spot2d.x - spotRadius, spot2d.y,spot2d.x + spotRadius, spot2d.y);
-
-			ofNoFill();
-			ofSetLineWidth(5);
-			ofSetColor(ofColor::white, userMapAlpha);
-
-			ofVec2f v(selectedUser.headPoint.x, selectedUser.headPoint.z);
-			ofCircle(v, 200);
-
-
-			ofPopStyle();
+			openNIRecorder.drawImageSubsection(w, h, sx, sy);
 			ofPopMatrix();
 
-			//draw arrow
+			//draw overlays
+
+			if (state == GOTO_SPOT)
+			{	
+
+				userMessage << "go to the spot. Please move " 
+					<< (abs(selectedUser.dist.x - spotRadius < 0) ? "Right" : "Left")
+					<< (abs(selectedUser.dist.x - spotRadius < 0) && abs(selectedUser.dist.y - spotRadius < 0) ? " and " : "")
+					<< (abs(selectedUser.dist.y - spotRadius < 0)? "Forward" : "Back") << endl
+					<< endl;
+
+				ofSetLineWidth(3);
+				ofSetColor(ofColor::green, userMapAlpha);
+				ofLine(0, -h/2*sc2, 0, h/2*sc2);
+
+				drawOverheadText(txt_position, -sc2*w/2 + txt_position.getWidth()/2, -sc2*h/2 + txt_position.getHeight()/2);
+
+				//TODO: instruct user to step into spot (visualy? top view)
+				//draw user map
+				float maxZ = 4000.0f;		
+				float factor = h*sc2/maxZ;
+
+				ofPushMatrix();
+				ofPushStyle();
+				ofTranslate(0 , -h/2*sc2);
+
+				ofScale(factor, factor);
+				ofVec2f spot2d(spot.x, spot.z);
+
+				ofSetColor(ofColor::green, userMapAlpha);
+				ofFill();
+				ofCircle(spot2d, spotRadius);
+				ofNoFill();
+				ofCircle(spot2d,spotRadius + spotRadiusHysteresis);
+
+
+
+				ofLine(spot2d.x - spotRadius, spot2d.y,spot2d.x + spotRadius, spot2d.y);
+
+				ofNoFill();
+				ofSetLineWidth(5);
+				ofSetColor(ofColor::white, userMapAlpha);
+
+				ofVec2f v(selectedUser.headPoint.x, selectedUser.headPoint.z);
+				ofCircle(v, 200);
+
+
+				ofPopStyle();
+				ofPopMatrix();
+
+				//draw arrow
+			}
+
+			if (state == MORE_THAN_ONE)
+			{
+				drawOverheadText(txt_toomany, -sc2*w/2 + txt_toomany.getWidth()/2, -sc2*h/2 + txt_toomany.getHeight()/2);
+			}
+
+			if (state == RAISE_HAND || state == SELECTION)
+			{
+				drawOverheadText(txt_prompt, -sc2*w/2 + txt_prompt.getWidth()/2, -sc2*h/2 + txt_prompt.getHeight()/2);
+			}
+
+			ofxProfileSectionPop();
+			ofPopMatrix();
 		}
 
-		if (state == MORE_THAN_ONE)
-		{
-			drawOverheadText(txt_toomany, -sc2*w/2 + txt_toomany.getWidth()/2, -sc2*h/2 + txt_toomany.getHeight()/2);
-		}
-
-		if (state == RAISE_HAND || state == SELECTION)
-		{
-			drawOverheadText(txt_prompt, -sc2*w/2 + txt_prompt.getWidth()/2, -sc2*h/2 + txt_prompt.getHeight()/2);
-		}
-
-		ofxProfileSectionPop();
-		ofPopMatrix();
 	}
 
 	if (state == SELECTION)
