@@ -341,7 +341,7 @@ void testApp::draw(){
 
 	if (drawVideo) {
 
-
+		ofPushMatrix();
 		//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
 		float w = (ofGetScreenWidth() - margin) / 2;					//380
 		float h = (ofGetScreenHeight() - margin - bottomMargin) / 2;	//480
@@ -352,6 +352,35 @@ void testApp::draw(){
 		userMessage << "h" << h << endl;
 		userMessage << "sx" << sx << endl;
 		userMessage << "sy" << sy << endl;
+
+		ofPoint globalTranslation;
+		float maxExpand = 0.2;
+		float s = 0;
+
+		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
+		{
+			ofVec2f p = selectedUser.screenPoint;
+			p -= ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
+
+			float x = ofMap(fabs(p.x), w/4, ofGetScreenWidth()/4, 0.0f, 1.0f, true);
+			float y = ofMap(fabs(p.y), h/4, ofGetScreenHeight()/4, 0.0f, 1.0f, true);
+
+			if (selectedUser.screenPoint01.y < -1)
+			{
+				y = ofMap(selectedUser.screenPoint01.y, -1, minBottomScreen, 1.0f, 0.0f, true); // fix jitter when hand is too low
+			}
+
+			float s01 = (x*y); // score
+			s = maxExpand * s01; 
+
+			//translate into screen (avoid spill)
+			int tx = selectedUser.hovered % 2;
+			int ty = selectedUser.hovered / 2;
+			tx = 2*tx - 1; // map 0,1 to -1,1
+			ty = 2*ty - 1;
+			globalTranslation = ofPoint(-tx * s * w * 2, -ty * s * w * 2);
+			ofTranslate(globalTranslation);
+		}
 
 		for (int i=0; i < 4; i++)
 		{
@@ -375,24 +404,11 @@ void testApp::draw(){
 
 			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
-				ofVec2f p = selectedUser.screenPoint;
-				p -= ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
-
-				float x = ofMap(fabs(p.x), w/4, ofGetScreenWidth()/4, 0.0f, 1.0f, true);
-				float y = ofMap(fabs(p.y), h/4, ofGetScreenHeight()/4, 0.0f, 1.0f, true);
-
-				if (selectedUser.screenPoint01.y < -1)
-				{
-					y = ofMap(selectedUser.screenPoint01.y, -1, minBottomScreen, 1.0f, 0.0f, true); // fix jitter when hand is too low
-				}
-
-				float s01 = (x*y); // score
-				float maxExpand = 0.3;
-				float s = maxExpand * s01; 
 				playbackScale = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
 			}
 
 			ofTranslate(ofGetScreenWidth()/2 + (dx * (w+margin)/2 * playbackScale), (ofGetScreenHeight() - bottomMargin)/2 + (dy * (h+margin)/2 * playbackScale));
+
 			ofScale(playbackScale, playbackScale);
 
 			ofRectangle border(0, 0, w+margin, h+margin);
@@ -422,7 +438,7 @@ void testApp::draw(){
 
 				if (i==selectedUser.hovered)
 				{
-					drawOverheadText(txt_pointing, playbackScale / 2 * (-w + txt_pointing.getWidth()), -dy * playbackScale/2 * (-h + txt_pointing.getHeight()));
+					drawOverheadText(txt_pointing, playbackScale * (-w/2 + txt_pointing.getWidth()), -dy * playbackScale * (-h/2 + txt_pointing.getHeight()));
 				}
 			}
 
@@ -461,6 +477,7 @@ void testApp::draw(){
 			ofSetColor(ofColor::black);
 			ofFill();
 			ofRect(0,0, w + 2*margin/sc2, h + 2*margin/sc2);
+
 
 			openNIRecorder.drawImageSubsection(w, h, sx, sy);
 			ofPopMatrix();
@@ -532,14 +549,17 @@ void testApp::draw(){
 			ofPopMatrix();
 		}
 
+		ofPopMatrix();
+
+		if (state == SELECTION)
+		{
+			//userMessage << "waiting for selection... TODO: instructions how to select" << endl;
+			//userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
+			cursor.draw();
+		}
 	}
 
-	if (state == SELECTION)
-	{
-		//userMessage << "waiting for selection... TODO: instructions how to select" << endl;
-		//userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
-		cursor.draw();
-	}
+
 
 
 	if (drawDepth)
