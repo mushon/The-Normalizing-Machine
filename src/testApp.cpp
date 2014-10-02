@@ -431,7 +431,7 @@ void testApp::draw(){
 			{
 				ofImage& icon = (i==selectedUser.hovered) ? yesIcon : noIcon;
 
-				float transitionLength = 0.1;		
+				float transitionLength = 0.05;		
 				float transitionBegin = (i==selectedUser.hovered) ? 0.4 : 0.5 + 0.05 * i;				
 				int alphaIcon = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 255, true);
 				
