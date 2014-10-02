@@ -214,11 +214,7 @@ void testApp::update(){
 				}
 				else
 				{
-					if (selectedUser.rightHand.z < selectedUser.rightShoulder.z + handShoulderDistance)
-					{
-						userMessage << "waiting for hand Raise" << endl;
-					}
-					else
+					if (selectedUser.hand.z < selectedUser.shoulder.z - handShoulderDistance)
 					{
 						if (selectedUser.isSteady())
 						{
@@ -236,6 +232,11 @@ void testApp::update(){
 			}
 		case SELECTION:
 			{
+				if (selectedUser.hand.z > selectedUser.shoulder.z - handShoulderDistance)
+				{
+					if (isRecording) abortRecording();
+					state = RAISE_HAND;
+				}
 				if (selectedUser.dist.length() > spotRadius + spotRadiusHysteresis)
 				{
 					if (isRecording) abortRecording();
