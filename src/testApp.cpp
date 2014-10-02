@@ -374,7 +374,7 @@ void testApp::draw(){
 			int ty = selectedUser.hovered / 2;
 			tx = 2*tx - 1; // map 0,1 to -1,1
 			ty = 2*ty - 1;
-			globalTranslation = ofPoint(-tx * s * w * 2, -ty * s * w * 2);
+			globalTranslation = ofPoint(-tx * s * w, -ty * s * h);
 			ofTranslate(globalTranslation);
 		}
 
