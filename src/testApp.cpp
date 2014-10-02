@@ -495,7 +495,7 @@ void testApp::draw(){
 				ofSetColor(ofColor::green, userMapAlpha);
 				ofLine(0, -h/2*sc2, 0, h/2*sc2);
 
-				drawOverheadText(txt_position, -sc2*w/2 + txt_position.getWidth()/2, -sc2*h/2 + txt_position.getHeight()/2);
+				drawOverheadText(txt_position, -sc2*w/2 + txt_position.getWidth()/2, sc2*h/2 - txt_position.getHeight()/2);
 
 				//TODO: instruct user to step into spot (visualy? top view)
 				//draw user map
@@ -535,12 +535,12 @@ void testApp::draw(){
 
 			if (state == MORE_THAN_ONE)
 			{
-				drawOverheadText(txt_toomany, -sc2*w/2 + txt_toomany.getWidth()/2, -sc2*h/2 + txt_toomany.getHeight()/2);
+				drawOverheadText(txt_toomany, -sc2*w/2 + txt_toomany.getWidth()/2, 0);
 			}
 
 			if (state == RAISE_HAND)
 			{
-				drawOverheadText(txt_prompt, -sc2*w/2 + txt_prompt.getWidth()/2, -sc2*h/2 + txt_prompt.getHeight()/2);
+				drawOverheadText(txt_prompt, -sc2*w/2 + txt_prompt.getWidth()/2, sc2*h/2 - txt_prompt.getHeight()/2);
 			}
 
 			ofxProfileSectionPop();
