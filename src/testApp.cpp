@@ -505,7 +505,7 @@ void testApp::draw(){
 					<< (abs(selectedUser.dist.y - spotRadius < 0)? "Forward" : "Back") << endl
 					<< endl;
 
-				ofSetLineWidth(3);
+				ofSetLineWidth(2);
 				ofSetColor(ofColor::green, userMapAlpha);
 				ofLine(0, -h/2*sc2, 0, h/2*sc2);
 
@@ -527,11 +527,11 @@ void testApp::draw(){
 				ofFill();
 				ofCircle(spot2d, spotRadius);
 				ofNoFill();
-				ofCircle(spot2d,spotRadius + spotRadiusHysteresis);
+				ofCircle(spot2d,(spotRadius + spotRadiusHysteresis));
 
 
 
-				ofLine(spot2d.x - spotRadius, spot2d.y,spot2d.x + spotRadius, spot2d.y);
+				//ofLine(spot2d.x - spotRadius, spot2d.y,spot2d.x + spotRadius, spot2d.y);
 
 				ofNoFill();
 				ofSetLineWidth(5);
