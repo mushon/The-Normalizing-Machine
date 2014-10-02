@@ -183,6 +183,8 @@ private:
 	ofImage txt_pointing;
 	ofImage txt_position;
 	ofImage txt_prompt;
+	ofImage txt_toomany;
+
 	void drawOverheadText(ofImage&, int x, int y);
 
 

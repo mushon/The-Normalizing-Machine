@@ -29,7 +29,7 @@ void testApp::setup() {
 	txt_pointing.loadImage("assets/txt_pointing.png");
 	txt_position.loadImage("assets/txt_position.png");
 	txt_prompt.loadImage("assets/txt_prompt.png");
-
+	txt_toomany.loadImage("assets/txt_toomany.png");
 
 	//ofTrueTypeFont::setGlobalDpi(72);
 	verdana.loadFont("fonts/verdana.ttf", 50, true, true);
@@ -475,6 +475,11 @@ void testApp::draw(){
 			ofPopMatrix();
 
 			//draw arrow
+		}
+
+		if (state == MORE_THAN_ONE)
+		{
+			drawOverheadText(txt_toomany, -sc2*w/2 + txt_toomany.getWidth()/2, -sc2*h/2 + txt_toomany.getHeight()/2);
 		}
 
 		if (state == RAISE_HAND || state == SELECTION)
