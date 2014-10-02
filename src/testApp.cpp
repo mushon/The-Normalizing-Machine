@@ -58,13 +58,13 @@ void testApp::setupRecording(string _filename)
 	openNIRecorder.addDepthStream();
 	openNIRecorder.addImageStream();
 	openNIRecorder.addUserTracker();
-//	openNIRecorder.addHandsTracker();
+	//	openNIRecorder.addHandsTracker();
 	openNIRecorder.start();
 }
 
 void testApp::setupPlayback(string _filename) {
 	//player.stop();
-	cout << "setupPlayback: " << _filename << endl;
+	ofLogNotice("setupPlayback:") << _filename << endl;
 
 	ofxOpenNI& player = players[n_players];
 	n_players++;
@@ -159,7 +159,7 @@ void testApp::update(){
 			}
 		}		
 	}
-	
+
 	else if (nVisibleUsers > 1 || simulateMoreThanOne)
 	{
 		state = MORE_THAN_ONE;
@@ -413,7 +413,7 @@ void testApp::draw(){
 			if (state == RESULT)
 			{
 				RecordedData* other = currData.othersPtr[i];
-				
+
 				for (int j=0;j<other->scoreCount();j++)
 				{
 					ofImage& icon = (j < other->vScore) ? yesIcon20 : noIcon20;
@@ -628,8 +628,8 @@ void testApp::setupGui(){
 
 	gui->addLabelButton("Save XML", false);
 
-//	recDir = "e:/records/";
-//	recDir = ofToDataPath("/records/");
+	//	recDir = "e:/records/";
+	//	recDir = ofToDataPath("/records/");
 	recDir = "C:/Users/SE_Shenkar/Dropbox/records/";
 
 	gui->addLabel("Rec Dir", recDir);
@@ -712,13 +712,13 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 
 	string name = e.getName();
 	int kind = e.getKind();
-	cout << "got event from: " << name << endl;
+	ofLogNotice("") << "got event from: " << name << endl;
 
 	if(name == "State")
 	{
 		ofxUIRadio *radio = (ofxUIRadio *) e.widget;
-		cout << "value" << radio->getValue() << endl;
-		cout << " active name: " << radio->getActiveName() << endl;
+		ofLogNotice("") << "value" << radio->getValue() << endl;
+		ofLogNotice("") << " active name: " << radio->getActiveName() << endl;
 	}
 
 	if(name == "Save XML" && e.getButton()->getValue())
@@ -733,19 +733,21 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 void testApp::startRecording()
 {
 	lastRecordingFilename = generateFileName();
-	cout << "startRecording: " << recDir + lastRecordingFilename << endl;	
+	ofLogNotice("startRecording") << recDir + lastRecordingFilename;	
 	openNIRecorder.startRecording(recDir + lastRecordingFilename);
 	isRecording = true;
-	cout << "startRecording: OK" << endl;
+	ofLogNotice("startRecording") << "OK";
 }
 
 void testApp::saveRecording()
 {
+	ofLogNotice("saveRecording");
 	stopRecording();
 
 	saveSessionToDataSet();	
 	updateScores();
 	saveLibrary();
+	ofLogNotice("saveRecording") << "OK";
 
 	// when recording is complete, save his selection data, process face frames and save to data,
 	// update other selected x/v in db
@@ -762,10 +764,10 @@ void testApp::saveRecording()
 
 void testApp::stopRecording()
 {
-	cout << "stopRecording: " << lastRecordingFilename << endl;
+	ofLogNotice("") << "stopRecording: " << lastRecordingFilename << endl;
 	openNIRecorder.stopRecording();
 	isRecording = false;
-	//	cout << "stopRecording: " << "OK" << endl;
+	//	ofLogNotice("") << "stopRecording: " << "OK" << endl;
 
 	//HACKHACK !!!
 	//setupPlayback(lastRecordingFilename);
@@ -773,14 +775,14 @@ void testApp::stopRecording()
 
 void testApp::abortRecording()
 {
-	cout << "abortRecording: " << lastRecordingFilename << endl;
+	ofLogNotice("") << "abortRecording: " << lastRecordingFilename << endl;
 	stopRecording();
 	//delete file?
 }
 
 void testApp::drawOverheadText(ofImage& txt, int x, int y)
 {
-//	ofPoint pos(0, -h/2 + txt.getHeight()/2);
+	//	ofPoint pos(0, -h/2 + txt.getHeight()/2);
 	ofPoint pos(x,y);
 	ofSetColor(ofColor::black, textAlpha);
 	ofFill();
@@ -829,7 +831,7 @@ void testApp::saveSessionToDataSet()
 
 void testApp::saveLibrary()
 {
-	cout << "saveLibrary:" << endl;
+	ofLogNotice("saveLibrary");
 
 	ofxJSONElement json;
 	for (DataSet::iterator it = dataset.begin(); it != dataset.end(); it++)
@@ -841,7 +843,7 @@ void testApp::saveLibrary()
 	}
 
 	bool success = json.save(recDir + datasetJsonFilename, true);
-	cout << ("saveLibrary", success ? "OK":"FAIL") << endl;
+	ofLogNotice("saveLibrary") << (success ? "OK":"FAIL");
 }
 
 void testApp::loadLibrary()
