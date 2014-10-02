@@ -1024,5 +1024,17 @@ setupPlayback(ofToDataPath(filename));
 
 void testApp::updateScores()
 {
+	for (int i=0; i<4; i++)
+	{
+		RecordedData* other = currData.othersPtr[i];
 
+		if (currData.othersSelection[i])
+		{
+			other->vScore++;
+		}
+		else
+		{
+			other->xScore++;
+		}
+	}
 }
