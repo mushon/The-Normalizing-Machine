@@ -934,7 +934,7 @@ void testApp::select4()
 
 	maxit = std::max_element(dataset.begin(), dataset.end(), sortById); //latest
 	currData.othersId[0] = maxit->id;
-	currData.othersPtr[0] = maxit._Ptr;
+	currData.othersPtr[0] = &(*maxit);
 
 
 	DataSet::iterator leastScored1;
@@ -961,8 +961,8 @@ void testApp::select4()
 	currData.othersId[1] = leastScored1->id;
 	currData.othersId[2] = leastScored2->id;
 
-	currData.othersPtr[1] = leastScored1._Ptr;
-	currData.othersPtr[2] = leastScored2._Ptr;
+	currData.othersPtr[1] = &(*leastScored1);
+	currData.othersPtr[2] = &(*leastScored2);
 
 	//random
 	DataSet::iterator randit = std::min_element(dataset.begin(), dataset.end(), sortById); //first, just as a fallback
@@ -984,7 +984,7 @@ void testApp::select4()
 		randit++;
 	}
 	currData.othersId[3] = randit->id;
-	currData.othersPtr[3] = randit._Ptr;
+	currData.othersPtr[3] = &(*randit);
 
 	for (int i=0; i<4; i++)
 	{

@@ -86,7 +86,7 @@ struct RecordedData
 
 class testApp : public ofBaseApp{
 
-	typedef vector<RecordedData> DataSet;
+	typedef list<RecordedData> DataSet;
 	DataSet dataset; // the whole shablang
 	ofxJSONElement datasetJson;
 	string datasetJsonFilename;
