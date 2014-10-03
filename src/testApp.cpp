@@ -416,7 +416,7 @@ void testApp::draw(){
 			ofSetColor(ofColor::black);
 			ofRect(border);
 
-//			players[i].drawImage();
+			//			players[i].drawImage();
 			players[i].drawImageSubsection(w, h, 0, 0);
 
 
@@ -436,7 +436,7 @@ void testApp::draw(){
 				float transitionLength = 0.05;		
 				float transitionBegin = (i==selectedUser.hovered) ? 0.4 : 0.5 + 0.05 * i;				
 				int alphaIcon = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 255, true);
-				
+
 				//float iconScale = ofMap(selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 1.0f, 0.0f, true);
 				float iconTrans = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 1, true);
 				iconTrans = sqrt(iconTrans);
