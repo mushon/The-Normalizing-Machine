@@ -865,8 +865,6 @@ void testApp::drawDebugText()
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 		<< "State : " << stateToString(state) << endl
-		<< "Height: " << openNIRecorder.getImageFrame().getHeight() << endl
-		<< "Width : " << openNIRecorder.getImageFrame().getWidth() << endl
 		<< lastSeenUser.getCountDown() << endl
 		<< "User Message: " << userMessage.str() << endl
 		;
