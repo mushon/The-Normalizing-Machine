@@ -206,7 +206,7 @@ private:
 	ofImage txt_prompt;
 	ofImage txt_toomany;
 
-	void drawOverheadText(ofImage&, int x, int y);
+	void drawOverheadText(ofImage&, int x, int y, int w);
 
 
 	ofTrueTypeFont	verdana;

@@ -456,7 +456,7 @@ void testApp::draw(){
 
 				if (i==selectedUser.hovered)
 				{
-					drawOverheadText(txt_pointing, -dx * (-w + txt_pointing.getWidth()) / 2, (h - txt_pointing.getHeight()) / 2);
+					drawOverheadText(txt_pointing, -dx * (-w + txt_pointing.getWidth()) / 2, (h - txt_pointing.getHeight()) / 2, w);
 				}
 			}
 
@@ -517,7 +517,7 @@ void testApp::draw(){
 				ofSetColor(ofColor::green, userMapAlpha);
 				ofLine(0, -h/2*sc2, 0, h/2*sc2);
 
-				drawOverheadText(txt_position, -sc2*w/2 + txt_position.getWidth()/2, sc2*h/2 - txt_position.getHeight()/2);
+				drawOverheadText(txt_position, -sc2*w/2 + txt_position.getWidth()/2, sc2*h/2 - txt_position.getHeight()/2, w * sc2);
 
 				//TODO: instruct user to step into spot (visualy? top view)
 				//draw user map
@@ -557,12 +557,12 @@ void testApp::draw(){
 
 			if (state == MORE_THAN_ONE)
 			{
-				drawOverheadText(txt_toomany, -sc2*w/2 + txt_toomany.getWidth()/2, 0);
+				drawOverheadText(txt_toomany, -sc2*w/2 + txt_toomany.getWidth()/2, 0, w * sc2);
 			}
 
 			if (state == RAISE_HAND)
 			{
-				drawOverheadText(txt_prompt, -sc2*w/2 + txt_prompt.getWidth()/2, sc2*h/2 - txt_prompt.getHeight()/2);
+				drawOverheadText(txt_prompt, -sc2*w/2 + txt_prompt.getWidth()/2, sc2*h/2 - txt_prompt.getHeight()/2, w * sc2);
 			}
 
 			ofxProfileSectionPop();
@@ -843,16 +843,14 @@ void testApp::abortRecording()
 	//delete file?
 }
 
-void testApp::drawOverheadText(ofImage& txt, int x, int y)
+void testApp::drawOverheadText(ofImage& txt, int x, int y, int w)
 {
-	//	ofPoint pos(0, -h/2 + txt.getHeight()/2);
-	ofPoint pos(x,y);
 	ofSetColor(ofColor::black, textAlpha);
 	ofFill();
-	ofRect(pos, txt.getWidth(), txt.getHeight()); // text background
+	ofRect(0, y, w, txt.getHeight()); // text background
 
 	ofSetColor(ofColor::white, 255);
-	txt.draw(pos);
+	txt.draw(x, y);
 }
 
 void testApp::drawDebugText()
