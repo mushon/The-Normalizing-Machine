@@ -106,11 +106,17 @@ void testApp::update(){
 			ofxOpenNIUser& u = it->second;
 			if (u.isVisible())				
 			{
-				ofxOpenNIJoint j = u.getJoints().at(nite::JointType::JOINT_HEAD);
+				ofxOpenNIJoint j1 = u.getJoints().at(nite::JointType::JOINT_HEAD);
+				ofxOpenNIJoint j2 = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
+				ofxOpenNIJoint j3 = u.getJoints().at(nite::JointType::JOINT_TORSO);
 
-				if (j.positionConfidence < 0.5) continue;
 
-				ofPoint headPoint = j.positionReal;
+				if (j1.positionConfidence < 0.5 &&
+					j2.positionConfidence < 0.5 &&
+					j3.positionConfidence < 0.5)
+					continue;
+
+				ofPoint headPoint = j1.positionReal;
 				nVisibleUsers++;
 
 
