@@ -178,6 +178,8 @@ private:
 	ofPoint spot;
 	float spotRadius;
 	float spotRadiusHysteresis;
+	float idleThreshold;
+	float idleThresholdHysteresis;
 
 	int userMapAlpha;
 	int textAlpha;

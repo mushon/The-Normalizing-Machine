@@ -187,14 +187,19 @@ void testApp::update(){
 		{
 		case IDLE: //this happens only once in the transition
 			{
-				state = GOTO_SPOT;
-				userMessage << "TODO: begin to show instructions";
+				userMessage << selectedUser.dist.length() << endl;
+				if (selectedUser.dist.length() < idleThreshold)
+				{
+					state = GOTO_SPOT;
+					userMessage << "TODO: begin to show instructions";
+				}
 				break;
 			}
 
 		case GOTO_SPOT:
 			{
-				if (selectedUser.id == SelectedUser::NO_USER)
+				if (selectedUser.id == SelectedUser::NO_USER ||
+					selectedUser.dist.length() > idleThreshold + idleThresholdHysteresis)
 				{
 					state = IDLE;
 				}
@@ -705,6 +710,12 @@ void testApp::setupGui(){
 
 	profilerPos = ofxUIVec3f(220, 0);
 	//gui->add2DPad("profilerPos", ofxUIVec3f(0, ofGetScreenWidth()), ofxUIVec3f(0, ofGetScreenHeight()), &profilerPos);
+
+	idleThreshold = 500;
+	gui->addSlider("idleThreshold", 200, 2000, &idleThreshold);
+
+	idleThresholdHysteresis = 100;
+	gui->addSlider("idle.Thr.Hyst", 10, 200, &idleThresholdHysteresis);
 
 	spotRadius = 400;
 	gui->addSlider("spot radius", 0, 1000, &spotRadius);
