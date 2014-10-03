@@ -1,0 +1,16 @@
+push ofxOpenNI !!!
+team viewer
+share dropbox folder with mushon
+
+put text on idle?
+looper?
+
+
+possible futures
+---
+randomize videos location (select4)
+left hand
+recording tweaks (when to start and stop) - delete unused on the spot
+calibrate hand-shoulder-sensor-screen
+cursor reset from 12 to current location, wuthout bump (like movie beggining)
+add sound ticks
