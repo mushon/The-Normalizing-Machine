@@ -45,11 +45,8 @@ void testApp::setup() {
 
 	ofBackground(0, 0, 0);
 
-	//restart()
-	n_players = 0;
 	loadLibrary();
-	state = IDLE;
-	select4();
+	begin();
 }
 
 void testApp::setupRecording(string _filename)
