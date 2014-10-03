@@ -88,6 +88,16 @@ void testApp::begin()
 }
 //--------------------------------------------------------------
 void testApp::update(){
+	
+	static int lastMin=0;
+	
+	int mins = ofGetElapsedTimeMillis() / (1000 * 60); // (ofGetElapsedTimef());
+	if (mins > lastMin)
+	{
+		lastMin = mins;
+		ofLogNotice("Minutes Passed") << mins;
+	}
+	
 	userMessage = stringstream();
 
 	ofxProfileSectionPush("openni update live");
