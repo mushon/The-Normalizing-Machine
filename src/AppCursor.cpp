@@ -17,7 +17,8 @@ AppCursor::AppCursor(void)
 
 void AppCursor::update(ofPoint pos, float progress)
 {
-	center = pos;
+	float smoothingFactor = 0.1;
+	position.interpolate(pos, smoothingFactor);
 	highAngle = ofMap(progress, 0.0f, 1.0f, -89, 270, true);
 }
 
@@ -28,15 +29,15 @@ void AppCursor::draw()
 	ofSetLineWidth(2);
 
 	ofNoFill();
-	ofCircle(center, minRadius);
+	ofCircle(position, minRadius);
 	path.clear();
-	path.arc(center, minRadius, minRadius, lowAngle, highAngle);  
-	path.moveTo(center);
-	path.arc(center, maxRadius, maxRadius, lowAngle ,highAngle);
+	path.arc(position, minRadius, minRadius, lowAngle, highAngle);  
+	path.moveTo(position);
+	path.arc(position, maxRadius, maxRadius, lowAngle ,highAngle);
 	path.draw();
 
 	ofPushMatrix();
-	ofTranslate(center);
+	ofTranslate(position);
 	ofLine(-crossSize, 0, crossSize,0); // x line
 	ofLine(0, -crossSize, 0, crossSize); // y line
 	ofPopMatrix();

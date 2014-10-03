@@ -8,11 +8,11 @@ public:
 	AppCursor(void);
 	void update(ofPoint pos, float progress);
 	void draw();
-
+	void setPosition(ofVec2f pos) {position = pos;}
 private:
 	ofPath path;
 
-	ofPoint center;
+	ofVec2f position;
 
 	int minRadius;
 	int maxRadius;

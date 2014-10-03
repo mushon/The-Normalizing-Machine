@@ -43,6 +43,8 @@ void testApp::setup() {
 
 	setupGui();
 
+	screenCenter = ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
+
 	ofBackground(0, 0, 0);
 
 	loadLibrary();
@@ -221,6 +223,8 @@ void testApp::update(){
 						if (selectedUser.isSteady())
 						{
 							selectedUser.reset();
+							cursor = AppCursor();
+							cursor.setPosition(screenCenter);
 							state = SELECTION;
 						}
 						else
@@ -249,17 +253,26 @@ void testApp::update(){
 				{
 					ofPoint p = selectedUser.getPointingDir();
 
+					float x = -(selectedUser.shoulder.z - screenZ) * p.x / p.z - screenL;
+					float y = -(selectedUser.shoulder.z - screenZ) * p.y / p.z - screenB;
+
+					float kx = (x-screenL) / (screenR - screenL);
+					float ky = (y-screenB) / (screenT - screenB);
+
+
 					// TODO: sanity check if hand is +- at shoulder level
-					ofVec2f v(p.x, p.y);
-					v /= (touchScreenSize / 2); // <<<< There's alot of UI tweaking here, where the window sits (width = shoulders width?)
+					ofVec2f v(2*kx-1, 2*ky-1);
+					//ofVec2f v(2*kx-1, 2*ky-1);
+
+					//	v /= (touchScreenSize / 2); // <<<< There's alot of UI tweaking here, where the window sits (width = shoulders width?)
 					selectedUser.screenPoint01 = v;
 
 					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function, 
 					//v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function, 
 					//v.y = powf(v.y, 3); // only on x
 
-					ofVec2f screenCenter(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
-					selectedUser.screenPoint = v.getMapped(screenCenter, ofVec2f(ofGetScreenWidth()/2, 0), ofVec2f(0, -1 * ofGetScreenHeight()/2)); // reverse y, assume -1 < v.x, v.y < 1
+
+					selectedUser.screenPoint = v.getMapped(screenCenter, ofVec2f(ofGetScreenWidth()/2, 0), ofVec2f(0, -ofGetScreenHeight()/2)); // reverse y, assume -1 < v.x, v.y < 1
 
 					float progress = selectedUser.getProgress();
 					cursor.update(selectedUser.screenPoint, progress);
@@ -275,7 +288,7 @@ void testApp::update(){
 					{
 						hover = SelectedUser::NO_HOVER;
 					}
-					if (v.y < minBottomScreen) // hand down
+					if (abs(v.x) > outsideScreenFactor || abs(v.y) > outsideScreenFactor) // hand down
 					{
 						hover = SelectedUser::NO_HOVER;
 					}
@@ -364,9 +377,13 @@ void testApp::draw(){
 			float x = ofMap(fabs(p.x), w/4, ofGetScreenWidth()/4, 0.0f, 1.0f, true);
 			float y = ofMap(fabs(p.y), h/4, ofGetScreenHeight()/4, 0.0f, 1.0f, true);
 
-			if (selectedUser.screenPoint01.y < -1)
+			if (abs(selectedUser.screenPoint01.x) > 1)
 			{
-				y = ofMap(selectedUser.screenPoint01.y, -1, minBottomScreen, 1.0f, 0.0f, true); // fix jitter when hand is too low
+				x = ofMap(abs(selectedUser.screenPoint01.x), 1, outsideScreenFactor, 1.0f, 0.0f, true); // fix jitter when hand is too low
+			}
+			if (abs(selectedUser.screenPoint01.y) > 1)
+			{
+				y = ofMap(abs(selectedUser.screenPoint01.y), 1, outsideScreenFactor, 1.0f, 0.0f, true); // fix jitter when hand is too low
 			}
 
 			float s01 = (x*y); // score
@@ -731,8 +748,8 @@ void testApp::setupGui(){
 	handShoulderDistance = 200;
 	gui->addIntSlider("handShoulderDistance", 100, 500, &handShoulderDistance);
 
-	minBottomScreen = -1.2;
-	gui->addSlider("minBottomScreen", -2, -1, &minBottomScreen);
+	outsideScreenFactor = 1.2;
+	gui->addSlider("outsideScreenFactor", 1, 2, &outsideScreenFactor);
 
 
 
@@ -746,15 +763,20 @@ void testApp::setupGui(){
 	gui->addSlider("touchScreenSize", 100, 1000, &touchScreenSize);
 
 
-	vector<string> states;
-	states.push_back("Idle"); //video grid
-	states.push_back("Recognition"); //instructions
-	states.push_back("Selection"); //add face layer
-	// start recording around raise hand gesture
-	states.push_back("RESULT"); //add face layer
-	// present selection
-	//	gui->addRadio("State", states, OFX_UI_ORIENTATION_VERTICAL, dim, dim)->activateToggle(State.Idle); 
+	screenZ = -1700;
+	gui->addSlider("screenZ", -3000, 0, &screenZ);
 
+	screenB = 1500;// screen bottom
+	gui->addSlider("screenB", -1000, 2000, &screenB);
+
+	screenT = 3000;// screen bottom
+	gui->addSlider("screenT", 1000, 5000, &screenT);
+
+	screenL = -600;// screen bottom
+	gui->addSlider("screenL", -1000, 1000, &screenL);
+
+	screenR = 600;// screen bottom
+	gui->addSlider("screenR", -1000, 1000, &screenR);
 
 	gui->autoSizeToFitWidgets();
 	ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);   

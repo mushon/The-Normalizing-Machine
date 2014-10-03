@@ -185,7 +185,14 @@ private:
 	int textAlpha;
 
 	int handShoulderDistance;
-	float minBottomScreen;
+	float outsideScreenFactor;
+
+	float screenZ;
+	float screenB;
+	float screenT;
+	float screenL;
+	float screenR;
+
 
 	bool drawText;
 	void drawDebugText();
@@ -215,13 +222,14 @@ private:
 	ofxUISuperCanvas* gui;
 
 	string recDir;
-	
+
 	void startRecording();
 	void saveRecording();
 	void stopRecording();
 	void abortRecording();
 
 	AppCursor cursor;
+	ofVec2f screenCenter;
 
 	bool simulateMoreThanOne; // for debugging purposes
 
