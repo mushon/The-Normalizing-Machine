@@ -1,0 +1,118 @@
+[
+   {
+      "id" : "test1.oni",
+      "others" : [
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : true
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         }
+      ],
+      "vScore" : 5,
+      "xScore" : 16
+   },
+   {
+      "id" : "test1.oni",
+      "others" : [
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : true
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         }
+      ],
+      "vScore" : 8,
+      "xScore" : 11
+   },
+   {
+      "id" : "test1.oni",
+      "others" : [
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : true
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         }
+      ],
+      "vScore" : 5,
+      "xScore" : 13
+   },
+   {
+      "id" : "test1.oni",
+      "others" : [
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : true
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         }
+      ],
+      "vScore" : 5,
+      "xScore" : 12
+   },
+   {
+      "id" : "2014_11_14_16_14_11_847.oni",
+      "others" : [
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "test1.oni",
+            "selection" : true
+         }
+      ],
+      "vScore" : 0,
+      "xScore" : 0
+   }
+]
+

@@ -913,7 +913,7 @@ void testApp::saveSessionToDataSet()
 		currData.othersSelection[i] = false;
 	}
 	currData.othersSelection[selectedUser.hovered] = true;
-	currData.location = "Athens"; //TODO add textEdit w/load save
+	currData.location = "Kiev"; //TODO add textEdit w/load save
 	currData.vScore = 0;
 	currData.xScore = 0;
 
@@ -943,15 +943,18 @@ string testApp::getRecDirString(string url)
 	ofxJSONElement json;
 	// Now parse the JSON
 	bool parsingSuccessful = json.open(url);
-
+	string dir;
 	if (parsingSuccessful) 
 	{
 		ofLogNotice("load Recdir") << json.getRawString(true);
-	} else {
+		dir = json["recDir"].asString();
+	}
+	else
+	{
 		ofLogNotice("load Recdir") << "Failed to parse JSON.";
+		dir = ofToDataPath("records/");
 	}
 
-	string dir = json["recDir"].asString();
 	return dir;
 }
 

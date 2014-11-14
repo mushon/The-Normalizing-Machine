@@ -1,0 +1,4 @@
+//rename this file to recDir.json to use other path, otherwise uses data/records/
+{
+	"recDir": "C:/path/"
+}
