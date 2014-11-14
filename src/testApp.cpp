@@ -711,7 +711,9 @@ void testApp::setupGui(){
 
 	//	recDir = "e:/records/";
 	//	recDir = ofToDataPath("/records/");
-	recDir = "C:/Users/SE_Shenkar/Dropbox/records/";
+	//  recDir = "C:/Users/SE_Shenkar/Dropbox/records/";
+	
+	recDir = getRecDirString(ofToDataPath("recDir.json"));
 
 	gui->addLabel("Rec Dir", recDir);
 
@@ -933,6 +935,24 @@ void testApp::saveLibrary()
 
 	bool success = json.save(recDir + datasetJsonFilename, true);
 	ofLogNotice("saveLibrary") << (success ? "OK":"FAIL");
+}
+
+string testApp::getRecDirString(string url)
+{
+
+	ofxJSONElement json;
+	// Now parse the JSON
+	bool parsingSuccessful = json.open(url);
+
+	if (parsingSuccessful) 
+	{
+		ofLogNotice("load Recdir") << json.getRawString(true);
+	} else {
+		ofLogNotice("load Recdir") << "Failed to parse JSON.";
+	}
+
+	string dir = json["recDir"].asString();
+	return dir;
 }
 
 void testApp::loadLibrary()

@@ -230,7 +230,7 @@ private:
 
 	bool simulateMoreThanOne; // for debugging purposes
 
-
+	string getRecDirString(string url);
 	bool testLoadLibrary;
 	void loadLibrary();
 	void saveLibrary();
