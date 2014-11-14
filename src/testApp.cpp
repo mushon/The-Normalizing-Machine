@@ -34,11 +34,6 @@ void testApp::setup() {
 	txt_prompt.loadImage("assets/txt_prompt.png");
 	txt_toomany.loadImage("assets/txt_toomany.png");
 
-	//ofTrueTypeFont::setGlobalDpi(72);
-	verdana.loadFont("fonts/verdana.ttf", 50, true, true);
-	verdana.setLineHeight(54.0f);
-	//verdana.setLetterSpacing(1.037);
-
 	ofEnableAlphaBlending();
 
 	setupGui();

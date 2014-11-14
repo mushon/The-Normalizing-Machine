@@ -215,9 +215,6 @@ private:
 
 	void drawOverheadText(ofImage&, int x, int y, int w);
 
-
-	ofTrueTypeFont	verdana;
-
 	void setupGui();
 	ofxUISuperCanvas* gui;
 
