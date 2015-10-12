@@ -2,15 +2,13 @@
 
 1. clone those addons (from github):
 
-    https://github.com/kylemcdonald/ofxCv
-
-    https://github.com/eranws/ofxFaceTracker
-
-    https://github.com/eranws/ofxOpenNI (experimental branch)
-
-    https://github.com/rezaali/ofxUI
- 
-    ofxOpenCv (included in oF)
+    ```
+    git clone https://github.com/kylemcdonald/ofxCv.git
+    git clone https://github.com/eranws/ofxFaceTracker.git
+    git clone https://github.com/eranws/ofxOpenNI.git // (experimental branch)
+    git clone https://github.com/rezaali/ofxUI
+    ```
+    the ofxOpenCv libary is also required but should be included in oF
     <!--
     irrelevant if cloning eranws/ofxFacetracker
     
