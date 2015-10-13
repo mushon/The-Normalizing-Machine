@@ -1,0 +1,95 @@
+[
+   {
+      "id" : "place_holder0.oni",
+      "others" : [
+         {
+            "id" : "place_holder0.oni",
+            "selection" : false
+         },
+         {
+            "id" : "place_holder1.oni",
+            "selection" : true
+         },
+         {
+            "id" : "place_holder2.oni",
+            "selection" : false
+         },
+         {
+            "id" : "place_holder3.oni",
+            "selection" : false
+         }
+      ],
+      "vScore" : 1,
+      "xScore" : 3
+   },
+   {
+      "id" : "place_holder1.oni",
+      "others" : [
+         {
+            "id" : "place_holder0.oni",
+            "selection" : false
+         },
+         {
+            "id" : "place_holder1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "place_holder2.oni",
+            "selection" : true
+         },
+         {
+            "id" : "place_holder3.oni",
+            "selection" : false
+         }
+      ],
+      "vScore" : 1,
+      "xScore" : 3
+   },
+   {
+      "id" : "place_holder2.oni",
+      "others" : [
+         {
+            "id" : "place_holder0.oni",
+            "selection" : false
+         },
+         {
+            "id" : "place_holder1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "place_holder2.oni",
+            "selection" : false
+         },
+         {
+            "id" : "place_holder3.oni",
+            "selection" : true
+         }
+      ],
+      "vScore" : 1,
+      "xScore" : 3
+   },
+   {
+      "id" : "place_holder3.oni",
+      "others" : [
+         {
+            "id" : "place_holder0.oni",
+            "selection" : true
+         },
+         {
+            "id" : "place_holder1.oni",
+            "selection" : false
+         },
+         {
+            "id" : "place_holder2.oni",
+            "selection" : false
+         },
+         {
+            "id" : "place_holder3.oni",
+            "selection" : false
+         }
+      ],
+      "vScore" : 1,
+      "xScore" : 3
+   }
+]
+
