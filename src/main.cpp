@@ -1,16 +1,24 @@
 #include "testApp.h"
 #include "ofMain.h"
-#include "ofAppGlutWindow.h"
+
+#ifdef TARGET_WIN32
+	#include "ofAppGlutWindow.h"
+#endif
 
 //========================================================================
 int main( ){
 
+
+#ifdef TARGET_WIN32
 	ofAppGlutWindow window;
 	ofSetupOpenGL(&window, 1024,768, OF_FULLSCREEN);			// <-------- setup the GL context
-
-	// this kicks off the running of my app
-	// can be OF_WINDOW or OF_FULLSCREEN
-	// pass in width and height too:
+#endif
+#ifdef TARGET_OSX
+	ofSetupOpenGL(1024,768, OF_WINDOW);			// <-------- setup the GL context
+#endif
+#ifdef TARGET_LINUX
+	// TODO
+#endif
 
 	try
 	{

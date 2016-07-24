@@ -1,5 +1,5 @@
-ofxOpenCv
-ofxXmlSettings
-ofxCv
-ofxFaceTracker
+ofxJSON
 ofxOpenNI
+ofxProfile
+ofxUI
+ofxXmlSettings

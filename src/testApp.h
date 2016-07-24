@@ -3,18 +3,13 @@
 
 #include "ofxOpenNI.h"
 #include "ofMain.h"
-#include "ofxCv.h"
-#include "ofxFaceTracker.h"
+#include "ofxJSON.h"
 #include "ofxUI.h"
-#include "AppCursor.h"
 
 #include "SelectedUser.h"
+#include "AppCursor.h"
 #include "AppTimer.h"
-#include "ofxJSON\src\ofxJSON.h"
 
-
-using namespace ofxCv;
-using namespace cv;
 
 struct RecordedData
 {
