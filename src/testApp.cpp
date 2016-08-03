@@ -468,7 +468,7 @@ void testApp::draw(){
 				//float iconScale = ofMap(selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 1.0f, 0.0f, true);
 				float iconTrans = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 1, true);
 				iconTrans = sqrt(iconTrans);
-				iconTrans = ofMap(iconTrans, 0, 1, h * 0.75 + icon.height * 2, 0.0f, true);
+				iconTrans = ofMap(iconTrans, 0, 1, h * 0.75 + icon.getHeight() * 2, 0.0f, true);
 
 
 				//ofSetColor(255, 255, 255, alphaIcon);
@@ -494,7 +494,7 @@ void testApp::draw(){
 					int iconSpacing = 5;
 					ofImage& icon = (j < other->vScore) ? yesIcon20 : noIcon20;
 					icon.draw(
-						(-(other->scoreCount() - 1) / 2 + j) * (icon.width + iconSpacing), 0);
+						(-(other->scoreCount() - 1) / 2 + j) * (icon.getWidth() + iconSpacing), 0);
 				}
 			}
 
