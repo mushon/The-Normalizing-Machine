@@ -100,7 +100,7 @@ void testApp::update(){
 	ofxProfileSectionPop();
 
 	nVisibleUsers = 0;
-	ofVec2f minDist = ofVec2f(99999, 99999);
+	float minDistance = FLT_MAX;
 	float minId = SelectedUser::NO_USER;
 
 	// HACK: nite internally counts down 10 seconds, even if user is not visible
@@ -127,19 +127,25 @@ void testApp::update(){
 
 				userMessage << it->first << ":" << headPoint << endl;
 				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)    <<<--------------------------might be a hang here, consider other way of choosing
-				if (dist.length() < minDist.length())
+				float distance = dist.length();
+
+				if (distance < minDistance)
 				{
 					minId = it->first;
-					minDist = dist;
+					minDistance = distance;
 				}
 			}
 		} // end for map
 
-		if (minId != SelectedUser::NO_USER)
+		if (minId == SelectedUser::NO_USER)
+		{
+			selectedUser = SelectedUser(); //reset
+		}
+		else
 		{
 			// keep track uf id (if changes in the middle)
 			selectedUser.id = minId;
-			selectedUser.dist = minDist;
+			selectedUser.distance = minDistance;
 			ofxOpenNIUser& u = openNIRecorder.trackedUsers.at(minId);
 
 			selectedUser.headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
@@ -156,10 +162,6 @@ void testApp::update(){
 				ofPoint rightShoulder = rsj.positionReal;
 				selectedUser.updatePoints(rightHand, rightShoulder);
 			}
-		}
-		else
-		{
-			selectedUser = SelectedUser(); //reset
 		}
 	}
 
@@ -197,8 +199,8 @@ void testApp::update(){
 		{
 		case IDLE: //this happens only once in the transition
 			{
-				userMessage << selectedUser.dist.length() << endl;
-				if (selectedUser.dist.length() < idleThreshold)
+				userMessage << selectedUser.distance << endl;
+				if (selectedUser.distance < idleThreshold)
 				{
 					state = GOTO_SPOT;
 					userMessage << "TODO: begin to show instructions";
@@ -209,12 +211,12 @@ void testApp::update(){
 		case GOTO_SPOT:
 			{
 				if (selectedUser.id == SelectedUser::NO_USER ||
-					selectedUser.dist.length() > idleThreshold + idleThresholdHysteresis)
+					selectedUser.distance > idleThreshold + idleThresholdHysteresis)
 				{
 					state = IDLE;
 				}
 
-				if (selectedUser.dist.length() < spotRadius)
+				if (selectedUser.distance < spotRadius)
 				{
 					state = RAISE_HAND;
 				}
@@ -223,7 +225,7 @@ void testApp::update(){
 
 		case RAISE_HAND:
 			{
-				if (selectedUser.dist.length() > spotRadius + spotRadiusHysteresis)
+				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
 					state = GOTO_SPOT;
 				}
@@ -254,7 +256,7 @@ void testApp::update(){
 					if (isRecording) abortRecording();
 					state = RAISE_HAND;
 				}
-				if (selectedUser.dist.length() > spotRadius + spotRadiusHysteresis)
+				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
 					if (isRecording) abortRecording();
 					//give timeout?
@@ -336,7 +338,7 @@ void testApp::update(){
 				//draw score
 				//animate back to idle
 				//change from live to recording
-				if (selectedUser.dist.length() > spotRadius + spotRadiusHysteresis)
+				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
 					ofLogNotice("RESULT -> IDLE");
 					begin();

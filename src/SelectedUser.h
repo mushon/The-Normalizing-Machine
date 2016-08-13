@@ -3,6 +3,9 @@
 #include "ofMain.h"
 #include "AppTimer.h"
 
+// add NO_USER as Selected user type
+// min Length = FLT_MAX
+
 class SelectedUser
 {
 public:
@@ -18,7 +21,8 @@ public:
 		ofPoint rightHand;
 		ofPoint rightShoulder;
 		ofPoint headPoint;
-		ofVec2f dist;
+
+		float distance; // to spot
 
 		ofVec3f rightHandVelocity;
 
