@@ -73,8 +73,6 @@ private:
 
 	string lastRecordingFilename;
 
-	string lastDump;
-
 	State state;
 
 	int nVisibleUsers;
