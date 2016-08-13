@@ -101,6 +101,7 @@ void testApp::update(){
 
 	int nVisibleUsers = getVisibleUsers();
 
+	updateSelectedUser();
 
 
 	if (nVisibleUsers == 0)
@@ -1081,10 +1082,9 @@ bool checkMainJointsConfidence(ofxOpenNIUser& u)
 		ofxOpenNIJoint jls = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
 		ofxOpenNIJoint jt = u.getJoints().at(nite::JointType::JOINT_TORSO);
 
-		return (jh.positionConfidence < 0.5 &&
-			jrs.positionConfidence < 0.5 &&
-			jls.positionConfidence < 0.5 &&
-			jt.positionConfidence < 0.5);
+		return (jh.positionConfidence > 0.5 &&
+			(jrs.positionConfidence > 0.5 || jls.positionConfidence > 0.5) &&
+			jt.positionConfidence > 0.5);
 
 }
 
@@ -1136,7 +1136,7 @@ SelectedUser testApp::getClosestUser()
 	return user;
 }
 
-int testApp::getUsers()
+int testApp::updateSelectedUser()
 {
 	SelectedUser user = getClosestUser();
 

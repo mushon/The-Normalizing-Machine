@@ -200,7 +200,7 @@ private:
 
 	AppCursor cursor;
 	SelectedUser getClosestUser();
-	int getUsers();
+	int updateSelectedUser();
 	int getVisibleUsers();
 	
 
