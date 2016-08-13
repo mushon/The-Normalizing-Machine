@@ -103,20 +103,16 @@ void testApp::update(){
 
 	if (nVisibleUsers == 0)
 	{
-		if (state == IDLE)
+		if (state == RESULT)
 		{
-			//TODO: idle animations
+			begin();
 		}
-		else  //user left in the middle of interacion - stop instructions / show warning with countdown
+		if (state != IDLE)
 		{
 			// stop recording?
 			if (selectedUser.lastSeen.getCountDown() == 0)
 			{
 				state = IDLE;
-			}
-			if (state==RESULT)
-			{
-				begin();
 			}
 		}		
 	}

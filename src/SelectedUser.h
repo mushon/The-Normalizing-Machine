@@ -35,6 +35,9 @@ public:
 
 		SelectedUser() : selectTimer(8000)
 		{
+			id = NO_USER;
+			distance = FLT_MAX;
+
 			reset();
 		}
 
@@ -44,8 +47,6 @@ public:
 			rightArm.reset();
 			
 			hovered = NO_HOVER;
-			id = NO_USER;
-			distance = FLT_MAX;
 
 			selectTimer.reset();
 			waitForSteady = true;
