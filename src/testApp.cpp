@@ -534,11 +534,13 @@ void testApp::draw(){
 			if (state == GOTO_SPOT)
 			{	
 
-				userMessage << "go to the spot. Please move " 
-					<< (abs(selectedUser.dist.x - spotRadius < 0) ? "Right" : "Left")
-					<< (abs(selectedUser.dist.x - spotRadius < 0) && abs(selectedUser.dist.y - spotRadius < 0) ? " and " : "")
-					<< (abs(selectedUser.dist.y - spotRadius < 0)? "Forward" : "Back") << endl
-					<< endl;
+				// // Depracated debug info:
+				// ofVec2f dist(selectedUser.headPoint.x - spot.x, selectedUser.headPoint.z - spot.z);
+				// userMessage << "go to the spot. Please move " 
+				// << (abs(dist.x - spotRadius < 0) ? "Right" : "Left")
+				// << (abs(dist.x - spotRadius < 0) && abs(dist.y - spotRadius < 0) ? " and " : "")
+				// << (abs(dist.y - spotRadius < 0)? "Forward" : "Back") << endl
+				// << endl;
 
 				ofSetLineWidth(2);
 				ofSetColor(ofColor::green, userMapAlpha);
