@@ -9,7 +9,7 @@
 #include "SelectedUser.h"
 #include "AppCursor.h"
 #include "AppTimer.h"
-
+#include "State.h"
 
 struct RecordedData
 {
@@ -115,30 +115,6 @@ public:
 	bool drawDepth;
 
 
-	enum State {
-		IDLE, GOTO_SPOT, RAISE_HAND, SELECTION, RESULT, MORE_THAN_ONE
-	};
-	State state;
-
-	const string stateToString(const testApp::State& state )
-	{
-		string str;
-#define X(state) case testApp::State::state: str = #state; break;
-		switch(state)
-		{
-			X(IDLE);
-			X(GOTO_SPOT);
-			X(RAISE_HAND);
-			X(SELECTION);
-			X(RESULT);
-			X(MORE_THAN_ONE);
-		default:
-			str = "undefined";
-		}
-#undef X
-
-		return str;
-	}
 
 	AppTimer lastSeenUser;
 	SelectedUser selectedUser;
@@ -166,6 +142,8 @@ private:
 	string lastRecordingFilename;
 
 	string lastDump;
+
+	State state;
 
 	int nVisibleUsers;
 	stringstream userMessage;

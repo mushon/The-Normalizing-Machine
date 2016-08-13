@@ -705,10 +705,11 @@ void testApp::exit(){
 void testApp::setupGui(){
 	float dim = 16;
 
-	gui = new ofxUISuperCanvas("Turing Normalizing Machine");
+	gui = new ofxUISuperCanvas("Turing Normalizing Machine", 2);
 
 	gui->addLabelButton("Save XML", false);
 
+	gui->addRadio("State", AppState::getStates());
 	//	recDir = "e:/records/";
 	//	recDir = ofToDataPath("/records/");
 	//  recDir = "C:/Users/SE_Shenkar/Dropbox/records/";
@@ -901,7 +902,7 @@ void testApp::drawDebugText()
 		<< "s : start/stop recording: " << (isRecording ? "RECORDING":"READY") << endl
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
-		<< "State : " << stateToString(state) << endl
+		<< "State : " << AppState::toString(state) << endl
 		<< lastSeenUser.getCountDown() << endl
 		<< "User Message: " << userMessage.str() << endl
 		;
