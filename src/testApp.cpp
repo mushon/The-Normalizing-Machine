@@ -776,19 +776,23 @@ void testApp::setupGui(){
 	gui->addSlider("touchScreenSize", 100, 1000, &touchScreenSize);
 
 
+	// screen-sensor distance. ir-sensor=0, depth values are z positive
+	// +z = front
+	// +y is up
+
 	screenZ = -1700;
 	gui->addSlider("screenZ", -3000, 0, &screenZ);
 
 	screenB = 1500;// screen bottom
-	gui->addSlider("screenB", -1000, 2000, &screenB);
+	gui->addSlider("screenB", -5000, 5000, &screenB);
 
-	screenT = 3000;// screen bottom
-	gui->addSlider("screenT", 1000, 5000, &screenT);
+	screenT = 3000;// screen top
+	gui->addSlider("screenT", -5000, 5000, &screenT);
 
-	screenL = -600;// screen bottom
+	screenL = -600;// screen left
 	gui->addSlider("screenL", -1000, 1000, &screenL);
 
-	screenR = 600;// screen bottom
+	screenR = 600;// screen right
 	gui->addSlider("screenR", -1000, 1000, &screenR);
 
 	gui->autoSizeToFitWidgets();
@@ -806,13 +810,14 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 
 	string name = e.getName();
 	int kind = e.getKind();
-	ofLogNotice("") << "got event from: " << name << endl;
+	ofLogNotice("guiEvent") << "got event from: " << name << endl;
 
 	if(name == "State")
 	{
 		ofxUIRadio *radio = (ofxUIRadio *) e.widget;
-		ofLogNotice("") << "value" << radio->getValue() << endl;
-		ofLogNotice("") << " active name: " << radio->getActiveName() << endl;
+		ofLogNotice("guiEvent") << "value" << radio->getValue()<<
+			" active name: " << radio->getActiveName() << endl;
+		// appState.set(value, force=true) 
 	}
 
 	if(name == "Save XML" && e.getButton()->getValue())
