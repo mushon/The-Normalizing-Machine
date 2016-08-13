@@ -10,7 +10,7 @@ public:
 	void draw();
 	void setPosition(ofVec2f pos) {position = pos;}
 private:
-	ofPath path;
+	ofPath ring;
 
 	ofVec2f position;
 

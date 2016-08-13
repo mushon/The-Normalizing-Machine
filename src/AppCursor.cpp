@@ -3,7 +3,7 @@
 
 AppCursor::AppCursor(void)
 {
-	path.setArcResolution(360);
+	ring.setArcResolution(360);
 	
 	minRadius = 40;
 	maxRadius = 50;
@@ -30,11 +30,11 @@ void AppCursor::draw()
 
 	ofNoFill();
 	ofCircle(position, minRadius);
-	path.clear();
-	path.arc(position, minRadius, minRadius, lowAngle, highAngle);  
-	path.moveTo(position);
-	path.arc(position, maxRadius, maxRadius, lowAngle ,highAngle);
-	path.draw();
+	ring.clear();
+	ring.arc(position, minRadius, minRadius, lowAngle, highAngle);  
+	ring.moveTo(position);
+	ring.arc(position, maxRadius, maxRadius, lowAngle ,highAngle);
+	ring.draw();
 
 	ofPushMatrix();
 	ofTranslate(position);
