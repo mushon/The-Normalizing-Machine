@@ -695,9 +695,9 @@ void testApp::exit(){
 	{
 		players[i].stop();
 	}
-	openNIRecorder.stop(); 
+//	openNIRecorder.stop(); 
 
-	ofxOpenNI::shutdown();
+//	ofxOpenNI::shutdown();
 
 	ofLogNotice("testApp exit OK");
 }
