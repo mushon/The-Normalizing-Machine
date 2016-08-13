@@ -103,6 +103,10 @@ void testApp::update(){
 
 	updateSelectedUser();
 
+	if (simulateMoreThanOne)
+	{
+		nVisibleUsers = 99;
+	}
 
 	if (nVisibleUsers == 0)
 	{
@@ -123,12 +127,8 @@ void testApp::update(){
 			}
 		}		
 	}
-
-	else if (nVisibleUsers > 1 || simulateMoreThanOne)
-	{
-		state = MORE_THAN_ONE;
-	}
-	else 
+	
+	if (nVisibleUsers == 1)
 	{
 		lastSeenUser.reset();
 
@@ -292,8 +292,14 @@ void testApp::update(){
 				state = IDLE;
 			}
 		}
-
 	}
+	
+	if (nVisibleUsers > 1)
+	{
+		state = MORE_THAN_ONE;
+	}
+
+
 
 	for (int i=0; i<n_players; i++)
 	{
