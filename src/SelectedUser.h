@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "AppTimer.h"
 
+#include "SelectedArm.h"
+
 // add NO_USER as Selected user type
 // min Length = FLT_MAX
 
@@ -12,67 +14,41 @@ public:
 		static const int NO_USER = -1;
 		static const int NO_HOVER = -1;
 
-		float handSmoothingFactor;
-		float shoulderSmoothingFactor;
 		int hovered;
 
 		int id;
 
-		ofPoint rightHand;
-		ofPoint rightShoulder;
 		ofPoint headPoint;
 
 		float distance; // to spot
 
-		ofVec3f rightHandVelocity;
-
-		ofPoint hand; //filtered
-		ofPoint shoulder; //filtered
+		SelectedArm leftArm;
+		SelectedArm rightArm;
 
 		ofVec2f screenPoint;
 		ofVec2f screenPoint01;
 
-		AppTimer steady;
 		AppTimer selectTimer;
 		bool waitForSteady;
 
-		SelectedUser() : 
-			handSmoothingFactor(0.1f), shoulderSmoothingFactor(0.05f), steady(300), selectTimer(8000)
+		SelectedUser() : selectTimer(8000)
 		{
 			reset();
 		}
 
 		void reset()
 		{
-			hand = ofVec3f();
-			shoulder = ofVec3f();
-			rightHandVelocity = ofVec3f();
+			leftArm.reset();
+			rightArm.reset();
 			
 			id = NO_USER;
 			hovered = NO_HOVER;
-			steady.reset();
 			selectTimer.reset();
 			waitForSteady = true;
 		}
 
-		void updatePoints(ofPoint h, ofPoint s)
+		void update()
 		{
-			if (hand == ofVec3f() && shoulder == ofVec3f())
-			{
-				hand = h;
-				shoulder = s;
-			}
-			else
-			{
-				hand.interpolate(h, handSmoothingFactor);
-				shoulder.interpolate(s, shoulderSmoothingFactor);
-				rightHandVelocity = rightHand - h;
-			}
-
-			if (!isHandSteady())
-			{
-				steady.reset();
-			}
 			if (isSteady())
 			{
 				waitForSteady = false;
@@ -81,21 +57,15 @@ public:
 			{
 				selectTimer.reset();
 			}
-
-			rightHand = h;
 		}
 
-		ofVec3f getPointingDir()
-		{
-			return hand - shoulder;
+		ofVec3f getPointingDir() {
+			return getSelectedArm().getPointingDir();
 		}
 
-		bool isHandSteady()
-		{
-			return rightHandVelocity.length() < 10;
+		bool isSteady() {
+			return getSelectedArm().isSteady();
 		}
-
-		bool isSteady() {return steady.getCountDown() <= 0;}
 
 		float getProgress()
 		{
@@ -103,5 +73,9 @@ public:
 		}
 
 
+		SelectedArm& getSelectedArm() {
+			//return leftArm;
+			return rightArm;
+		}
 
 };

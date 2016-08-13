@@ -20,7 +20,7 @@ public:
 		timeout = _timeout;
 	}
 
-	int getCountDown()
+	int getCountDown() const
 	{
 		int countdown = last + timeout - ofGetSystemTime();
 		return max(0, countdown);

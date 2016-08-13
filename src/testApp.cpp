@@ -111,21 +111,24 @@ void testApp::update(){
 			ofxOpenNIUser& u = it->second;
 			if (u.isVisible())				
 			{
-				ofxOpenNIJoint j1 = u.getJoints().at(nite::JointType::JOINT_HEAD);
-				ofxOpenNIJoint j2 = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
-				ofxOpenNIJoint j3 = u.getJoints().at(nite::JointType::JOINT_TORSO);
+				ofxOpenNIJoint jh = u.getJoints().at(nite::JointType::JOINT_HEAD);
+				ofxOpenNIJoint jrs = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
+				ofxOpenNIJoint jls = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
+				ofxOpenNIJoint jt = u.getJoints().at(nite::JointType::JOINT_TORSO);
 
 
-				if (j1.positionConfidence < 0.5 &&
-					j2.positionConfidence < 0.5 &&
-					j3.positionConfidence < 0.5)
+				if (jh.positionConfidence < 0.5 &&
+					jrs.positionConfidence < 0.5 &&
+					jls.positionConfidence < 0.5 &&
+					jt.positionConfidence < 0.5)
 					continue;
 
-				ofPoint headPoint = j1.positionReal;
 				nVisibleUsers++;
 
 
+				ofPoint headPoint = jh.positionReal;
 				userMessage << it->first << ":" << headPoint << endl;
+
 				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)    <<<--------------------------might be a hang here, consider other way of choosing
 				float distance = dist.length();
 
@@ -152,15 +155,32 @@ void testApp::update(){
 
 			ofxOpenNIJoint rhj = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND);
 			ofxOpenNIJoint rsj = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
-			if (rhj.positionConfidence < 0.5 || rsj.positionConfidence < 0.5)
+			ofxOpenNIJoint lhj = u.getJoints().at(nite::JointType::JOINT_LEFT_HAND);
+			ofxOpenNIJoint lsj = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
+
+			bool updateLeftArm = lhj.positionConfidence >= 0.5 && lsj.positionConfidence >= 0.5;
+			bool updateRightArm = rhj.positionConfidence >= 0.5 && rsj.positionConfidence >= 0.5;
+
+			if (updateLeftArm)
 			{
-				selectedUser.reset();
+				ofPoint leftHand = lhj.positionReal;
+				ofPoint leftShoulder = lsj.positionReal;
+				selectedUser.leftArm.update(leftHand, leftShoulder);
 			}
-			else
+			if (updateRightArm)
 			{
 				ofPoint rightHand = rhj.positionReal;
 				ofPoint rightShoulder = rsj.positionReal;
-				selectedUser.updatePoints(rightHand, rightShoulder);
+				selectedUser.rightArm.update(rightHand, rightShoulder);
+			}
+
+			if (updateRightArm || updateLeftArm)
+			{
+				selectedUser.update();
+			}
+			else
+			{
+				selectedUser.reset();
 			}
 		}
 	}
@@ -231,7 +251,7 @@ void testApp::update(){
 				}
 				else
 				{
-					if (selectedUser.hand.z < selectedUser.shoulder.z - handShoulderDistance)
+					if (selectedUser.getSelectedArm().hand.z < selectedUser.getSelectedArm().shoulder.z - handShoulderDistance)
 					{
 						if (selectedUser.isSteady())
 						{
@@ -251,7 +271,7 @@ void testApp::update(){
 			}
 		case SELECTION:
 			{
-				if (selectedUser.hand.z > selectedUser.shoulder.z - handShoulderDistance)
+				if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance)
 				{
 					if (isRecording) abortRecording();
 					state = RAISE_HAND;
@@ -266,8 +286,8 @@ void testApp::update(){
 				{
 					ofPoint p = selectedUser.getPointingDir();
 
-					float x = -(selectedUser.shoulder.z - screenZ) * p.x / p.z - screenL;
-					float y = -(selectedUser.shoulder.z - screenZ) * p.y / p.z - screenB;
+					float x = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.x / p.z - screenL;
+					float y = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.y / p.z - screenB;
 
 					float kx = (x-screenL) / (screenR - screenL);
 					float ky = (y-screenB) / (screenT - screenB);
@@ -309,7 +329,7 @@ void testApp::update(){
 					if (hover == SelectedUser::NO_HOVER || selectedUser.hovered != hover) //changed selection
 					{
 						selectedUser.hovered = hover;
-						selectedUser.steady.reset();
+						selectedUser.getSelectedArm().steady.reset();
 						selectedUser.selectTimer.reset();
 						selectedUser.waitForSteady = true;
 						if (isRecording) abortRecording();
