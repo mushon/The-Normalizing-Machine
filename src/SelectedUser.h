@@ -28,6 +28,8 @@ public:
 		ofVec2f screenPoint;
 		ofVec2f screenPoint01;
 
+		AppTimer lastSeen;
+
 		AppTimer selectTimer;
 		bool waitForSteady;
 
@@ -51,6 +53,8 @@ public:
 
 		void update()
 		{
+			lastSeen.reset();
+			
 			if (isSteady())
 			{
 				waitForSteady = false;

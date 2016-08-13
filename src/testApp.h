@@ -49,9 +49,6 @@ public:
 	bool drawProfiler;
 	bool drawDepth;
 
-
-
-	AppTimer lastSeenUser;
 	SelectedUser selectedUser;
 
 

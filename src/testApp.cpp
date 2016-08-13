@@ -21,7 +21,7 @@ void testApp::setup() {
 	drawText=false;
 	testLoadLibrary = true;
 
-	lastSeenUser.setTimeout(3000);
+	selectedUser.lastSeen.setTimeout(3000);
 
 	yesIcon20.loadImage("assets/i-yes-20.png");
 	noIcon20.loadImage("assets/i-no-20.png");
@@ -117,7 +117,7 @@ void testApp::update(){
 		else  //user left in the middle of interacion - stop instructions / show warning with countdown
 		{
 			// stop recording?
-			if (lastSeenUser.getCountDown() == 0)
+			if (selectedUser.lastSeen.getCountDown() == 0)
 			{
 				state = IDLE;
 			}
@@ -130,7 +130,7 @@ void testApp::update(){
 	
 	if (nVisibleUsers == 1)
 	{
-		lastSeenUser.reset();
+		selectedUser.lastSeen.reset();
 
 		switch (state)
 		{
@@ -854,7 +854,7 @@ void testApp::drawDebugText()
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 		<< "State : " << AppState::toString(state) << endl
-		<< lastSeenUser.getCountDown() << endl
+		<< "User Last seen: " << selectedUser.lastSeen.getCountDown() << endl
 		<< "User Message: " << userMessage.str() << endl
 		;
 
