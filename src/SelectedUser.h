@@ -41,8 +41,10 @@ public:
 			leftArm.reset();
 			rightArm.reset();
 			
-			id = NO_USER;
 			hovered = NO_HOVER;
+			id = NO_USER;
+			distance = FLT_MAX;
+
 			selectTimer.reset();
 			waitForSteady = true;
 		}

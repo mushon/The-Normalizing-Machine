@@ -199,6 +199,10 @@ private:
 	void abortRecording();
 
 	AppCursor cursor;
+	SelectedUser getClosestUser();
+	int getUsers();
+	int getVisibleUsers();
+	
 
 	bool simulateMoreThanOne; // for debugging purposes
 

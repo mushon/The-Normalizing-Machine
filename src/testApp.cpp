@@ -98,91 +98,8 @@ void testApp::update(){
 	openNIRecorder.update();
 	ofxProfileSectionPop();
 
-	nVisibleUsers = 0;
-	float minDistance = FLT_MAX;
-	float minId = SelectedUser::NO_USER;
 
-	// HACK: nite internally counts down 10 seconds, even if user is not visible
-	if(openNIRecorder.trackedUsers.size() > 0)
-	{	
-		for(map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
-		{
-			ofxOpenNIUser& u = it->second;
-			if (u.isVisible())				
-			{
-				ofxOpenNIJoint jh = u.getJoints().at(nite::JointType::JOINT_HEAD);
-				ofxOpenNIJoint jrs = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
-				ofxOpenNIJoint jls = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
-				ofxOpenNIJoint jt = u.getJoints().at(nite::JointType::JOINT_TORSO);
-
-
-				if (jh.positionConfidence < 0.5 &&
-					jrs.positionConfidence < 0.5 &&
-					jls.positionConfidence < 0.5 &&
-					jt.positionConfidence < 0.5)
-					continue;
-
-				nVisibleUsers++;
-
-
-				ofPoint headPoint = jh.positionReal;
-				userMessage << it->first << ":" << headPoint << endl;
-
-				ofVec2f dist = ofVec2f(headPoint.x - spot.x, headPoint.z - spot.z); // discard height(y)    <<<--------------------------might be a hang here, consider other way of choosing
-				float distance = dist.length();
-
-				if (distance < minDistance)
-				{
-					minId = it->first;
-					minDistance = distance;
-				}
-			}
-		} // end for map
-
-		if (minId == SelectedUser::NO_USER)
-		{
-			selectedUser = SelectedUser(); //reset
-		}
-		else
-		{
-			// keep track uf id (if changes in the middle)
-			selectedUser.id = minId;
-			selectedUser.distance = minDistance;
-			ofxOpenNIUser& u = openNIRecorder.trackedUsers.at(minId);
-
-			selectedUser.headPoint = u.getJoints().at(nite::JointType::JOINT_HEAD).positionReal;
-
-			ofxOpenNIJoint rhj = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND);
-			ofxOpenNIJoint rsj = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
-			ofxOpenNIJoint lhj = u.getJoints().at(nite::JointType::JOINT_LEFT_HAND);
-			ofxOpenNIJoint lsj = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
-
-			bool updateLeftArm = lhj.positionConfidence >= 0.5 && lsj.positionConfidence >= 0.5;
-			bool updateRightArm = rhj.positionConfidence >= 0.5 && rsj.positionConfidence >= 0.5;
-
-			if (updateLeftArm)
-			{
-				ofPoint leftHand = lhj.positionReal;
-				ofPoint leftShoulder = lsj.positionReal;
-				selectedUser.leftArm.update(leftHand, leftShoulder);
-			}
-			if (updateRightArm)
-			{
-				ofPoint rightHand = rhj.positionReal;
-				ofPoint rightShoulder = rsj.positionReal;
-				selectedUser.rightArm.update(rightHand, rightShoulder);
-			}
-
-			if (updateRightArm || updateLeftArm)
-			{
-				selectedUser.update();
-			}
-			else
-			{
-				selectedUser.reset();
-			}
-		}
-	}
+	int nVisibleUsers = getVisibleUsers();
 
 
 
@@ -1154,5 +1071,119 @@ void testApp::updateScores()
 		{
 			other->xScore++;
 		}
+	}
+}
+
+bool checkMainJointsConfidence(ofxOpenNIUser& u)
+{
+		ofxOpenNIJoint jh = u.getJoints().at(nite::JointType::JOINT_HEAD);
+		ofxOpenNIJoint jrs = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
+		ofxOpenNIJoint jls = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
+		ofxOpenNIJoint jt = u.getJoints().at(nite::JointType::JOINT_TORSO);
+
+		return (jh.positionConfidence < 0.5 &&
+			jrs.positionConfidence < 0.5 &&
+			jls.positionConfidence < 0.5 &&
+			jt.positionConfidence < 0.5);
+
+}
+
+int testApp::getVisibleUsers()
+{
+	int nVisibleUsers = 0;
+	// HACK: nite internally counts down 10 seconds, even if user is not visible
+	if (openNIRecorder.trackedUsers.size() > 0)
+	{
+		for (map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
+		{
+			ofxOpenNIUser& u = it->second;
+			if (u.isVisible() && checkMainJointsConfidence(u))
+			{
+				nVisibleUsers++;
+			}
+		}
+	}
+
+	return nVisibleUsers;
+}
+
+// note: adds id, distance and headpoint to SelectedUser
+SelectedUser testApp::getClosestUser()
+{
+	SelectedUser user;
+
+	if (openNIRecorder.trackedUsers.size() > 0)
+	{
+		for (map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
+		{
+			ofxOpenNIUser& u = it->second;
+			ofxOpenNIJoint jh = u.getJoints().at(nite::JointType::JOINT_HEAD);
+			user.headPoint = jh.positionReal;
+
+			ofVec2f dist = ofVec2f(user.headPoint.x - spot.x, user.headPoint.z - spot.z); // discard height(y)    <<<--------------------------might be a hang here, consider other way of choosing
+
+			float distance = dist.length();
+			if (distance < user.distance)
+			{
+				user.id = it->first;
+				user.distance = distance;
+			}
+
+			userMessage << user.id << ":" << user.headPoint << endl;
+		}
+	} // end for map
+	
+	return user;
+}
+
+int testApp::getUsers()
+{
+	SelectedUser user = getClosestUser();
+
+	if (user.id == SelectedUser::NO_USER)
+	{
+		selectedUser = SelectedUser(); //reset
+	}
+	else
+	{
+		// CHANGED USER (state)
+
+		// keep track of id (if changes in the middle)
+		selectedUser.id = user.id;
+		selectedUser.distance = user.distance;
+		selectedUser.headPoint = user.headPoint;
+		
+		ofxOpenNIUser& u = openNIRecorder.trackedUsers.at(user.id);
+
+		ofxOpenNIJoint rhj = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND);
+		ofxOpenNIJoint rsj = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
+		ofxOpenNIJoint lhj = u.getJoints().at(nite::JointType::JOINT_LEFT_HAND);
+		ofxOpenNIJoint lsj = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
+		
+		bool updateLeftArm = lhj.positionConfidence >= 0.5 && lsj.positionConfidence >= 0.5;
+		bool updateRightArm = rhj.positionConfidence >= 0.5 && rsj.positionConfidence >= 0.5;
+		
+		if (updateLeftArm)
+		{
+			ofPoint leftHand = lhj.positionReal;
+			ofPoint leftShoulder = lsj.positionReal;
+			selectedUser.leftArm.update(leftHand, leftShoulder);
+		}
+		if (updateRightArm)
+		{
+			ofPoint rightHand = rhj.positionReal;
+			ofPoint rightShoulder = rsj.positionReal;
+			selectedUser.rightArm.update(rightHand, rightShoulder);
+		}
+		
+		if (updateRightArm || updateLeftArm)
+		{
+			selectedUser.update();
+		}
+		else
+		{
+			selectedUser.reset();
+		}
+		
 	}
 }
