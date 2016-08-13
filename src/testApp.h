@@ -199,7 +199,6 @@ private:
 	void abortRecording();
 
 	AppCursor cursor;
-	ofVec2f screenCenter;
 
 	bool simulateMoreThanOne; // for debugging purposes
 

@@ -38,7 +38,6 @@ void testApp::setup() {
 
 	setupGui();
 
-	screenCenter = ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 
 	ofBackground(0, 0, 0);
 
@@ -257,7 +256,9 @@ void testApp::update(){
 						{
 							selectedUser.reset();
 							cursor = AppCursor();
-							cursor.setPosition(screenCenter);
+
+							cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2));
+
 							state = SELECTION;
 						}
 						else
@@ -304,8 +305,10 @@ void testApp::update(){
 					//v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function, 
 					//v.y = powf(v.y, 3); // only on x
 
+					float cx = ofGetScreenWidth() / 2;
+					float cy = ofGetScreenHeight() / 2;
 
-					selectedUser.screenPoint = v.getMapped(screenCenter, ofVec2f(ofGetScreenWidth()/2, 0), ofVec2f(0, -ofGetScreenHeight()/2)); // reverse y, assume -1 < v.x, v.y < 1
+					selectedUser.screenPoint = v.getMapped(ofVec2f(cx, cy), ofVec2f(cx, 0), ofVec2f(0, -cy)); // reverse y, assume -1 < v.x, v.y < 1
 
 					float progress = selectedUser.getProgress();
 					cursor.update(selectedUser.screenPoint, progress);
