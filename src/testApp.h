@@ -13,17 +13,9 @@
 
 #include "RecordedData.h"
 #include "AppRecorder.h"
+#include "AppDataset.h"
 
 class testApp : public ofBaseApp{
-
-	typedef list<RecordedData> DataSet;
-	DataSet dataset; // the whole shablang
-	ofxJSONElement datasetJson;
-	string datasetJsonFilename;
-
-	RecordedData currData;
-	// on startup, find dirs (xml?)
-	// load recordings
 
 public:
 	void setup();
@@ -54,10 +46,17 @@ public:
 private:
 
 	State state;
+	
+	// DB records
+	AppDataset dataset;
+	RecordedData currData;
+	string datasetJsonFilename;
 
+	// Video records
 	AppRecorder appRecorder;
 	string recDir;
 
+	// Video player
 	void setupPlayback(string _filename);
 	static const unsigned int MAX_PLAYERS = 4;
 	ofxOpenNI players[MAX_PLAYERS];
@@ -115,15 +114,6 @@ private:
 
 	string getRecDirString(string url);
 	bool testLoadLibrary;
-	void loadLibrary();
-	void saveLibrary();
-
-	void saveSession();
-	void saveSessionToDataSet();
-
-	void updateScores();
-	void select25();
-	void select4();
 
 };
 

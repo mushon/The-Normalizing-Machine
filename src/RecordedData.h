@@ -38,6 +38,14 @@ struct RecordedData
 		xScore = v["xScore"].asInt();
 	}
 
+
+	void makeSelection(string recordingFilename, int selection, string loc)
+	{
+		id = recordingFilename;
+		othersSelection[selection] = true;
+		location = loc;
+	}
+
 	Json::Value toJson()
 	{
 		Json::Value v;

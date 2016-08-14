@@ -138,6 +138,7 @@
     <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIWidget.cpp" />
     <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIWidgetWithLabel.cpp" />
     <ClCompile Include="src\AppCursor.cpp" />
+    <ClCompile Include="src\AppDataset.cpp" />
     <ClCompile Include="src\AppRecorder.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="..\..\..\addons\ofxJSON\libs\jsoncpp\src\jsoncpp.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWidgetWithLabel.h" />
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWrapper.h" />
     <ClInclude Include="src\AppCursor.h" />
+    <ClInclude Include="src\AppDataset.h" />
     <ClInclude Include="src\AppRecorder.h" />
     <ClInclude Include="src\AppTimer.h" />
     <ClInclude Include="..\..\..\addons\ofxJSON\libs\jsoncpp\include\json\json-forwards.h" />

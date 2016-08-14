@@ -18,7 +18,6 @@ void testApp::setup() {
 	drawProfiler=false;
 	drawVideo=true;
 	drawText=false;
-	testLoadLibrary = true;
 
 	selectedUser.lastSeen.setTimeout(3000);
 
@@ -40,7 +39,7 @@ void testApp::setup() {
 
 	ofBackground(0, 0, 0);
 
-	loadLibrary();
+	dataset.loadLibrary(recDir + datasetJsonFilename);
 	begin();
 }
 
@@ -65,8 +64,14 @@ void testApp::begin()
 		players[i].stop();
 	}
 	n_players = 0;
-	currData = RecordedData();
-	select4();
+
+	currData = dataset.select4(); // better name?
+
+	for (int i = 0; i<4; i++)
+	{
+		setupPlayback(recDir + currData.othersId[i]);
+	}
+
 	state = IDLE;
 }
 //--------------------------------------------------------------
@@ -255,7 +260,16 @@ void testApp::update(){
 					if(selected)
 					{
 						appRecorder.stop();
-						saveSession();
+						ofSleepMillis(100);
+						
+						string location = "Zurich"; //TODO add textEdit w/load save
+						currData.makeSelection(appRecorder.getLastFilename(), selectedUser.hovered, location);
+
+						// info: ALL dataset is saved everytime
+						dataset.saveSession(currData);
+						dataset.saveLibrary(recDir + datasetJsonFilename);
+
+						ofSleepMillis(100);
 
 						state = RESULT;
 					}
@@ -791,47 +805,6 @@ void testApp::drawDebugText()
 
 }
 
-void testApp::saveSession(){
-	ofSleepMillis(100);
-	saveSessionToDataSet();
-	updateScores();
-	saveLibrary();
-	ofSleepMillis(100);
-}
-
-void testApp::saveSessionToDataSet()
-{
-
-	currData.id = appRecorder.getLastFilename();
-	for (int i=0; i<RecordedData::N_OTHERS; i++)
-	{
-		currData.othersSelection[i] = false;
-	}
-	currData.othersSelection[selectedUser.hovered] = true;
-	currData.location = "Kiev"; //TODO add textEdit w/load save
-	currData.vScore = 0;
-	currData.xScore = 0;
-
-	dataset.push_back(currData);
-}
-
-void testApp::saveLibrary()
-{
-	ofLogNotice("saveLibrary");
-
-	ofxJSONElement json;
-	for (DataSet::iterator it = dataset.begin(); it != dataset.end(); it++)
-	{
-		if (it->id != "")
-		{
-			json.append(it->toJson());
-		}
-	}
-
-	bool success = json.save(recDir + datasetJsonFilename, true);
-	ofLogNotice("saveLibrary") << (success ? "OK":"FAIL");
-}
-
 string testApp::getRecDirString(string url)
 {
 
@@ -852,144 +825,6 @@ string testApp::getRecDirString(string url)
 
 	return dir;
 }
-
-void testApp::loadLibrary()
-{
-	std::string url = recDir + datasetJsonFilename;
-
-	// Now parse the JSON
-	bool parsingSuccessful = datasetJson.open(url);
-
-	if (parsingSuccessful) 
-	{
-		ofLogNotice("loadLibrary") << datasetJson.getRawString(true);
-	} else {
-		ofLogNotice("loadLibrary") << "Failed to parse JSON.";
-	}
-
-	for(unsigned int i = 0; i < datasetJson.size(); ++i)
-	{
-		Json::Value v = datasetJson[i];
-		string id = v["id"].asString(); 
-		dataset.push_back(RecordedData(v));
-	}
-}
-
-void testApp::select25()
-{
-	//sort by rank
-	//5: take last 5
-	//2: take highest and lowest score
-	//18: random
-}
-
-
-bool sortById(const RecordedData& lhs, const RecordedData& rhs)
-{
-	return lhs.id < rhs.id;
-}
-bool sortByScoreCount(const RecordedData& lhs, const RecordedData& rhs)
-{
-	return lhs.scoreCount() < rhs.scoreCount();
-}
-
-
-void testApp::select4()
-{
-	// 1 last one
-	// 2 least times scored
-	// 1 random
-
-	DataSet::iterator maxit;
-
-	maxit = std::max_element(dataset.begin(), dataset.end(), sortById); //latest
-	currData.othersId[0] = maxit->id;
-	currData.othersPtr[0] = &(*maxit);
-
-	DataSet::iterator leastScored1 = std::max_element(dataset.begin(), dataset.end(), sortByScoreCount);
-	DataSet::iterator first = dataset.begin();
-	DataSet::iterator last = dataset.end();
-
-	if (first!=last)
-	{
-		while (++first!=last)
-		{
-			if (first != maxit && sortByScoreCount(*first,*leastScored1))    // or: if (comp(*first,*smallest)) for version (2)
-				leastScored1=first;
-		}
-	}
-
-
-	DataSet::iterator leastScored2;
-	leastScored2 = std::max_element(dataset.begin(), dataset.end(), sortByScoreCount);
-
-	for (DataSet::iterator it = dataset.begin(); it != dataset.end(); it++)
-	{
-		if (it == maxit)
-			continue;
-
-		if (it == leastScored1)
-			continue;
-
-		if (it->scoreCount() < leastScored2->scoreCount())
-		{
-			leastScored2 = it;
-		}
-	}
-
-
-	currData.othersId[1] = leastScored1->id;
-	currData.othersId[2] = leastScored2->id;
-
-	currData.othersPtr[1] = &(*leastScored1);
-	currData.othersPtr[2] = &(*leastScored2);
-
-	//random
-	DataSet::iterator randit = std::min_element(dataset.begin(), dataset.end(), sortById); //first, just as a fallback
-
-	int r = rand() % dataset.size();
-	for (int j=0; j<r; j++)
-	{
-		randit++;
-	}
-	for (int i=0;i<dataset.size();i++)
-	{
-		if (randit == dataset.end())
-			randit = dataset.begin(); 
-
-		if (randit != maxit && randit != leastScored1 && randit != leastScored2)
-		{
-			break;
-		}
-		randit++;
-	}
-	currData.othersId[3] = randit->id;
-	currData.othersPtr[3] = &(*randit);
-
-	for (int i=0; i<4; i++)
-	{
-		setupPlayback(recDir + currData.othersId[i]);
-	}
-}
-
-
-void testApp::updateScores()
-{
-	for (int i=0; i<4; i++)
-	{
-		RecordedData* other = currData.othersPtr[i];
-
-		if (currData.othersSelection[i])
-		{
-			other->vScore++;
-		}
-		else
-		{
-			other->xScore++;
-		}
-	}
-}
-
 
 // note: adds id, distance and headpoint to SelectedUser
 SelectedUser testApp::getClosestUser()

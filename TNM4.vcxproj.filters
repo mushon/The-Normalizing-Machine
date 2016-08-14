@@ -165,6 +165,9 @@
     <ClCompile Include="src\AppRecorder.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\AppDataset.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -393,6 +396,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\State.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AppDataset.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
