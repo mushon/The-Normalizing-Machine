@@ -51,28 +51,18 @@ public:
 
 	SelectedUser selectedUser;
 
-
-
 private:
-
-	AppRecorder appRecorder;
-
-	void	setupPlayback(string _filename);
-
-	ofDirectory dir;
-
-	static const unsigned int MAX_PLAYERS = 4;
-	ofxOpenNI players[MAX_PLAYERS];
-
-	int playersRowSize;
-	int n_players;
-
-	float playbackScale;
 
 	State state;
 
-	int nVisibleUsers;
-	stringstream userMessage;
+	AppRecorder appRecorder;
+	string recDir;
+
+	void setupPlayback(string _filename);
+	static const unsigned int MAX_PLAYERS = 4;
+	ofxOpenNI players[MAX_PLAYERS];
+	int n_players;
+
 
 	ofPoint spot;
 	float spotRadius;
@@ -95,7 +85,7 @@ private:
 
 	bool drawText;
 	void drawDebugText();
-
+	stringstream userMessage;
 
 	int margin;
 	int bottomMargin;
@@ -117,12 +107,9 @@ private:
 	void setupGui();
 	ofxUISuperCanvas* gui;
 
-	string recDir;
-
 	AppCursor cursor;
 	SelectedUser getClosestUser();
 	int updateSelectedUser();
-
 
 	bool simulateMoreThanOne; // for debugging purposes
 

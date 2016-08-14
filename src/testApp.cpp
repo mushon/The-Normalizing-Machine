@@ -361,7 +361,7 @@ void testApp::draw(){
 			dx = 2*dx - 1; // map 0,1 to -1,1
 			dy = 2*dy - 1;
 
-			playbackScale = 1.0f;
+			float playbackScale = 1.0f;
 			if (state == MORE_THAN_ONE)
 			{
 				playbackScale = 0.66;
@@ -972,35 +972,6 @@ void testApp::select4()
 	}
 }
 
-/*
-{
-dir.listDir("records/");
-dir.sort(); // in linux the file system doesn't return file lists ordered in alphabetical order
-
-//allocate the vector to have as many ofImages as files
-int n = min(MAX_PLAYERS, dir.size());
-
-if (testLoadLibrary) n = MAX_PLAYERS;
-
-// iterate through the files and load them
-for(int i = 0; i < n; i++)
-{
-string filename;
-if (testLoadLibrary) 
-{
-filename = "records/t2.oni";
-}
-else
-{
-filename = dir.getPath(i);
-}
-
-setupPlayback(ofToDataPath(filename));
-}
-
-// TODO: load face data
-}
-*/
 
 void testApp::updateScores()
 {
