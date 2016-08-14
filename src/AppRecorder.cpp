@@ -21,11 +21,14 @@ void AppRecorder::setup(string _filename)
 
 void AppRecorder::start(string recDir)
 {
-	lastFilename = generateFileName();
-	ofLogNotice("startRecording") << recDir + lastFilename;
-	openNIRecorder.startRecording(recDir + lastFilename);
-	ofLogNotice("startRecording") << "OK";
-	isRecording = true;
+	if (!isRecording)
+	{
+		lastFilename = generateFileName();
+		ofLogNotice("startRecording") << recDir + lastFilename;
+		openNIRecorder.startRecording(recDir + lastFilename);
+		ofLogNotice("startRecording") << "OK";
+		isRecording = true;
+	}
 }
 
 
@@ -34,32 +37,16 @@ void AppRecorder::update()
 	openNIRecorder.update();
 }
 
-void AppRecorder::save()
-{
-	ofLogNotice("saveRecording");
-
-	ofLogNotice("saveRecording") << "OK";
-
-	// when recording is complete, save his selection data, process face frames and save to data,
-	// update other selected x/v in db
-	// select 25 :current25
-	// meanwhile in 'position yourself'
-	// select 4 :current4
-	// when to start recording? (each hoverChange abort and start over) 
-	// void abortRecording() // delete file
-	// 
-
-
-}
-
 
 void AppRecorder::stop()
 {
-	ofLogNotice("") << "stopRecording: " << lastFilename << endl;
-	openNIRecorder.stopRecording();
-	isRecording = false;
-	ofLogNotice("") << "stopRecording: " << "OK" << endl;
-
+	if (isRecording)
+	{
+		ofLogNotice("") << "stopRecording: " << lastFilename << endl;
+		openNIRecorder.stopRecording();
+		ofLogNotice("") << "stopRecording: " << "OK" << endl;
+		isRecording = false;
+	}
 	//HACKHACK !!!
 	//setupPlayback(lastFilename);
 }

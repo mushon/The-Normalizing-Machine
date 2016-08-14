@@ -14,7 +14,6 @@ public:
 	void setup(string _filename = "");
 	void start(string recDir);
 	void update();
-	void save();
 	void stop();
 	void abort();
 
