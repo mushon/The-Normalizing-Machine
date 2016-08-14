@@ -12,7 +12,7 @@
 #include "State.h"
 
 #include "RecordedData.h"
-
+#include "AppRecorder.h"
 
 class testApp : public ofBaseApp{
 
@@ -54,24 +54,20 @@ public:
 
 
 private:
-	void	setupRecording(string _filename = "");
+
+	AppRecorder appRecorder;
+
 	void	setupPlayback(string _filename);
-	string	generateFileName();
-
-	bool isRecording;
-
-	static const unsigned int MAX_PLAYERS = 4;
-	ofxOpenNI openNIRecorder;
 
 	ofDirectory dir;
+
+	static const unsigned int MAX_PLAYERS = 4;
 	ofxOpenNI players[MAX_PLAYERS];
 
 	int playersRowSize;
 	int n_players;
 
 	float playbackScale;
-
-	string lastRecordingFilename;
 
 	State state;
 
@@ -141,6 +137,7 @@ private:
 	void loadLibrary();
 	void saveLibrary();
 
+	void saveSession();
 	void saveSessionToDataSet();
 
 	void updateScores();

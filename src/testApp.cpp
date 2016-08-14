@@ -11,8 +11,7 @@ void testApp::setup() {
 	ofxOpenNI::shutdown();
 	openni::Status rc = OpenNI::initialize();
 
-	isRecording		= false;
-	setupRecording();
+	appRecorder.setup();
 
 	drawDepth=false;
 	drawGui=false;
@@ -43,16 +42,6 @@ void testApp::setup() {
 
 	loadLibrary();
 	begin();
-}
-
-void testApp::setupRecording(string _filename)
-{
-	openNIRecorder.setup();
-	openNIRecorder.addDepthStream();
-	openNIRecorder.addImageStream();
-	openNIRecorder.addUserTracker();
-	//	openNIRecorder.addHandsTracker();
-	openNIRecorder.start();
 }
 
 void testApp::setupPlayback(string _filename) {
@@ -95,7 +84,7 @@ void testApp::update(){
 	userMessage = stringstream();
 
 	ofxProfileSectionPush("openni update live");
-	openNIRecorder.update();
+	appRecorder.update();
 	ofxProfileSectionPop();
 
 
@@ -192,12 +181,12 @@ void testApp::update(){
 			{
 				if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance)
 				{
-					if (isRecording) abortRecording();
+					appRecorder.abort();
 					state = RAISE_HAND;
 				}
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
-					if (isRecording) abortRecording();
+					appRecorder.abort();
 					//give timeout?
 					state = GOTO_SPOT;
 				}
@@ -253,20 +242,22 @@ void testApp::update(){
 						selectedUser.getSelectedArm().steady.reset();
 						selectedUser.selectTimer.reset();
 						selectedUser.waitForSteady = true;
-						if (isRecording) abortRecording();
+						appRecorder.abort();
 					}
 
 
-					if (!isRecording && selectedUser.selectTimer.getCountDown() < 6000)
+					if (selectedUser.selectTimer.getCountDown() < 6000)
 					{
-						startRecording();
+						appRecorder.start();
 					}
 
 					//TODO select mechanism (click/timeout)
 					bool selected = (selectedUser.selectTimer.getCountDown() == 0);
 					if(selected)
 					{
-						saveRecording();
+						appRecorder.stop();
+						saveSession();
+
 						state = RESULT;
 					}
 
@@ -473,7 +464,7 @@ void testApp::draw(){
 			ofRect(0,0, w + 2*margin/sc2, h + 2*margin/sc2);
 
 
-			openNIRecorder.drawImageSubsection(w, h, 0, 0);
+			appRecorder.drawImageSubsection(w, h, 0, 0);
 			ofPopMatrix();
 
 			//draw overlays
@@ -561,8 +552,7 @@ void testApp::draw(){
 	if (drawDepth)
 	{
 		ofSetRectMode(OF_RECTMODE_CORNER);
-		//openNIRecorder.drawDepth();
-		openNIRecorder.draw();
+		appRecorder.draw();
 	}
 
 	if (drawText)
@@ -591,14 +581,10 @@ void testApp::keyPressed(int key){
 
 
 	case 's':
+		appRecorder.stop();
+		break;
 	case 'S':
-		if (isRecording) {
-			stopRecording();
-		}
-		else
-		{
-			startRecording();
-		}
+		appRecorder.start();
 		break;
 
 	case 'F':
@@ -614,12 +600,6 @@ void testApp::keyPressed(int key){
 	}
 }
 
-string testApp::generateFileName() {
-	string timeFormat = "%Y_%m_%d_%H_%M_%S_%i";
-	string name = ofGetTimestampString(timeFormat);
-	string filename = (name + ".oni");
-	return filename;
-}
 
 void testApp::keyReleased(int key){
 }
@@ -646,7 +626,7 @@ void testApp::exit(){
 	{
 		players[i].stop();
 	}
-//	openNIRecorder.stop(); 
+
 
 //	ofxOpenNI::shutdown();
 
@@ -781,56 +761,6 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 
 }
 
-void testApp::startRecording()
-{
-	lastRecordingFilename = generateFileName();
-	ofLogNotice("startRecording") << recDir + lastRecordingFilename;	
-	openNIRecorder.startRecording(recDir + lastRecordingFilename);
-	isRecording = true;
-	ofLogNotice("startRecording") << "OK";
-}
-
-void testApp::saveRecording()
-{
-	ofLogNotice("saveRecording");
-	stopRecording();
-	ofSleepMillis(100);
-	saveSessionToDataSet();	
-	updateScores();
-	saveLibrary();
-	ofSleepMillis(100);
-	ofLogNotice("saveRecording") << "OK";
-
-	// when recording is complete, save his selection data, process face frames and save to data,
-	// update other selected x/v in db
-	// select 25 :current25
-	// meanwhile in 'position yourself'
-	// select 4 :current4
-	// when to start recording? (each hoverChange abort and start over) 
-	// void abortRecording() // delete file
-	// 
-
-
-}
-
-
-void testApp::stopRecording()
-{
-	ofLogNotice("") << "stopRecording: " << lastRecordingFilename << endl;
-	openNIRecorder.stopRecording();
-	isRecording = false;
-	//	ofLogNotice("") << "stopRecording: " << "OK" << endl;
-
-	//HACKHACK !!!
-	//setupPlayback(lastRecordingFilename);
-}
-
-void testApp::abortRecording()
-{
-	ofLogNotice("") << "abortRecording: " << lastRecordingFilename << endl;
-	stopRecording();
-	//delete file?
-}
 
 void testApp::drawOverheadText(ofImage& txt, int x, int y, int w)
 {
@@ -850,7 +780,7 @@ void testApp::drawDebugText()
 	stringstream msg;
 	msg
 		<< "F: Fullscreen" << endl
-		<< "s : start/stop recording: " << (isRecording ? "RECORDING":"READY") << endl
+		<< "s : start/stop recording: " << (appRecorder.isOn() ? "RECORDING" : "READY") << endl
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 		<< "State : " << AppState::toString(state) << endl
@@ -862,9 +792,18 @@ void testApp::drawDebugText()
 
 }
 
+void testApp::saveSession(){
+	ofSleepMillis(100);
+	saveSessionToDataSet();
+	updateScores();
+	saveLibrary();
+	ofSleepMillis(100);
+}
+
 void testApp::saveSessionToDataSet()
 {
-	currData.id = lastRecordingFilename;
+
+	currData.id = appRecorder.getLastFilename();
 	for (int i=0; i<RecordedData::N_OTHERS; i++)
 	{
 		currData.othersSelection[i] = false;
