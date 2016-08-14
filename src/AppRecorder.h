@@ -7,21 +7,17 @@
 class AppRecorder
 {
 
-	bool isRecording;
-	ofxOpenNI openNIRecorder;
-	string lastFilename;
-
 public:
 
-	bool isOn() { return isRecording; }
+	ofxOpenNI openNIRecorder;
 
 	void setup(string _filename = "");
-	void start();
+	void start(string recDir);
+	void update();
 	void save();
 	void stop();
 	void abort();
 
-	void update();
 
 	void draw() {
 		openNIRecorder.draw();
@@ -31,6 +27,13 @@ public:
 		openNIRecorder.drawImageSubsection(w, h, sx, sy);
 	}
 
+	int countVisibleUsers();
 
+	bool isOn() { return isRecording; }
 	string getLastFilename() { return lastFilename; }
+
+private:
+	bool isRecording;
+	string lastFilename;
+
 };

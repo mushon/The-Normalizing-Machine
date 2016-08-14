@@ -19,13 +19,19 @@ void AppRecorder::setup(string _filename)
 	openNIRecorder.start();
 }
 
-void AppRecorder::start()
+void AppRecorder::start(string recDir)
 {
 	lastFilename = generateFileName();
 	ofLogNotice("startRecording") << recDir + lastFilename;
 	openNIRecorder.startRecording(recDir + lastFilename);
-	isRecording = true;
 	ofLogNotice("startRecording") << "OK";
+	isRecording = true;
+}
+
+
+void AppRecorder::update()
+{
+	openNIRecorder.update();
 }
 
 void AppRecorder::save()
@@ -65,3 +71,35 @@ void AppRecorder::abort()
 	//delete file?
 }
 
+
+bool checkMainJointsConfidence(ofxOpenNIUser& u)
+{
+	ofxOpenNIJoint jh = u.getJoints().at(nite::JointType::JOINT_HEAD);
+	ofxOpenNIJoint jrs = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
+	ofxOpenNIJoint jls = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
+	ofxOpenNIJoint jt = u.getJoints().at(nite::JointType::JOINT_TORSO);
+
+	return (jh.positionConfidence > 0.5 &&
+		(jrs.positionConfidence > 0.5 || jls.positionConfidence > 0.5) &&
+		jt.positionConfidence > 0.5);
+
+}
+
+int AppRecorder::countVisibleUsers()
+{
+	int nVisibleUsers = 0;
+	// HACK: nite internally counts down 10 seconds, even if user is not visible
+	if (openNIRecorder.trackedUsers.size() > 0)
+	{
+		for (map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
+		{
+			ofxOpenNIUser& u = it->second;
+			if (u.isVisible() && checkMainJointsConfidence(u))
+			{
+				nVisibleUsers++;
+			}
+		}
+	}
+
+	return nVisibleUsers;
+}

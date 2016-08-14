@@ -119,16 +119,10 @@ private:
 
 	string recDir;
 
-	void startRecording();
-	void saveRecording();
-	void stopRecording();
-	void abortRecording();
-
 	AppCursor cursor;
 	SelectedUser getClosestUser();
 	int updateSelectedUser();
-	int getVisibleUsers();
-	
+
 
 	bool simulateMoreThanOne; // for debugging purposes
 

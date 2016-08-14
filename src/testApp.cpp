@@ -87,8 +87,7 @@ void testApp::update(){
 	appRecorder.update();
 	ofxProfileSectionPop();
 
-
-	int nVisibleUsers = getVisibleUsers();
+	int nVisibleUsers = appRecorder.countVisibleUsers(); // vector from sensor
 
 	updateSelectedUser();
 
@@ -248,7 +247,7 @@ void testApp::update(){
 
 					if (selectedUser.selectTimer.getCountDown() < 6000)
 					{
-						appRecorder.start();
+						appRecorder.start(recDir);
 					}
 
 					//TODO select mechanism (click/timeout)
@@ -584,7 +583,7 @@ void testApp::keyPressed(int key){
 		appRecorder.stop();
 		break;
 	case 'S':
-		appRecorder.start();
+		appRecorder.start(recDir);
 		break;
 
 	case 'F':
@@ -1020,46 +1019,15 @@ void testApp::updateScores()
 	}
 }
 
-bool checkMainJointsConfidence(ofxOpenNIUser& u)
-{
-		ofxOpenNIJoint jh = u.getJoints().at(nite::JointType::JOINT_HEAD);
-		ofxOpenNIJoint jrs = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
-		ofxOpenNIJoint jls = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
-		ofxOpenNIJoint jt = u.getJoints().at(nite::JointType::JOINT_TORSO);
-
-		return (jh.positionConfidence > 0.5 &&
-			(jrs.positionConfidence > 0.5 || jls.positionConfidence > 0.5) &&
-			jt.positionConfidence > 0.5);
-
-}
-
-int testApp::getVisibleUsers()
-{
-	int nVisibleUsers = 0;
-	// HACK: nite internally counts down 10 seconds, even if user is not visible
-	if (openNIRecorder.trackedUsers.size() > 0)
-	{
-		for (map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
-		{
-			ofxOpenNIUser& u = it->second;
-			if (u.isVisible() && checkMainJointsConfidence(u))
-			{
-				nVisibleUsers++;
-			}
-		}
-	}
-
-	return nVisibleUsers;
-}
 
 // note: adds id, distance and headpoint to SelectedUser
 SelectedUser testApp::getClosestUser()
 {
 	SelectedUser user;
 
-	if (openNIRecorder.trackedUsers.size() > 0)
+	if (appRecorder.openNIRecorder.trackedUsers.size() > 0)
 	{
-		for (map<int, ofxOpenNIUser>::iterator it = openNIRecorder.trackedUsers.begin(); it != openNIRecorder.trackedUsers.end(); ++it)
+		for (map<int, ofxOpenNIUser>::iterator it = appRecorder.openNIRecorder.trackedUsers.begin(); it != appRecorder.openNIRecorder.trackedUsers.end(); ++it)
 		{
 			ofxOpenNIUser& u = it->second;
 			ofxOpenNIJoint jh = u.getJoints().at(nite::JointType::JOINT_HEAD);
@@ -1098,7 +1066,7 @@ int testApp::updateSelectedUser()
 		selectedUser.distance = user.distance;
 		selectedUser.headPoint = user.headPoint;
 		
-		ofxOpenNIUser& u = openNIRecorder.trackedUsers.at(user.id);
+		ofxOpenNIUser& u = appRecorder.openNIRecorder.trackedUsers.at(user.id);
 
 		ofxOpenNIJoint rhj = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND);
 		ofxOpenNIJoint rsj = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
