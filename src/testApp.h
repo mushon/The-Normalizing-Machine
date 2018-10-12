@@ -108,7 +108,7 @@ private:
 
 	AppCursor cursor;
 	SelectedUser getClosestUser();
-	int updateSelectedUser();
+	void updateSelectedUser();
 
 	bool simulateMoreThanOne; // for debugging purposes
 

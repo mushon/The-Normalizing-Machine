@@ -855,7 +855,7 @@ SelectedUser testApp::getClosestUser()
 	return user;
 }
 
-int testApp::updateSelectedUser()
+void testApp::updateSelectedUser()
 {
 	SelectedUser user = getClosestUser();
 
