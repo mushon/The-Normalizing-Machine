@@ -7,6 +7,36 @@
 </Canvas>
 <Widget>
     <Kind>2</Kind>
+    <Name>IDLE</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>GOTO_SPOT</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>RAISE_HAND</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>SELECTION</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>RESULT</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>MORE_THAN_ONE</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
     <Name>draw (g)ui</Name>
     <Value>0</Value>
 </Widget>
@@ -103,7 +133,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>screenB</Name>
-    <Value>1500.000000000</Value>
+    <Value>1499.999755859</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
