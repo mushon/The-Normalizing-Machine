@@ -217,6 +217,8 @@ void testApp::update(){
 
 					selectedUser.screenPoint = v.getMapped(ofVec2f(cx, cy), ofVec2f(cx, 0), ofVec2f(0, -cy)); // reverse y, assume -1 < v.x, v.y < 1
 
+					selectedUser.screenPoint.y = ofLerp(ofGetScreenHeight() / 2, selectedUser.screenPoint.y, 0.1);  // force to center // 2-player hack 
+
 					float progress = selectedUser.getProgress();
 					cursor.update(selectedUser.screenPoint, progress);
 
