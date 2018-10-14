@@ -36,6 +36,7 @@ void testApp::setup() {
 
 	setupGui();
 
+	roundCount = 0;
 
 	ofBackground(0, 0, 0);
 
@@ -128,6 +129,7 @@ void testApp::update(){
 				userMessage << selectedUser.distance << endl;
 				if (selectedUser.distance < idleThreshold)
 				{
+					roundCount = 0;
 					state = GOTO_SPOT;
 					userMessage << "TODO: begin to show instructions";
 				}
@@ -254,11 +256,13 @@ void testApp::update(){
 					}
 
 					//TODO select mechanism (click/timeout)
+					userMessage << "roundCount: " << roundCount << endl;
+
 					bool selected = (selectedUser.selectTimer.getCountDown() == 0);
 					if(selected)
 					{
 						appRecorder.stop();
-						ofSleepMillis(100);
+						ofSleepMillis(10);
 						
 						string location = "Zurich"; //TODO add textEdit w/load save
 						currData.makeSelection(appRecorder.getLastFilename(), selectedUser.hovered, location);
@@ -267,9 +271,17 @@ void testApp::update(){
 						dataset.saveSession(currData);
 						dataset.saveLibrary(recDir + datasetJsonFilename);
 
-						ofSleepMillis(100);
+						ofSleepMillis(10);
 
-						state = RESULT;
+						roundCount++;
+
+						if (roundCount < MAX_ROUND_COUNT) {
+							selectedUser.reset();
+						}
+						else {
+							roundCount = 0;
+							state = RESULT;
+						}
 					}
 
 				}
