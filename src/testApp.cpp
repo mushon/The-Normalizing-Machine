@@ -65,9 +65,9 @@ void testApp::begin()
 	}
 	n_players = 0;
 
-	currData = dataset.select4(); // better name?
+	currData = dataset.selectNextRound(); // better name?
 
-	for (int i = 0; i<4; i++)
+	for (int i = 0; i<currData.N_OTHERS; i++)
 	{
 		setupPlayback(recDir + currData.othersId[i]);
 	}
@@ -222,7 +222,7 @@ void testApp::update(){
 
 					int hover = 0;
 					if (v.x > 0) hover+=1;
-					if (v.y < 0) hover+=2;
+					// if (v.y < 0) hover+=2; 2 players hack
 
 					float w = (ofGetScreenWidth() - margin) / 2; //380
 					float height = (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
@@ -346,7 +346,9 @@ void testApp::draw(){
 				y = ofMap(abs(selectedUser.screenPoint01.y), 1, outsideScreenFactor, 1.0f, 0.0f, true); // fix jitter when hand is too low
 			}
 
-			float s01 = (x*y); // score
+			//	float s01 = (x*y); // score
+			float s01 = x; // score  // 2-player hack 
+
 			s = maxExpand * s01; 
 
 			//translate into screen (avoid spill)
@@ -358,7 +360,7 @@ void testApp::draw(){
 			ofTranslate(globalTranslation);
 		}
 
-		for (int i=0; i < 4; i++)
+		for (int i=0; i < n_players; i++)
 		{
 
 			ofPushMatrix();
@@ -370,6 +372,8 @@ void testApp::draw(){
 
 			dx = 2*dx - 1; // map 0,1 to -1,1
 			dy = 2*dy - 1;
+
+			dy = 0; // force // 2-player hack 
 
 			float playbackScale = 1.0f;
 			if (state == MORE_THAN_ONE)

@@ -58,9 +58,47 @@ bool sortByScoreCount(const RecordedData& lhs, const RecordedData& rhs)
 }
 
 
-RecordedData AppDataset::select4()
+RecordedData AppDataset::selectNextRound()
+{
+	return select2();
+}
+
+
+RecordedData AppDataset::select2()
 {
 	// 1 last one
+	// 1 least scored
+
+	RecordedData newRecord;
+
+	DataSet::iterator maxit;
+
+	maxit = std::max_element(dataset.begin(), dataset.end(), sortById); //latest
+	newRecord.othersId[0] = maxit->id;
+	newRecord.othersPtr[0] = &(*maxit);
+
+	DataSet::iterator leastScored1 = std::max_element(dataset.begin(), dataset.end(), sortByScoreCount);
+	DataSet::iterator first = dataset.begin();
+	DataSet::iterator last = dataset.end();
+
+	if (first != last)
+	{
+		while (++first != last)
+		{
+			if (first != maxit && sortByScoreCount(*first, *leastScored1))    // or: if (comp(*first,*smallest)) for version (2)
+				leastScored1 = first;
+		}
+	}
+
+	newRecord.othersId[1] = leastScored1->id;
+	newRecord.othersPtr[1] = &(*leastScored1);
+
+	return newRecord;
+}
+
+RecordedData AppDataset::select4() // legacy
+{
+		// 1 last one
 	// 2 least times scored
 	// 1 random
 
@@ -138,7 +176,7 @@ RecordedData AppDataset::select4()
 
 void AppDataset::updateScores(const RecordedData& data)
 {
-	for (int i = 0; i<4; i++)
+	for (int i = 0; i < 2; i++)  // TODO FIXME
 	{
 		RecordedData* other = data.othersPtr[i];
 

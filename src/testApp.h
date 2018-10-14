@@ -58,7 +58,7 @@ private:
 
 	// Video player
 	void setupPlayback(string _filename);
-	static const unsigned int MAX_PLAYERS = 4;
+	static const unsigned int MAX_PLAYERS = 2;
 	ofxOpenNI players[MAX_PLAYERS];
 	int n_players;
 

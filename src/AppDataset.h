@@ -14,7 +14,7 @@ public:
 	void saveLibrary(string url);
 	void loadLibrary(string url);
 
-	RecordedData select4();
+	RecordedData selectNextRound();
 
 private:
 
@@ -27,5 +27,7 @@ private:
 
 	void updateScores(const RecordedData& data);
 
-
+	RecordedData select2(); 
+	RecordedData select4(); // legacy
+	
 };

@@ -5,7 +5,7 @@
 struct RecordedData
 {
 
-	static const int N_OTHERS = 4;
+	static const int N_OTHERS = 2;
 	RecordedData()
 	{
 		id = "";

@@ -42,10 +42,10 @@ void AppRecorder::stop()
 {
 	if (isRecording)
 	{
+		isRecording = false;
 		ofLogNotice("") << "stopRecording: " << lastFilename << endl;
 		openNIRecorder.stopRecording();
 		ofLogNotice("") << "stopRecording: " << "OK" << endl;
-		isRecording = false;
 	}
 	//HACKHACK !!!
 	//setupPlayback(lastFilename);
