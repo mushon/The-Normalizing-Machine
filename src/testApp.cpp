@@ -321,8 +321,8 @@ void testApp::draw(){
 
 		ofPushMatrix();
 		//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
-		float w = (ofGetScreenWidth() - margin) / 2;					//380
-		float h = (ofGetScreenHeight() - margin - bottomMargin) / 2;	//480
+		float w = 380; //  (ofGetScreenWidth() - margin) / 2;					//380
+		float h = 480; //  (ofGetScreenHeight() - margin - bottomMargin) / 2;	//480
 
 		userMessage << "w" << w << endl;
 		userMessage << "h" << h << endl;
