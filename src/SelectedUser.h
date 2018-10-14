@@ -81,8 +81,7 @@ public:
 
 
 		SelectedArm& getSelectedArm() {
-			//return leftArm;
-			return rightArm;
+			return (leftArm.hand.z < rightArm.hand.z) ? leftArm : rightArm;
 		}
 
 };
