@@ -160,13 +160,17 @@
     <ClCompile Include="src\AppCursor.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxJSON\libs\jsoncpp\src\jsoncpp.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.cpp" />
     <ClCompile Include="src\AppRecorder.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\AppDataset.cpp">
       <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxJSON\libs\jsoncpp\src\jsoncpp.cpp">
+      <Filter>addons\ofxJSON</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.cpp">
+      <Filter>addons\ofxJSON</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -382,10 +386,6 @@
     <ClInclude Include="src\SelectedUser.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxJSON\libs\jsoncpp\include\json\json-forwards.h" />
-    <ClInclude Include="..\..\..\addons\ofxJSON\libs\jsoncpp\include\json\json.h" />
-    <ClInclude Include="..\..\..\addons\ofxJSON\src\ofxJSON.h" />
-    <ClInclude Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.h" />
     <ClInclude Include="src\AppRecorder.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -400,6 +400,18 @@
     </ClInclude>
     <ClInclude Include="src\AppDataset.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxJSON\libs\jsoncpp\include\json\json.h">
+      <Filter>addons\ofxJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxJSON\libs\jsoncpp\include\json\json-forwards.h">
+      <Filter>addons\ofxJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxJSON\src\ofxJSON.h">
+      <Filter>addons\ofxJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.h">
+      <Filter>addons\ofxJSON</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
