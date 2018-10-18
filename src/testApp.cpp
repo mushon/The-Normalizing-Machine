@@ -263,7 +263,7 @@ void testApp::update(){
 					if(selected)
 					{
 						appRecorder.stop();
-						ofSleepMillis(10);
+						//ofSleepMillis(100); // seems like it's fixed
 						
 						string location = "Zurich"; //TODO add textEdit w/load save
 						currData.makeSelection(appRecorder.getLastFilename(), selectedUser.hovered, location);
@@ -272,7 +272,7 @@ void testApp::update(){
 						dataset.saveSession(currData);
 						dataset.saveLibrary(recDir + datasetJsonFilename);
 
-						ofSleepMillis(10);
+						//ofSleepMillis(100); // seems like it's fixed
 
 						roundCount++;
 

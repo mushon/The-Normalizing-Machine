@@ -23,11 +23,11 @@ void AppRecorder::start(string recDir)
 {
 	if (!isRecording)
 	{
+		isRecording = true;
 		lastFilename = generateFileName();
 		ofLogNotice("startRecording") << recDir + lastFilename;
 		openNIRecorder.startRecording(recDir + lastFilename);
 		ofLogNotice("startRecording") << "OK";
-		isRecording = true;
 	}
 }
 
@@ -42,10 +42,10 @@ void AppRecorder::stop()
 {
 	if (isRecording)
 	{
-		isRecording = false;
 		ofLogNotice("") << "stopRecording: " << lastFilename << endl;
 		openNIRecorder.stopRecording();
 		ofLogNotice("") << "stopRecording: " << "OK" << endl;
+		isRecording = false;
 	}
 	//HACKHACK !!!
 	//setupPlayback(lastFilename);
