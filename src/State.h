@@ -1,7 +1,13 @@
 #pragma once
 
 enum State {
-	IDLE, GOTO_SPOT, RAISE_HAND, SELECTION, RESULT, MORE_THAN_ONE
+	IDLE,
+	GOTO_SPOT,
+	RAISE_HAND,
+	SELECTION,
+	RESULT,
+	PROFILE_CONFIRMED,
+	MORE_THAN_ONE
 };
 
 class AppState {
@@ -19,6 +25,7 @@ public:
 			X(RAISE_HAND);
 			X(SELECTION);
 			X(RESULT);
+			X(PROFILE_CONFIRMED);
 			X(MORE_THAN_ONE);
 		default:
 			str = "undefined";
@@ -37,6 +44,7 @@ public:
 		X(RAISE_HAND);
 		X(SELECTION);
 		X(RESULT);
+		X(PROFILE_CONFIRMED);
 		X(MORE_THAN_ONE);
 #undef X
 		return states;

@@ -291,9 +291,19 @@ void testApp::update(){
 			}
 		case RESULT:
 			{
-				//draw score
-				//animate back to idle
-				//change from live to recording
+				// show prompt - look sideways
+				bool b = true; // isFaceLookingSideWays(); // get from camera
+				if (b) {
+					state = PROFILE_CONFIRMED;
+				}
+				break;
+
+			}
+		case PROFILE_CONFIRMED:
+		{
+				// thank you and goodbye
+				// animate back to idle
+				// change from live to recording
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
 					ofLogNotice("RESULT -> IDLE");
