@@ -380,7 +380,7 @@ void testApp::draw(){
 			int tx = selectedUser.hovered % 2;
 			int ty = selectedUser.hovered / 2;
 			tx = 2*tx - 1; // map 0,1 to -1,1
-			ty = 2*ty - 1;
+			ty = 0;// 2 * ty - 1;
 			globalTranslation = ofPoint(-tx * s * w, -ty * s * h);
 			ofTranslate(globalTranslation);
 		}
@@ -475,7 +475,11 @@ void testApp::draw(){
 						(-(other->scoreCount() - 1) / 2 + j) * (icon.getWidth() + iconSpacing), 0);
 				}
 			}
-
+			if (state == PROFILE_CONFIRMED)
+			{
+				userMessage << "thank you and goodbye";
+				break;
+			}
 			ofPopMatrix();
 		}
 
