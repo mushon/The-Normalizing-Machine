@@ -133,6 +133,7 @@ private:
 		return 480; // (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
 	}
 
+	string sessionId;
 
 
 

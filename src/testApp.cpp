@@ -266,8 +266,12 @@ void testApp::update(){
 						appRecorder.stop();
 						//ofSleepMillis(100); // seems like it's fixed
 						
-						string location = "Zurich"; //TODO add textEdit w/load save
-						currData.makeSelection(appRecorder.getLastFilename(), selectedUser.hovered, location);
+						string id = appRecorder.getLastFilename();
+
+						if (roundSelections.size() == 0) {
+							sessionId = id;
+						}
+						currData.makeSelection(sessionId, id, selectedUser.hovered);
 
 						// info: ALL dataset is saved everytime
 						dataset.saveSession(currData);
