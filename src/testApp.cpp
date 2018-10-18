@@ -36,8 +36,6 @@ void testApp::setup() {
 
 	setupGui();
 
-	roundCount = 0;
-
 	ofBackground(0, 0, 0);
 
 	dataset.loadLibrary(recDir + datasetJsonFilename);
@@ -130,7 +128,7 @@ void testApp::update(){
 				userMessage << selectedUser.distance << endl;
 				if (selectedUser.distance < idleThreshold)
 				{
-					roundCount = 0;
+					roundSelections.clear();
 					state = GOTO_SPOT;
 					userMessage << "TODO: begin to show instructions";
 				}
@@ -257,7 +255,10 @@ void testApp::update(){
 					}
 
 					//TODO select mechanism (click/timeout)
-					userMessage << "roundCount: " << roundCount << endl;
+					
+					for (int i = 0; i < roundSelections.size(); i++) {
+						userMessage << "roundCount: " << i << ": " << roundSelections[i] << endl;
+					}
 
 					bool selected = (selectedUser.selectTimer.getCountDown() == 0);
 					if(selected)
@@ -274,13 +275,12 @@ void testApp::update(){
 
 						//ofSleepMillis(100); // seems like it's fixed
 
-						roundCount++;
+						roundSelections.push_back(selectedUser.hovered);
 
-						if (roundCount < MAX_ROUND_COUNT) {
+						if (roundSelections.size() < MAX_ROUND_COUNT) {
 							selectedUser.reset();
 						}
 						else {
-							roundCount = 0;
 							state = RESULT;
 						}
 					}

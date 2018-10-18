@@ -47,8 +47,8 @@ private:
 
 	State state;
 
+	vector<int> roundSelections;
 	const int MAX_ROUND_COUNT = 5;
-	int roundCount = 0;
 
 
 	// DB records
