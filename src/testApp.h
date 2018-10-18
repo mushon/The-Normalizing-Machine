@@ -46,7 +46,11 @@ public:
 private:
 
 	State state;
-	
+
+	const int MAX_ROUND_COUNT = 5;
+	int roundCount = 0;
+
+
 	// DB records
 	AppDataset dataset;
 	RecordedData currData;
@@ -114,9 +118,6 @@ private:
 
 	string getRecDirString(string url);
 	bool testLoadLibrary;
-
-	const int MAX_ROUND_COUNT = 5;
-	int roundCount;
 
 };
 

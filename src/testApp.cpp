@@ -113,6 +113,7 @@ void testApp::update(){
 			// stop recording?
 			if (selectedUser.lastSeen.getCountDown() == 0)
 			{
+				// 1 -> 0
 				state = IDLE;
 			}
 		}		
@@ -225,13 +226,13 @@ void testApp::update(){
 					cursor.update(selectedUser.screenPoint, progress);
 
 					int hover = 0;
-					if (v.x > 0) hover+=1;
+					if (v.x > 0) hover += 1;
 					// if (v.y < 0) hover+=2; 2 players hack
 
-					float w = (ofGetScreenWidth() - margin) / 2; //380
-					float height = (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
+					float w = 380; // (ofGetScreenWidth() - margin) / 2; //380
+					float h = 480; // (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
 
-					if (abs(selectedUser.screenPoint.x - (ofGetScreenWidth()/2)) < w/4 && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < height/4) //inside middle frame
+					if (abs(selectedUser.screenPoint.x - cx) < w/4) // && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
 					{
 						hover = SelectedUser::NO_HOVER;
 					}
@@ -250,7 +251,7 @@ void testApp::update(){
 					}
 
 
-					if (selectedUser.selectTimer.getCountDown() < 6000)
+					if (selectedUser.selectTimer.getCountDown() < 2000)
 					{
 						appRecorder.start(recDir);
 					}
