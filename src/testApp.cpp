@@ -373,8 +373,6 @@ void testApp::drawGotoSpot() {
 	ofNoFill();
 	ofCircle(spot2d, (spotRadius + spotRadiusHysteresis));
 
-
-
 	//ofLine(spot2d.x - spotRadius, spot2d.y,spot2d.x + spotRadius, spot2d.y);
 
 	ofNoFill();
@@ -384,11 +382,110 @@ void testApp::drawGotoSpot() {
 	ofVec2f v(selectedUser.headPoint.x, selectedUser.headPoint.z);
 	ofCircle(v, 200);
 
-
 	ofPopStyle();
 	ofPopMatrix();
 
 	//draw arrow
+}
+
+void testApp::drawOverlay() {
+
+	float w = getPlayerWidth();
+	float h = getPlayerHeight();
+	// cover with 50% black
+	int alphaImage = 128;
+	ofSetColor(ofColor::black, alphaImage);
+	ofFill();
+	ofRect(0, 0, w, h);
+}
+
+
+void testApp::drawLiveFrame(float scale) {
+	float w = getPlayerWidth();
+	float h = getPlayerHeight();
+
+	ofPushMatrix();
+	ofScale(scale, scale);
+	
+	//border
+	ofSetColor(ofColor::black);
+	ofFill();
+	ofRect(0, 0, w + 2 * margin / scale, h + 2 * margin / scale);
+
+	appRecorder.drawImageSubsection(w, h, 0, 0);
+	ofPopMatrix();
+}
+
+void testApp::drawIconAnimations(int i) {
+	float w = getPlayerWidth();
+	float h = getPlayerHeight();
+
+	int dx = i % 2;
+	dx = 2 * dx - 1; // map 0,1 to -1,1
+
+	ofImage& icon = (i == selectedUser.hovered) ? yesIcon : noIcon;
+
+	float transitionLength = 0.05;
+	float transitionBegin = (i == selectedUser.hovered) ? 0.4 : 0.5 + 0.05 * i;
+	int alphaIcon = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 255, true);
+
+	//float iconScale = ofMap(selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 1.0f, 0.0f, true);
+	float iconTrans = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 1, true);
+	iconTrans = sqrt(iconTrans);
+	iconTrans = ofMap(iconTrans, 0, 1, h * 0.75 + icon.getHeight() * 2, 0.0f, true);
+
+	//ofSetColor(255, 255, 255, alphaIcon);
+	ofPushMatrix();
+	ofTranslate(0, iconTrans);
+	//ofScale(iconScale, iconScale);
+	ofSetColor(255, 255, 255, alphaIcon);
+	icon.draw(0, 0);
+	ofPopMatrix();
+
+	if (i == selectedUser.hovered)
+	{
+		drawOverheadText(txt_pointing, -dx * (-w + txt_pointing.getWidth()) / 2, (h - txt_pointing.getHeight()) / 2, w);
+	}
+}
+
+void testApp::drawTotalScore(int i) {
+	RecordedData* other = currData.othersPtr[i];
+
+	for (int j = 0; j<other->scoreCount(); j++)
+	{
+		int iconSpacing = 5;
+		ofImage& icon = (j < other->vScore) ? yesIcon20 : noIcon20;
+		icon.draw(
+			(-(other->scoreCount() - 1) / 2 + j) * (icon.getWidth() + iconSpacing), 0);
+	}
+}
+
+float testApp::getExpansionFactor() {
+	// todo use progress timer
+
+	float w = getPlayerWidth();
+	float h = getPlayerHeight();
+
+	ofVec2f p = selectedUser.screenPoint;
+	p -= ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
+
+	float x = ofMap(fabs(p.x), w / 4, ofGetScreenWidth() / 4, 0.0f, 1.0f, true);
+	float y = ofMap(fabs(p.y), h / 4, ofGetScreenHeight() / 4, 0.0f, 1.0f, true);
+
+	if (abs(selectedUser.screenPoint01.x) > 1)
+	{
+		x = ofMap(abs(selectedUser.screenPoint01.x), 1, outsideScreenFactor, 1.0f, 0.0f, true); // fix jitter when hand is too low
+	}
+	if (abs(selectedUser.screenPoint01.y) > 1)
+	{
+		y = ofMap(abs(selectedUser.screenPoint01.y), 1, outsideScreenFactor, 1.0f, 0.0f, true); // fix jitter when hand is too low
+	}
+
+	//	float s01 = (x*y); // score
+	float s01 = x; // score  // 2-player hack 
+
+	float maxExpand = 0.2;
+	return maxExpand * s01;
 }
 
 //--------------------------------------------------------------
@@ -407,43 +504,34 @@ void testApp::draw(){
 		userMessage << "w" << w << endl;
 		userMessage << "h" << h << endl;
 
-		ofPoint globalTranslation;
-		float maxExpand = 0.2;
-		float s = 0;
-
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 		{
-			ofVec2f p = selectedUser.screenPoint;
-			p -= ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
-
-			float x = ofMap(fabs(p.x), w/4, ofGetScreenWidth()/4, 0.0f, 1.0f, true);
-			float y = ofMap(fabs(p.y), h/4, ofGetScreenHeight()/4, 0.0f, 1.0f, true);
-
-			if (abs(selectedUser.screenPoint01.x) > 1)
-			{
-				x = ofMap(abs(selectedUser.screenPoint01.x), 1, outsideScreenFactor, 1.0f, 0.0f, true); // fix jitter when hand is too low
-			}
-			if (abs(selectedUser.screenPoint01.y) > 1)
-			{
-				y = ofMap(abs(selectedUser.screenPoint01.y), 1, outsideScreenFactor, 1.0f, 0.0f, true); // fix jitter when hand is too low
-			}
-
-			//	float s01 = (x*y); // score
-			float s01 = x; // score  // 2-player hack 
-
-			s = maxExpand * s01; 
+			// get offset for drawing liquid video
+			
+			float s = getExpansionFactor();
 
 			//translate into screen (avoid spill)
 			int tx = selectedUser.hovered % 2;
 			int ty = selectedUser.hovered / 2;
 			tx = 2*tx - 1; // map 0,1 to -1,1
 			ty = 0;// 2 * ty - 1;
-			globalTranslation = ofPoint(-tx * s * w, -ty * s * h);
-			ofTranslate(globalTranslation);
+			ofTranslate(ofPoint(-tx * s * w, -ty * s * h));
 		}
 
 		for (int i=0; i < n_players; i++)
 		{
+			// draw player
+			float playbackScale = 1.0f;
+			if (state == MORE_THAN_ONE)
+			{
+				playbackScale = 0.66;
+			}
+
+			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
+			{
+				float s = getExpansionFactor();
+				playbackScale = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
+			}
 
 			ofPushMatrix();
 			// video order:
@@ -457,23 +545,12 @@ void testApp::draw(){
 
 			dy = 0; // force // 2-player hack 
 
-			float playbackScale = 1.0f;
-			if (state == MORE_THAN_ONE)
-			{
-				playbackScale = 0.66;
-			}
-
-
-			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
-			{
-				playbackScale = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
-			}
-
 			ofTranslate(ofGetScreenWidth()/2, ofGetScreenHeight()/2);
 			ofTranslate(dx * (w+margin)/2 * playbackScale, dy * (h+margin)/2 * playbackScale);
 
 			ofScale(playbackScale, playbackScale);
-
+			
+			// draw player
 			ofRectangle border(0, 0, w+margin, h+margin);
 			ofFill();
 			ofSetColor(ofColor::black);
@@ -485,52 +562,17 @@ void testApp::draw(){
 
 			if (state == MORE_THAN_ONE)
 			{
-				// cover with 50% black
-				int alphaImage = 128;
-				ofSetColor(ofColor::black, alphaImage);
-				ofFill();
-				ofRect(0,0, w, h);
+				drawOverlay();
 			}
 
 			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 			{
-				ofImage& icon = (i==selectedUser.hovered) ? yesIcon : noIcon;
-
-				float transitionLength = 0.05;		
-				float transitionBegin = (i==selectedUser.hovered) ? 0.4 : 0.5 + 0.05 * i;				
-				int alphaIcon = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 255, true);
-
-				//float iconScale = ofMap(selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 1.0f, 0.0f, true);
-				float iconTrans = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 1, true);
-				iconTrans = sqrt(iconTrans);
-				iconTrans = ofMap(iconTrans, 0, 1, h * 0.75 + icon.getHeight() * 2, 0.0f, true);
-
-
-				//ofSetColor(255, 255, 255, alphaIcon);
-				ofPushMatrix();
-				ofTranslate(0, iconTrans);
-				//ofScale(iconScale, iconScale);
-				ofSetColor(255, 255, 255, alphaIcon);
-				icon.draw(0, 0);
-				ofPopMatrix();
-
-				if (i==selectedUser.hovered)
-				{
-					drawOverheadText(txt_pointing, -dx * (-w + txt_pointing.getWidth()) / 2, (h - txt_pointing.getHeight()) / 2, w);
-				}
+				drawIconAnimations(i);
 			}
 
 			if (state == RESULT)
 			{
-				RecordedData* other = currData.othersPtr[i];
-
-				for (int j=0;j<other->scoreCount();j++)
-				{
-					int iconSpacing = 5;
-					ofImage& icon = (j < other->vScore) ? yesIcon20 : noIcon20;
-					icon.draw(
-						(-(other->scoreCount() - 1) / 2 + j) * (icon.getWidth() + iconSpacing), 0);
-				}
+				drawTotalScore(i);
 			}
 			if (state == PROFILE_CONFIRMED)
 			{
@@ -543,31 +585,22 @@ void testApp::draw(){
 
 		if (state == GOTO_SPOT || state == RAISE_HAND || state == SELECTION || state == MORE_THAN_ONE) // not on IDLE or RESULT
 		{
-			//draw live frame
+
 			ofPushMatrix();
 			ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
-			ofxProfileSectionPush("draw live");
-
-
-			ofPushMatrix();
+			
 			float sc2 = 0.5;
 			if (state == MORE_THAN_ONE || state == GOTO_SPOT)
 			{
 				sc2 = 1;
 			}
-			ofScale(sc2, sc2);
-
-			//border
-			ofSetColor(ofColor::black);
-			ofFill();
-			ofRect(0,0, w + 2*margin/sc2, h + 2*margin/sc2);
-
-
-			appRecorder.drawImageSubsection(w, h, 0, 0);
-			ofPopMatrix();
-
-			//draw overlays
 			
+
+			//draw live frame
+			ofxProfileSectionPush("draw live");
+			drawLiveFrame(sc2);
+
+			//draw overlays	
 			if (state == GOTO_SPOT) {
 				drawGotoSpot();
 			}
@@ -596,9 +629,6 @@ void testApp::draw(){
 		}
 	}
 
-
-
-
 	if (drawDepth)
 	{
 		ofSetRectMode(OF_RECTMODE_CORNER);
@@ -614,8 +644,6 @@ void testApp::draw(){
 	{
 		ofDrawBitmapString(ofxProfile::describe(), profilerPos);
 	}
-
-
 
 }
 
