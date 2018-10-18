@@ -119,6 +119,18 @@ private:
 	string getRecDirString(string url);
 	bool testLoadLibrary;
 
+	void drawGotoSpot();
+	
+	float getPlayerWidth() {
+		return 380; // (ofGetScreenWidth() - margin) / 2; //380
+	}
+	float getPlayerHeight() {
+		return 480; // (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
+	}
+
+
+
+
 };
 
 

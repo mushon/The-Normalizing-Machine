@@ -227,8 +227,8 @@ void testApp::update(){
 					if (v.x > 0) hover += 1;
 					// if (v.y < 0) hover+=2; 2 players hack
 
-					float w = 380; // (ofGetScreenWidth() - margin) / 2; //380
-					float h = 480; // (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
+					float w = getPlayerWidth(); 
+					float h = getPlayerHeight();
 
 					if (abs(selectedUser.screenPoint.x - cx) < w/4) // && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
 					{
@@ -334,6 +334,63 @@ void testApp::update(){
 	}
 }
 
+
+void testApp::drawGotoSpot() {
+
+	// // Depracated debug info:
+	// ofVec2f dist(selectedUser.headPoint.x - spot.x, selectedUser.headPoint.z - spot.z);
+	// userMessage << "go to the spot. Please move " 
+	// << (abs(dist.x - spotRadius < 0) ? "Right" : "Left")
+	// << (abs(dist.x - spotRadius < 0) && abs(dist.y - spotRadius < 0) ? " and " : "")
+	// << (abs(dist.y - spotRadius < 0)? "Forward" : "Back") << endl
+	// << endl;
+	
+	float sc2 = 1; // legacy
+	float w = getPlayerWidth();
+	float h = getPlayerHeight();
+
+	ofSetLineWidth(2);
+	ofSetColor(ofColor::green, userMapAlpha);
+	ofLine(0, -h / 2 * sc2, 0, h / 2 * sc2);
+
+	drawOverheadText(txt_position, -sc2*w / 2 + txt_position.getWidth() / 2, sc2*h / 2 - txt_position.getHeight() / 2, w * sc2);
+
+	//TODO: instruct user to step into spot (visualy? top view)
+	//draw user map
+	float maxZ = 4000.0f;
+	float factor = h*sc2 / maxZ;
+
+	ofPushMatrix();
+	ofPushStyle();
+	ofTranslate(0, -h / 2 * sc2);
+
+	ofScale(factor, factor);
+	ofVec2f spot2d(spot.x, spot.z);
+
+	ofSetColor(ofColor::green, userMapAlpha);
+	ofFill();
+	ofCircle(spot2d, spotRadius);
+	ofNoFill();
+	ofCircle(spot2d, (spotRadius + spotRadiusHysteresis));
+
+
+
+	//ofLine(spot2d.x - spotRadius, spot2d.y,spot2d.x + spotRadius, spot2d.y);
+
+	ofNoFill();
+	ofSetLineWidth(5);
+	ofSetColor(ofColor::white, userMapAlpha);
+
+	ofVec2f v(selectedUser.headPoint.x, selectedUser.headPoint.z);
+	ofCircle(v, 200);
+
+
+	ofPopStyle();
+	ofPopMatrix();
+
+	//draw arrow
+}
+
 //--------------------------------------------------------------
 void testApp::draw(){
 	ofSetRectMode(OF_RECTMODE_CENTER);
@@ -344,8 +401,8 @@ void testApp::draw(){
 
 		ofPushMatrix();
 		//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
-		float w = 380; //  (ofGetScreenWidth() - margin) / 2;					//380
-		float h = 480; //  (ofGetScreenHeight() - margin - bottomMargin) / 2;	//480
+		float w = getPlayerWidth();
+		float h = getPlayerHeight();
 
 		userMessage << "w" << w << endl;
 		userMessage << "h" << h << endl;
@@ -510,58 +567,9 @@ void testApp::draw(){
 			ofPopMatrix();
 
 			//draw overlays
-
-			if (state == GOTO_SPOT)
-			{	
-
-				// // Depracated debug info:
-				// ofVec2f dist(selectedUser.headPoint.x - spot.x, selectedUser.headPoint.z - spot.z);
-				// userMessage << "go to the spot. Please move " 
-				// << (abs(dist.x - spotRadius < 0) ? "Right" : "Left")
-				// << (abs(dist.x - spotRadius < 0) && abs(dist.y - spotRadius < 0) ? " and " : "")
-				// << (abs(dist.y - spotRadius < 0)? "Forward" : "Back") << endl
-				// << endl;
-
-				ofSetLineWidth(2);
-				ofSetColor(ofColor::green, userMapAlpha);
-				ofLine(0, -h/2*sc2, 0, h/2*sc2);
-
-				drawOverheadText(txt_position, -sc2*w/2 + txt_position.getWidth()/2, sc2*h/2 - txt_position.getHeight()/2, w * sc2);
-
-				//TODO: instruct user to step into spot (visualy? top view)
-				//draw user map
-				float maxZ = 4000.0f;		
-				float factor = h*sc2/maxZ;
-
-				ofPushMatrix();
-				ofPushStyle();
-				ofTranslate(0 , -h/2*sc2);
-
-				ofScale(factor, factor);
-				ofVec2f spot2d(spot.x, spot.z);
-
-				ofSetColor(ofColor::green, userMapAlpha);
-				ofFill();
-				ofCircle(spot2d, spotRadius);
-				ofNoFill();
-				ofCircle(spot2d,(spotRadius + spotRadiusHysteresis));
-
-
-
-				//ofLine(spot2d.x - spotRadius, spot2d.y,spot2d.x + spotRadius, spot2d.y);
-
-				ofNoFill();
-				ofSetLineWidth(5);
-				ofSetColor(ofColor::white, userMapAlpha);
-
-				ofVec2f v(selectedUser.headPoint.x, selectedUser.headPoint.z);
-				ofCircle(v, 200);
-
-
-				ofPopStyle();
-				ofPopMatrix();
-
-				//draw arrow
+			
+			if (state == GOTO_SPOT) {
+				drawGotoSpot();
 			}
 
 			if (state == MORE_THAN_ONE)
