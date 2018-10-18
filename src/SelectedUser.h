@@ -33,7 +33,7 @@ public:
 		AppTimer selectTimer;
 		bool waitForSteady;
 
-		SelectedUser() : selectTimer(8000)
+		SelectedUser() : selectTimer(3000)
 		{
 			id = NO_USER;
 			distance = FLT_MAX;
