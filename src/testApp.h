@@ -125,6 +125,7 @@ private:
 	void drawIconAnimations(int i);
 	void drawTotalScore(int i);
 	float getExpansionFactor();
+	void drawPlayers();
 
 	float getPlayerWidth() {
 		return 380; // (ofGetScreenWidth() - margin) / 2; //380

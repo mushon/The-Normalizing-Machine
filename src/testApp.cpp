@@ -304,8 +304,9 @@ void testApp::update(){
 
 			}
 		case PROFILE_CONFIRMED:
-		{
-				// thank you and goodbye
+			{
+			// TODO: save video with sessionId (front, side)
+			// TODO: show thank you and goodbye
 				// animate back to idle
 				// change from live to recording
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
@@ -319,6 +320,7 @@ void testApp::update(){
 		case MORE_THAN_ONE:
 			{
 				state = IDLE;
+				break;
 			}
 		}
 	}
@@ -492,6 +494,90 @@ float testApp::getExpansionFactor() {
 	return maxExpand * s01;
 }
 
+void testApp::drawPlayers() {
+	ofPushMatrix();
+	//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
+	float w = getPlayerWidth();
+	float h = getPlayerHeight();
+
+	if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
+	{
+		// get offset for drawing liquid video
+
+		float s = getExpansionFactor();
+
+		//translate into screen (avoid spill)
+		int tx = selectedUser.hovered % 2;
+		int ty = selectedUser.hovered / 2;
+		tx = 2 * tx - 1; // map 0,1 to -1,1
+		ty = 0;// 2 * ty - 1;
+		ofTranslate(ofPoint(-tx * s * w, -ty * s * h));
+	}
+
+	for (int i = 0; i < n_players; i++)
+	{
+		// draw player
+		float playbackScale = 1.0f;
+		if (state == MORE_THAN_ONE)
+		{
+			playbackScale = 0.66;
+		}
+
+		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
+		{
+			float s = getExpansionFactor();
+			playbackScale = (i == selectedUser.hovered) ? 1.0f + s : 1.0f - s;
+		}
+
+		ofPushMatrix();
+		// video order:
+		// 0 1
+		// 2 3
+		int dx = i % 2;
+		int dy = i / 2;
+
+		dx = 2 * dx - 1; // map 0,1 to -1,1
+		dy = 2 * dy - 1;
+
+		dy = 0; // force // 2-player hack 
+
+		ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
+		ofTranslate(dx * (w + margin) / 2 * playbackScale, dy * (h + margin) / 2 * playbackScale);
+
+		ofScale(playbackScale, playbackScale);
+
+		// draw player
+		ofRectangle border(0, 0, w + margin, h + margin);
+		ofFill();
+		ofSetColor(ofColor::black);
+		ofRect(border);
+
+		//			players[i].drawImage();
+		players[i].drawImageSubsection(w, h, 0, 0);
+
+
+		if (state == MORE_THAN_ONE)
+		{
+			drawOverlay();
+		}
+
+		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
+		{
+			drawIconAnimations(i);
+		}
+
+		if (state == RESULT)
+		{
+			drawTotalScore(i);
+		}
+		if (state == PROFILE_CONFIRMED)
+		{
+			userMessage << "thank you and goodbye";
+			break;
+		}
+		ofPopMatrix();
+	}
+}
 //--------------------------------------------------------------
 void testApp::draw(){
 	ofSetRectMode(OF_RECTMODE_CENTER);
@@ -499,96 +585,19 @@ void testApp::draw(){
 	ofxProfileThisFunction();
 
 	if (drawVideo) {
-
-		ofPushMatrix();
-		//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
-		float w = getPlayerWidth();
-		float h = getPlayerHeight();
-
-		userMessage << "w" << w << endl;
-		userMessage << "h" << h << endl;
-
-		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
-		{
-			// get offset for drawing liquid video
-			
-			float s = getExpansionFactor();
-
-			//translate into screen (avoid spill)
-			int tx = selectedUser.hovered % 2;
-			int ty = selectedUser.hovered / 2;
-			tx = 2*tx - 1; // map 0,1 to -1,1
-			ty = 0;// 2 * ty - 1;
-			ofTranslate(ofPoint(-tx * s * w, -ty * s * h));
-		}
-
-		for (int i=0; i < n_players; i++)
-		{
-			// draw player
-			float playbackScale = 1.0f;
-			if (state == MORE_THAN_ONE)
-			{
-				playbackScale = 0.66;
-			}
-
-			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
-			{
-				float s = getExpansionFactor();
-				playbackScale = (i==selectedUser.hovered) ? 1.0f+s : 1.0f-s;
-			}
-
-			ofPushMatrix();
-			// video order:
-			// 0 1
-			// 2 3
-			int dx = i%2;
-			int dy = i/2;
-
-			dx = 2*dx - 1; // map 0,1 to -1,1
-			dy = 2*dy - 1;
-
-			dy = 0; // force // 2-player hack 
-
-			ofTranslate(ofGetScreenWidth()/2, ofGetScreenHeight()/2);
-			ofTranslate(dx * (w+margin)/2 * playbackScale, dy * (h+margin)/2 * playbackScale);
-
-			ofScale(playbackScale, playbackScale);
-			
-			// draw player
-			ofRectangle border(0, 0, w+margin, h+margin);
-			ofFill();
-			ofSetColor(ofColor::black);
-			ofRect(border);
-
-			//			players[i].drawImage();
-			players[i].drawImageSubsection(w, h, 0, 0);
+		drawPlayers();
 
 
-			if (state == MORE_THAN_ONE)
-			{
-				drawOverlay();
-			}
+		
 
-			if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
-			{
-				drawIconAnimations(i);
-			}
-
-			if (state == RESULT)
-			{
-				drawTotalScore(i);
-			}
-			if (state == PROFILE_CONFIRMED)
-			{
-				userMessage << "thank you and goodbye";
-				break;
-			}
-			ofPopMatrix();
-		}
-
-
+		//draw live frame
 		if (state == GOTO_SPOT || state == RAISE_HAND || state == SELECTION || state == MORE_THAN_ONE) // not on IDLE or RESULT
 		{
+			float w = getPlayerWidth();
+			float h = getPlayerHeight();
+
+			userMessage << "w" << w << endl;
+			userMessage << "h" << h << endl;
 
 			ofPushMatrix();
 			ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
@@ -600,7 +609,6 @@ void testApp::draw(){
 			}
 			
 
-			//draw live frame
 			ofxProfileSectionPush("draw live");
 			drawLiveFrame(sc2);
 
