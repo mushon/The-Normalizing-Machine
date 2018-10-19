@@ -92,6 +92,7 @@ void testApp::update(){
 	ofxProfileSectionPop();
 
 	int nVisibleUsers = appRecorder.countVisibleUsers(); // vector from sensor
+	userMessage << nVisibleUsers << endl;
 
 	updateSelectedUser();
 
@@ -128,6 +129,20 @@ void testApp::update(){
 				userMessage << selectedUser.distance << endl;
 				if (selectedUser.distance < idleThreshold)
 				{
+					state = STEP_IN;
+				}
+				break;
+			}
+		case STEP_IN:
+			{
+				if (selectedUser.id == SelectedUser::NO_USER || 
+				   selectedUser.distance > idleThreshold + idleThresholdHysteresis)
+				{
+					state = IDLE;
+				}
+
+				if (selectedUser.distance < stepInThreshold)
+				{
 					roundSelections.clear();
 					state = GOTO_SPOT;
 					userMessage << "TODO: begin to show instructions";
@@ -138,9 +153,9 @@ void testApp::update(){
 		case GOTO_SPOT:
 			{
 				if (selectedUser.id == SelectedUser::NO_USER ||
-					selectedUser.distance > idleThreshold + idleThresholdHysteresis)
+					selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
 				{
-					state = IDLE;
+					state = STEP_IN;
 				}
 
 				if (selectedUser.distance < spotRadius)
@@ -330,13 +345,21 @@ void testApp::update(){
 		state = MORE_THAN_ONE;
 	}
 
-	if (state == MORE_THAN_ONE || state == GOTO_SPOT)
-	{
-		liveFrameScale = 1;
-	}
-	else {
-		liveFrameScale = 0.5;
-	}
+	// set drawing parameters (before smoothing)
+	if (state == IDLE) liveFrameScale = 0;
+	if (state == STEP_IN) liveFrameScale = 0;
+	if (state == GOTO_SPOT) liveFrameScale = 1;
+	if (state == RAISE_HAND) liveFrameScale = 0.75;
+	if (state == SELECTION) liveFrameScale = 0.5;
+	if (state == RESULT) liveFrameScale = 0;
+	if (state == PROFILE_CONFIRMED) liveFrameScale = 0;
+	//if (state == MORE_THAN_ONE) liveFrameScale = 0; // do nothing
+
+	
+	// smoothing
+	liveFrameScaleSmooth *= liveFrameScaleSmoothFactor;
+	liveFrameScaleSmooth += (1 - liveFrameScaleSmoothFactor) * liveFrameScale;
+
 
 	for (int i=0; i<n_players; i++)
 	{
@@ -357,7 +380,7 @@ void testApp::drawGotoSpot() {
 	// << (abs(dist.y - spotRadius < 0)? "Forward" : "Back") << endl
 	// << endl;
 	
-	float sc2 = 1; // legacy
+	float sc2 = liveFrameScaleSmooth; // legacy
 	float w = getPlayerWidth();
 	float h = getPlayerHeight();
 
@@ -415,7 +438,7 @@ void testApp::drawOverlay() {
 void testApp::drawLiveFrame() {
 	float w = getPlayerWidth();
 	float h = getPlayerHeight();
-	float scale = liveFrameScale;
+	float scale = liveFrameScaleSmooth;
 	ofPushMatrix();
 	ofScale(scale, scale);
 	
@@ -601,7 +624,7 @@ void testApp::draw(){
 			ofPushMatrix();
 			ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 			
-			float sc2 = liveFrameScale;
+			float sc2 = liveFrameScaleSmooth;
 
 			ofxProfileSectionPush("draw live");
 			drawLiveFrame();
@@ -755,13 +778,19 @@ void testApp::setupGui(){
 	profilerPos = ofxUIVec3f(220, 0);
 	//gui->add2DPad("profilerPos", ofxUIVec3f(0, ofGetScreenWidth()), ofxUIVec3f(0, ofGetScreenHeight()), &profilerPos);
 
-	idleThreshold = 500;
-	gui->addSlider("idleThreshold", 200, 2000, &idleThreshold);
+	idleThreshold = 1000;
+	gui->addSlider("idleThreshold", 500, 2000, &idleThreshold);
 
 	idleThresholdHysteresis = 100;
 	gui->addSlider("idle.Thr.Hyst", 10, 200, &idleThresholdHysteresis);
 
-	spotRadius = 400;
+	stepInThreshold = 700;
+	gui->addSlider("stepInThreshold", 200, 1000, &stepInThreshold);
+
+	stepInThresholdHysteresis = 100;
+	gui->addSlider("stepIn.Thr.Hyst", 10, 200, &stepInThresholdHysteresis);
+
+	spotRadius = 200;
 	gui->addSlider("spot radius", 0, 1000, &spotRadius);
 	spotRadiusHysteresis = 100;
 	gui->addSlider("sr Hysteresis", 0, 300, &spotRadiusHysteresis);

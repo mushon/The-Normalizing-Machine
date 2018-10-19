@@ -72,6 +72,8 @@ private:
 	float spotRadiusHysteresis;
 	float idleThreshold;
 	float idleThresholdHysteresis;
+	float stepInThreshold;
+	float stepInThresholdHysteresis;
 
 	int userMapAlpha;
 	int textAlpha;
@@ -121,8 +123,10 @@ private:
 
 	void drawGotoSpot();
 	void drawLiveFrame();
-	float liveFrameScale = 1.0f; 
-	
+	float liveFrameScale = 0.0f;
+	float liveFrameScaleSmooth = 0.0f;
+	float liveFrameScaleSmoothFactor = 0.9f;
+
 	void drawOverlay();
 	void drawIconAnimations(int i);
 	void drawTotalScore(int i);
