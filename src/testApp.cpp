@@ -330,7 +330,13 @@ void testApp::update(){
 		state = MORE_THAN_ONE;
 	}
 
-
+	if (state == MORE_THAN_ONE || state == GOTO_SPOT)
+	{
+		liveFrameScale = 1;
+	}
+	else {
+		liveFrameScale = 0.5;
+	}
 
 	for (int i=0; i<n_players; i++)
 	{
@@ -406,10 +412,10 @@ void testApp::drawOverlay() {
 }
 
 
-void testApp::drawLiveFrame(float scale) {
+void testApp::drawLiveFrame() {
 	float w = getPlayerWidth();
 	float h = getPlayerHeight();
-
+	float scale = liveFrameScale;
 	ofPushMatrix();
 	ofScale(scale, scale);
 	
@@ -518,10 +524,6 @@ void testApp::drawPlayers() {
 	{
 		// draw player
 		float playbackScale = 1.0f;
-		if (state == MORE_THAN_ONE)
-		{
-			playbackScale = 0.66;
-		}
 
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 		{
@@ -556,11 +558,6 @@ void testApp::drawPlayers() {
 		players[i].drawImageSubsection(w, h, 0, 0);
 
 
-		if (state == MORE_THAN_ONE)
-		{
-			drawOverlay();
-		}
-
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 		{
 			drawIconAnimations(i);
@@ -585,13 +582,15 @@ void testApp::draw(){
 	ofxProfileThisFunction();
 
 	if (drawVideo) {
-		drawPlayers();
 
-
+		if (state == RAISE_HAND || state == SELECTION) {
+			drawPlayers();
+		}
 		
-
 		//draw live frame
-		if (state == GOTO_SPOT || state == RAISE_HAND || state == SELECTION || state == MORE_THAN_ONE) // not on IDLE or RESULT
+		if (state == IDLE || state == GOTO_SPOT || 
+			state == RAISE_HAND || state == SELECTION ||
+			state == MORE_THAN_ONE || state == RESULT) // not PROFILE_CONFIRMED
 		{
 			float w = getPlayerWidth();
 			float h = getPlayerHeight();
@@ -602,15 +601,10 @@ void testApp::draw(){
 			ofPushMatrix();
 			ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 			
-			float sc2 = 0.5;
-			if (state == MORE_THAN_ONE || state == GOTO_SPOT)
-			{
-				sc2 = 1;
-			}
-			
+			float sc2 = liveFrameScale;
 
 			ofxProfileSectionPush("draw live");
-			drawLiveFrame(sc2);
+			drawLiveFrame();
 
 			//draw overlays	
 			if (state == GOTO_SPOT) {
@@ -620,6 +614,7 @@ void testApp::draw(){
 			if (state == MORE_THAN_ONE)
 			{
 				drawOverheadText(txt_toomany, -sc2*w/2 + txt_toomany.getWidth()/2, 0, w * sc2);
+				drawOverlay(); //?
 			}
 
 			if (state == RAISE_HAND)
