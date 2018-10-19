@@ -125,14 +125,20 @@ private:
 	void drawLiveFrame();
 	float liveFrameScale = 0.0f;
 	float liveFrameScaleSmooth = 0.0f;
-	float liveFrameScaleSmoothFactor = 0.9f;
+	float liveFrameScaleSmoothFactor = 0.8f;
 
 	void drawOverlay();
 	void drawIconAnimations(int i);
 	void drawTotalScore(int i);
-	float getExpansionFactor();
 	void drawPlayers();
 	
+	float progressSmooth = 1.0;
+	float progressSmoothFactor = 0.9f;
+
+	float playerFrameScale = 0.0f;
+	float playerFrameScaleSmooth = 0.0f;
+	float playerFrameScaleSmoothFactor = 0.8f;
+
 	float getPlayerWidth() {
 		return 380; // (ofGetScreenWidth() - margin) / 2; //380
 	}

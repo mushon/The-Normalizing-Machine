@@ -346,19 +346,57 @@ void testApp::update(){
 	}
 
 	// set drawing parameters (before smoothing)
-	if (state == IDLE) liveFrameScale = 0;
-	if (state == STEP_IN) liveFrameScale = 0;
-	if (state == GOTO_SPOT) liveFrameScale = 1;
-	if (state == RAISE_HAND) liveFrameScale = 0.75;
-	if (state == SELECTION) liveFrameScale = 0.5;
-	if (state == RESULT) liveFrameScale = 0;
-	if (state == PROFILE_CONFIRMED) liveFrameScale = 0;
-	//if (state == MORE_THAN_ONE) liveFrameScale = 0; // do nothing
+	if (state == IDLE) {
+		liveFrameScale = 0;
+		playerFrameScale = 0.0f;
+	}
+	if (state == STEP_IN) {
+		liveFrameScale = 0;
+		playerFrameScale = 0.0f;
+	}
+
+	if (state == GOTO_SPOT) {
+		liveFrameScale = 1;
+		playerFrameScale = 0.0f;
+	}
+	if (state == RAISE_HAND) {
+		liveFrameScale = 0.75;
+		playerFrameScale = 1.0f;
+	}
+	if (state == SELECTION) {
+		liveFrameScale = 0.5;
+		playerFrameScale = 1.0f;
+	}
+	if (state == RESULT) {
+		liveFrameScale = 0;
+		playerFrameScale = 0.0f;
+	}
+	if (state == PROFILE_CONFIRMED) {
+		liveFrameScale = 0;
+		playerFrameScale = 0.0f;
+	}
+	if (state == MORE_THAN_ONE) {
+		//liveFrameScale = 0; // do nothing
+		playerFrameScale = 0.0f;
+	}
 
 	
 	// smoothing
 	liveFrameScaleSmooth *= liveFrameScaleSmoothFactor;
 	liveFrameScaleSmooth += (1 - liveFrameScaleSmoothFactor) * liveFrameScale;
+
+	playerFrameScaleSmooth *= playerFrameScaleSmoothFactor;
+	playerFrameScaleSmooth += (1 - playerFrameScaleSmoothFactor) * playerFrameScale;
+
+	float progress = 1.0;
+	if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
+	{
+		progress = selectedUser.getProgress();
+	}
+
+	progressSmooth *= progressSmoothFactor;
+	progressSmooth += (1 - progressSmoothFactor) * progress;
+
 
 
 	for (int i=0; i<n_players; i++)
@@ -495,64 +533,24 @@ void testApp::drawTotalScore(int i) {
 	}
 }
 
-float testApp::getExpansionFactor() {
-	// todo use progress timer
-
-	float w = getPlayerWidth();
-	float h = getPlayerHeight();
-
-	ofVec2f p = selectedUser.screenPoint;
-	p -= ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
-
-	float x = ofMap(fabs(p.x), w / 4, ofGetScreenWidth() / 4, 0.0f, 1.0f, true);
-	float y = ofMap(fabs(p.y), h / 4, ofGetScreenHeight() / 4, 0.0f, 1.0f, true);
-
-	if (abs(selectedUser.screenPoint01.x) > 1)
-	{
-		x = ofMap(abs(selectedUser.screenPoint01.x), 1, outsideScreenFactor, 1.0f, 0.0f, true); // fix jitter when hand is too low
-	}
-	if (abs(selectedUser.screenPoint01.y) > 1)
-	{
-		y = ofMap(abs(selectedUser.screenPoint01.y), 1, outsideScreenFactor, 1.0f, 0.0f, true); // fix jitter when hand is too low
-	}
-
-	//	float s01 = (x*y); // score
-	float s01 = x; // score  // 2-player hack 
-
-	float maxExpand = 0.2;
-	return maxExpand * s01;
-}
-
 void testApp::drawPlayers() {
 	ofPushMatrix();
 	//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
 	float w = getPlayerWidth();
 	float h = getPlayerHeight();
 
-	if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
-	{
-		// get offset for drawing liquid video
-
-		float s = getExpansionFactor();
-
-		//translate into screen (avoid spill)
-		int tx = selectedUser.hovered % 2;
-		int ty = selectedUser.hovered / 2;
-		tx = 2 * tx - 1; // map 0,1 to -1,1
-		ty = 0;// 2 * ty - 1;
-		ofTranslate(ofPoint(-tx * s * w, -ty * s * h));
-	}
-
 	for (int i = 0; i < n_players; i++)
 	{
 		// draw player
-		float playbackScale = 1.0f;
-
-		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
-		{
-			float s = getExpansionFactor();
-			playbackScale = (i == selectedUser.hovered) ? 1.0f + s : 1.0f - s;
+		float maxExpand = 0.2;
+		float s = maxExpand * (1 - progressSmooth);
+		/// THIS
+		float selectionScale = 1;
+		if (state == SELECTION) {
+			selectionScale = (i == selectedUser.hovered) ? (1.0f + s) : (1.0f - s);
 		}
+		
+		float playbackScale = playerFrameScale * selectionScale;
 
 		ofPushMatrix();
 		// video order:
@@ -586,15 +584,6 @@ void testApp::drawPlayers() {
 			drawIconAnimations(i);
 		}
 
-		if (state == RESULT)
-		{
-			drawTotalScore(i);
-		}
-		if (state == PROFILE_CONFIRMED)
-		{
-			userMessage << "thank you and goodbye";
-			break;
-		}
 		ofPopMatrix();
 	}
 }
@@ -606,14 +595,12 @@ void testApp::draw(){
 
 	if (drawVideo) {
 
-		if (state == RAISE_HAND || state == SELECTION) {
+		if (playerFrameScaleSmooth > 0.01) {
 			drawPlayers();
 		}
 		
 		//draw live frame
-		if (state == IDLE || state == GOTO_SPOT || 
-			state == RAISE_HAND || state == SELECTION ||
-			state == MORE_THAN_ONE || state == RESULT) // not PROFILE_CONFIRMED
+		if (liveFrameScaleSmooth > 0.01)
 		{
 			float w = getPlayerWidth();
 			float h = getPlayerHeight();
@@ -656,6 +643,16 @@ void testApp::draw(){
 			//userMessage << "waiting for selection... TODO: instructions how to select" << endl;
 			//userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
 			cursor.draw();
+		}
+
+		if (state == RESULT)
+		{
+			//drawTotalScore(i);
+		}
+		
+		if (state == PROFILE_CONFIRMED)
+		{
+			userMessage << "thank you and goodbye";
 		}
 	}
 
