@@ -280,7 +280,7 @@ void testApp::update(){
 					{
 						appRecorder.stop();
 						//ofSleepMillis(100); // seems like it's fixed
-						
+
 						string id = appRecorder.getLastFilename();
 
 						if (roundSelections.size() == 0) {
@@ -295,19 +295,30 @@ void testApp::update(){
 						//ofSleepMillis(100); // seems like it's fixed
 
 						roundSelections.push_back(selectedUser.hovered);
-
-						if (roundSelections.size() < MAX_ROUND_COUNT) {
-							selectedUser.reset();
-						}
-						else {
-							state = RESULT;
-						}
+						state = SELECTION_POST;
+						postSelectionTimer.setTimeout(1000); 
+						postSelectionTimer.reset();
 					}
 
 				}
 				break;
 
 			}
+		case SELECTION_POST:
+		{
+			if (postSelectionTimer.getCountDown() <= 0) {
+				if (roundSelections.size() < MAX_ROUND_COUNT) {
+					selectedUser.reset();
+					state = SELECTION;
+				}
+				else {
+					state = RESULT;
+				}
+			}
+
+			break;
+		}
+
 		case RESULT:
 			{
 				// show prompt - look sideways
@@ -366,6 +377,10 @@ void testApp::update(){
 	if (state == SELECTION) {
 		liveFrameScale = 0.5;
 		playerFrameScale = 1.0f;
+	}
+	if (state == SELECTION_POST) {
+		//liveFrameScale = 0.5;
+		playerFrameScale = 0;
 	}
 	if (state == RESULT) {
 		liveFrameScale = 0;

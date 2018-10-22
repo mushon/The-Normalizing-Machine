@@ -149,7 +149,7 @@ private:
 
 	string sessionId;
 
-
+	AppTimer postSelectionTimer;
 
 };
 
