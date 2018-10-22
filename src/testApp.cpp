@@ -324,7 +324,7 @@ void testApp::update(){
 			// TODO: show thank you and goodbye
 				// animate back to idle
 				// change from live to recording
-				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
+				if (selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
 				{
 					ofLogNotice("RESULT -> IDLE");
 					begin();
