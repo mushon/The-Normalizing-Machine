@@ -64,6 +64,7 @@ private:
 	void setupPlayback(string _filename);
 	static const unsigned int MAX_PLAYERS = 2;
 	ofxOpenNI players[MAX_PLAYERS];
+	float playbackScales[MAX_PLAYERS];
 	int n_players;
 
 

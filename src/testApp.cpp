@@ -397,7 +397,18 @@ void testApp::update(){
 	progressSmooth *= progressSmoothFactor;
 	progressSmooth += (1 - progressSmoothFactor) * progress;
 
+	for (int i = 0; i < n_players; i++)
+	{
+		// draw player
+		float maxExpand = 0.2;
+		float s = maxExpand * (1 - progressSmooth);
 
+		float selectionScale = 1;
+		if (state == SELECTION) {
+			selectionScale = (i == selectedUser.hovered) ? (1.0f + s) : (1.0f - s);
+		}
+		playbackScales[i] = playerFrameScale * selectionScale;
+	}
 
 	for (int i=0; i<n_players; i++)
 	{
@@ -542,15 +553,7 @@ void testApp::drawPlayers() {
 	for (int i = 0; i < n_players; i++)
 	{
 		// draw player
-		float maxExpand = 0.2;
-		float s = maxExpand * (1 - progressSmooth);
-		/// THIS
-		float selectionScale = 1;
-		if (state == SELECTION) {
-			selectionScale = (i == selectedUser.hovered) ? (1.0f + s) : (1.0f - s);
-		}
-		
-		float playbackScale = playerFrameScale * selectionScale;
+		float playbackScale = playbackScales[i]; // refac
 
 		ofPushMatrix();
 		// video order:
