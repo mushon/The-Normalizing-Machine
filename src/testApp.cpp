@@ -39,7 +39,7 @@ void testApp::setup() {
 	ofBackground(0, 0, 0);
 
 	dataset.loadLibrary(recDir + datasetJsonFilename);
-	begin();
+	state = IDLE;
 }
 
 void testApp::setupPlayback(string _filename) {
@@ -56,9 +56,8 @@ void testApp::setupPlayback(string _filename) {
 
 }
 
-void testApp::begin()
-{
-	for (int i=0; i<n_players; i++)
+void testApp::setupNextRound() {
+	for (int i = 0; i<n_players; i++)
 	{
 		players[i].stop();
 	}
@@ -70,9 +69,8 @@ void testApp::begin()
 	{
 		setupPlayback(recDir + currData.othersId[i]);
 	}
-
-	state = IDLE;
 }
+
 //--------------------------------------------------------------
 void testApp::update(){
 	
@@ -103,10 +101,6 @@ void testApp::update(){
 
 	if (nVisibleUsers == 0)
 	{
-		if (state == RESULT)
-		{
-			begin();
-		}
 		if (state != IDLE)
 		{
 			// stop recording?
@@ -124,7 +118,7 @@ void testApp::update(){
 
 		switch (state)
 		{
-		case IDLE: //this happens only once in the transition
+		case IDLE:
 			{
 				userMessage << selectedUser.distance << endl;
 				if (selectedUser.distance < idleThreshold)
@@ -143,9 +137,9 @@ void testApp::update(){
 
 				if (selectedUser.distance < stepInThreshold)
 				{
+					setupNextRound();
 					roundSelections.clear();
 					state = GOTO_SPOT;
-					userMessage << "TODO: begin to show instructions";
 				}
 				break;
 			}
@@ -236,7 +230,7 @@ void testApp::update(){
 					selectedUser.screenPoint.y = ofLerp(ofGetScreenHeight() / 2, selectedUser.screenPoint.y, 0.1);  // force to center // 2-player hack 
 
 					float progress = selectedUser.getProgress();
-					cursor.update(selectedUser.screenPoint, progress);
+					cursor.update(selectedUser.screenPoint, progressSmooth);
 
 					int hover = 0;
 					if (v.x > 0) hover += 1;
@@ -279,7 +273,7 @@ void testApp::update(){
 					if(selected)
 					{
 						appRecorder.stop();
-						//ofSleepMillis(100); // seems like it's fixed
+						ofSleepMillis(100); // seems like it's fixed
 
 						string id = appRecorder.getLastFilename();
 
@@ -292,7 +286,7 @@ void testApp::update(){
 						dataset.saveSession(currData);
 						dataset.saveLibrary(recDir + datasetJsonFilename);
 
-						//ofSleepMillis(100); // seems like it's fixed
+						ofSleepMillis(100); // seems like it's fixed
 
 						roundSelections.push_back(selectedUser.hovered);
 						state = SELECTION_POST;
@@ -308,6 +302,7 @@ void testApp::update(){
 		{
 			if (postSelectionTimer.getCountDown() <= 0) {
 				if (roundSelections.size() < MAX_ROUND_COUNT) {
+					setupNextRound();
 					selectedUser.reset();
 					state = SELECTION;
 				}
@@ -338,7 +333,7 @@ void testApp::update(){
 				if (selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
 				{
 					ofLogNotice("RESULT -> IDLE");
-					begin();
+					state = IDLE;
 				}				
 				break;
 			}
@@ -415,14 +410,17 @@ void testApp::update(){
 	for (int i = 0; i < n_players; i++)
 	{
 		// draw player
-		float maxExpand = 0.2;
-		float s = maxExpand * (1 - progressSmooth);
+		float s = selectionMaxExpand * (1 - progress);
 
 		float selectionScale = 1;
 		if (state == SELECTION) {
 			selectionScale = (i == selectedUser.hovered) ? (1.0f + s) : (1.0f - s);
 		}
-		playbackScales[i] = playerFrameScale * selectionScale;
+
+		selectionScaleSmoothed[i] *= selectionScaleSmoothFactor;
+		selectionScaleSmoothed[i] += (1 - selectionScaleSmoothFactor) * selectionScale;
+
+		playbackScales[i] = playerFrameScaleSmooth * selectionScaleSmoothed[i];
 	}
 
 	for (int i=0; i<n_players; i++)

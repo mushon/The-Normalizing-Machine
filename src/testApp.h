@@ -19,7 +19,6 @@ class testApp : public ofBaseApp{
 
 public:
 	void setup();
-	void begin();
 	void update();
 	void draw();
 
@@ -66,7 +65,9 @@ private:
 	ofxOpenNI players[MAX_PLAYERS];
 	float playbackScales[MAX_PLAYERS];
 	int n_players;
-
+	float selectionScaleSmoothed[MAX_PLAYERS] = { 1.0f, 1.0f };
+	float selectionScaleSmoothFactor = 0.7f;
+	float selectionMaxExpand = 0.2;
 
 	ofPoint spot;
 	float spotRadius;
@@ -134,7 +135,7 @@ private:
 	void drawPlayers();
 	
 	float progressSmooth = 1.0;
-	float progressSmoothFactor = 0.9f;
+	float progressSmoothFactor = 0.6f;
 
 	float playerFrameScale = 0.0f;
 	float playerFrameScaleSmooth = 0.0f;
@@ -150,6 +151,8 @@ private:
 	string sessionId;
 
 	AppTimer postSelectionTimer;
+	void setupNextRound();
+	
 
 };
 
