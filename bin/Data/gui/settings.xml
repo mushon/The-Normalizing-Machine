@@ -7,6 +7,46 @@
 </Canvas>
 <Widget>
     <Kind>2</Kind>
+    <Name>IDLE</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>STEP_IN</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>GOTO_SPOT</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>RAISE_HAND</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>SELECTION</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>RESULT</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>PROFILE_CONFIRMED</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>MORE_THAN_ONE</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
     <Name>draw (g)ui</Name>
     <Value>0</Value>
 </Widget>
@@ -34,6 +74,26 @@
     <Kind>2</Kind>
     <Name>simulate (m)ore 1</Name>
     <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>idleThreshold</Name>
+    <Value>1500.00</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>idle.Thr.Hyst</Name>
+    <Value>100.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>stepInThreshold</Name>
+    <Value>700.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>stepIn.Thr.Hyst</Name>
+    <Value>100.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -67,8 +127,8 @@
 </Widget>
 <Widget>
     <Kind>4</Kind>
-    <Name>minBottomScreen</Name>
-    <Value>-1.200000048</Value>
+    <Name>outsideScreenFactor</Name>
+    <Value>1.200000048</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
@@ -84,4 +144,29 @@
     <Kind>4</Kind>
     <Name>touchScreenSize</Name>
     <Value>627.586242676</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>screenZ</Name>
+    <Value>-3000.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>screenB</Name>
+    <Value>-812.807983398</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>screenT</Name>
+    <Value>-24.630428314</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>screenL</Name>
+    <Value>-600.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>screenR</Name>
+    <Value>600.000000000</Value>
 </Widget>
