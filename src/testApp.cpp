@@ -56,14 +56,14 @@ void testApp::setupPlayback(string _filename) {
 
 }
 
-void testApp::setupNextRound(string forcedId) {
+void testApp::setupNextRound(string forcedId, string excludeSessionId) {
 	for (int i = 0; i<n_players; i++)
 	{
 		players[i].stop();
 	}
 	n_players = 0;
 
-	currData = dataset.selectNextRound(forcedId); // better name?
+	currData = dataset.selectNextRound(forcedId, excludeSessionId); // better name?
 
 	for (int i = 0; i<currData.N_OTHERS; i++)
 	{
@@ -137,7 +137,7 @@ void testApp::update(){
 
 				if (selectedUser.distance < stepInThreshold)
 				{
-					setupNextRound();
+					setupNextRound(); // first round
 					roundSelections.clear();
 					state = GOTO_SPOT;
 				}
@@ -302,7 +302,12 @@ void testApp::update(){
 		{
 			if (postSelectionTimer.getCountDown() <= 0) {
 				if (roundSelections.size() < MAX_ROUND_COUNT) {
-					setupNextRound(currData.othersId[selectedUser.hovered]); // keep winner
+					if (roundSelections.size() == MAX_ROUND_COUNT - 1) {
+						setupNextRound(currData.othersId[selectedUser.hovered]); // show self
+					}
+					else {
+						setupNextRound(currData.othersId[selectedUser.hovered], sessionId); // keep winner
+					}
 					selectedUser.reset();
 					state = SELECTION;
 				}

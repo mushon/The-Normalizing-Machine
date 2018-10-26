@@ -151,7 +151,7 @@ private:
 	string sessionId;
 
 	AppTimer postSelectionTimer;
-	void setupNextRound(string forcedId = "");
+	void setupNextRound(string forcedId = "", string excludeSessionId = "");
 	
 
 };

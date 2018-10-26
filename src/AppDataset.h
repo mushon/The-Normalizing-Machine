@@ -14,7 +14,7 @@ public:
 	void saveLibrary(string url);
 	void loadLibrary(string url);
 
-	RecordedData selectNextRound(string forcedId = "");
+	RecordedData selectNextRound(string forcedId = "", string excludeSessionId = "");
 
 private:
 

@@ -58,18 +58,14 @@ bool sortByScoreCount(const RecordedData& lhs, const RecordedData& rhs)
 }
 
 
-RecordedData AppDataset::selectNextRound(string forcedId)
+RecordedData AppDataset::selectNextRound(string forcedId, string excludeSessionId)
 {
 	RecordedData newRecord;
+	int i = 0;
 	
-	// select first
-	if (forcedId.empty()) {
-		// last
-		DataSet::iterator lastIt = std::max_element(dataset.begin(), dataset.end(), sortById); //latest
-		newRecord.othersId[0] = lastIt->id;
-		newRecord.othersPtr[0] = &(*lastIt);
-	} else {
-		// keep forcedId
+	if (!forcedId.empty()) 
+	{
+		// pick forcedId
 		DataSet::iterator forceIt;
 		for (auto it = dataset.begin(); it != dataset.end(); it++) {
 			if (it->id == forcedId) {
@@ -77,19 +73,38 @@ RecordedData AppDataset::selectNextRound(string forcedId)
 				break;
 			}
 		}
-		newRecord.othersId[0] = forceIt->id;
-		newRecord.othersPtr[0] = &(*forceIt);
+		newRecord.othersId[i] = forceIt->id;
+		newRecord.othersPtr[i] = &(*forceIt);
+		i++;
 	}
 
-	// select second
-	DataSet::iterator leastScoredIt = dataset.begin(); // = std::min_element(dataset.begin(), dataset.end(), sortByScoreCount);
+	
+	// pick last selection
+	DataSet::iterator maxIt = dataset.begin();
 	for (auto it = dataset.begin(); it != dataset.end(); it++) {
-		if (it->id != newRecord.othersId[0] && it->scoreCount() < leastScoredIt->scoreCount()) {
-			leastScoredIt = it;
+		if (it->id > maxIt->id &&
+			it->sessionId != excludeSessionId) {
+			maxIt = it;
 		}
 	}
-	newRecord.othersId[1] = leastScoredIt->id;
-	newRecord.othersPtr[1] = &(*leastScoredIt);
+	newRecord.othersId[i] = maxIt->id;
+	newRecord.othersPtr[i] = &(*maxIt);
+	i++;
+
+	if (i < 2) {
+		// pick least scored
+		DataSet::iterator leastScoredIt = dataset.begin(); // = std::min_element(dataset.begin(), dataset.end(), sortByScoreCount);
+		for (auto it = dataset.begin(); it != dataset.end(); it++) {
+			if (it->id != newRecord.othersId[0] &&
+				it->sessionId != excludeSessionId &&
+				it->scoreCount() < leastScoredIt->scoreCount()) {
+				leastScoredIt = it;
+			}
+		}
+		newRecord.othersId[i] = leastScoredIt->id;
+		newRecord.othersPtr[i] = &(*leastScoredIt);
+		i++;
+	}
 
 	if (rand() % 2 == 0) {
 		swap(newRecord.othersId[0], newRecord.othersId[1]);
