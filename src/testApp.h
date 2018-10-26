@@ -47,7 +47,7 @@ private:
 	State state;
 
 	vector<int> roundSelections;
-	const int MAX_ROUND_COUNT = 5;
+	static const int MAX_ROUND_COUNT = 5;
 
 
 	// DB records
@@ -109,6 +109,19 @@ private:
 	ofImage txt_prompt;
 	ofImage txt_toomany;
 
+	
+	ofImage img_arrow_left;
+	ofImage img_face_left;
+	ofImage img_placemark_body;
+	ofImage img_placemark_head;
+	
+	ofImage img_rounds[MAX_ROUND_COUNT + 1]; // r#.png;
+	ofImage img_rounds_active[MAX_ROUND_COUNT + 1]; // r#_active.png;
+	
+	ofImage img_r_left;
+	ofImage img_r_right;
+	ofImage img_record;
+
 	void drawOverheadText(ofImage&, int x, int y, int w);
 
 	void setupGui();
@@ -153,6 +166,10 @@ private:
 	AppTimer postSelectionTimer;
 	void setupNextRound(string forcedId = "", string excludeSessionId = "");
 	
+	void drawRoundSelections();
+	float roundSelectionsScale = 0;
+	float roundSelectionsScaleSmooth = 0;
+	float roundSelectionsSmoothFactor = 0.8f;
 
 };
 

@@ -32,6 +32,20 @@ void testApp::setup() {
 	txt_prompt.loadImage("assets/txt_prompt.png");
 	txt_toomany.loadImage("assets/txt_toomany.png");
 
+	img_arrow_left.loadImage("assets/arrow_left.png");
+	img_face_left.loadImage("assets/face_left.png");
+	img_placemark_body.loadImage("assets/placemark_body.png");
+	img_placemark_head.loadImage("assets/placemark_head.png");
+
+	for (int i = 0; i < MAX_ROUND_COUNT + 1; i++){
+		img_rounds[i].loadImage("assets/r" + to_string(i+1) + ".png");
+		img_rounds_active[i].loadImage("assets/r" + to_string(i+1) + "_active.png");
+	} 
+
+	img_r_left.loadImage("assets/r_left.png");
+	img_r_right.loadImage("assets/r_right.png");
+	img_record.loadImage("assets/record.png");
+
 	ofEnableAlphaBlending();
 
 	setupGui();
@@ -360,39 +374,47 @@ void testApp::update(){
 	if (state == IDLE) {
 		liveFrameScale = 0;
 		playerFrameScale = 0.0f;
+		roundSelectionsScale = 0;
 	}
 	if (state == STEP_IN) {
 		liveFrameScale = 0;
 		playerFrameScale = 0.0f;
+		roundSelectionsScale = 0;
 	}
-
 	if (state == GOTO_SPOT) {
 		liveFrameScale = 1;
 		playerFrameScale = 0.0f;
+		roundSelectionsScale = 0;
 	}
 	if (state == RAISE_HAND) {
 		liveFrameScale = 0.75;
 		playerFrameScale = 1.0f;
+		roundSelectionsScale = 1.0f;
 	}
 	if (state == SELECTION) {
 		liveFrameScale = 0.5;
 		playerFrameScale = 1.0f;
+		roundSelectionsScale = 1.0f;
 	}
 	if (state == SELECTION_POST) {
 		//liveFrameScale = 0.5;
 		playerFrameScale = 0;
+		roundSelectionsScale = 1.0f;
 	}
 	if (state == RESULT) {
 		liveFrameScale = 0;
 		playerFrameScale = 0.0f;
+		roundSelectionsScale = 1.0f;
 	}
 	if (state == PROFILE_CONFIRMED) {
 		liveFrameScale = 0;
 		playerFrameScale = 0.0f;
+		roundSelectionsScale = 0.0f;
 	}
 	if (state == MORE_THAN_ONE) {
 		//liveFrameScale = 0; // do nothing
 		playerFrameScale = 0.0f;
+		roundSelectionsScale = 0.0f;
 	}
 
 	
@@ -411,6 +433,10 @@ void testApp::update(){
 
 	progressSmooth *= progressSmoothFactor;
 	progressSmooth += (1 - progressSmoothFactor) * progress;
+
+	roundSelectionsScaleSmooth *= roundSelectionsSmoothFactor;
+	roundSelectionsScaleSmooth += (1 - roundSelectionsSmoothFactor) * roundSelectionsScale;
+
 
 	for (int i = 0; i < n_players; i++)
 	{
@@ -610,6 +636,45 @@ void testApp::drawPlayers() {
 	ofPopMatrix();	
 }
 //--------------------------------------------------------------
+void testApp::drawRoundSelections(){
+	ofPushMatrix();
+	ofPushStyle();
+	auto prevRectMode = ofGetRectMode();
+	ofSetRectMode(OF_RECTMODE_CORNER);
+
+	int border = 4;
+	int iconWidth = img_rounds[0].getWidth();
+	int totalWidth = (MAX_ROUND_COUNT + 1) * iconWidth + MAX_ROUND_COUNT * border;
+
+	ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
+	ofTranslate(0, getPlayerHeight() / 2 + iconWidth * 1.5);
+	ofScale(roundSelectionsScaleSmooth, roundSelectionsScaleSmooth);
+	ofTranslate(-totalWidth / 2, 0);
+	
+	ofSetColor(255 * roundSelectionsScaleSmooth);
+
+	int currentRound = roundSelections.size();
+	
+	for (int i = 0; i < MAX_ROUND_COUNT + 1; i++) {
+		const ofImage* img;
+		if (i < currentRound) { // previously selected
+			img = (roundSelections[i] == 0) ? &img_r_left : &img_r_right;
+		}
+		else if (i == currentRound) { // current round
+			img = &img_rounds_active[i];
+		}
+		else {
+			img = &img_rounds[i];
+		}
+		img->draw((border + iconWidth) * i, 0);
+	}
+	
+	ofSetRectMode(prevRectMode);
+	ofPopStyle();
+	ofPopMatrix();
+}
+
+
 void testApp::draw(){
 	ofSetRectMode(OF_RECTMODE_CENTER);
 
@@ -619,6 +684,10 @@ void testApp::draw(){
 
 		if (playerFrameScaleSmooth > 0.01) {
 			drawPlayers();
+		}
+		
+		if (roundSelectionsScaleSmooth > 0.01) {
+			drawRoundSelections();
 		}
 		
 		//draw live frame
@@ -657,7 +726,7 @@ void testApp::draw(){
 			ofxProfileSectionPop();
 			ofPopMatrix();
 		}
-
+		
 
 		if (state == SELECTION)
 		{
@@ -675,6 +744,7 @@ void testApp::draw(){
 		{
 			userMessage << "thank you and goodbye";
 		}
+
 	}
 
 	if (drawDepth)
