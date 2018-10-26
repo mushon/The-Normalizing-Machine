@@ -58,120 +58,47 @@ bool sortByScoreCount(const RecordedData& lhs, const RecordedData& rhs)
 }
 
 
-RecordedData AppDataset::selectNextRound()
+RecordedData AppDataset::selectNextRound(string forcedId)
 {
-	return select2();
-}
-
-
-RecordedData AppDataset::select2()
-{
-	// 1 last one
-	// 1 least scored
-
 	RecordedData newRecord;
-
-	DataSet::iterator maxit;
-
-	maxit = std::max_element(dataset.begin(), dataset.end(), sortById); //latest
-	newRecord.othersId[0] = maxit->id;
-	newRecord.othersPtr[0] = &(*maxit);
-
-	DataSet::iterator leastScored1 = std::max_element(dataset.begin(), dataset.end(), sortByScoreCount);
-	DataSet::iterator first = dataset.begin();
-	DataSet::iterator last = dataset.end();
-
-	if (first != last)
-	{
-		while (++first != last)
-		{
-			if (first != maxit && sortByScoreCount(*first, *leastScored1))    // or: if (comp(*first,*smallest)) for version (2)
-				leastScored1 = first;
+	
+	// select first
+	if (forcedId.empty()) {
+		// last
+		DataSet::iterator lastIt = std::max_element(dataset.begin(), dataset.end(), sortById); //latest
+		newRecord.othersId[0] = lastIt->id;
+		newRecord.othersPtr[0] = &(*lastIt);
+	} else {
+		// keep forcedId
+		DataSet::iterator forceIt;
+		for (auto it = dataset.begin(); it != dataset.end(); it++) {
+			if (it->id == forcedId) {
+				forceIt = it;
+				break;
+			}
 		}
+		newRecord.othersId[0] = forceIt->id;
+		newRecord.othersPtr[0] = &(*forceIt);
 	}
 
-	newRecord.othersId[1] = leastScored1->id;
-	newRecord.othersPtr[1] = &(*leastScored1);
+	// select second
+	DataSet::iterator leastScoredIt = dataset.begin(); // = std::min_element(dataset.begin(), dataset.end(), sortByScoreCount);
+	for (auto it = dataset.begin(); it != dataset.end(); it++) {
+		if (it->id != newRecord.othersId[0] && it->scoreCount() < leastScoredIt->scoreCount()) {
+			leastScoredIt = it;
+		}
+	}
+	newRecord.othersId[1] = leastScoredIt->id;
+	newRecord.othersPtr[1] = &(*leastScoredIt);
+
+	if (rand() % 2 == 0) {
+		swap(newRecord.othersId[0], newRecord.othersId[1]);
+		swap(newRecord.othersPtr[0], newRecord.othersPtr[1]);
+	}
 
 	return newRecord;
 }
 
-RecordedData AppDataset::select4() // legacy
-{
-		// 1 last one
-	// 2 least times scored
-	// 1 random
-
-	RecordedData newRecord;
-
-	DataSet::iterator maxit;
-
-	maxit = std::max_element(dataset.begin(), dataset.end(), sortById); //latest
-	newRecord.othersId[0] = maxit->id;
-	newRecord.othersPtr[0] = &(*maxit);
-
-	DataSet::iterator leastScored1 = std::max_element(dataset.begin(), dataset.end(), sortByScoreCount);
-	DataSet::iterator first = dataset.begin();
-	DataSet::iterator last = dataset.end();
-
-	if (first != last)
-	{
-		while (++first != last)
-		{
-			if (first != maxit && sortByScoreCount(*first, *leastScored1))    // or: if (comp(*first,*smallest)) for version (2)
-				leastScored1 = first;
-		}
-	}
-
-
-	DataSet::iterator leastScored2;
-	leastScored2 = std::max_element(dataset.begin(), dataset.end(), sortByScoreCount);
-
-	for (DataSet::iterator it = dataset.begin(); it != dataset.end(); it++)
-	{
-		if (it == maxit)
-			continue;
-
-		if (it == leastScored1)
-			continue;
-
-		if (it->scoreCount() < leastScored2->scoreCount())
-		{
-			leastScored2 = it;
-		}
-	}
-
-
-	newRecord.othersId[1] = leastScored1->id;
-	newRecord.othersId[2] = leastScored2->id;
-
-	newRecord.othersPtr[1] = &(*leastScored1);
-	newRecord.othersPtr[2] = &(*leastScored2);
-
-	//random
-	DataSet::iterator randit = std::min_element(dataset.begin(), dataset.end(), sortById); //first, just as a fallback
-
-	int r = rand() % dataset.size();
-	for (int j = 0; j<r; j++)
-	{
-		randit++;
-	}
-	for (int i = 0; i<dataset.size(); i++)
-	{
-		if (randit == dataset.end())
-			randit = dataset.begin();
-
-		if (randit != maxit && randit != leastScored1 && randit != leastScored2)
-		{
-			break;
-		}
-		randit++;
-	}
-	newRecord.othersId[3] = randit->id;
-	newRecord.othersPtr[3] = &(*randit);
-
-	return newRecord;
-}
 
 
 void AppDataset::updateScores(const RecordedData& data)

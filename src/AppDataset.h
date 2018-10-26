@@ -14,7 +14,7 @@ public:
 	void saveLibrary(string url);
 	void loadLibrary(string url);
 
-	RecordedData selectNextRound();
+	RecordedData selectNextRound(string forcedId = "");
 
 private:
 
