@@ -607,6 +607,7 @@ void testApp::drawPlayers() {
 
 		ofPopMatrix();
 	}
+	ofPopMatrix();	
 }
 //--------------------------------------------------------------
 void testApp::draw(){
@@ -657,7 +658,6 @@ void testApp::draw(){
 			ofPopMatrix();
 		}
 
-		ofPopMatrix();
 
 		if (state == SELECTION)
 		{
