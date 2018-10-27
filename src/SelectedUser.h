@@ -33,9 +33,10 @@ public:
 		AppTimer selectTimer;
 		bool waitForSteady;
 
-		float totalHeight = 0; // distance(head, feet)
-		float torsoLength = 0;// distance(neck, torso)
-		float shouldersWidth = 0; // distance(shoulders)
+		float totalHeight; // distance(head, feet)
+		float headHeight;  // distance(head, neck)
+		float torsoLength; // distance(neck, torso)
+		float shouldersWidth; // distance(shoulders)
 
 
 		SelectedUser() : selectTimer(3000)
@@ -57,6 +58,7 @@ public:
 			waitForSteady = true;
 
 			totalHeight = 0;
+			headHeight = 0;
 			torsoLength = 0;
 			shouldersWidth = 0;
 		}

@@ -295,7 +295,7 @@ void testApp::update(){
 							sessionId = id;
 						}
 						currData.makeSelection(sessionId, id, selectedUser.hovered,
-							selectedUser.totalHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
+							selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
 
 						// info: ALL dataset is saved everytime
 						dataset.saveSession(currData);
@@ -1092,6 +1092,14 @@ void testApp::updateSelectedUser()
 			selectedUser.totalHeight = userHeight;
 		}
 
+		float headHeight = 0;
+		if (neck.positionConfidence >= 0.5) {
+			headHeight = selectedUser.headPoint.distance(neck.positionReal);
+		}
+		if (headHeight > selectedUser.headHeight) {
+			selectedUser.headHeight = headHeight;
+		}
+
 		float torsoLength = 0;
 		if (neck.positionConfidence >= 0.5 && lhip.positionConfidence >= 0.5) {
 			torsoLength = neck.positionReal.distance(lhip.positionReal);
@@ -1112,6 +1120,7 @@ void testApp::updateSelectedUser()
 		}
 
 		userMessage << "user.totalHeight: " << selectedUser.totalHeight << endl;
+		userMessage << "user.headHeight: " << selectedUser.headHeight << endl;
 		userMessage << "user.torsoLength: " << selectedUser.torsoLength << endl;
 		userMessage << "user.shouldersWidth: " << selectedUser.shouldersWidth << endl;
 

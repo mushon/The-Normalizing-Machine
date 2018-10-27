@@ -22,6 +22,7 @@ struct RecordedData
 		xScore = 0;
 
 		totalHeight = 0;
+		headHeight = 0;
 		torsoLength = 0;
 		shouldersWidth = 0;
 	}
@@ -40,6 +41,7 @@ struct RecordedData
 		xScore = v["xScore"].asInt();
 
 		totalHeight = v["totalHeight"].asFloat();
+		headHeight = v["headHeight"].asFloat();
 		torsoLength = v["torsoLength"].asFloat();
 		shouldersWidth = v["shouldersWidth"].asFloat();
 
@@ -47,13 +49,14 @@ struct RecordedData
 
 
 	void makeSelection(string _sessionId, string recordingFilename, int selection,
-		float _totalHeight, float _torsoLength, float _shouldersWidth)
+		float _totalHeight, float _headHeight, float _torsoLength, float _shouldersWidth)
 	{
 		id = recordingFilename;
 		sessionId = _sessionId;
 		othersSelection[selection] = true;
 
 		totalHeight = _totalHeight;
+		headHeight = _headHeight;	
 		torsoLength = _torsoLength;
 		shouldersWidth = _shouldersWidth;
 	}
@@ -76,6 +79,7 @@ struct RecordedData
 		v["xScore"] = xScore;
 
 		v["totalHeight"] = totalHeight;
+		v["headHeight"] = headHeight;
 		v["torsoLength"] = torsoLength;
 		v["shouldersWidth"] = shouldersWidth;
 
@@ -94,6 +98,7 @@ struct RecordedData
 	int xScore;
 
 	float totalHeight;		// distance(head, feet)
+	float headHeight;		// distance(head, neck)
 	float torsoLength;		// distance(neck, torso)
 	float shouldersWidth;	// distance(shoulders)
 
