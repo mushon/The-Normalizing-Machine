@@ -334,18 +334,15 @@ void testApp::update(){
 				// show prompt - look sideways
 				bool b = true; // isFaceLookingSideWays(); // get from camera
 				if (b) {
-					if (session.currentRound() == RecordedData::MAX_ROUND_COUNT)
-					{
-						// save user measurements
-						// currData.saveUserMeasurements(selectedUser); // TODO
-						session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
+					// save user measurements
+					// currData.saveUserMeasurements(selectedUser); // TODO
+					session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
 
-						// info: ALL dataset is saved everytime
-						dataset.updateScores(session);
-						dataset.saveSession(session);
+					// info: ALL dataset is saved everytime
+					dataset.updateScores(session);
+					dataset.saveSession(session);
+					dataset.saveLibrary(recDir + datasetJsonFilename);
 
-						dataset.saveLibrary(recDir + datasetJsonFilename);
-					}
 					state = PROFILE_CONFIRMED;
 				}
 				break;
@@ -546,9 +543,11 @@ void testApp::drawLiveFrame() {
 	//border
 	ofSetColor(ofColor::black);
 	ofFill();
-	ofRect(0, 0, w + 2 * margin / scale, h + 2 * margin / scale);
+	ofRect(0, 0, w + 2 * margin / scale, h + 2 * margin / scale);	
 
 	appRecorder.drawImageSubsection(w, h, 0, 0);
+	
+	img_record.draw((img_record.getWidth() + margin - w) / 2 , (img_record.getHeight() + margin - h) / 2); // top left
 	ofPopMatrix();
 }
 
