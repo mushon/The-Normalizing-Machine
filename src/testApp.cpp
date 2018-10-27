@@ -152,6 +152,7 @@ void testApp::update(){
 				if (selectedUser.distance < stepInThreshold)
 				{
 					setupNextRound(); // first round
+					sessionId = appRecorder.getLastFilename();
 					roundSelections.clear();
 					state = GOTO_SPOT;
 				}
@@ -289,12 +290,7 @@ void testApp::update(){
 						appRecorder.stop();
 						ofSleepMillis(100); // seems like it's fixed
 
-						string id = appRecorder.getLastFilename();
-
-						if (roundSelections.size() == 0) {
-							sessionId = id;
-						}
-						currData.makeSelection(sessionId, id, selectedUser.hovered,
+						currData.makeSelection(sessionId, sessionId, selectedUser.hovered,
 							selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
 
 						// info: ALL dataset is saved everytime
@@ -304,9 +300,10 @@ void testApp::update(){
 						ofSleepMillis(100); // seems like it's fixed
 
 						roundSelections.push_back(selectedUser.hovered);
-						state = SELECTION_POST;
+
 						postSelectionTimer.setTimeout(1000); 
 						postSelectionTimer.reset();
+						state = SELECTION_POST;
 					}
 
 				}
@@ -983,7 +980,7 @@ void testApp::drawDebugText()
 	stringstream msg;
 	msg
 		<< "F: Fullscreen" << endl
-		<< "s : start/stop recording: " << (appRecorder.isOn() ? "RECORDING" : "READY") << endl
+		<< "s : start/stop recording: " << (appRecorder.IsRecording() ? "RECORDING" : "READY") << endl
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 		<< "State : " << AppState::toString(state) << endl

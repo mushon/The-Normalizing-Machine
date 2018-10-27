@@ -28,7 +28,7 @@ public:
 
 	int countVisibleUsers();
 
-	bool isOn() { return isRecording; }
+	bool IsRecording() { return isRecording; }
 	string getLastFilename() { return lastFilename; }
 
 private:

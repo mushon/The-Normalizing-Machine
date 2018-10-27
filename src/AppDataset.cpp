@@ -42,7 +42,7 @@ void AppDataset::loadLibrary(string url)
 	for (unsigned int i = 0; i < datasetJson.size(); ++i)
 	{
 		Json::Value v = datasetJson[i];
-		string id = v["id"].asString();
+		// string id = v["id"].asString();
 		dataset.push_back(RecordedData(v));
 	}
 }

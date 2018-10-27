@@ -27,7 +27,4 @@ private:
 
 	void updateScores(const RecordedData& data);
 
-	RecordedData select2(); 
-	RecordedData select4(); // legacy
-	
 };

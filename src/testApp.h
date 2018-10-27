@@ -15,6 +15,7 @@
 #include "AppRecorder.h"
 #include "AppDataset.h"
 
+
 class testApp : public ofBaseApp{
 
 public:
@@ -46,13 +47,15 @@ private:
 
 	State state;
 
+	// session
 	vector<int> roundSelections;
 	static const int MAX_ROUND_COUNT = 5;
+	string sessionId;
+	RecordedData currData;
 
 
 	// DB records
 	AppDataset dataset;
-	RecordedData currData;
 	string datasetJsonFilename;
 
 	// Video records
@@ -160,8 +163,6 @@ private:
 	float getPlayerHeight() {
 		return 480; // (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
 	}
-
-	string sessionId;
 
 	AppTimer postSelectionTimer;
 	void setupNextRound(string forcedId = "", string excludeSessionId = "");
