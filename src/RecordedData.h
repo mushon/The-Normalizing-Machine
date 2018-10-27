@@ -21,6 +21,9 @@ struct RecordedData
 		vScore = 0;
 		xScore = 0;
 
+		totalHeight = 0;
+		torsoLength = 0;
+		shouldersWidth = 0;
 	}
 
 	RecordedData(Json::Value v)
@@ -35,14 +38,24 @@ struct RecordedData
 		}
 		vScore = v["vScore"].asInt();
 		xScore = v["xScore"].asInt();
+
+		totalHeight = v["totalHeight"].asFloat();
+		torsoLength = v["torsoLength"].asFloat();
+		shouldersWidth = v["shouldersWidth"].asFloat();
+
 	}
 
 
-	void makeSelection(string _sessionId, string recordingFilename, int selection)
+	void makeSelection(string _sessionId, string recordingFilename, int selection,
+		float _totalHeight, float _torsoLength, float _shouldersWidth)
 	{
 		id = recordingFilename;
 		sessionId = _sessionId;
 		othersSelection[selection] = true;
+
+		totalHeight = _totalHeight;
+		torsoLength = _torsoLength;
+		shouldersWidth = _shouldersWidth;
 	}
 
 	Json::Value toJson()
@@ -62,6 +75,10 @@ struct RecordedData
 		v["vScore"] = vScore;
 		v["xScore"] = xScore;
 
+		v["totalHeight"] = totalHeight;
+		v["torsoLength"] = torsoLength;
+		v["shouldersWidth"] = shouldersWidth;
+
 		return v;
 	}
 
@@ -75,6 +92,10 @@ struct RecordedData
 	int scoreCount() const { return vScore + xScore; }
 	int vScore; //how many scored you. to be updated globally
 	int xScore;
+
+	float totalHeight;		// distance(head, feet)
+	float torsoLength;		// distance(neck, torso)
+	float shouldersWidth;	// distance(shoulders)
 
 	// time, file, location, selection v/x
 	// string location;

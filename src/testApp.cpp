@@ -294,7 +294,8 @@ void testApp::update(){
 						if (roundSelections.size() == 0) {
 							sessionId = id;
 						}
-						currData.makeSelection(sessionId, id, selectedUser.hovered);
+						currData.makeSelection(sessionId, id, selectedUser.hovered,
+							selectedUser.totalHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
 
 						// info: ALL dataset is saved everytime
 						dataset.saveSession(currData);
@@ -1071,7 +1072,51 @@ void testApp::updateSelectedUser()
 		ofxOpenNIJoint rsj = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
 		ofxOpenNIJoint lhj = u.getJoints().at(nite::JointType::JOINT_LEFT_HAND);
 		ofxOpenNIJoint lsj = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
-		
+
+
+		ofxOpenNIJoint neck = u.getJoints().at(nite::JointType::JOINT_NECK);
+		ofxOpenNIJoint lhip= u.getJoints().at(nite::JointType::JOINT_LEFT_HIP);
+		ofxOpenNIJoint rhip = u.getJoints().at(nite::JointType::JOINT_RIGHT_HIP);
+		ofxOpenNIJoint lfoot = u.getJoints().at(nite::JointType::JOINT_LEFT_FOOT);
+		ofxOpenNIJoint rfoot = u.getJoints().at(nite::JointType::JOINT_RIGHT_FOOT);
+
+		// update body measurements
+		float userHeight = 0;
+		if (rfoot.positionConfidence >= 0.5) {
+			userHeight = selectedUser.headPoint.distance(rfoot.positionReal);
+		}
+		else if (lfoot.positionConfidence >= 0.5) {
+			userHeight = selectedUser.headPoint.distance(lfoot.positionReal);
+		}
+		if (userHeight > selectedUser.totalHeight) {
+			selectedUser.totalHeight = userHeight;
+		}
+
+		float torsoLength = 0;
+		if (neck.positionConfidence >= 0.5 && lhip.positionConfidence >= 0.5) {
+			torsoLength = neck.positionReal.distance(lhip.positionReal);
+		}
+		else if (neck.positionConfidence >= 0.5 && rhip.positionConfidence >= 0.5) {
+			torsoLength = neck.positionReal.distance(rhip.positionReal);
+		}
+		if (torsoLength > selectedUser.torsoLength) {
+			selectedUser.torsoLength = torsoLength;
+		}
+
+		float shouldersWidth = 0;
+		if (rsj.positionConfidence >= 0.5 && lsj.positionConfidence >= 0.5) {
+			shouldersWidth = rsj.positionReal.distance(lsj.positionReal);
+		}
+		if (shouldersWidth > selectedUser.shouldersWidth) {
+			selectedUser.shouldersWidth = shouldersWidth;
+		}
+
+		userMessage << "user.totalHeight: " << selectedUser.totalHeight << endl;
+		userMessage << "user.torsoLength: " << selectedUser.torsoLength << endl;
+		userMessage << "user.shouldersWidth: " << selectedUser.shouldersWidth << endl;
+
+
+
 		bool updateLeftArm = lhj.positionConfidence >= 0.5 && lsj.positionConfidence >= 0.5;
 		bool updateRightArm = rhj.positionConfidence >= 0.5 && rsj.positionConfidence >= 0.5;
 		

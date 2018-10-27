@@ -33,6 +33,11 @@ public:
 		AppTimer selectTimer;
 		bool waitForSteady;
 
+		float totalHeight = 0; // distance(head, feet)
+		float torsoLength = 0;// distance(neck, torso)
+		float shouldersWidth = 0; // distance(shoulders)
+
+
 		SelectedUser() : selectTimer(3000)
 		{
 			id = NO_USER;
@@ -50,6 +55,10 @@ public:
 
 			selectTimer.reset();
 			waitForSteady = true;
+
+			totalHeight = 0;
+			torsoLength = 0;
+			shouldersWidth = 0;
 		}
 
 		void update()
