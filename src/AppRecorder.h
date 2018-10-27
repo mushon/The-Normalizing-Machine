@@ -11,8 +11,8 @@ public:
 
 	ofxOpenNI openNIRecorder;
 
-	void setup(string _filename = "");
-	void start(string recDir);
+	void setup();
+	void start(string recDir, string filename, string ext = ".oni");
 	void update();
 	void stop();
 	void abort();

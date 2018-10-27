@@ -9,22 +9,24 @@ class AppDataset
 
 public:
 
-	void saveSession(const RecordedData& record);
+	void saveSession(const RecordedData& session);
+	void updateScores(const RecordedData& session);
 
 	void saveLibrary(string url);
 	void loadLibrary(string url);
 
-	RecordedData selectNextRound(string forcedId = "", string excludeSessionId = "");
+	vector<string> selectNextRound(string forcedId = "", string excludeSessionId = "");
+
+	
 
 private:
 
-	typedef list<RecordedData> DataSet;
+	typedef map<string, RecordedData> DataSet;
 	DataSet dataset; // the whole shablang
 	ofxJSONElement datasetJson;
 
 	// on startup, find dirs (xml?)
 	// load recordings
 
-	void updateScores(const RecordedData& data);
 
 };

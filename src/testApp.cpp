@@ -37,7 +37,7 @@ void testApp::setup() {
 	img_placemark_body.loadImage("assets/placemark_body.png");
 	img_placemark_head.loadImage("assets/placemark_head.png");
 
-	for (int i = 0; i < MAX_ROUND_COUNT + 1; i++){
+	for (int i = 0; i < RecordedData::MAX_ROUND_COUNT + 1; i++){
 		img_rounds[i].loadImage("assets/r" + to_string(i+1) + ".png");
 		img_rounds_active[i].loadImage("assets/r" + to_string(i+1) + "_active.png");
 	} 
@@ -77,11 +77,13 @@ void testApp::setupNextRound(string forcedId, string excludeSessionId) {
 	}
 	n_players = 0;
 
-	currData = dataset.selectNextRound(forcedId, excludeSessionId); // better name?
+	vector<string> nextIds = dataset.selectNextRound(forcedId, excludeSessionId); // better name?
+	session.setupNextRound(nextIds);
 
-	for (int i = 0; i<currData.N_OTHERS; i++)
+	for (int i = 0; i<session.N_OTHERS; i++)
 	{
-		setupPlayback(recDir + currData.othersId[i]);
+		int r = session.currentRound();
+		setupPlayback(recDir + session.othersId[r][i]);
 	}
 }
 
@@ -151,9 +153,9 @@ void testApp::update(){
 
 				if (selectedUser.distance < stepInThreshold)
 				{
+					session = RecordedData();
+					session.id = generateFileName();
 					setupNextRound(); // first round
-					sessionId = appRecorder.getLastFilename();
-					roundSelections.clear();
 					state = GOTO_SPOT;
 				}
 				break;
@@ -272,34 +274,29 @@ void testApp::update(){
 						appRecorder.abort();
 					}
 
-
-					if (selectedUser.selectTimer.getCountDown() < 2000)
-					{
-						appRecorder.start(recDir);
+					if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 2) { // one before last round
+						if (selectedUser.selectTimer.getCountDown() < 2000)
+						{
+							appRecorder.start(recDir, session.id);
+						}
 					}
 
 					//TODO select mechanism (click/timeout)
 					
-					for (int i = 0; i < roundSelections.size(); i++) {
-						userMessage << "roundCount: " << i << ": " << roundSelections[i] << endl;
+					for (int i = 0; i < session.currentRound(); i++) {
+						userMessage << "roundCount: " << i << ": " << session.roundSelections[i] << endl;
 					}
 
 					bool selected = (selectedUser.selectTimer.getCountDown() == 0);
 					if(selected)
 					{
-						appRecorder.stop();
-						ofSleepMillis(100); // seems like it's fixed
+						// add vote
+						session.makeSelection(selectedUser.hovered);
 
-						currData.makeSelection(sessionId, sessionId, selectedUser.hovered,
-							selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
-
-						// info: ALL dataset is saved everytime
-						dataset.saveSession(currData);
-						dataset.saveLibrary(recDir + datasetJsonFilename);
-
-						ofSleepMillis(100); // seems like it's fixed
-
-						roundSelections.push_back(selectedUser.hovered);
+						if (appRecorder.IsRecording()) {
+							appRecorder.stop();
+							ofSleepMillis(100); // seems like it's fixed
+						}
 
 						postSelectionTimer.setTimeout(1000); 
 						postSelectionTimer.reset();
@@ -313,12 +310,13 @@ void testApp::update(){
 		case SELECTION_POST:
 		{
 			if (postSelectionTimer.getCountDown() <= 0) {
-				if (roundSelections.size() < MAX_ROUND_COUNT) {
-					if (roundSelections.size() == MAX_ROUND_COUNT - 1) {
-						setupNextRound(currData.othersId[selectedUser.hovered]); // show self
+				int r = session.currentRound();
+				if (r < RecordedData::MAX_ROUND_COUNT) {
+					if (r == RecordedData::MAX_ROUND_COUNT - 1) {
+						setupNextRound(session.othersId[r][selectedUser.hovered]); // keep winner + show self
 					}
 					else {
-						setupNextRound(currData.othersId[selectedUser.hovered], sessionId); // keep winner
+						setupNextRound(session.othersId[r][selectedUser.hovered], session.id); // keep winner, exclude self
 					}
 					selectedUser.reset();
 					state = SELECTION;
@@ -336,6 +334,18 @@ void testApp::update(){
 				// show prompt - look sideways
 				bool b = true; // isFaceLookingSideWays(); // get from camera
 				if (b) {
+					if (session.currentRound() == RecordedData::MAX_ROUND_COUNT)
+					{
+						// save user measurements
+						// currData.saveUserMeasurements(selectedUser); // TODO
+						session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
+
+						// info: ALL dataset is saved everytime
+						dataset.updateScores(session);
+						dataset.saveSession(session);
+
+						dataset.saveLibrary(recDir + datasetJsonFilename);
+					}
 					state = PROFILE_CONFIRMED;
 				}
 				break;
@@ -574,17 +584,6 @@ void testApp::drawIconAnimations(int i) {
 	}
 }
 
-void testApp::drawTotalScore(int i) {
-	RecordedData* other = currData.othersPtr[i];
-
-	for (int j = 0; j<other->scoreCount(); j++)
-	{
-		int iconSpacing = 5;
-		ofImage& icon = (j < other->vScore) ? yesIcon20 : noIcon20;
-		icon.draw(
-			(-(other->scoreCount() - 1) / 2 + j) * (icon.getWidth() + iconSpacing), 0);
-	}
-}
 
 void testApp::drawPlayers() {
 	ofPushMatrix();
@@ -642,7 +641,7 @@ void testApp::drawRoundSelections(){
 
 	int border = 4;
 	int iconWidth = img_rounds[0].getWidth();
-	int totalWidth = (MAX_ROUND_COUNT + 1) * iconWidth + MAX_ROUND_COUNT * border;
+	int totalWidth = (RecordedData::MAX_ROUND_COUNT + 1) * iconWidth + RecordedData::MAX_ROUND_COUNT * border;
 
 	ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 	ofTranslate(0, getPlayerHeight() / 2 + iconWidth * 1.5);
@@ -651,12 +650,12 @@ void testApp::drawRoundSelections(){
 	
 	ofSetColor(255 * roundSelectionsScaleSmooth);
 
-	int currentRound = roundSelections.size();
+	int currentRound = session.currentRound();
 	
-	for (int i = 0; i < MAX_ROUND_COUNT + 1; i++) {
+	for (int i = 0; i < RecordedData::MAX_ROUND_COUNT + 1; i++) {
 		const ofImage* img;
 		if (i < currentRound) { // previously selected
-			img = (roundSelections[i] == 0) ? &img_r_left : &img_r_right;
+			img = (session.roundSelections[i] == 0) ? &img_r_left : &img_r_right;
 		}
 		else if (i == currentRound) { // current round
 			img = &img_rounds_active[i];
@@ -778,7 +777,7 @@ void testApp::keyPressed(int key){
 		appRecorder.stop();
 		break;
 	case 'S':
-		appRecorder.start(recDir);
+		appRecorder.start(recDir, generateFileName());
 		break;
 
 	case 'F':
@@ -988,8 +987,8 @@ void testApp::drawDebugText()
 		<< "User Message: " << userMessage.str() << endl
 		;
 
-	for (int i = 0; i < currData.N_OTHERS; i++) {
-		msg << "#" << i << ": " << currData.othersId[i] << endl;
+	for (int i = 0; i < session.N_OTHERS; i++) {
+		msg << "#" << i << ": " << session.othersId[session.currentRound()][i] << endl;
 	}
 
 	ofDrawBitmapString(msg.str(), 220, 200);
@@ -1149,4 +1148,10 @@ void testApp::updateSelectedUser()
 		}
 		
 	}
+}
+
+string testApp::generateFileName() {
+	string timeFormat = "%Y_%m_%d_%H_%M_%S_%i";
+	string name = ofGetTimestampString(timeFormat);
+	return name;
 }

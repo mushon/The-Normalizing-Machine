@@ -1,118 +1,126 @@
 [
    {
+      "headHeight" : 250,
       "id" : "test1.oni",
       "others" : [
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : true
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         }
+         [
+            {
+               "id" : "test1.oni",
+               "selection" : false
+            },
+            {
+               "id" : "test2.oni",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "test1.oni",
+               "selection" : false
+            },
+            {
+               "id" : "test2.oni",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "test1.oni",
+               "selection" : false
+            },
+            {
+               "id" : "test2.oni",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "test1.oni",
+               "selection" : false
+            },
+            {
+               "id" : "test2.oni",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "test1.oni",
+               "selection" : false
+            },
+            {
+               "id" : "test2.oni",
+               "selection" : true
+            }
+         ]
       ],
+      "shouldersWidth" : 300,
+      "torsoLength" : 500,
+      "totalHeight" : 1700,
       "vScore" : 5,
-      "xScore" : 16
+      "xScore" : 5
    },
    {
-      "id" : "test1.oni",
+      "headHeight" : 250,
+      "id" : "test2.oni",
       "others" : [
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : true
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         }
+         [
+            {
+               "id" : "test1.oni",
+               "selection" : false
+            },
+            {
+               "id" : "test2.oni",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "test1.oni",
+               "selection" : false
+            },
+            {
+               "id" : "test2.oni",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "test1.oni",
+               "selection" : false
+            },
+            {
+               "id" : "test2.oni",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "test1.oni",
+               "selection" : false
+            },
+            {
+               "id" : "test2.oni",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "test1.oni",
+               "selection" : false
+            },
+            {
+               "id" : "test2.oni",
+               "selection" : true
+            }
+         ]
       ],
-      "vScore" : 8,
-      "xScore" : 11
-   },
-   {
-      "id" : "test1.oni",
-      "others" : [
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : true
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         }
-      ],
+      "shouldersWidth" : 300,
+      "torsoLength" : 500,
+      "totalHeight" : 1700,
       "vScore" : 5,
-      "xScore" : 13
-   },
-   {
-      "id" : "test1.oni",
-      "others" : [
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : true
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         }
-      ],
-      "vScore" : 5,
-      "xScore" : 12
-   },
-   {
-      "id" : "test1.oni",
-      "others" : [
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : false
-         },
-         {
-            "id" : "test1.oni",
-            "selection" : true
-         }
-      ],
-      "vScore" : 0,
-      "xScore" : 0
+      "xScore" : 5
    }
 ]
+
 

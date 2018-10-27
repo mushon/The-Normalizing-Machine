@@ -1,13 +1,6 @@
 #include "AppRecorder.h"
 
-string generateFileName() {
-	string timeFormat = "%Y_%m_%d_%H_%M_%S_%i";
-	string name = ofGetTimestampString(timeFormat);
-	string filename = (name + ".oni");
-	return filename;
-}
-
-void AppRecorder::setup(string _filename)
+void AppRecorder::setup()
 {
 	isRecording = false;
 
@@ -19,14 +12,13 @@ void AppRecorder::setup(string _filename)
 	openNIRecorder.start();
 }
 
-void AppRecorder::start(string recDir)
+void AppRecorder::start(string recDir, string filename, string ext)
 {
 	if (!isRecording)
 	{
 		isRecording = true;
-		lastFilename = generateFileName();
-		ofLogNotice("startRecording") << recDir + lastFilename;
-		openNIRecorder.startRecording(recDir + lastFilename);
+		ofLogNotice("startRecording") << recDir + filename + ext;
+		openNIRecorder.startRecording(recDir + filename + ext);
 		ofLogNotice("startRecording") << "OK";
 	}
 }
@@ -42,7 +34,7 @@ void AppRecorder::stop()
 {
 	if (isRecording)
 	{
-		ofLogNotice("") << "stopRecording: " << lastFilename << endl;
+		ofLogNotice("") << "stopRecording: " << endl;
 		openNIRecorder.stopRecording();
 		ofLogNotice("") << "stopRecording: " << "OK" << endl;
 		isRecording = false;
@@ -53,9 +45,12 @@ void AppRecorder::stop()
 
 void AppRecorder::abort()
 {
-	ofLogNotice("") << "abortRecording: " << lastFilename << endl;
-	stop();
-	//delete file?
+	if (isRecording)
+	{
+		ofLogNotice("") << "abortRecording: " << endl;
+		stop();
+		//delete file?
+	}
 }
 
 

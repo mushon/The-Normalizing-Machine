@@ -48,10 +48,7 @@ private:
 	State state;
 
 	// session
-	vector<int> roundSelections;
-	static const int MAX_ROUND_COUNT = 5;
-	string sessionId;
-	RecordedData currData;
+	RecordedData session;
 
 
 	// DB records
@@ -61,6 +58,7 @@ private:
 	// Video records
 	AppRecorder appRecorder;
 	string recDir;
+	string generateFileName();
 
 	// Video player
 	void setupPlayback(string _filename);
@@ -118,8 +116,8 @@ private:
 	ofImage img_placemark_body;
 	ofImage img_placemark_head;
 	
-	ofImage img_rounds[MAX_ROUND_COUNT + 1]; // r#.png;
-	ofImage img_rounds_active[MAX_ROUND_COUNT + 1]; // r#_active.png;
+	ofImage img_rounds[RecordedData::MAX_ROUND_COUNT + 1]; // r#.png;
+	ofImage img_rounds_active[RecordedData::MAX_ROUND_COUNT + 1]; // r#_active.png;
 	
 	ofImage img_r_left;
 	ofImage img_r_right;

@@ -1,10 +1,9 @@
 #include "AppDataSet.h"
 
 
-void AppDataset::saveSession(const RecordedData& record)
+void AppDataset::saveSession(const RecordedData& session)
 {
-	dataset.push_back(record);
-	updateScores(record);
+	dataset[session.id] = session;
 }
 
 void AppDataset::saveLibrary(string url)
@@ -14,9 +13,9 @@ void AppDataset::saveLibrary(string url)
 	ofxJSONElement json;
 	for (DataSet::iterator it = dataset.begin(); it != dataset.end(); it++)
 	{
-		if (it->id != "")
+		if (it->first != "")
 		{
-			json.append(it->toJson());
+			json.append(it->second.toJson());
 		}
 	}
 
@@ -42,8 +41,8 @@ void AppDataset::loadLibrary(string url)
 	for (unsigned int i = 0; i < datasetJson.size(); ++i)
 	{
 		Json::Value v = datasetJson[i];
-		// string id = v["id"].asString();
-		dataset.push_back(RecordedData(v));
+		string id = v["id"].asString();
+		dataset[id] = (RecordedData(v));
 	}
 }
 
@@ -58,77 +57,64 @@ bool sortByScoreCount(const RecordedData& lhs, const RecordedData& rhs)
 }
 
 
-RecordedData AppDataset::selectNextRound(string forcedId, string excludeSessionId)
+vector<string> AppDataset::selectNextRound(string forcedId, string excludeSessionId)
 {
-	RecordedData newRecord;
-	int i = 0;
+	vector<string> newRound;
 	
 	if (!forcedId.empty()) 
 	{
 		// pick forcedId
-		DataSet::iterator forceIt;
-		for (auto it = dataset.begin(); it != dataset.end(); it++) {
-			if (it->id == forcedId) {
-				forceIt = it;
-				break;
-			}
-		}
-		newRecord.othersId[i] = forceIt->id;
-		newRecord.othersPtr[i] = &(*forceIt);
-		i++;
+		newRound.push_back(forcedId);
 	}
 
 	
 	// pick last selection
 	DataSet::iterator maxIt = dataset.begin();
 	for (auto it = dataset.begin(); it != dataset.end(); it++) {
-		if (it->id > maxIt->id &&
-			it->sessionId != excludeSessionId) {
+		if (it->first > maxIt->first &&
+			it->first != excludeSessionId) {
 			maxIt = it;
 		}
 	}
-	newRecord.othersId[i] = maxIt->id;
-	newRecord.othersPtr[i] = &(*maxIt);
-	i++;
+	newRound.push_back(maxIt->first);
 
-	if (i < 2) {
+	if (newRound.size() < RecordedData::N_OTHERS) {
 		// pick least scored
 		DataSet::iterator leastScoredIt = dataset.begin(); // = std::min_element(dataset.begin(), dataset.end(), sortByScoreCount);
 		for (auto it = dataset.begin(); it != dataset.end(); it++) {
-			if (it->id != newRecord.othersId[0] &&
-				it->sessionId != excludeSessionId &&
-				it->scoreCount() < leastScoredIt->scoreCount()) {
+			if (it->first != newRound[0] &&
+				it->first != excludeSessionId &&
+				it->second.scoreCount() < leastScoredIt->second.scoreCount()) {
 				leastScoredIt = it;
 			}
 		}
-		newRecord.othersId[i] = leastScoredIt->id;
-		newRecord.othersPtr[i] = &(*leastScoredIt);
-		i++;
+		newRound.push_back(leastScoredIt->first);
 	}
 
 	if (rand() % 2 == 0) {
-		swap(newRecord.othersId[0], newRecord.othersId[1]);
-		swap(newRecord.othersPtr[0], newRecord.othersPtr[1]);
+		swap(newRound[0], newRound[1]);
 	}
 
-	return newRecord;
+	return newRound;
 }
 
 
-
-void AppDataset::updateScores(const RecordedData& data)
+void AppDataset::updateScores(const RecordedData& session)
 {
-	for (int i = 0; i < 2; i++)  // TODO FIXME
+	for (int r = 0; r < RecordedData::MAX_ROUND_COUNT; r++)  // TODO FIXME
 	{
-		RecordedData* other = data.othersPtr[i];
+		for (int i = 0; i < RecordedData::N_OTHERS; i++)  // TODO FIXME
+		{
+			RecordedData& other = dataset[session.othersId[r][i]];
 
-		if (data.othersSelection[i])
-		{
-			other->vScore++;
-		}
-		else
-		{
-			other->xScore++;
+			if (session.othersSelection[r][i])
+			{
+				other.vScore++;
+			}
+			else
+			{
+				other.xScore++;
+			}
 		}
 	}
 }

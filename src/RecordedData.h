@@ -6,37 +6,41 @@ struct RecordedData
 {
 
 	static const int N_OTHERS = 2;
+	static const int MAX_ROUND_COUNT = 5;
+
 	RecordedData()
 	{
-		sessionId = "";
 		id = "";
-
-		for (int i = 0; i < N_OTHERS; i++)
-		{
-			othersId[i] = "";
-			othersSelection[i] = false;
-			othersPtr[i] = NULL;
+		
+		for (int r = 0; r < MAX_ROUND_COUNT; r++) {	
+			for (int i = 0; i < N_OTHERS; i++)
+			{
+				othersId[r][i] = "";
+				othersSelection[r][i] = false;
+			}
 		}
-
-		vScore = 0;
-		xScore = 0;
 
 		totalHeight = 0;
 		headHeight = 0;
 		torsoLength = 0;
 		shouldersWidth = 0;
+
+		vScore = 0;
+		xScore = 0;
 	}
 
 	RecordedData(Json::Value v)
 	{
 		id = v["id"].asString();
-		sessionId = v["sessionId"].asString();
-
-		for (int i = 0; i < N_OTHERS; i++)
-		{
-			othersId[i] = v["others"][i]["id"].asString();
-			othersSelection[i] = v["others"][i]["selection"].asBool();
+		
+		for (int r = 0; r < MAX_ROUND_COUNT; r++) {
+			for (int i = 0; i < N_OTHERS; i++)
+			{
+				othersId[r][i] = v["others"][r][i]["id"].asString();
+				othersSelection[r][i] = v["others"][r][i]["selection"].asBool();
+			}
 		}
+
 		vScore = v["vScore"].asInt();
 		xScore = v["xScore"].asInt();
 
@@ -47,32 +51,20 @@ struct RecordedData
 
 	}
 
-
-	void makeSelection(string _sessionId, string recordingFilename, int selection,
-		float _totalHeight, float _headHeight, float _torsoLength, float _shouldersWidth)
-	{
-		id = recordingFilename;
-		sessionId = _sessionId;
-		othersSelection[selection] = true;
-
-		totalHeight = _totalHeight;
-		headHeight = _headHeight;	
-		torsoLength = _torsoLength;
-		shouldersWidth = _shouldersWidth;
-	}
-
 	Json::Value toJson()
 	{
 		Json::Value v;
 		v["id"] = id;
-		v["sessionId"] = sessionId;
 
-		for (int i = 0; i < N_OTHERS; i++)
-		{
-			Json::Value other;
-			other["id"] = othersId[i];
-			other["selection"] = othersSelection[i];
-			v["others"].append(other);
+		for (int r = 0; r < MAX_ROUND_COUNT; r++) {
+			Json::Value round;
+			for (int i = 0; i < N_OTHERS; i++) {
+				Json::Value other;
+				other["id"] = othersId[r][i];
+				other["selection"] = othersSelection[r][i];
+				round.append(other);
+			}
+			v["others"].append(round);
 		}
 
 		v["vScore"] = vScore;
@@ -87,12 +79,41 @@ struct RecordedData
 	}
 
 
-	string id; //timestamp: ofGetTimestampString returns in this format: 2011-01-15-18-29-35-299
-	string sessionId; // id is for one selection. this points to the first id
-	string othersId[N_OTHERS];
-	bool othersSelection[N_OTHERS];
-	RecordedData* othersPtr[N_OTHERS];
+	void makeSelection(int selection)
+	{
+		int r = currentRound();
+		othersSelection[r][selection] = true;
+		roundSelections.push_back(selection);
+	}
 
+
+	void saveUserMeasurements(float _totalHeight, float _headHeight, float _torsoLength, float _shouldersWidth)
+	{
+		totalHeight = _totalHeight;
+		headHeight = _headHeight;
+		torsoLength = _torsoLength;
+		shouldersWidth = _shouldersWidth;
+	}
+
+	void setupNextRound(vector<string> nextIds) {
+		int r = currentRound();
+		for (int i = 0; i < nextIds.size(); i++) {
+			othersId[r][i] = nextIds[i];
+		}
+	}
+
+	int currentRound() {
+		return roundSelections.size();
+	}
+
+	string id; //timestamp: ofGetTimestampString returns in this format: 2011-01-15-18-29-35-299
+	string othersId[MAX_ROUND_COUNT][N_OTHERS];
+	bool othersSelection[MAX_ROUND_COUNT][N_OTHERS];
+	vector<int> roundSelections;
+
+	float getScore() const { 
+		return vScore / (vScore + xScore + 1);
+	}
 	int scoreCount() const { return vScore + xScore; }
 	int vScore; //how many scored you. to be updated globally
 	int xScore;
@@ -101,6 +122,7 @@ struct RecordedData
 	float headHeight;		// distance(head, neck)
 	float torsoLength;		// distance(neck, torso)
 	float shouldersWidth;	// distance(shoulders)
+
 
 	// time, file, location, selection v/x
 	// string location;
