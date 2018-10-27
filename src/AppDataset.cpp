@@ -57,33 +57,38 @@ bool sortByScoreCount(const RecordedData& lhs, const RecordedData& rhs)
 }
 
 
-vector<string> AppDataset::selectNextRound(string forcedId, string excludeSessionId)
+vector<string> AppDataset::selectNextRound(string forcedId, string forcedId2)
 {
 	vector<string> newRound;
 	
-	if (!forcedId.empty()) 
+	if (!forcedId.empty())
 	{
 		// pick forcedId
 		newRound.push_back(forcedId);
 	}
 
-	
-	// pick last selection
-	DataSet::iterator maxIt = dataset.begin();
-	for (auto it = dataset.begin(); it != dataset.end(); it++) {
-		if (it->first > maxIt->first &&
-			it->first != excludeSessionId) {
-			maxIt = it;
-		}
+	if (!forcedId2.empty())
+	{
+		// pick forcedId
+		newRound.push_back(forcedId2);
 	}
-	newRound.push_back(maxIt->first);
+
+	if (newRound.size() < RecordedData::N_OTHERS) {
+		// pick last selection
+		DataSet::iterator maxIt = dataset.begin();
+		for (auto it = dataset.begin(); it != dataset.end(); it++) {
+			if (it->first > maxIt->first) {
+				maxIt = it;
+			}
+		}
+		newRound.push_back(maxIt->first);
+	}
 
 	if (newRound.size() < RecordedData::N_OTHERS) {
 		// pick least scored
 		DataSet::iterator leastScoredIt = dataset.begin(); // = std::min_element(dataset.begin(), dataset.end(), sortByScoreCount);
 		for (auto it = dataset.begin(); it != dataset.end(); it++) {
 			if (it->first != newRound[0] &&
-				it->first != excludeSessionId &&
 				it->second.scoreCount() < leastScoredIt->second.scoreCount()) {
 				leastScoredIt = it;
 			}
@@ -101,9 +106,9 @@ vector<string> AppDataset::selectNextRound(string forcedId, string excludeSessio
 
 void AppDataset::updateScores(const RecordedData& session)
 {
-	for (int r = 0; r < RecordedData::MAX_ROUND_COUNT; r++)  // TODO FIXME
+	for (int r = 0; r < RecordedData::MAX_ROUND_COUNT; r++)
 	{
-		for (int i = 0; i < RecordedData::N_OTHERS; i++)  // TODO FIXME
+		for (int i = 0; i < RecordedData::N_OTHERS; i++)
 		{
 			RecordedData& other = dataset[session.othersId[r][i]];
 

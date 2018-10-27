@@ -170,6 +170,8 @@ private:
 	float roundSelectionsScaleSmooth = 0;
 	float roundSelectionsSmoothFactor = 0.8f;
 
+	AppTimer resultTimer;
+
 };
 
 

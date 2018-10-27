@@ -83,7 +83,7 @@ void testApp::setupNextRound(string forcedId, string excludeSessionId) {
 	for (int i = 0; i<session.N_OTHERS; i++)
 	{
 		int r = session.currentRound();
-		setupPlayback(recDir + session.othersId[r][i]);
+		setupPlayback(recDir + session.othersId[r][i] + ".oni");
 	}
 }
 
@@ -312,16 +312,19 @@ void testApp::update(){
 			if (postSelectionTimer.getCountDown() <= 0) {
 				int r = session.currentRound();
 				if (r < RecordedData::MAX_ROUND_COUNT) {
+					string lastWinnerId = session.othersId[r-1][selectedUser.hovered];
 					if (r == RecordedData::MAX_ROUND_COUNT - 1) {
-						setupNextRound(session.othersId[r][selectedUser.hovered]); // keep winner + show self
+						setupNextRound(lastWinnerId, session.id); // keep winner + show self
 					}
 					else {
-						setupNextRound(session.othersId[r][selectedUser.hovered], session.id); // keep winner, exclude self
+						setupNextRound(lastWinnerId); // keep winner, exclude self
 					}
 					selectedUser.reset();
 					state = SELECTION;
 				}
 				else {
+					resultTimer.setTimeout(5000); 
+					resultTimer.reset();
 					state = RESULT;
 				}
 			}
@@ -332,16 +335,19 @@ void testApp::update(){
 		case RESULT:
 			{
 				// show prompt - look sideways
-				bool b = true; // isFaceLookingSideWays(); // get from camera
-				if (b) {
+				userMessage << "resultTimer: " << resultTimer.getCountDown() << endl;
+				bool userShowedProfile = (resultTimer.getCountDown() <= 0); // isFaceLookingSideWays(); // get from camera
+				// userShowedProfile = true;
+				if (userShowedProfile) {
 					// save user measurements
 					// currData.saveUserMeasurements(selectedUser); // TODO
 					session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
 
 					// info: ALL dataset is saved everytime
-					dataset.updateScores(session);
 					dataset.saveSession(session);
+					dataset.updateScores(session);
 					dataset.saveLibrary(recDir + datasetJsonFilename);
+					ofSleepMillis(100); // seems like it's fixed
 
 					state = PROFILE_CONFIRMED;
 				}

@@ -1,55 +1,55 @@
 [
    {
       "headHeight" : 250,
-      "id" : "test1.oni",
+      "id" : "test1",
       "others" : [
          [
             {
-               "id" : "test1.oni",
+               "id" : "test1",
                "selection" : false
             },
             {
-               "id" : "test2.oni",
+               "id" : "test2",
                "selection" : true
             }
          ],
          [
             {
-               "id" : "test1.oni",
+               "id" : "test1",
                "selection" : false
             },
             {
-               "id" : "test2.oni",
+               "id" : "test2",
                "selection" : true
             }
          ],
          [
             {
-               "id" : "test1.oni",
+               "id" : "test1",
                "selection" : false
             },
             {
-               "id" : "test2.oni",
+               "id" : "test2",
                "selection" : true
             }
          ],
          [
             {
-               "id" : "test1.oni",
+               "id" : "test1",
                "selection" : false
             },
             {
-               "id" : "test2.oni",
+               "id" : "test2",
                "selection" : true
             }
          ],
          [
             {
-               "id" : "test1.oni",
+               "id" : "test1",
                "selection" : false
             },
             {
-               "id" : "test2.oni",
+               "id" : "test2",
                "selection" : true
             }
          ]
@@ -62,55 +62,55 @@
    },
    {
       "headHeight" : 250,
-      "id" : "test2.oni",
+      "id" : "test2",
       "others" : [
          [
             {
-               "id" : "test1.oni",
+               "id" : "test1",
                "selection" : false
             },
             {
-               "id" : "test2.oni",
+               "id" : "test2",
                "selection" : true
             }
          ],
          [
             {
-               "id" : "test1.oni",
+               "id" : "test1",
                "selection" : false
             },
             {
-               "id" : "test2.oni",
+               "id" : "test2",
                "selection" : true
             }
          ],
          [
             {
-               "id" : "test1.oni",
+               "id" : "test1",
                "selection" : false
             },
             {
-               "id" : "test2.oni",
+               "id" : "test2",
                "selection" : true
             }
          ],
          [
             {
-               "id" : "test1.oni",
+               "id" : "test1",
                "selection" : false
             },
             {
-               "id" : "test2.oni",
+               "id" : "test2",
                "selection" : true
             }
          ],
          [
             {
-               "id" : "test1.oni",
+               "id" : "test1",
                "selection" : false
             },
             {
-               "id" : "test2.oni",
+               "id" : "test2",
                "selection" : true
             }
          ]
@@ -122,5 +122,4 @@
       "xScore" : 5
    }
 ]
-
 
