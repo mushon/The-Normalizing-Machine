@@ -53,6 +53,12 @@ void testApp::setup() {
 	ofBackground(0, 0, 0);
 
 	dataset.loadLibrary(recDir + datasetJsonFilename);
+
+	fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+	fbo.begin();
+	ofClear(0, 0, 0, 0);
+	fbo.end();
+
 	state = IDLE;
 }
 
@@ -678,6 +684,7 @@ void testApp::drawRoundSelections(){
 
 
 void testApp::draw(){
+	fbo.begin();
 	ofSetRectMode(OF_RECTMODE_CENTER);
 
 	ofxProfileThisFunction();
@@ -764,6 +771,17 @@ void testApp::draw(){
 	{
 		ofDrawBitmapString(ofxProfile::describe(), profilerPos);
 	}
+	fbo.end();
+
+	if (projection)
+	{
+		//ofSetRectMode(OF_RECTMODE_CORNER);
+		drawSplitScreen(fbo, WALL_ANGLE);
+	}
+	else 
+	{
+		fbo.draw(0, 0);
+	}
 
 }
 
@@ -791,6 +809,9 @@ void testApp::keyPressed(int key){
 
 	case 'g':
 		gui->toggleVisible();
+		break;
+	case 'p':
+		projection = !projection;
 		break;
 
 	default:
@@ -1159,4 +1180,15 @@ string testApp::generateFileName() {
 	string timeFormat = "%Y_%m_%d_%H_%M_%S_%i";
 	string name = ofGetTimestampString(timeFormat);
 	return name;
+}
+
+void testApp::drawSplitScreen(ofFbo& fbo, float angle) {
+	ofPushMatrix();
+	//float z = tan(angle)* fboW / 2;
+	ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2 - fbo.getHeight() / 2);
+	ofRotateY(-angle);
+	fbo.getTextureReference().drawSubsection(-(fbo.getWidth() / 2), 0, 0, fbo.getWidth() / 2, fbo.getHeight(), 0, 0, fbo.getWidth() / 2, fbo.getHeight());
+	ofRotateY(angle * 2);
+	fbo.getTextureReference().drawSubsection(0, 0, 0, fbo.getWidth() / 2, fbo.getHeight(), fbo.getWidth() / 2, 0, fbo.getWidth() / 2, fbo.getHeight());
+	ofPopMatrix();
 }

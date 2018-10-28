@@ -31,6 +31,7 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void windowResized(int w, int h);
 	void exit();
+	void drawSplitScreen(ofFbo& fbo, float angle);
 
 	void guiEvent(ofxUIEventArgs &e);
 
@@ -171,6 +172,9 @@ private:
 	float roundSelectionsSmoothFactor = 0.8f;
 
 	AppTimer resultTimer;
+	ofFbo fbo;
+	bool projection = true;
+	static const int WALL_ANGLE = -20;
 
 };
 
