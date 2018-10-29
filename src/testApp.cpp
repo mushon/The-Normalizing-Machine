@@ -681,12 +681,12 @@ void testApp::drawRoundSelections(){
 
 
 void testApp::draw(){
+	ofxProfileThisFunction();
+
 	fbo.begin();
 	ofClear(0, 0, 0, 0);
 
 	ofSetRectMode(OF_RECTMODE_CENTER);
-
-	ofxProfileThisFunction();
 
 	if (drawVideo) {
 
@@ -754,7 +754,21 @@ void testApp::draw(){
 		}
 
 	}
+	fbo.end();
 
+	ofSetColor(ofColor::white);
+
+	if (drawProjection)
+	{
+		//ofSetRectMode(OF_RECTMODE_CORNER);
+		drawSplitScreen(fbo);
+	}
+	else 
+	{
+		fbo.draw(0, 0);
+	}
+
+	// debugging draw
 	if (drawDepth)
 	{
 		ofSetRectMode(OF_RECTMODE_CORNER);
@@ -770,17 +784,7 @@ void testApp::draw(){
 	{
 		ofDrawBitmapString(ofxProfile::describe(), profilerPos);
 	}
-	fbo.end();
 
-	if (drawProjection)
-	{
-		//ofSetRectMode(OF_RECTMODE_CORNER);
-		drawSplitScreen(fbo);
-	}
-	else 
-	{
-		fbo.draw(0, 0);
-	}
 
 }
 
