@@ -386,12 +386,12 @@ void testApp::update(){
 
 	// set drawing parameters (before smoothing)
 	if (state == IDLE) {
-		liveFrameScale = 0;
+		liveFrameScale = 1;
 		playerFrameScale = 0.0f;
 		roundSelectionsScale = 0;
 	}
 	if (state == STEP_IN) {
-		liveFrameScale = 0;
+		liveFrameScale = 1;
 		playerFrameScale = 0.0f;
 		roundSelectionsScale = 0;
 	}
