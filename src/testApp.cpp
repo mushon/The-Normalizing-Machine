@@ -55,9 +55,6 @@ void testApp::setup() {
 	dataset.loadLibrary(recDir + datasetJsonFilename);
 
 	fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
-	fbo.begin();
-	ofClear(0, 0, 0, 0);
-	fbo.end();
 
 	state = IDLE;
 }
@@ -685,6 +682,8 @@ void testApp::drawRoundSelections(){
 
 void testApp::draw(){
 	fbo.begin();
+	ofClear(0, 0, 0, 0);
+
 	ofSetRectMode(OF_RECTMODE_CENTER);
 
 	ofxProfileThisFunction();
@@ -773,10 +772,10 @@ void testApp::draw(){
 	}
 	fbo.end();
 
-	if (projection)
+	if (drawProjection)
 	{
 		//ofSetRectMode(OF_RECTMODE_CORNER);
-		drawSplitScreen(fbo, WALL_ANGLE);
+		drawSplitScreen(fbo);
 	}
 	else 
 	{
@@ -811,7 +810,7 @@ void testApp::keyPressed(int key){
 		gui->toggleVisible();
 		break;
 	case 'p':
-		projection = !projection;
+		drawProjection = !drawProjection;
 		break;
 
 	default:
@@ -1182,13 +1181,13 @@ string testApp::generateFileName() {
 	return name;
 }
 
-void testApp::drawSplitScreen(ofFbo& fbo, float angle) {
+void testApp::drawSplitScreen(ofFbo& fbo) {
 	ofPushMatrix();
 	//float z = tan(angle)* fboW / 2;
 	ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2 - fbo.getHeight() / 2);
-	ofRotateY(-angle);
+	ofRotateY(-wallAngle);
 	fbo.getTextureReference().drawSubsection(-(fbo.getWidth() / 2), 0, 0, fbo.getWidth() / 2, fbo.getHeight(), 0, 0, fbo.getWidth() / 2, fbo.getHeight());
-	ofRotateY(angle * 2);
+	ofRotateY(wallAngle * 2);
 	fbo.getTextureReference().drawSubsection(0, 0, 0, fbo.getWidth() / 2, fbo.getHeight(), fbo.getWidth() / 2, 0, fbo.getWidth() / 2, fbo.getHeight());
 	ofPopMatrix();
 }

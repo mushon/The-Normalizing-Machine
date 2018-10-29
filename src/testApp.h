@@ -31,7 +31,6 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void windowResized(int w, int h);
 	void exit();
-	void drawSplitScreen(ofFbo& fbo, float angle);
 
 	void guiEvent(ofxUIEventArgs &e);
 
@@ -148,7 +147,8 @@ private:
 	void drawIconAnimations(int i);
 	void drawTotalScore(int i);
 	void drawPlayers();
-	
+	void drawSplitScreen(ofFbo& fbo);
+
 	float progressSmooth = 1.0;
 	float progressSmoothFactor = 0.6f;
 
@@ -172,9 +172,10 @@ private:
 	float roundSelectionsSmoothFactor = 0.8f;
 
 	AppTimer resultTimer;
+
 	ofFbo fbo;
-	bool projection = true;
-	static const int WALL_ANGLE = -20;
+	bool drawProjection = true;
+	int wallAngle = -20;
 
 };
 
