@@ -14,6 +14,7 @@
 #include "RecordedData.h"
 #include "AppRecorder.h"
 #include "AppDataset.h"
+#include "ImageSaver.h"
 
 
 class testApp : public ofBaseApp{
@@ -109,15 +110,15 @@ private:
 	ofImage txt_prompt;
 	ofImage txt_toomany;
 
-	
+
 	ofImage img_arrow_left;
 	ofImage img_face_left;
 	ofImage img_placemark_body;
 	ofImage img_placemark_head;
-	
+
 	ofImage img_rounds[RecordedData::MAX_ROUND_COUNT + 1]; // r#.png;
 	ofImage img_rounds_active[RecordedData::MAX_ROUND_COUNT + 1]; // r#_active.png;
-	
+
 	ofImage img_r_left;
 	ofImage img_r_right;
 	ofImage img_record;
@@ -164,7 +165,7 @@ private:
 
 	AppTimer postSelectionTimer;
 	void setupNextRound(string forcedId = "", string excludeSessionId = "");
-	
+
 	void drawRoundSelections();
 	float roundSelectionsScale = 0;
 	float roundSelectionsScaleSmooth = 0;
@@ -180,6 +181,10 @@ private:
 	int postSelectionTimeout;	// ms
 	int recordingDuration;		// ms
 	int resultTimeout;			// ms
+	ImageSaver imageSaver;
+	bool faceRecorded = false;
+	static const string DATA_PATH_ROOT;
+	static const string IMAGE_DIR;
 };
 
 

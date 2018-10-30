@@ -60,14 +60,21 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src;..\..\..\addons\ofxOpenNI\libs;..\..\..\addons\ofxOpenNI\src;..\..\..\addons\ofxProfile\src;..\..\..\addons\ofxUI\src;..\..\..\addons\ofxJSON\libs\jsoncpp\include;..\..\..\addons\ofxJSON\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);
+..\..\..\addons\ofxXmlSettings\libs;
+..\..\..\addons\ofxXmlSettings\src;
+..\..\..\addons\ofxOpenNI\libs;
+..\..\..\addons\ofxOpenNI\src;
+..\..\..\addons\ofxProfile\src;
+..\..\..\addons\ofxUI\src;
+..\..\..\addons\ofxJSON\libs\jsoncpp\include;
+..\..\..\addons\ofxJSON\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies);</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -77,7 +84,15 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src;..\..\..\addons\ofxOpenNI\libs;..\..\..\addons\ofxOpenNI\src;..\..\..\addons\ofxProfile\src;..\..\..\addons\ofxUI\src;..\..\..\addons\ofxJSON\libs\jsoncpp\include;..\..\..\addons\ofxJSON\src;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);
+..\..\..\addons\ofxXmlSettings\libs;
+..\..\..\addons\ofxXmlSettings\src;
+..\..\..\addons\ofxOpenNI\libs;
+..\..\..\addons\ofxOpenNI\src;
+..\..\..\addons\ofxProfile\src;
+..\..\..\addons\ofxUI\src;
+..\..\..\addons\ofxJSON\libs\jsoncpp\include;
+..\..\..\addons\ofxJSON\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -87,7 +102,6 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies);</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -140,6 +154,7 @@
     <ClCompile Include="src\AppCursor.cpp" />
     <ClCompile Include="src\AppDataset.cpp" />
     <ClCompile Include="src\AppRecorder.cpp" />
+    <ClCompile Include="src\ImageSaver.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="..\..\..\addons\ofxJSON\libs\jsoncpp\src\jsoncpp.cpp" />
     <ClCompile Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.cpp" />
@@ -210,6 +225,7 @@
     <ClInclude Include="..\..\..\addons\ofxJSON\libs\jsoncpp\include\json\json.h" />
     <ClInclude Include="..\..\..\addons\ofxJSON\src\ofxJSON.h" />
     <ClInclude Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.h" />
+    <ClInclude Include="src\ImageSaver.h" />
     <ClInclude Include="src\RecordedData.h" />
     <ClInclude Include="src\SelectedArm.h" />
     <ClInclude Include="src\SelectedUser.h" />

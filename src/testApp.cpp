@@ -2,6 +2,8 @@
 #define PROFILE
 #include "ofxProfile.h"
 
+const string testApp::DATA_PATH_ROOT = "D:\\TNM\\Input\\Data\\"; 
+const string testApp::IMAGE_DIR = "SeqImg";
 
 
 //--------------------------------------------------------------
@@ -55,6 +57,8 @@ void testApp::setup() {
 	dataset.loadLibrary(recDir + datasetJsonFilename);
 
 	fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+
+	imageSaver.setup(IMAGE_DIR,string("jpg"));
 
 	state = IDLE;
 }
@@ -172,9 +176,14 @@ void testApp::update(){
 					state = STEP_IN;
 				}
 
-				if (selectedUser.distance < spotRadius)
+				else
 				{
-					state = RAISE_HAND;
+					imageSaver.save(session.id + "_0");
+				
+					if (selectedUser.distance < spotRadius)
+					{
+						state = RAISE_HAND;
+					}
 				}
 				break;
 			}
@@ -361,7 +370,8 @@ void testApp::update(){
 			}
 		case PROFILE_CONFIRMED:
 			{
-			// TODO: save video with sessionId (front, side)
+			imageSaver.save(session.id + "_1");
+			// TODO: save video with sessionId (front, side). you cant save front it here too late
 			// TODO: show thank you and goodbye
 				// animate back to idle
 				// change from live to recording
