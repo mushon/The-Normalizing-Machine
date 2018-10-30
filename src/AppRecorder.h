@@ -26,6 +26,9 @@ public:
 		openNIRecorder.drawImageSubsection(w, h, sx, sy);
 	}
 
+	float imageWidth() { return openNIRecorder.imageWidth; }
+	float imageHeight() { return openNIRecorder.imageHeight; }
+	
 	int countVisibleUsers();
 
 	bool IsRecording() { return isRecording; }
