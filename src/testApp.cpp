@@ -2,8 +2,6 @@
 #define PROFILE
 #include "ofxProfile.h"
 
-const string testApp::DATA_PATH_ROOT = "D:\\TNM\\Input\\Data\\"; 
-const string testApp::IMAGE_DIR = "SeqImg";
 
 
 //--------------------------------------------------------------
@@ -58,7 +56,7 @@ void testApp::setup() {
 
 	fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
-	imageSaver.setup(IMAGE_DIR,string("jpg"));
+	imageSaver.setup(imageDir, string("jpg"));
 
 	state = IDLE;
 }
@@ -880,6 +878,9 @@ void testApp::setupGui(){
 	//	recDir = ofToDataPath("/records/");
 	//  recDir = "C:/Users/SE_Shenkar/Dropbox/records/";
 	
+	imageDir = "SeqImg";
+	gui->addTextInput("ImageDir", imageDir);
+
 	recDir = getRecDirString(ofToDataPath("recDir.json"));
 
 	gui->addLabel("Rec Dir", recDir);
@@ -966,10 +967,10 @@ void testApp::setupGui(){
 	gui->addIntSlider("selectionTimeout", 100, 10000, &selectionTimeout);
 
 	postSelectionTimeout = 1000;
-	gui->addIntSlider("postSelectionTimeout ", 100, 10000, &postSelectionTimeout);
+	gui->addIntSlider("postSelectionTimeout", 100, 10000, &postSelectionTimeout);
 
 	recordingDuration = 2000;
-	gui->addIntSlider("recordingDuration ", 100, 10000, &recordingDuration);
+	gui->addIntSlider("recordingDuration", 100, 10000, &recordingDuration);
 
 	resultTimeout = 5000;
 	gui->addIntSlider("resultTimeout", 100, 10000, &resultTimeout);

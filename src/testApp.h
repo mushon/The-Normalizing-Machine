@@ -181,10 +181,10 @@ private:
 	int postSelectionTimeout;	// ms
 	int recordingDuration;		// ms
 	int resultTimeout;			// ms
+	
 	ImageSaver imageSaver;
 	bool faceRecorded = false;
-	static const string DATA_PATH_ROOT;
-	static const string IMAGE_DIR;
+	string imageDir;
 };
 
 

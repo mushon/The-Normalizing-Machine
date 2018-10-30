@@ -6,6 +6,11 @@
     <YPosition>0.000000000</YPosition>
 </Canvas>
 <Widget>
+    <Kind>12</Kind>
+    <Name>ImageDir</Name>
+    <Value>SeqImg</Value>
+</Widget>
+<Widget>
     <Kind>2</Kind>
     <Name>draw (g)ui</Name>
     <Value>0</Value>
@@ -127,13 +132,18 @@
 </Widget>
 <Widget>
     <Kind>42</Kind>
-    <Name>postSelectionTimeout </Name>
+    <Name>postSelectionTimeout</Name>
     <Value>1000</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
-    <Name>recordingDuration </Name>
+    <Name>recordingDuration</Name>
     <Value>2000</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>resultTimeout</Name>
+    <Value>5000</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
