@@ -896,7 +896,7 @@ void testApp::setupGui(){
 	//	recDir = ofToDataPath("/records/");
 	//  recDir = "C:/Users/SE_Shenkar/Dropbox/records/";
 	
-	imageDir = "SeqImg";
+	imageDir = "SeqImg/";
 	gui->addTextInput("ImageDir", imageDir);
 
 	recDir = getRecDirString(ofToDataPath("recDir.json"));
