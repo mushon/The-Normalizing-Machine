@@ -328,7 +328,7 @@ void testApp::update(){
 					state = SELECTION;
 				}
 				else {
-					resultTimer.setTimeout(5000); 
+					resultTimer.setTimeout(resultTimeout); 
 					resultTimer.reset();
 					state = RESULT;
 				}
@@ -960,6 +960,9 @@ void testApp::setupGui(){
 
 	recordingDuration = 2000;
 	gui->addIntSlider("recordingDuration ", 100, 10000, &recordingDuration);
+
+	resultTimeout = 5000;
+	gui->addIntSlider("resultTimeout", 100, 10000, &resultTimeout);
 
 	gui->addSpacer();
 	///

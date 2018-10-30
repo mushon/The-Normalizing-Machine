@@ -137,6 +137,11 @@
 </Widget>
 <Widget>
     <Kind>42</Kind>
+    <Name>resultTimeout</Name>
+    <Value>5000</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
     <Name>userMapAlpha</Name>
     <Value>60</Value>
 </Widget>

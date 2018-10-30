@@ -179,6 +179,7 @@ private:
 	int selectionTimeout;		// ms
 	int postSelectionTimeout;	// ms
 	int recordingDuration;		// ms
+	int resultTimeout;			// ms
 };
 
 
