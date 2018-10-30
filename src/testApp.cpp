@@ -46,6 +46,20 @@ void testApp::setup() {
 	img_r_right.loadImage("assets/r_right.png");
 	img_record.loadImage("assets/record.png");
 
+	img_gapmarker.loadImage("assets/gapmarker.png");
+	img_placemark.loadImage("assets/placemark.png");
+	img_placemarker_body.loadImage("assets/placemarker_body.png");
+	img_placemarker_head.loadImage("assets/placemarker_head.png");
+	img_placemark_0_2_position.loadImage("assets/placemark_0.2_position.png");
+	img_prompt_0_1_idle.loadImage("assets/prompt_0.1_idle.png");
+	img_prompt_0_2_position.loadImage("assets/prompt_0.2_position.png");
+	img_prompt_0_3_onebyone.loadImage("assets/prompt_0.3_onebyone.png");
+	img_prompt_1_1_point.loadImage("assets/prompt_1.1_point.png");
+	img_prompt_10_goodbye.loadImage("assets/prompt_10_goodbye.png");
+	img_prompt_2_1_moreNormal.loadImage("assets/prompt_2.1_moreNormal.png");
+	img_prompt_9_turnLeft.loadImage("assets/prompt_9_turnLeft.png");
+
+
 	ofEnableAlphaBlending();
 
 	setupGui();
@@ -174,12 +188,12 @@ void testApp::update(){
 					state = STEP_IN;
 				}
 
-				
-					if (selectedUser.distance < spotRadius)
-					{
+
+				if (selectedUser.distance < spotRadius)
+				{
 					imageSaver.save(session.id + "_0");
-						state = RAISE_HAND;
-					}
+					state = RAISE_HAND;
+				}
 
 				break;
 			}
@@ -723,9 +737,15 @@ void testApp::draw(){
 			ofxProfileSectionPush("draw live");
 			drawLiveFrame();
 
+
 			//draw overlays	
+			if (state == IDLE) {
+				img_placemark.draw(0, 0, 76, 480); // TODO fix - use 480 tall asset
+			}
+
 			if (state == GOTO_SPOT) {
-				drawGotoSpot();
+				img_placemark_0_2_position.draw(0, 0);
+				//drawGotoSpot(); // todo draw red shadow
 			}
 
 			if (state == MORE_THAN_ONE)

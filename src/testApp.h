@@ -123,6 +123,19 @@ private:
 	ofImage img_r_right;
 	ofImage img_record;
 
+	ofImage img_gapmarker;
+	ofImage img_placemark;
+	ofImage img_placemarker_body;
+	ofImage img_placemarker_head;
+	ofImage img_placemark_0_2_position;
+	ofImage img_prompt_0_1_idle;
+	ofImage img_prompt_0_2_position;
+	ofImage img_prompt_0_3_onebyone;
+	ofImage img_prompt_1_1_point;
+	ofImage img_prompt_10_goodbye;
+	ofImage img_prompt_2_1_moreNormal;
+	ofImage img_prompt_9_turnLeft;
+
 	void drawOverheadText(ofImage&, int x, int y, int w);
 
 	void setupGui();
