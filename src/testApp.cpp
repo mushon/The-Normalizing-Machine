@@ -174,15 +174,13 @@ void testApp::update(){
 					state = STEP_IN;
 				}
 
-				else
-				{
-					imageSaver.save(session.id + "_0");
 				
 					if (selectedUser.distance < spotRadius)
 					{
+					imageSaver.save(session.id + "_0");
 						state = RAISE_HAND;
 					}
-				}
+
 				break;
 			}
 
