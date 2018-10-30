@@ -145,7 +145,6 @@ private:
 
 	void drawOverlay();
 	void drawIconAnimations(int i);
-	void drawTotalScore(int i);
 	void drawPlayers();
 	void drawSplitScreen(ofFbo& fbo);
 
@@ -185,6 +184,8 @@ private:
 	ImageSaver imageSaver;
 	bool faceRecorded = false;
 	string imageDir;
+
+	float selectionBufferWidth;
 };
 
 

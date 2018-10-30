@@ -266,12 +266,12 @@ void testApp::update(){
 					float w = getPlayerWidth(); 
 					float h = getPlayerHeight();
 
-					/*
-					if (abs(selectedUser.screenPoint.x - cx) < w/4) // && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
+					
+					if (abs(selectedUser.screenPoint.x - cx) < selectionBufferWidth) // && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
 					{
 						hover = SelectedUser::NO_HOVER;
 					}
-					*/
+					
 					if (/* abs(v.x) > outsideScreenFactor || */ abs(v.y) > outsideScreenFactor) // hand down
 					{
 						hover = SelectedUser::NO_HOVER;
@@ -959,6 +959,9 @@ void testApp::setupGui(){
 	gui->addSpacer();
 	///
 	gui->addLabel("Selection");
+
+	selectionBufferWidth = 100;
+	gui->addSlider("selectionBufferWidth", 0, 1000, &selectionBufferWidth);
 
 	handShoulderDistance = 200;
 	gui->addIntSlider("handShoulderDistance", 100, 500, &handShoulderDistance);
