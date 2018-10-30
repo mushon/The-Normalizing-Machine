@@ -191,7 +191,7 @@ void testApp::update(){
 					{
 						if (selectedUser.isSteady())
 						{
-							selectedUser.reset();
+							selectedUser.reset(selectionTimeout);
 							cursor = AppCursor();
 
 							cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2));
@@ -235,7 +235,6 @@ void testApp::update(){
 					ofVec2f v(2*kx-1, 2*ky-1);
 					//ofVec2f v(2*kx-1, 2*ky-1);
 
-					//	v /= (touchScreenSize / 2); // <<<< There's alot of UI tweaking here, where the window sits (width = shoulders width?)
 					selectedUser.screenPoint01 = v;
 
 					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function, 
@@ -247,6 +246,7 @@ void testApp::update(){
 
 					selectedUser.screenPoint = v.getMapped(ofVec2f(cx, cy), ofVec2f(cx, 0), ofVec2f(0, -cy)); // reverse y, assume -1 < v.x, v.y < 1
 
+					selectedUser.screenPoint.x = ofLerp(ofGetScreenWidth() / 2, selectedUser.screenPoint.x, 0.1);  // force to center // 2-player hack 
 					selectedUser.screenPoint.y = ofLerp(ofGetScreenHeight() / 2, selectedUser.screenPoint.y, 0.1);  // force to center // 2-player hack 
 
 					float progress = selectedUser.getProgress();
@@ -259,11 +259,13 @@ void testApp::update(){
 					float w = getPlayerWidth(); 
 					float h = getPlayerHeight();
 
+					/*
 					if (abs(selectedUser.screenPoint.x - cx) < w/4) // && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
 					{
 						hover = SelectedUser::NO_HOVER;
 					}
-					if (abs(v.x) > outsideScreenFactor || abs(v.y) > outsideScreenFactor) // hand down
+					*/
+					if (/* abs(v.x) > outsideScreenFactor || */ abs(v.y) > outsideScreenFactor) // hand down
 					{
 						hover = SelectedUser::NO_HOVER;
 					}
@@ -278,7 +280,7 @@ void testApp::update(){
 					}
 
 					if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 2) { // one before last round
-						if (selectedUser.selectTimer.getCountDown() < 2000)
+						if (selectedUser.selectTimer.getCountDown() < recordingDuration)
 						{
 							appRecorder.start(recDir, session.id);
 						}
@@ -301,7 +303,7 @@ void testApp::update(){
 							ofSleepMillis(100); // seems like it's fixed
 						}
 
-						postSelectionTimer.setTimeout(1000); 
+						postSelectionTimer.setTimeout(postSelectionTimeout);
 						postSelectionTimer.reset();
 						state = SELECTION_POST;
 					}
@@ -322,7 +324,7 @@ void testApp::update(){
 					else {
 						setupNextRound(lastWinnerId); // keep winner, exclude self
 					}
-					selectedUser.reset();
+					selectedUser.reset(selectionTimeout);
 					state = SELECTION;
 				}
 				else {
@@ -740,7 +742,9 @@ void testApp::draw(){
 		{
 			//userMessage << "waiting for selection... TODO: instructions how to select" << endl;
 			//userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
-			cursor.draw();
+			if (drawCursor) {
+				cursor.draw();
+			}
 		}
 
 		if (state == RESULT)
@@ -793,7 +797,7 @@ void testApp::keyPressed(int key){
 
 	switch (key) {
 
-	case 'c':
+	case 'C':
 		ofxProfile::clear();
 		break;
 
@@ -812,9 +816,7 @@ void testApp::keyPressed(int key){
 
 	case 'g':
 		gui->toggleVisible();
-		break;
-	case 'p':
-		drawProjection = !drawProjection;
+		// gui->isVisible() ? ofShowCursor() : ofHideCursor; // not working, of bug
 		break;
 
 	default:
@@ -861,8 +863,9 @@ void testApp::setupGui(){
 	gui = new ofxUISuperCanvas("Turing Normalizing Machine", 2);
 
 	gui->addLabelButton("Save XML", false);
-
-	gui->addRadio("State", AppState::getStates());
+	gui->addLabelButton("RESET XML", false);
+	
+	// gui->addRadio("State", AppState::getStates());
 	//	recDir = "e:/records/";
 	//	recDir = ofToDataPath("/records/");
 	//  recDir = "C:/Users/SE_Shenkar/Dropbox/records/";
@@ -873,16 +876,18 @@ void testApp::setupGui(){
 
 	datasetJsonFilename = "dataset.json";
 	gui->addLabel("datasetJsonFilename", datasetJsonFilename);
+	gui->addSpacer();
 
 
 	// add FPS
 	gui->addFPSSlider("FPS", 30)->setDrawOutline(true);
 	gui->addToggle("draw (g)ui", &drawGui)->bindToKey('g');
 	gui->addToggle("draw (v)ideo", &drawVideo)->bindToKey('v');
-	gui->addToggle("draw (p)rofiler", &drawProfiler)->bindToKey('p');
 	gui->addToggle("draw (d)epth", &drawDepth)->bindToKey('d');
 	gui->addToggle("draw (t)ext", &drawText)->bindToKey('t');
-
+	gui->addToggle("draw (p)rojection", &drawProjection)->bindToKey('p');
+	gui->addToggle("draw (c)ursor", &drawCursor)->bindToKey('c');
+	gui->addToggle("draw (P)rofiler", &drawProfiler)->bindToKey('P');
 
 	simulateMoreThanOne = false;
 	gui->addToggle("simulate (m)ore 1", &simulateMoreThanOne)->bindToKey('m');
@@ -892,53 +897,11 @@ void testApp::setupGui(){
 	profilerPos = ofxUIVec3f(220, 0);
 	//gui->add2DPad("profilerPos", ofxUIVec3f(0, ofGetScreenWidth()), ofxUIVec3f(0, ofGetScreenHeight()), &profilerPos);
 
-	idleThreshold = 1000;
-	gui->addSlider("idleThreshold", 500, 2000, &idleThreshold);
-
-	idleThresholdHysteresis = 100;
-	gui->addSlider("idle.Thr.Hyst", 10, 200, &idleThresholdHysteresis);
-
-	stepInThreshold = 700;
-	gui->addSlider("stepInThreshold", 200, 1000, &stepInThreshold);
-
-	stepInThresholdHysteresis = 100;
-	gui->addSlider("stepIn.Thr.Hyst", 10, 200, &stepInThresholdHysteresis);
-
-	spotRadius = 200;
-	gui->addSlider("spot radius", 0, 1000, &spotRadius);
-	spotRadiusHysteresis = 100;
-	gui->addSlider("sr Hysteresis", 0, 300, &spotRadiusHysteresis);
-
-	spot.z = 1600; // distance from sensor [mm]
-	gui->addSlider("spot Z", 500, 3000, &spot.z);
-
-	userMapAlpha = 60;
-	gui->addIntSlider("userMapAlpha", 0, 255, &userMapAlpha);
-	textAlpha = 150;
-	gui->addIntSlider("textAlpha", 0, 255, &textAlpha);
-
-
-	handShoulderDistance = 200;
-	gui->addIntSlider("handShoulderDistance", 100, 500, &handShoulderDistance);
-
-	outsideScreenFactor = 1.2;
-	gui->addSlider("outsideScreenFactor", 1, 2, &outsideScreenFactor);
-
-
-
-	margin = 8;
-	gui->addIntSlider("margin", 0, 24, &margin);
-
-	bottomMargin = 56;
-	gui->addIntSlider("bottomMargin", 0, 100, &bottomMargin);
-
-	touchScreenSize = 600;		// virtual screen 
-	gui->addSlider("touchScreenSize", 100, 1000, &touchScreenSize);
-
+	gui->addLabel("Screen Position");
 
 	// screen-sensor distance. ir-sensor=0, depth values are z positive
-	// +z = front
 	// +y is up
+	// +z = front
 
 	screenZ = -1700;
 	gui->addSlider("screenZ", -3000, 0, &screenZ);
@@ -949,14 +912,69 @@ void testApp::setupGui(){
 	screenT = 3000;// screen top
 	gui->addSlider("screenT", -5000, 5000, &screenT);
 
-	screenL = -600;// screen left
-	gui->addSlider("screenL", -1000, 1000, &screenL);
+	screenL = -2000;// screen left
+	gui->addSlider("screenL", -3000, 3000, &screenL);
 
-	screenR = 600;// screen right
-	gui->addSlider("screenR", -1000, 1000, &screenR);
+	screenR = 2000;// screen right
+	gui->addSlider("screenR", -3000, 3000, &screenR);
+
+	outsideScreenFactor = 5;
+	gui->addSlider("outsideScreenFactor", 1, 10, &outsideScreenFactor);
+
+	gui->addSpacer();
+	///
+	gui->addLabel("Spot & Thresholds");
+	spot.x = 0;
+	gui->addSlider("spot X", -500, 500, &spot.x);
+
+	spot.z = 1600; // distance from sensor [mm]
+	gui->addSlider("spot Z", 500, 3000, &spot.z);
+
+	spotRadius = 300;
+	gui->addSlider("spot radius", 0, 1000, &spotRadius);
+	spotRadiusHysteresis = 300;
+	gui->addSlider("spot Hysteresis", 0, 400, &spotRadiusHysteresis);
+
+	stepInThreshold = 700;
+	gui->addSlider("stepIn Threshold", 200, 1000, &stepInThreshold);
+	stepInThresholdHysteresis = 200;
+	gui->addSlider("stepIn Hysteresis", 10, 400, &stepInThresholdHysteresis);
+
+	idleThreshold = 1000;
+	gui->addSlider("idle Threshold", 500, 2000, &idleThreshold);
+	idleThresholdHysteresis = 200;
+	gui->addSlider("idle Hysteresis", 10, 400, &idleThresholdHysteresis);
+
+	gui->addSpacer();
+	///
+	gui->addLabel("Selection");
+
+	handShoulderDistance = 200;
+	gui->addIntSlider("handShoulderDistance", 100, 500, &handShoulderDistance);
+
+	selectionTimeout = 3000;
+	gui->addIntSlider("selectionTimeout", 100, 10000, &selectionTimeout);
+
+	postSelectionTimeout = 1000;
+	gui->addIntSlider("postSelectionTimeout ", 100, 10000, &postSelectionTimeout);
+
+	recordingDuration = 2000;
+	gui->addIntSlider("recordingDuration ", 100, 10000, &recordingDuration);
+
+	gui->addSpacer();
+	///
+	gui->addLabel("Drawing");
+	userMapAlpha = 60;
+	gui->addIntSlider("userMapAlpha", 0, 255, &userMapAlpha);
+	textAlpha = 150;
+	gui->addIntSlider("textAlpha", 0, 255, &textAlpha);
+	margin = 8;
+	gui->addIntSlider("margin", 0, 24, &margin);
+	gui->addSpacer();
+
 
 	gui->autoSizeToFitWidgets();
-	ofAddListener(gui->newGUIEvent,this,&testApp::guiEvent);   
+	ofAddListener(gui->newGUIEvent, this, &testApp::guiEvent);   
 
 	gui->saveSettings(ofToDataPath("gui/default_settings.xml"));
 	gui->loadSettings(ofToDataPath("gui/settings.xml"));
@@ -980,12 +998,15 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 		// appState.set(value, force=true) 
 	}
 
-	if(name == "Save XML" && e.getButton()->getValue())
+	if (name == "Save XML" && e.getButton()->getValue())
 	{
 		gui->saveSettings(ofToDataPath("gui/settings.xml"));
 	}
 
-
+	if (name == "RESET XML" && e.getButton()->getValue())
+	{
+		gui->loadSettings(ofToDataPath("gui/default_settings.xml"));
+	}
 
 }
 
@@ -1173,7 +1194,7 @@ void testApp::updateSelectedUser()
 		}
 		else
 		{
-			selectedUser.reset();
+			selectedUser.reset(selectionTimeout);
 		}
 		
 	}

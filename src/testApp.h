@@ -40,6 +40,7 @@ public:
 	ofPoint profilerPos;
 	bool drawProfiler;
 	bool drawDepth;
+	bool drawCursor;
 
 	SelectedUser selectedUser;
 
@@ -96,9 +97,7 @@ private:
 	stringstream userMessage;
 
 	int margin;
-	int bottomMargin;
 
-	float touchScreenSize; // virtual screen 
 
 	ofImage yesIcon;
 	ofImage noIcon;
@@ -177,6 +176,9 @@ private:
 	bool drawProjection = true;
 	int wallAngle = -20;
 
+	int selectionTimeout;		// ms
+	int postSelectionTimeout;	// ms
+	int recordingDuration;		// ms
 };
 
 

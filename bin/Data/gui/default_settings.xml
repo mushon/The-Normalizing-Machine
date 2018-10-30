@@ -7,51 +7,6 @@
 </Canvas>
 <Widget>
     <Kind>2</Kind>
-    <Name>IDLE</Name>
-    <Value>0</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>STEP_IN</Name>
-    <Value>0</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>GOTO_SPOT</Name>
-    <Value>0</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>RAISE_HAND</Name>
-    <Value>0</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>SELECTION</Name>
-    <Value>0</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>SELECTION_POST</Name>
-    <Value>0</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>RESULT</Name>
-    <Value>0</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>PROFILE_CONFIRMED</Name>
-    <Value>0</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>MORE_THAN_ONE</Name>
-    <Value>0</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
     <Name>draw (g)ui</Name>
     <Value>0</Value>
 </Widget>
@@ -59,11 +14,6 @@
     <Kind>2</Kind>
     <Name>draw (v)ideo</Name>
     <Value>1</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>draw (p)rofiler</Name>
-    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -77,78 +27,23 @@
 </Widget>
 <Widget>
     <Kind>2</Kind>
-    <Name>simulate (m)ore 1</Name>
+    <Name>draw (p)rojection</Name>
+    <Value>1</Value>
+</Widget>
+<Widget>
+    <Kind>2</Kind>
+    <Name>draw (c)ursor</Name>
     <Value>0</Value>
 </Widget>
 <Widget>
-    <Kind>4</Kind>
-    <Name>idleThreshold</Name>
-    <Value>1000.000000000</Value>
+    <Kind>2</Kind>
+    <Name>draw (P)rofiler</Name>
+    <Value>0</Value>
 </Widget>
 <Widget>
-    <Kind>4</Kind>
-    <Name>idle.Thr.Hyst</Name>
-    <Value>100.000000000</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>stepInThreshold</Name>
-    <Value>700.000000000</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>stepIn.Thr.Hyst</Name>
-    <Value>100.000000000</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>spot radius</Name>
-    <Value>200.000000000</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>sr Hysteresis</Name>
-    <Value>100.000000000</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>spot Z</Name>
-    <Value>1600.000000000</Value>
-</Widget>
-<Widget>
-    <Kind>42</Kind>
-    <Name>userMapAlpha</Name>
-    <Value>60</Value>
-</Widget>
-<Widget>
-    <Kind>42</Kind>
-    <Name>textAlpha</Name>
-    <Value>150</Value>
-</Widget>
-<Widget>
-    <Kind>42</Kind>
-    <Name>handShoulderDistance</Name>
-    <Value>200</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>outsideScreenFactor</Name>
-    <Value>1.200000048</Value>
-</Widget>
-<Widget>
-    <Kind>42</Kind>
-    <Name>margin</Name>
-    <Value>8</Value>
-</Widget>
-<Widget>
-    <Kind>42</Kind>
-    <Name>bottomMargin</Name>
-    <Value>56</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>touchScreenSize</Name>
-    <Value>600.000000000</Value>
+    <Kind>2</Kind>
+    <Name>simulate (m)ore 1</Name>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -168,10 +63,90 @@
 <Widget>
     <Kind>4</Kind>
     <Name>screenL</Name>
-    <Value>-600.000000000</Value>
+    <Value>-2000.000000000</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>screenR</Name>
-    <Value>600.000000000</Value>
+    <Value>1999.999877930</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>outsideScreenFactor</Name>
+    <Value>5.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>spot X</Name>
+    <Value>0.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>spot Z</Name>
+    <Value>1600.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>spot radius</Name>
+    <Value>300.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>spot Hysteresis</Name>
+    <Value>300.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>stepIn Threshold</Name>
+    <Value>700.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>stepIn Hysteresis</Name>
+    <Value>200.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>idle Threshold</Name>
+    <Value>1000.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>idle Hysteresis</Name>
+    <Value>200.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>handShoulderDistance</Name>
+    <Value>200</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>selectionTimeout</Name>
+    <Value>3000</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>postSelectionTimeout </Name>
+    <Value>1000</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>recordingDuration </Name>
+    <Value>2000</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>userMapAlpha</Name>
+    <Value>60</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>textAlpha</Name>
+    <Value>150</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>margin</Name>
+    <Value>8</Value>
 </Widget>

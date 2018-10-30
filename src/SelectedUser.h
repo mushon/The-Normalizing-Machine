@@ -39,21 +39,20 @@ public:
 		float shouldersWidth; // distance(shoulders)
 
 
-		SelectedUser() : selectTimer(3000)
+		SelectedUser()
 		{
 			id = NO_USER;
 			distance = FLT_MAX;
-
-			reset();
 		}
 
-		void reset()
+		void reset(unsigned long long timeout)
 		{
 			leftArm.reset();
 			rightArm.reset();
 			
 			hovered = NO_HOVER;
 
+			selectTimer.setTimeout(timeout);
 			selectTimer.reset();
 			waitForSteady = true;
 
