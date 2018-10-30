@@ -576,7 +576,13 @@ void testApp::drawLiveFrame() {
 	ofFill();
 	ofRect(0, 0, w + 2 * margin / scale, h + 2 * margin / scale);	
 
-	appRecorder.drawImageSubsection(w, h, 0, 0);
+	// draw cropped area in center of frame
+	float imageWidth = appRecorder.imageWidth();
+	float imageHeight = appRecorder.imageHeight();
+
+	float offsetW = (imageWidth - w) / 2;
+	float offsetH = (imageHeight - h) / 2;
+	appRecorder.drawImageSubsection(w, h, offsetW, offsetH);
 	
 	img_record.draw((img_record.getWidth() + margin - w) / 2 , (img_record.getHeight() + margin - h) / 2); // top left
 	ofPopMatrix();
@@ -649,8 +655,14 @@ void testApp::drawPlayers() {
 		ofSetColor(ofColor::black);
 		ofRect(border);
 
-		//			players[i].drawImage();
-		players[i].drawImageSubsection(w, h, 0, 0);
+		// draw cropped area in center of frame
+		float imageWidth = players[i].imageWidth;
+		float imageHeight = players[i].imageHeight;
+
+		float offsetW = (imageWidth - w) / 2;
+		float offsetH = (imageHeight - h) / 2;
+
+		players[i].drawImageSubsection(w, h, offsetW, offsetH);
 
 
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
