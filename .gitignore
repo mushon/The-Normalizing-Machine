@@ -32,3 +32,5 @@ _ReSharper*/
 
 .vscode/
 .vs/
+*.VC.db
+*.VC.VC.opendb
