@@ -59,6 +59,10 @@ void testApp::setup() {
 	img_prompt_2_1_moreNormal.loadImage("assets/prompt_2.1_moreNormal.png");
 	img_prompt_9_turnLeft.loadImage("assets/prompt_9_turnLeft.png");
 
+	img_goodbye.loadImage("assets/goodbye.png");
+	img_one_by_one.loadImage("assets/one_by_one.png");
+	img_position_yourself.loadImage("assets/position_yourself.png");
+	img_step_in.loadImage("assets/step_in.png");
 
 	ofEnableAlphaBlending();
 
@@ -438,13 +442,13 @@ void testApp::update(){
 		roundSelectionsScale = 1.0f;
 	}
 	if (state == RESULT) {
-		liveFrameScale = 0;
-		playerFrameScale = 0.0f;
-		roundSelectionsScale = 1.0f;
+		// liveFrameScale = 0;
+		// playerFrameScale = 0.0f;
+		roundSelectionsScale = 0;
 	}
 	if (state == PROFILE_CONFIRMED) {
-		liveFrameScale = 0;
-		playerFrameScale = 0.0f;
+		liveFrameScale = 1;
+		// playerFrameScale = 0.0f;
 		roundSelectionsScale = 0.0f;
 	}
 	if (state == MORE_THAN_ONE) {
@@ -667,7 +671,10 @@ void testApp::drawPlayers() {
 
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 		{
-			drawIconAnimations(i);
+			if (i == selectedUser.hovered) {
+				img_prompt_2_1_moreNormal.draw(0, textY);
+			}
+			// drawIconAnimations(i);
 		}
 
 		ofPopMatrix();
@@ -752,23 +759,41 @@ void testApp::draw(){
 
 			//draw overlays	
 			if (state == IDLE) {
-				img_placemark.draw(0, 0, 76, 480); // TODO fix - use 480 tall asset
+				img_step_in.draw(0, 0);
+				img_prompt_0_1_idle.draw(0, textY);
+			}
+
+			if (state == STEP_IN) {
+				img_step_in.draw(0, 0);
+				img_prompt_0_1_idle.draw(0, textY);
 			}
 
 			if (state == GOTO_SPOT) {
-				img_placemark_0_2_position.draw(0, 0);
+				img_position_yourself.draw(0, 0);
 				//drawGotoSpot(); // todo draw red shadow
+				img_prompt_0_2_position.draw(0, textY);
 			}
 
 			if (state == MORE_THAN_ONE)
 			{
-				drawOverheadText(txt_toomany, -sc2*w/2 + txt_toomany.getWidth()/2, 0, w * sc2);
-				drawOverlay(); //?
+				img_one_by_one.draw(0, 0);
+				img_prompt_0_3_onebyone.draw(0, textY);
 			}
 
 			if (state == RAISE_HAND)
 			{
-				drawOverheadText(txt_prompt, -sc2*w/2 + txt_prompt.getWidth()/2, sc2*h/2 - txt_prompt.getHeight()/2, w * sc2);
+				img_prompt_1_1_point.draw(0, textY);
+			}
+
+			if (state == RESULT)
+			{
+				//drawTotalScore(i);
+			}
+
+			if (state == PROFILE_CONFIRMED)
+			{
+				img_goodbye.draw(0, 0);
+				img_prompt_10_goodbye.draw(0, textY);
 			}
 
 			ofxProfileSectionPop();
@@ -783,16 +808,6 @@ void testApp::draw(){
 			if (drawCursor) {
 				cursor.draw();
 			}
-		}
-
-		if (state == RESULT)
-		{
-			//drawTotalScore(i);
-		}
-		
-		if (state == PROFILE_CONFIRMED)
-		{
-			userMessage << "thank you and goodbye";
 		}
 
 	}
@@ -838,8 +853,6 @@ void testApp::keyPressed(int key){
 	case 'C':
 		ofxProfile::clear();
 		break;
-
-
 
 	case 's':
 		appRecorder.stop();
@@ -1005,8 +1018,8 @@ void testApp::setupGui(){
 	recordingDuration = 2000;
 	gui->addIntSlider("recordingDuration", 100, 10000, &recordingDuration);
 
-	resultTimeout = 5000;
-	gui->addIntSlider("resultTimeout", 100, 10000, &resultTimeout);
+	resultTimeout = 0; // skip
+	gui->addIntSlider("resultTimeout", 0, 10000, &resultTimeout);
 
 	gui->addSpacer();
 	///
@@ -1017,6 +1030,12 @@ void testApp::setupGui(){
 	gui->addIntSlider("textAlpha", 0, 255, &textAlpha);
 	margin = 8;
 	gui->addIntSlider("margin", 0, 24, &margin);
+	
+	textY = getPlayerHeight() / 2;
+	gui->addSlider("textY", 0, 1000, &textY);
+
+	
+
 	gui->addSpacer();
 
 
