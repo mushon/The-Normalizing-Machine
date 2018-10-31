@@ -148,6 +148,8 @@ private:
 	ofxUISuperCanvas* gui;
 
 	AppCursor cursor;
+	bool lockCursorY;
+
 	SelectedUser getClosestUser();
 	void updateSelectedUser();
 

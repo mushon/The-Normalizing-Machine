@@ -273,7 +273,12 @@ void testApp::update(){
 					selectedUser.screenPoint.y = ofLerp(ofGetScreenHeight() / 2, selectedUser.screenPoint.y, 0.1);  // force to center // 2-player hack 
 
 					float progress = selectedUser.getProgress();
-					cursor.update(selectedUser.screenPoint, progressSmooth);
+
+					ofVec2f cursorPoint = selectedUser.screenPoint;
+					if (lockCursorY) {
+						cursorPoint.y = ofGetScreenHeight() / 2;
+					}
+					cursor.update(cursorPoint, progressSmooth);
 
 					int hover = 0;
 					if (v.x > 0) hover += 1;
@@ -940,6 +945,7 @@ void testApp::setupGui(){
 	gui->addToggle("draw (d)epth", &drawDepth)->bindToKey('d');
 	gui->addToggle("draw (t)ext", &drawText)->bindToKey('t');
 	gui->addToggle("draw (p)rojection", &drawProjection)->bindToKey('p');
+	drawCursor = true;
 	gui->addToggle("draw (c)ursor", &drawCursor)->bindToKey('c');
 	gui->addToggle("draw (P)rofiler", &drawProfiler)->bindToKey('P');
 
@@ -1034,8 +1040,9 @@ void testApp::setupGui(){
 	textY = getPlayerHeight() / 2;
 	gui->addSlider("textY", 0, 1000, &textY);
 
+	lockCursorY = true;
+	gui->addToggle("(l)ock cursor Y", &lockCursorY)->bindToKey('l');
 	
-
 	gui->addSpacer();
 
 
