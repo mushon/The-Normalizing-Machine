@@ -136,12 +136,20 @@ private:
 	ofImage img_prompt_2_1_moreNormal;
 	ofImage img_prompt_9_turnLeft;
 
+	ofImage img_goodbye;
+	ofImage img_one_by_one;
+	ofImage img_position_yourself;
+	ofImage img_step_in;
+
+
 	void drawOverheadText(ofImage&, int x, int y, int w);
 
 	void setupGui();
 	ofxUISuperCanvas* gui;
 
 	AppCursor cursor;
+	bool lockCursorY;
+
 	SelectedUser getClosestUser();
 	void updateSelectedUser();
 
@@ -174,6 +182,8 @@ private:
 	float getPlayerHeight() {
 		return 480; // (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
 	}
+
+	float textY;
 
 	AppTimer postSelectionTimer;
 	void setupNextRound(string forcedId = "", string excludeSessionId = "");

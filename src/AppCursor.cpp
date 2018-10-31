@@ -5,8 +5,8 @@ AppCursor::AppCursor(void)
 {
 	ring.setArcResolution(360);
 	
-	minRadius = 40;
-	maxRadius = 50;
+	minRadius = 30;
+	maxRadius = 35;
 
 	lowAngle = -90; //12 oclock, 0 degrees is 3 oclock
 	highAngle = -89;
@@ -38,8 +38,10 @@ void AppCursor::draw()
 
 	ofPushMatrix();
 	ofTranslate(position);
-	ofLine(-crossSize, 0, crossSize,0); // x line
-	ofLine(0, -crossSize, 0, crossSize); // y line
+	// ofLine(-crossSize, 0, crossSize, 0); // - x line
+	// ofLine(0, -crossSize, 0, crossSize); // | y line
+	ofLine(-crossSize, -crossSize, crossSize, crossSize); // \ line
+	ofLine(crossSize, -crossSize, -crossSize, crossSize); // / line
 	ofPopMatrix();
 	ofPopStyle();
 }

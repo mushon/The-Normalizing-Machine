@@ -61,9 +61,11 @@ bool checkMainJointsConfidence(ofxOpenNIUser& u)
 	ofxOpenNIJoint jls = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
 	ofxOpenNIJoint jt = u.getJoints().at(nite::JointType::JOINT_TORSO);
 
-	return (jh.positionConfidence > 0.5 &&
-		(jrs.positionConfidence > 0.5 || jls.positionConfidence > 0.5) &&
-		jt.positionConfidence > 0.5);
+	// bool headOK = jh.positionConfidence > 0.5; 
+	// NOTE: not checking head since hand can hide it sometimes
+	bool oneShoulderOK = (jrs.positionConfidence > 0.5 || jls.positionConfidence > 0.5);
+	bool torsoOK = jt.positionConfidence > 0.5;
+	return (oneShoulderOK && torsoOK);
 
 }
 
