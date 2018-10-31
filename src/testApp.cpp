@@ -577,7 +577,6 @@ void testApp::drawLiveFrame() {
 	float h = getPlayerHeight();
 	float scale = liveFrameScaleSmooth;
 	ofPushMatrix();
-	ofTranslate(0, videoY);
 	ofScale(scale, scale);
 	
 	//border
@@ -655,7 +654,6 @@ void testApp::drawPlayers() {
 
 		ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 		ofTranslate(dx * (w + margin) / 2 * playbackScale, dy * (h + margin) / 2 * playbackScale);
-		ofTranslate(0, videoY);
 
 		ofScale(playbackScale, playbackScale);
 
@@ -765,24 +763,24 @@ void testApp::draw(){
 
 			//draw overlays	
 			if (state == IDLE) {
-				img_step_in.draw(0, videoY);
+				img_step_in.draw(0, 0);
 				img_prompt_0_1_idle.draw(0, textY);
 			}
 
 			if (state == STEP_IN) {
-				img_step_in.draw(0, videoY);
+				img_step_in.draw(0, 0);
 				img_prompt_0_1_idle.draw(0, textY);
 			}
 
 			if (state == GOTO_SPOT) {
-				img_position_yourself.draw(0, videoY);
+				img_position_yourself.draw(0, 0);
 				//drawGotoSpot(); // todo draw red shadow
 				img_prompt_0_2_position.draw(0, textY);
 			}
 
 			if (state == MORE_THAN_ONE)
 			{
-				img_one_by_one.draw(0, videoY);
+				img_one_by_one.draw(0, 0);
 				img_prompt_0_3_onebyone.draw(0, textY);
 			}
 
@@ -798,7 +796,7 @@ void testApp::draw(){
 
 			if (state == PROFILE_CONFIRMED)
 			{
-				img_goodbye.draw(0, videoY);
+				img_goodbye.draw(0, 0);
 				img_prompt_10_goodbye.draw(0, textY);
 			}
 
@@ -1040,10 +1038,6 @@ void testApp::setupGui(){
 	
 	textY = getPlayerHeight() / 2;
 	gui->addSlider("textY", 0, 1000, &textY);
-
-	videoY = 0;
-	gui->addSlider("videoY", -1000, 1000, &videoY);
-	
 
 	lockCursorY = true;
 	gui->addToggle("(l)ock cursor Y", &lockCursorY)->bindToKey('l');

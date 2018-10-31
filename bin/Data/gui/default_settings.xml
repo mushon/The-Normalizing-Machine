@@ -171,11 +171,6 @@
     <Value>240.000000000</Value>
 </Widget>
 <Widget>
-    <Kind>4</Kind>
-    <Name>videoY</Name>
-    <Value>0.000000000</Value>
-</Widget>
-<Widget>
     <Kind>2</Kind>
     <Name>(l)ock cursor Y</Name>
     <Value>1</Value>
