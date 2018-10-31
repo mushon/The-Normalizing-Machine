@@ -184,6 +184,7 @@ private:
 	}
 
 	float textY;
+	float videoY;
 
 	AppTimer postSelectionTimer;
 	void setupNextRound(string forcedId = "", string excludeSessionId = "");
