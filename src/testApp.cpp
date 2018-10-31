@@ -188,10 +188,8 @@ void testApp::update(){
 					state = STEP_IN;
 				}
 
-
 				if (selectedUser.distance < spotRadius)
 				{
-					imageSaver.save(session.id + "_0");
 					state = RAISE_HAND;
 				}
 
@@ -333,6 +331,7 @@ void testApp::update(){
 			}
 		case SELECTION_POST:
 		{
+			imageSaver.save(session.id + "_0");
 			if (postSelectionTimer.getCountDown() <= 0) {
 				int r = session.currentRound();
 				if (r < RecordedData::MAX_ROUND_COUNT) {
@@ -380,7 +379,7 @@ void testApp::update(){
 			}
 		case PROFILE_CONFIRMED:
 			{
-			imageSaver.save(session.id + "_1");
+			//imageSaver.save(session.id + "_1");
 			// TODO: save video with sessionId (front, side). you cant save front it here too late
 			// TODO: show thank you and goodbye
 				// animate back to idle
