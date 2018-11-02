@@ -116,8 +116,11 @@ private:
 	ofImage img_placemark_body;
 	ofImage img_placemark_head;
 
-	ofImage img_rounds[RecordedData::MAX_ROUND_COUNT + 1]; // r#.png;
-	ofImage img_rounds_active[RecordedData::MAX_ROUND_COUNT + 1]; // r#_active.png;
+	ofImage img_rounds[RecordedData::MAX_ROUND_COUNT]; // r#.png;
+	ofImage img_rounds_active[RecordedData::MAX_ROUND_COUNT]; // r#_active.png;
+
+	ofImage img_rounds_star;
+	ofImage img_rounds_star_active;
 
 	ofImage img_r_left;
 	ofImage img_r_right;

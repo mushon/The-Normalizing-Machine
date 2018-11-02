@@ -37,10 +37,14 @@ void testApp::setup() {
 	img_placemark_body.loadImage("assets/placemark_body.png");
 	img_placemark_head.loadImage("assets/placemark_head.png");
 
-	for (int i = 0; i < RecordedData::MAX_ROUND_COUNT + 1; i++){
+	for (int i = 0; i < RecordedData::MAX_ROUND_COUNT; i++){
 		img_rounds[i].loadImage("assets/r" + to_string(i+1) + ".png");
 		img_rounds_active[i].loadImage("assets/r" + to_string(i+1) + "_active.png");
-	} 
+	}
+
+	img_rounds_star.loadImage("assets/r_star.png");
+	img_rounds_star_active.loadImage("assets/r_star_active.png");
+	
 
 	img_r_left.loadImage("assets/r_left.png");
 	img_r_right.loadImage("assets/r_right.png");
@@ -705,7 +709,7 @@ void testApp::drawRoundSelections(){
 
 	int currentRound = session.currentRound();
 	
-	for (int i = 0; i < RecordedData::MAX_ROUND_COUNT + 1; i++) {
+	for (int i = 0; i < RecordedData::MAX_ROUND_COUNT; i++) {
 		const ofImage* img;
 		if (i < currentRound) { // previously selected
 			img = (session.roundSelections[i] == 0) ? &img_r_left : &img_r_right;
@@ -718,7 +722,18 @@ void testApp::drawRoundSelections(){
 		}
 		img->draw((border + iconWidth) * i, 0);
 	}
-	
+
+	// draw star
+	const ofImage* img;
+	if (state == State::PROFILE_CONFIRMED) { //. || State::RESULT
+		img = &img_rounds_star_active;
+	}
+	else {
+		img = &img_rounds_star;
+	}
+	img->draw((border + iconWidth) * RecordedData::MAX_ROUND_COUNT, 0);
+
+
 	ofSetRectMode(prevRectMode);
 	ofPopStyle();
 	ofPopMatrix();
@@ -920,6 +935,7 @@ void testApp::setupGui(){
 	gui->setScrollableDirections(false, true);
 	gui->setDamping(0); // no acceleration
 
+
 	gui->addLabel("The Normalizing Machine");
 
 	gui->addLabelButton("Save XML", false);
@@ -1050,7 +1066,6 @@ void testApp::setupGui(){
 	gui->addSpacer();
 	gui->addSpacer();
 	gui->addSpacer();
-
 
 	gui->autoSizeToFitWidgets();
 	ofAddListener(gui->newGUIEvent, this, &testApp::guiEvent);   
