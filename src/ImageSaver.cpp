@@ -45,7 +45,8 @@ void ImageSaver::save(const string& dir) {
 		//ofPixels pixels = grabber.getPixels();
 		ofImage image;
 		image.setUseTexture(false);
-		image.setFromPixels(grabber.getPixels());
+		image.setFromPixels(grabber.getPixelsRef());
+		image.crop(600, 100, 720, 680);
 		image.update();
  		image.save(out);
 	}
