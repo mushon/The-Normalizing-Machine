@@ -916,8 +916,13 @@ void testApp::exit(){
 
 void testApp::setupGui(){
 	float dim = 16;
+	
+	gui = new ofxUIScrollableCanvas();
+	gui->setScrollAreaToScreen();
+	gui->setScrollableDirections(false, true);
+	gui->setDamping(0); // no acceleration
 
-	gui = new ofxUISuperCanvas("Turing Normalizing Machine", 2);
+	gui->addLabel("The Normalizing Machine");
 
 	gui->addLabelButton("Save XML", false);
 	gui->addLabelButton("RESET XML", false);
@@ -1048,6 +1053,8 @@ void testApp::setupGui(){
 	lockCursorY = true;
 	gui->addToggle("(l)ock cursor Y", &lockCursorY)->bindToKey('l');
 	
+	gui->addSpacer();
+	gui->addSpacer();
 	gui->addSpacer();
 
 

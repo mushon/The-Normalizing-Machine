@@ -145,7 +145,7 @@ private:
 	void drawOverheadText(ofImage&, int x, int y, int w);
 
 	void setupGui();
-	ofxUISuperCanvas* gui;
+	ofxUIScrollableCanvas* gui;
 
 	AppCursor cursor;
 	bool lockCursorY;
