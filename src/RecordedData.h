@@ -6,7 +6,7 @@ struct RecordedData
 {
 
 	static const int N_OTHERS = 2;
-	static const int MAX_ROUND_COUNT = 4;
+	static const int MAX_ROUND_COUNT = 5;
 
 	RecordedData()
 	{
