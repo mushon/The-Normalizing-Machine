@@ -21,13 +21,16 @@ public:
 	void update();
 	//void stop();
 	void abort();
+	bool isRecording() {
+		return recording;
+	};
 	static const int  RECORDING_TIME = 20;// 20s
 	static const int  RECORDING_TIME_EXTRA = 0.5;// 20s
 	static const string args;
 	static const string ffmpeg;
 	execThread ffmpegThread;
 	float time;
-	bool isRecording;
+	bool recording;
 
 };
 

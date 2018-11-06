@@ -1,17 +1,26 @@
 #include "testApp.h"
 #define PROFILE
 #include "ofxProfile.h"
+#include "KinectUtil.h"
 
+#define HEAD_FATCOR  1.5
+#define KINECT_WIDTH 640
+#define KINECT_HIGHT 480
 
 
 //--------------------------------------------------------------
 void testApp::setup() {
 
-	ofSetFrameRate(30);
-	ofxOpenNI::shutdown();
-	openni::Status rc = OpenNI::initialize();
+	kinect.initSensor();
+	//kinect.initIRStream(640, 480);
+	kinect.initColorStream(KINECT_WIDTH, KINECT_HIGHT, true);
+	kinect.initDepthStream(KINECT_WIDTH, KINECT_HIGHT, true);
+	kinect.initSkeletonStream(false);
+	kinect.setDepthClipping(2500, 5000); // to export to settings
 
-	appRecorder.setup();
+	//simple start
+	kinect.start();
+
 
 	drawDepth=false;
 	drawGui=false;
@@ -68,7 +77,7 @@ void testApp::setup() {
 	img_position_yourself.loadImage("assets/position_yourself.png");
 	img_step_in.loadImage("assets/step_in.png");
 
-	ofEnableAlphaBlending();
+	ofDisableAlphaBlending();
 
 	setupGui();
 
@@ -81,19 +90,20 @@ void testApp::setup() {
 	imageSaver.setup(imageDir, string("jpg"));
 
 	state = IDLE;
+	players[0].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
+	players[1].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
 }
 
 void testApp::setupPlayback(string _filename) {
 	//player.stop();
 	ofLogNotice("setupPlayback:") << _filename << endl;
 
-	ofxOpenNI& player = players[n_players];
+	ofVideoPlayer& player = players[n_players];
 	n_players++;
 
-	player.setup(_filename.c_str());
-	//player.addDepthStream();
-	player.addImageStream();
-	player.start();
+	player.close();
+	player.load(_filename);
+	player.play();
 
 }
 
@@ -110,7 +120,7 @@ void testApp::setupNextRound(string forcedId, string excludeSessionId) {
 	for (int i = 0; i<session.N_OTHERS; i++)
 	{
 		int r = session.currentRound();
-		setupPlayback(recDir + session.othersId[r][i] + ".oni");
+		setupPlayback(recDir + session.othersId[r][i]);
 	}
 }
 
@@ -129,10 +139,10 @@ void testApp::update(){
 	userMessage = stringstream();
 
 	ofxProfileSectionPush("openni update live");
-	appRecorder.update();
+	kinect.update();
 	ofxProfileSectionPop();
 
-	int nVisibleUsers = appRecorder.countVisibleUsers(); // vector from sensor
+	int nVisibleUsers = KinectUtil::countVisibleUsers(kinect); // vector from sensor
 	userMessage << nVisibleUsers << endl;
 
 	updateSelectedUser();
@@ -236,12 +246,12 @@ void testApp::update(){
 			{
 				if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance)
 				{
-					appRecorder.abort();
+					recorder.abort();
 					state = RAISE_HAND;
 				}
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
-					appRecorder.abort();
+					recorder.abort();
 					//give timeout?
 					state = GOTO_SPOT;
 				}
@@ -306,13 +316,13 @@ void testApp::update(){
 						selectedUser.getSelectedArm().steady.reset();
 						selectedUser.selectTimer.reset();
 						selectedUser.waitForSteady = true;
-						appRecorder.abort();
+						recorder.abort();
 					}
 
 					if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 2) { // one before last round
 						if (selectedUser.selectTimer.getCountDown() < recordingDuration)
 						{
-							appRecorder.start(recDir, session.id);
+							recorder.start(recDir, session.id);
 						}
 					}
 
@@ -327,12 +337,12 @@ void testApp::update(){
 					{
 						// add vote
 						session.makeSelection(selectedUser.hovered);
-
+						/*
 						if (appRecorder.IsRecording()) {
 							appRecorder.stop();
 							ofSleepMillis(100); // seems like it's fixed
 						}
-
+						*/
 						postSelectionTimer.setTimeout(postSelectionTimeout);
 						postSelectionTimer.reset();
 						state = SELECTION_POST;
@@ -589,12 +599,13 @@ void testApp::drawLiveFrame() {
 	ofRect(0, 0, w + 2 * margin / scale, h + 2 * margin / scale);	
 
 	// draw cropped area in center of frame
-	float imageWidth = appRecorder.imageWidth();
-	float imageHeight = appRecorder.imageHeight();
+	float imageWidth = KINECT_WIDTH;
+	float imageHeight = KINECT_HIGHT;
 
 	float offsetW = (imageWidth - w) / 2;
 	float offsetH = (imageHeight - h) / 2;
-	appRecorder.drawImageSubsection(w, h, offsetW, offsetH);
+	kinect.getColorTexture().drawSubsection(0, 0, w, h, 0, 0, offsetW, offsetH);
+	//appRecorder.drawImageSubsection(w, h, offsetW, offsetH);
 	
 	img_record.draw((img_record.getWidth() + margin - w) / 2 , (img_record.getHeight() + margin - h) / 2); // top left
 	ofPopMatrix();
@@ -668,14 +679,14 @@ void testApp::drawPlayers() {
 		ofRect(border);
 
 		// draw cropped area in center of frame
-		float imageWidth = players[i].imageWidth;
-		float imageHeight = players[i].imageHeight;
+		float imageWidth = players[i].getWidth();
+		float imageHeight = players[i].getHeight();
 
 		float offsetW = (imageWidth - w) / 2;
 		float offsetH = (imageHeight - h) / 2;
 
-		players[i].drawImageSubsection(w, h, offsetW, offsetH);
-
+		//players[i].drawImageSubsection(w, h, offsetW, offsetH);
+		players[i].getTextureReference().drawSubsection(0, 0, w, h, 0, 0, offsetW, offsetH);
 
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 		{
@@ -848,7 +859,7 @@ void testApp::draw(){
 	if (drawDepth)
 	{
 		ofSetRectMode(OF_RECTMODE_CORNER);
-		appRecorder.draw();
+		kinect.drawDepth(0, 0);
 	}
 
 	if (drawText)
@@ -874,10 +885,10 @@ void testApp::keyPressed(int key){
 		break;
 
 	case 's':
-		appRecorder.stop();
+		recorder.abort();
 		break;
 	case 'S':
-		appRecorder.start(recDir, generateFileName());
+		recorder.start(recDir, generateFileName());
 		break;
 
 	case 'F':
@@ -1123,7 +1134,7 @@ void testApp::drawDebugText()
 	stringstream msg;
 	msg
 		<< "F: Fullscreen" << endl
-		<< "s : start/stop recording: " << (appRecorder.IsRecording() ? "RECORDING" : "READY") << endl
+		<< "s : start/stop recording: " << (recorder.isRecording() ? "RECORDING" : "READY") << endl
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 		<< "State : " << AppState::toString(state) << endl
@@ -1164,25 +1175,24 @@ string testApp::getRecDirString(string url)
 SelectedUser testApp::getClosestUser()
 {
 	SelectedUser user;
+	auto skeletons = kinect.getSkeletons();
+	for (int i = 0; i != skeletons.size(); i++) {
+		Skeleton skeleton = skeletons[i];
+		if (!skeleton.empty()) { 
+			if (KinectUtil::checkMainJointsConfidence(skeleton)) {
+				user.headPoint = skeleton.at(NUI_SKELETON_POSITION_HEAD).getStartPosition();
 
-	if (appRecorder.openNIRecorder.trackedUsers.size() > 0)
-	{
-		for (map<int, ofxOpenNIUser>::iterator it = appRecorder.openNIRecorder.trackedUsers.begin(); it != appRecorder.openNIRecorder.trackedUsers.end(); ++it)
-		{
-			ofxOpenNIUser& u = it->second;
-			ofxOpenNIJoint jh = u.getJoints().at(nite::JointType::JOINT_HEAD);
-			user.headPoint = jh.positionReal;
+				ofVec2f dist = ofVec2f(user.headPoint.x - spot.x, user.headPoint.z - spot.z); // discard height(y)    <<<--------------------------might be a hang here, consider other way of choosing
 
-			ofVec2f dist = ofVec2f(user.headPoint.x - spot.x, user.headPoint.z - spot.z); // discard height(y)    <<<--------------------------might be a hang here, consider other way of choosing
+				float distance = dist.length();
+				if (distance < user.distance)
+				{
+					user.id = i;
+					user.distance = distance;
+				}
 
-			float distance = dist.length();
-			if (distance < user.distance)
-			{
-				user.id = it->first;
-				user.distance = distance;
+				userMessage << user.id << ":" << user.headPoint << endl;
 			}
-
-			userMessage << user.id << ":" << user.headPoint << endl;
 		}
 	} // end for map
 	
@@ -1206,8 +1216,18 @@ void testApp::updateSelectedUser()
 		selectedUser.distance = user.distance;
 		selectedUser.headPoint = user.headPoint;
 		
-		ofxOpenNIUser& u = appRecorder.openNIRecorder.trackedUsers.at(user.id);
+		Skeleton& skeleton = kinect.getSkeletons().at(user.id);
 
+		auto & head = skeleton.at(NUI_SKELETON_POSITION_HEAD);
+
+		auto & rhj = skeleton.at(NUI_SKELETON_POSITION_WRIST_LEFT);
+		auto & rsj = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_RIGHT);
+		auto & lhj = skeleton.at(NUI_SKELETON_POSITION_WRIST_LEFT);
+		auto & lsj = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_LEFT);
+
+		auto & neck = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_CENTER);
+		auto & hip = skeleton.at(NUI_SKELETON_POSITION_HIP_CENTER);
+		/*
 		ofxOpenNIJoint rhj = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND);
 		ofxOpenNIJoint rsj = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
 		ofxOpenNIJoint lhj = u.getJoints().at(nite::JointType::JOINT_LEFT_HAND);
@@ -1219,41 +1239,37 @@ void testApp::updateSelectedUser()
 		ofxOpenNIJoint rhip = u.getJoints().at(nite::JointType::JOINT_RIGHT_HIP);
 		ofxOpenNIJoint lfoot = u.getJoints().at(nite::JointType::JOINT_LEFT_FOOT);
 		ofxOpenNIJoint rfoot = u.getJoints().at(nite::JointType::JOINT_RIGHT_FOOT);
-
+		*/
 		// update body measurements
 		float userHeight = 0;
-		if (rfoot.positionConfidence >= 0.5) {
-			userHeight = selectedUser.headPoint.distance(rfoot.positionReal);
+		if (head.getTrackingState() == SkeletonBone::Tracked) {
+			userHeight = head.getStartPosition().y;
 		}
-		else if (lfoot.positionConfidence >= 0.5) {
-			userHeight = selectedUser.headPoint.distance(lfoot.positionReal);
-		}
+
 		if (userHeight > selectedUser.totalHeight) {
 			selectedUser.totalHeight = userHeight;
 		}
 
 		float headHeight = 0;
-		if (neck.positionConfidence >= 0.5) {
-			headHeight = selectedUser.headPoint.distance(neck.positionReal);
+		if (neck.getTrackingState() == SkeletonBone::Tracked && head.getTrackingState() == SkeletonBone::Tracked) {
+			headHeight = head.getStartPosition().distance(neck.getStartPosition());
 		}
 		if (headHeight > selectedUser.headHeight) {
 			selectedUser.headHeight = headHeight;
 		}
 
 		float torsoLength = 0;
-		if (neck.positionConfidence >= 0.5 && lhip.positionConfidence >= 0.5) {
-			torsoLength = neck.positionReal.distance(lhip.positionReal);
+		if (neck.getTrackingState() == SkeletonBone::Tracked && hip.getTrackingState() == SkeletonBone::Tracked) {
+			torsoLength = neck.getStartPosition().distance(hip.getStartPosition());
 		}
-		else if (neck.positionConfidence >= 0.5 && rhip.positionConfidence >= 0.5) {
-			torsoLength = neck.positionReal.distance(rhip.positionReal);
-		}
+	
 		if (torsoLength > selectedUser.torsoLength) {
 			selectedUser.torsoLength = torsoLength;
 		}
 
 		float shouldersWidth = 0;
-		if (rsj.positionConfidence >= 0.5 && lsj.positionConfidence >= 0.5) {
-			shouldersWidth = rsj.positionReal.distance(lsj.positionReal);
+		if (rsj.getTrackingState() == SkeletonBone::Tracked && lsj.getTrackingState() == SkeletonBone::Tracked) {
+			shouldersWidth = rsj.getScreenPosition().distance(lsj.getScreenPosition());
 		}
 		if (shouldersWidth > selectedUser.shouldersWidth) {
 			selectedUser.shouldersWidth = shouldersWidth;
@@ -1266,19 +1282,19 @@ void testApp::updateSelectedUser()
 
 
 
-		bool updateLeftArm = lhj.positionConfidence >= 0.5 && lsj.positionConfidence >= 0.5;
-		bool updateRightArm = rhj.positionConfidence >= 0.5 && rsj.positionConfidence >= 0.5;
+		bool updateLeftArm = lhj.getTrackingState() == SkeletonBone::Tracked && lsj.getTrackingState() == SkeletonBone::Tracked;
+		bool updateRightArm = rhj.getTrackingState() == SkeletonBone::Tracked && rsj.getTrackingState() == SkeletonBone::Tracked;
 		
 		if (updateLeftArm)
 		{
-			ofPoint leftHand = lhj.positionReal;
-			ofPoint leftShoulder = lsj.positionReal;
+			ofPoint leftHand = lhj.getStartPosition();
+			ofPoint leftShoulder = lsj.getStartPosition();
 			selectedUser.leftArm.update(leftHand, leftShoulder);
 		}
 		if (updateRightArm)
 		{
-			ofPoint rightHand = rhj.positionReal;
-			ofPoint rightShoulder = rsj.positionReal;
+			ofPoint rightHand = rhj.getStartPosition();
+			ofPoint rightShoulder = rsj.getStartPosition();
 			selectedUser.rightArm.update(rightHand, rightShoulder);
 		}
 		

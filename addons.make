@@ -1,5 +1,5 @@
 ofxJSON
-ofxOpenNI
+ofxKinectCommonBridge
 ofxProfile
 ofxUI
 ofxXmlSettings

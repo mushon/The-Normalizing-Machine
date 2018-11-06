@@ -48,21 +48,24 @@ void FfmpegRecorder::start(string recDir, string filename, string ext /*= ".mp4"
 {
 	string cmd(ffmpeg + args + recDir + filename + "." + ext);
 	ffmpegThread.setup(cmd);
+	recording = true;
 }
 
 void FfmpegRecorder::update()
 {
-	if (isRecording) {
+	if (recording) {
 		if ((ofGetElapsedTimef() - time) > (RECORDING_TIME + RECORDING_TIME_EXTRA)) {
 			ffmpegThread.close();
+			recording = false;
 		}
 	}
 }
 
 void FfmpegRecorder::abort()
 {
-	if (isRecording) {
+	if (recording) {
 		ffmpegThread.close();
 	}
+	recording = false;
 
 }

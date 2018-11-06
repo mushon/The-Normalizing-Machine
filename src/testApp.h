@@ -1,7 +1,6 @@
 #ifndef _TEST_APP
 #define _TEST_APP
 
-#include "ofxOpenNI.h"
 #include "ofMain.h"
 #include "ofxJSON.h"
 #include "ofxUI.h"
@@ -12,9 +11,10 @@
 #include "State.h"
 
 #include "RecordedData.h"
-#include "AppRecorder.h"
+#include "FfmpegRecorder.h"
 #include "AppDataset.h"
 #include "ImageSaver.h"
+#include "ofxKinectCommonBridge.h"
 
 
 class testApp : public ofBaseApp{
@@ -44,6 +44,7 @@ public:
 	bool drawCursor;
 
 	SelectedUser selectedUser;
+	ofxKinectCommonBridge kinect;
 
 private:
 
@@ -58,14 +59,14 @@ private:
 	string datasetJsonFilename;
 
 	// Video records
-	AppRecorder appRecorder;
+	FfmpegRecorder recorder;
 	string recDir;
 	string generateFileName();
 
 	// Video player
 	void setupPlayback(string _filename);
 	static const unsigned int MAX_PLAYERS = 2;
-	ofxOpenNI players[MAX_PLAYERS];
+	ofVideoPlayer players[MAX_PLAYERS];
 	float playbackScales[MAX_PLAYERS];
 	int n_players;
 	float selectionScaleSmoothed[MAX_PLAYERS] = { 1.0f, 1.0f };
