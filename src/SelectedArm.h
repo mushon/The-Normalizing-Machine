@@ -24,7 +24,8 @@ public:
 
 
 	void update(ofPoint h, ofPoint s) {
-
+		h *= 1000;
+		s *= 1000;
 		if (hand == ofVec3f() && shoulder == ofVec3f())
 		{
 			hand = h;

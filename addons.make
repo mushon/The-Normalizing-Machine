@@ -1,5 +1,4 @@
+ofxXmlSettings
 ofxJSON
 ofxKinectCommonBridge
-ofxProfile
 ofxUI
-ofxXmlSettings

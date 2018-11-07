@@ -1,6 +1,4 @@
 #include "testApp.h"
-#define PROFILE
-#include "ofxProfile.h"
 #include "KinectUtil.h"
 
 #define HEAD_FATCOR  1.5
@@ -16,7 +14,10 @@ void testApp::setup() {
 	kinect.initColorStream(KINECT_WIDTH, KINECT_HIGHT, true);
 	kinect.initDepthStream(KINECT_WIDTH, KINECT_HIGHT, true);
 	kinect.initSkeletonStream(false);
-	kinect.setDepthClipping(2500, 5000); // to export to settings
+	//kinect.setUseStreams(true);
+	//kinect.createColorPixels(KINECT_WIDTH, KINECT_HIGHT);
+	kinect.setUseTexture(true);
+	kinect.setDepthClipping(500, 5000); // TODO:: export to settings
 
 	//simple start
 	kinect.start();
@@ -81,7 +82,7 @@ void testApp::setup() {
 
 	setupGui();
 
-	ofBackground(0, 0, 0);
+	ofBackground(0, 0, 0, 0);
 
 	dataset.loadLibrary(recDir + datasetJsonFilename);
 
@@ -138,9 +139,9 @@ void testApp::update(){
 	
 	userMessage = stringstream();
 
-	ofxProfileSectionPush("openni update live");
+	//ofxProfileSectionPush("openni update live");
 	kinect.update();
-	ofxProfileSectionPop();
+	//ofxProfileSectionPop();
 
 	int nVisibleUsers = KinectUtil::countVisibleUsers(kinect); // vector from sensor
 	userMessage << nVisibleUsers << endl;
@@ -514,10 +515,11 @@ void testApp::update(){
 
 	for (int i=0; i<n_players; i++)
 	{
-		ofxProfileSectionPush(string("openni update ").append(ofToString(i)));
+		//ofxProfileSectionPush(string("openni update ").append(ofToString(i)));
 		players[i].update();
-		ofxProfileSectionPop();
+		//ofxProfileSectionPop();
 	}
+	drawFbo();
 }
 
 
@@ -551,13 +553,13 @@ void testApp::drawGotoSpot() {
 	ofTranslate(0, -h / 2 * sc2);
 
 	ofScale(factor, factor);
-	ofVec2f spot2d(spot.x, spot.z);
+	//ofVec2f spot2d(spot.x, spot.z);
 
 	ofSetColor(ofColor::green, userMapAlpha);
 	ofFill();
-	ofCircle(spot2d, spotRadius);
+	ofCircle(spot.x, spot.z, spotRadius);
 	ofNoFill();
-	ofCircle(spot2d, (spotRadius + spotRadiusHysteresis));
+	ofCircle(spot.x, spot.z, (spotRadius + spotRadiusHysteresis));
 
 	//ofLine(spot2d.x - spotRadius, spot2d.y,spot2d.x + spotRadius, spot2d.y);
 
@@ -565,8 +567,8 @@ void testApp::drawGotoSpot() {
 	ofSetLineWidth(5);
 	ofSetColor(ofColor::white, userMapAlpha);
 
-	ofVec2f v(selectedUser.headPoint.x, selectedUser.headPoint.z);
-	ofCircle(v, 200);
+	//ofVec2f v(selectedUser.headPoint.x, selectedUser.headPoint.z);
+	ofCircle(selectedUser.headPoint.x, selectedUser.headPoint.z, 200);
 
 	ofPopStyle();
 	ofPopMatrix();
@@ -594,9 +596,11 @@ void testApp::drawLiveFrame() {
 	ofScale(scale, scale);
 	
 	//border
-	ofSetColor(ofColor::black);
-	ofFill();
-	ofRect(0, 0, w + 2 * margin / scale, h + 2 * margin / scale);	
+	//ofSetColor(ofColor::black);
+	//ofFill();
+	//ofNoFill();
+	//ofDrawRectRounded(0, 0, w + 2 * margin / scale, h + 2 * margin / scale, 6);
+	//ofRect(0, 0, w + 2 * margin / scale, h + 2 * margin / scale);	
 
 	// draw cropped area in center of frame
 	float imageWidth = KINECT_WIDTH;
@@ -604,7 +608,8 @@ void testApp::drawLiveFrame() {
 
 	float offsetW = (imageWidth - w) / 2;
 	float offsetH = (imageHeight - h) / 2;
-	kinect.getColorTexture().drawSubsection(0, 0, w, h, 0, 0, offsetW, offsetH);
+	kinect.getColorTexture().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
+	//kinect.draw(0, 0);
 	//appRecorder.drawImageSubsection(w, h, offsetW, offsetH);
 	
 	img_record.draw((img_record.getWidth() + margin - w) / 2 , (img_record.getHeight() + margin - h) / 2); // top left
@@ -685,8 +690,10 @@ void testApp::drawPlayers() {
 		float offsetW = (imageWidth - w) / 2;
 		float offsetH = (imageHeight - h) / 2;
 
-		//players[i].drawImageSubsection(w, h, offsetW, offsetH);
-		players[i].getTextureReference().drawSubsection(0, 0, w, h, 0, 0, offsetW, offsetH);
+		if (players[i].isPlaying()) {
+			//players[i].drawImageSubsection(w, h, offsetW, offsetH);
+			players[i].getTextureReference().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
+		}
 
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 		{
@@ -750,10 +757,7 @@ void testApp::drawRoundSelections(){
 	ofPopMatrix();
 }
 
-
-void testApp::draw(){
-	ofxProfileThisFunction();
-
+void testApp::drawFbo() {
 	fbo.begin();
 	ofClear(0, 0, 0, 0);
 
@@ -764,11 +768,11 @@ void testApp::draw(){
 		if (playerFrameScaleSmooth > 0.01) {
 			drawPlayers();
 		}
-		
+
 		if (roundSelectionsScaleSmooth > 0.01) {
 			drawRoundSelections();
 		}
-		
+
 		//draw live frame
 		if (liveFrameScaleSmooth > 0.01)
 		{
@@ -780,33 +784,41 @@ void testApp::draw(){
 
 			ofPushMatrix();
 			ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
-			
+
 			float sc2 = liveFrameScaleSmooth;
 
-			ofxProfileSectionPush("draw live");
+			//ofxProfileSectionPush("draw live");
 			drawLiveFrame();
 
 
 			//draw overlays	
 			if (state == IDLE) {
+				ofEnableAlphaBlending();
 				img_step_in.draw(0, 0);
+				ofDisableAlphaBlending();
 				img_prompt_0_1_idle.draw(0, textY);
 			}
 
 			if (state == STEP_IN) {
+				ofEnableAlphaBlending();
 				img_step_in.draw(0, 0);
+				ofDisableAlphaBlending();
 				img_prompt_0_1_idle.draw(0, textY);
 			}
 
 			if (state == GOTO_SPOT) {
+				ofEnableAlphaBlending();
 				img_position_yourself.draw(0, 0);
+				ofDisableAlphaBlending();
 				//drawGotoSpot(); // todo draw red shadow
 				img_prompt_0_2_position.draw(0, textY);
 			}
 
 			if (state == MORE_THAN_ONE)
 			{
+				ofEnableAlphaBlending();
 				img_one_by_one.draw(0, 0);
+				ofDisableAlphaBlending();
 				img_prompt_0_3_onebyone.draw(0, textY);
 			}
 
@@ -823,13 +835,15 @@ void testApp::draw(){
 			if (state == PROFILE_CONFIRMED)
 			{
 				img_goodbye.draw(0, 0);
+				ofEnableAlphaBlending();
 				img_prompt_10_goodbye.draw(0, textY);
+				ofDisableAlphaBlending();
 			}
 
-			ofxProfileSectionPop();
+			//ofxProfileSectionPop();
 			ofPopMatrix();
 		}
-		
+
 
 		if (state == SELECTION)
 		{
@@ -842,12 +856,15 @@ void testApp::draw(){
 
 	}
 	fbo.end();
+}
 
-	ofSetColor(ofColor::white);
+void testApp::draw(){
+	//ofxProfileThisFunction();
+	//ofSetColor(ofColor::white);
 
 	if (drawProjection)
 	{
-		//ofSetRectMode(OF_RECTMODE_CORNER);
+		ofSetRectMode(OF_RECTMODE_CORNER);
 		drawSplitScreen(fbo);
 	}
 	else 
@@ -859,7 +876,7 @@ void testApp::draw(){
 	if (drawDepth)
 	{
 		ofSetRectMode(OF_RECTMODE_CORNER);
-		kinect.drawDepth(0, 0);
+		kinect.drawDepth(0,0);
 	}
 
 	if (drawText)
@@ -869,7 +886,8 @@ void testApp::draw(){
 
 	if (drawProfiler)
 	{
-		ofDrawBitmapString(ofxProfile::describe(), profilerPos);
+		drawKinect();
+		//ofDrawBitmapString(ofxProfile::describe(), profilerPos);
 	}
 
 
@@ -881,7 +899,7 @@ void testApp::keyPressed(int key){
 	switch (key) {
 
 	case 'C':
-		ofxProfile::clear();
+		//ofxProfile::clear();
 		break;
 
 	case 's':
@@ -929,9 +947,9 @@ void testApp::exit(){
 
 	for (int i=0; i<n_players; i++)
 	{
-		players[i].stop();
+		players[i].close();
 	}
-
+	kinect.stop();
 
 //	ofxOpenNI::shutdown();
 
@@ -1181,7 +1199,7 @@ SelectedUser testApp::getClosestUser()
 		if (!skeleton.empty()) { 
 			if (KinectUtil::checkMainJointsConfidence(skeleton)) {
 				user.headPoint = skeleton.at(NUI_SKELETON_POSITION_HEAD).getStartPosition();
-
+				user.headPoint = user.headPoint * 1000;
 				ofVec2f dist = ofVec2f(user.headPoint.x - spot.x, user.headPoint.z - spot.z); // discard height(y)    <<<--------------------------might be a hang here, consider other way of choosing
 
 				float distance = dist.length();
@@ -1220,9 +1238,9 @@ void testApp::updateSelectedUser()
 
 		auto & head = skeleton.at(NUI_SKELETON_POSITION_HEAD);
 
-		auto & rhj = skeleton.at(NUI_SKELETON_POSITION_WRIST_LEFT);
+		auto & rhj = skeleton.at(NUI_SKELETON_POSITION_HAND_RIGHT);
 		auto & rsj = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_RIGHT);
-		auto & lhj = skeleton.at(NUI_SKELETON_POSITION_WRIST_LEFT);
+		auto & lhj = skeleton.at(NUI_SKELETON_POSITION_HAND_LEFT);
 		auto & lsj = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_LEFT);
 
 		auto & neck = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_CENTER);
@@ -1314,6 +1332,41 @@ string testApp::generateFileName() {
 	string timeFormat = "%Y_%m_%d_%H_%M_%S_%i";
 	string name = ofGetTimestampString(timeFormat);
 	return name;
+}
+
+void testApp::drawKinect()
+{
+	kinect.draw(640, 0);
+	kinect.drawDepth(0, 0);
+
+	ofPushStyle();
+	ofSetColor(255, 0, 0);
+	ofSetLineWidth(3.0f);
+	auto skeletons = kinect.getSkeletons();
+	for (auto & skeleton : skeletons) {
+		for (auto & bone : skeleton) {
+			switch (bone.second.getTrackingState()) {
+			case SkeletonBone::Inferred:
+				ofSetColor(0, 0, 255);
+				break;
+			case SkeletonBone::Tracked:
+				ofSetColor(0, 255, 0);
+				break;
+			case SkeletonBone::NotTracked:
+				ofSetColor(255, 0, 0);
+				break;
+			}
+
+			auto index = bone.second.getStartJoint();
+			auto connectedTo = skeleton.find((_NUI_SKELETON_POSITION_INDEX)index);
+			if (connectedTo != skeleton.end()) {
+				ofLine(connectedTo->second.getScreenPosition(), bone.second.getScreenPosition());
+			}
+
+			ofCircle(bone.second.getScreenPosition(), 10.0f);
+		}
+	}
+	ofPopStyle();
 }
 
 void testApp::drawSplitScreen(ofFbo& fbo) {

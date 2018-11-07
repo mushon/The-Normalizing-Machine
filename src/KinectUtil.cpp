@@ -30,22 +30,13 @@ int KinectUtil::countVisibleUsers(ofxKinectCommonBridge & kinect)
 
 bool KinectUtil::checkMainJointsConfidence(Skeleton& skeleton)
 {
-	int noTrack = 0;
-	if (skeleton.at(NUI_SKELETON_POSITION_HEAD).getTrackingState() == SkeletonBone::NotTracked) {
-		noTrack ++;
-	}
-	if (skeleton.at(NUI_SKELETON_POSITION_SHOULDER_LEFT).getTrackingState() == SkeletonBone::NotTracked) {
-		noTrack++;
-	}
-	if (skeleton.at(NUI_SKELETON_POSITION_SHOULDER_RIGHT).getTrackingState() == SkeletonBone::NotTracked) {
-		noTrack++;
-	}
-	if (skeleton.at(NUI_SKELETON_POSITION_HIP_CENTER).getTrackingState() == SkeletonBone::NotTracked) {
-		noTrack++;
-	}
-	if (noTrack >= 2) {
-		return false;
-	}
+	//if (skeleton.at(NUI_SKELETON_POSITION_HEAD).getTrackingState() == SkeletonBone::NotTracked) {
+	//	noTrack ++;
+	//}
+	auto & jrs = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_RIGHT);
+	auto & jls = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_LEFT);
+	auto & jt = skeleton.at(NUI_SKELETON_POSITION_SPINE);
 
-	return true;
+	bool oneShoulderOK = (jrs.getTrackingState() == SkeletonBone::Tracked || jls.getTrackingState() == SkeletonBone::Tracked);
+	return (jt.getTrackingState() == SkeletonBone::Tracked && oneShoulderOK);
 }

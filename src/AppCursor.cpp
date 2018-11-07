@@ -29,7 +29,7 @@ void AppCursor::draw()
 	ofSetLineWidth(2);
 
 	ofNoFill();
-	ofCircle(position, minRadius);
+	ofCircle(position.x, position.y, minRadius);
 	ring.clear();
 	ring.arc(position, minRadius, minRadius, lowAngle, highAngle);  
 	ring.moveTo(position);

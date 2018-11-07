@@ -201,7 +201,7 @@ private:
 
 	ofFbo fbo;
 	bool drawProjection = true;
-	int wallAngle = -20;
+	int wallAngle = 0;
 
 	int selectionTimeout;		// ms
 	int postSelectionTimeout;	// ms
@@ -213,6 +213,8 @@ private:
 	string imageDir;
 
 	float selectionBufferWidth;
+	void drawKinect();
+	void drawFbo();
 };
 
 
