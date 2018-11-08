@@ -4,10 +4,17 @@
 #define HEAD_FATCOR  1.5
 #define KINECT_WIDTH 640
 #define KINECT_HIGHT 480
+#define CAPTURE_IMAGE_X 1000
+#define CAPTURE_IMAGE_Y 0
+#define CAPTURE_IMAGE_W 1000
+#define CAPTURE_IMAGE_H 2160
 
-
+const ofRectangle testApp::cropImage(CAPTURE_IMAGE_X, CAPTURE_IMAGE_Y, CAPTURE_IMAGE_W, CAPTURE_IMAGE_H);
 //--------------------------------------------------------------
 void testApp::setup() {
+
+	ofSetVerticalSync(true);
+	ofSetFrameRate(25);
 
 	kinect.initSensor();
 	//kinect.initIRStream(640, 480);
@@ -54,7 +61,7 @@ void testApp::setup() {
 
 	img_rounds_star.loadImage("assets/r_star.png");
 	img_rounds_star_active.loadImage("assets/r_star_active.png");
-	
+
 
 	img_r_left.loadImage("assets/r_left.png");
 	img_r_right.loadImage("assets/r_right.png");
@@ -88,11 +95,14 @@ void testApp::setup() {
 
 	fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
-	imageSaver.setup(imageDir, string("jpg"));
-
 	state = IDLE;
 	players[0].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
 	players[1].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
+
+	// video border frame
+	frame.setStrokeColor(ofColor::white);
+	frame.setStrokeWidth(4);
+	frame.setFilled(false);
 }
 
 void testApp::setupPlayback(string _filename) {
@@ -127,16 +137,16 @@ void testApp::setupNextRound(string forcedId, string excludeSessionId) {
 
 //--------------------------------------------------------------
 void testApp::update(){
-	
+	recorder.update();
 	static int lastMin=0;
-	
+
 	int mins = ofGetElapsedTimeMillis() / (1000 * 60); // (ofGetElapsedTimef());
 	if (mins > lastMin)
 	{
 		lastMin = mins;
 		ofLogNotice("Minutes Passed") << mins;
 	}
-	
+
 	userMessage = stringstream();
 
 	//ofxProfileSectionPush("openni update live");
@@ -163,9 +173,9 @@ void testApp::update(){
 				// 1 -> 0
 				state = IDLE;
 			}
-		}		
+		}
 	}
-	
+
 	if (nVisibleUsers == 1)
 	{
 		selectedUser.lastSeen.reset();
@@ -183,7 +193,7 @@ void testApp::update(){
 			}
 		case STEP_IN:
 			{
-				if (selectedUser.id == SelectedUser::NO_USER || 
+				if (selectedUser.id == SelectedUser::NO_USER ||
 				   selectedUser.distance > idleThreshold + idleThresholdHysteresis)
 				{
 					state = IDLE;
@@ -217,6 +227,7 @@ void testApp::update(){
 
 		case RAISE_HAND:
 			{
+				recorder.capture(imageDir, session.id, cropImage, false);
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
 					state = GOTO_SPOT;
@@ -247,12 +258,12 @@ void testApp::update(){
 			{
 				if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance)
 				{
-					recorder.abort();
+					//recorder.abort();
 					state = RAISE_HAND;
 				}
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
-					recorder.abort();
+					//recorder.abort();
 					//give timeout?
 					state = GOTO_SPOT;
 				}
@@ -273,8 +284,8 @@ void testApp::update(){
 
 					selectedUser.screenPoint01 = v;
 
-					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function, 
-					//v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function, 
+					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function,
+					//v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function,
 					//v.y = powf(v.y, 3); // only on x
 
 					float cx = ofGetScreenWidth() / 2;
@@ -282,8 +293,8 @@ void testApp::update(){
 
 					selectedUser.screenPoint = v.getMapped(ofVec2f(cx, cy), ofVec2f(cx, 0), ofVec2f(0, -cy)); // reverse y, assume -1 < v.x, v.y < 1
 
-					selectedUser.screenPoint.x = ofLerp(ofGetScreenWidth() / 2, selectedUser.screenPoint.x, 0.1);  // force to center // 2-player hack 
-					selectedUser.screenPoint.y = ofLerp(ofGetScreenHeight() / 2, selectedUser.screenPoint.y, 0.1);  // force to center // 2-player hack 
+					selectedUser.screenPoint.x = ofLerp(ofGetScreenWidth() / 2, selectedUser.screenPoint.x, 0.1);  // force to center // 2-player hack
+					selectedUser.screenPoint.y = ofLerp(ofGetScreenHeight() / 2, selectedUser.screenPoint.y, 0.1);  // force to center // 2-player hack
 
 					float progress = selectedUser.getProgress();
 
@@ -297,15 +308,15 @@ void testApp::update(){
 					if (v.x > 0) hover += 1;
 					// if (v.y < 0) hover+=2; 2 players hack
 
-					float w = getPlayerWidth(); 
+					float w = getPlayerWidth();
 					float h = getPlayerHeight();
 
-					
+
 					if (abs(selectedUser.screenPoint.x - cx) < selectionBufferWidth) // && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
 					{
 						hover = SelectedUser::NO_HOVER;
 					}
-					
+
 					if (/* abs(v.x) > outsideScreenFactor || */ abs(v.y) > outsideScreenFactor) // hand down
 					{
 						hover = SelectedUser::NO_HOVER;
@@ -317,7 +328,7 @@ void testApp::update(){
 						selectedUser.getSelectedArm().steady.reset();
 						selectedUser.selectTimer.reset();
 						selectedUser.waitForSteady = true;
-						recorder.abort();
+						//recorder.abort();
 					}
 
 					if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 2) { // one before last round
@@ -328,7 +339,7 @@ void testApp::update(){
 					}
 
 					//TODO select mechanism (click/timeout)
-					
+
 					for (int i = 0; i < session.currentRound(); i++) {
 						userMessage << "roundCount: " << i << ": " << session.roundSelections[i] << endl;
 					}
@@ -355,7 +366,6 @@ void testApp::update(){
 			}
 		case SELECTION_POST:
 		{
-			imageSaver.save(session.id + "_0");
 			if (postSelectionTimer.getCountDown() <= 0) {
 				int r = session.currentRound();
 				if (r < RecordedData::MAX_ROUND_COUNT) {
@@ -370,7 +380,7 @@ void testApp::update(){
 					state = SELECTION;
 				}
 				else {
-					resultTimer.setTimeout(resultTimeout); 
+					resultTimer.setTimeout(resultTimeout);
 					resultTimer.reset();
 					state = RESULT;
 				}
@@ -403,7 +413,7 @@ void testApp::update(){
 			}
 		case PROFILE_CONFIRMED:
 			{
-			//imageSaver.save(session.id + "_1");
+			recorder.capture(imageDir, session.id, cropImage, false);
 			// TODO: save video with sessionId (front, side). you cant save front it here too late
 			// TODO: show thank you and goodbye
 				// animate back to idle
@@ -412,7 +422,7 @@ void testApp::update(){
 				{
 					ofLogNotice("RESULT -> IDLE");
 					state = IDLE;
-				}				
+				}
 				break;
 			}
 
@@ -423,7 +433,7 @@ void testApp::update(){
 			}
 		}
 	}
-	
+
 	if (nVisibleUsers > 1)
 	{
 		state = MORE_THAN_ONE;
@@ -476,7 +486,7 @@ void testApp::update(){
 		roundSelectionsScale = 0.0f;
 	}
 
-	
+
 	// smoothing
 	liveFrameScaleSmooth *= liveFrameScaleSmoothFactor;
 	liveFrameScaleSmooth += (1 - liveFrameScaleSmoothFactor) * liveFrameScale;
@@ -527,12 +537,12 @@ void testApp::drawGotoSpot() {
 
 	// // Depracated debug info:
 	// ofVec2f dist(selectedUser.headPoint.x - spot.x, selectedUser.headPoint.z - spot.z);
-	// userMessage << "go to the spot. Please move " 
+	// userMessage << "go to the spot. Please move "
 	// << (abs(dist.x - spotRadius < 0) ? "Right" : "Left")
 	// << (abs(dist.x - spotRadius < 0) && abs(dist.y - spotRadius < 0) ? " and " : "")
 	// << (abs(dist.y - spotRadius < 0)? "Forward" : "Back") << endl
 	// << endl;
-	
+
 	float sc2 = liveFrameScaleSmooth; // legacy
 	float w = getPlayerWidth();
 	float h = getPlayerHeight();
@@ -589,29 +599,33 @@ void testApp::drawOverlay() {
 
 
 void testApp::drawLiveFrame() {
-	float w = getPlayerWidth();
-	float h = getPlayerHeight();
+	float w = 380;// getPlayerWidth();
+	float h = 480;// getPlayerHeight();
 	float scale = liveFrameScaleSmooth;
 	ofPushMatrix();
 	ofScale(scale, scale);
-	
+
 	//border
 	//ofSetColor(ofColor::black);
 	//ofFill();
 	//ofNoFill();
 	//ofDrawRectRounded(0, 0, w + 2 * margin / scale, h + 2 * margin / scale, 6);
-	//ofRect(0, 0, w + 2 * margin / scale, h + 2 * margin / scale);	
+	//ofRect(0, 0, w + 2 * margin / scale, h + 2 * margin / scale);
 
 	// draw cropped area in center of frame
 	float imageWidth = KINECT_WIDTH;
 	float imageHeight = KINECT_HIGHT;
+
+	frame.clear();
+	frame.rectangle(-w / 2, -h / 2, w, h);
+	frame.draw();
 
 	float offsetW = (imageWidth - w) / 2;
 	float offsetH = (imageHeight - h) / 2;
 	kinect.getColorTexture().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
 	//kinect.draw(0, 0);
 	//appRecorder.drawImageSubsection(w, h, offsetW, offsetH);
-	
+
 	img_record.draw((img_record.getWidth() + margin - w) / 2 , (img_record.getHeight() + margin - h) / 2); // top left
 	ofPopMatrix();
 }
@@ -633,7 +647,6 @@ void testApp::drawIconAnimations(int i) {
 	float iconTrans = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 1, true);
 	iconTrans = sqrt(iconTrans);
 	iconTrans = ofMap(iconTrans, 0, 1, h * 0.75 + icon.getHeight() * 2, 0.0f, true);
-
 	//ofSetColor(255, 255, 255, alphaIcon);
 	ofPushMatrix();
 	ofTranslate(0, iconTrans);
@@ -651,7 +664,7 @@ void testApp::drawIconAnimations(int i) {
 
 void testApp::drawPlayers() {
 	ofPushMatrix();
-	//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!) 
+	//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!)
 	float w = getPlayerWidth();
 	float h = getPlayerHeight();
 
@@ -670,7 +683,7 @@ void testApp::drawPlayers() {
 		dx = 2 * dx - 1; // map 0,1 to -1,1
 		dy = 2 * dy - 1;
 
-		dy = 0; // force // 2-player hack 
+		dy = 0; // force // 2-player hack
 
 		ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 		ofTranslate(dx * (w + margin) / 2 * playbackScale, dy * (h + margin) / 2 * playbackScale);
@@ -678,10 +691,10 @@ void testApp::drawPlayers() {
 		ofScale(playbackScale, playbackScale);
 
 		// draw player
-		ofRectangle border(0, 0, w + margin, h + margin);
-		ofFill();
-		ofSetColor(ofColor::black);
-		ofRect(border);
+		//ofRectangle border(0, 0, w + margin, h + margin);
+		//ofFill();
+		//ofSetColor(ofColor::black);
+		//ofRect(border);
 
 		// draw cropped area in center of frame
 		float imageWidth = players[i].getWidth();
@@ -689,6 +702,10 @@ void testApp::drawPlayers() {
 
 		float offsetW = (imageWidth - w) / 2;
 		float offsetH = (imageHeight - h) / 2;
+
+		frame.clear();
+		frame.rectangle(offsetW, offsetH, w, h);
+		frame.draw();
 
 		if (players[i].isPlaying()) {
 			//players[i].drawImageSubsection(w, h, offsetW, offsetH);
@@ -705,7 +722,7 @@ void testApp::drawPlayers() {
 
 		ofPopMatrix();
 	}
-	ofPopMatrix();	
+	ofPopMatrix();
 }
 //--------------------------------------------------------------
 void testApp::drawRoundSelections(){
@@ -722,11 +739,11 @@ void testApp::drawRoundSelections(){
 	ofTranslate(0, getPlayerHeight() / 2 + iconWidth * 1.5);
 	ofScale(roundSelectionsScaleSmooth, roundSelectionsScaleSmooth);
 	ofTranslate(-totalWidth / 2, 0);
-	
+
 	ofSetColor(255 * roundSelectionsScaleSmooth);
 
 	int currentRound = session.currentRound();
-	
+
 	for (int i = 0; i < RecordedData::MAX_ROUND_COUNT; i++) {
 		const ofImage* img;
 		if (i < currentRound) { // previously selected
@@ -791,7 +808,7 @@ void testApp::drawFbo() {
 			drawLiveFrame();
 
 
-			//draw overlays	
+			//draw overlays
 			if (state == IDLE) {
 				ofEnableAlphaBlending();
 				img_step_in.draw(0, 0);
@@ -834,10 +851,10 @@ void testApp::drawFbo() {
 
 			if (state == PROFILE_CONFIRMED)
 			{
-				img_goodbye.draw(0, 0);
 				ofEnableAlphaBlending();
-				img_prompt_10_goodbye.draw(0, textY);
+				img_goodbye.draw(0, 0);
 				ofDisableAlphaBlending();
+				img_prompt_10_goodbye.draw(0, textY);
 			}
 
 			//ofxProfileSectionPop();
@@ -867,7 +884,7 @@ void testApp::draw(){
 		ofSetRectMode(OF_RECTMODE_CORNER);
 		drawSplitScreen(fbo);
 	}
-	else 
+	else
 	{
 		fbo.draw(0, 0);
 	}
@@ -942,7 +959,7 @@ void testApp::mouseReleased(int x, int y, int button){
 void testApp::windowResized(int w, int h){
 }
 
-void testApp::exit(){ 
+void testApp::exit(){
 	ofLogNotice("testApp exit");
 
 	for (int i=0; i<n_players; i++)
@@ -958,7 +975,7 @@ void testApp::exit(){
 
 void testApp::setupGui(){
 	float dim = 16;
-	
+
 	gui = new ofxUIScrollableCanvas();
 	gui->setScrollAreaToScreen();
 	gui->setScrollableDirections(false, true);
@@ -969,12 +986,12 @@ void testApp::setupGui(){
 
 	gui->addLabelButton("Save XML", false);
 	gui->addLabelButton("RESET XML", false);
-	
+
 	// gui->addRadio("State", AppState::getStates());
 	//	recDir = "e:/records/";
 	//	recDir = ofToDataPath("/records/");
 	//  recDir = "C:/Users/SE_Shenkar/Dropbox/records/";
-	
+
 	imageDir = "SeqImg/";
 	gui->addTextInput("ImageDir", imageDir);
 
@@ -1085,19 +1102,19 @@ void testApp::setupGui(){
 	gui->addIntSlider("textAlpha", 0, 255, &textAlpha);
 	margin = 8;
 	gui->addIntSlider("margin", 0, 24, &margin);
-	
-	textY = getPlayerHeight() / 2;
+
+	textY = getPlayerHeight() / 2 + 40;
 	gui->addSlider("textY", 0, 1000, &textY);
 
 	lockCursorY = true;
 	gui->addToggle("(l)ock cursor Y", &lockCursorY)->bindToKey('l');
-	
+
 	gui->addSpacer();
 	gui->addSpacer();
 	gui->addSpacer();
 
 	gui->autoSizeToFitWidgets();
-	ofAddListener(gui->newGUIEvent, this, &testApp::guiEvent);   
+	ofAddListener(gui->newGUIEvent, this, &testApp::guiEvent);
 
 	gui->saveSettings(ofToDataPath("gui/default_settings.xml"));
 	gui->loadSettings(ofToDataPath("gui/settings.xml"));
@@ -1118,7 +1135,7 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 		ofxUIRadio *radio = (ofxUIRadio *) e.widget;
 		ofLogNotice("guiEvent") << "value" << radio->getValue()<<
 			" active name: " << radio->getActiveName() << endl;
-		// appState.set(value, force=true) 
+		// appState.set(value, force=true)
 	}
 
 	if (name == "Save XML" && e.getButton()->getValue())
@@ -1175,7 +1192,7 @@ string testApp::getRecDirString(string url)
 	// Now parse the JSON
 	bool parsingSuccessful = json.open(url);
 	string dir;
-	if (parsingSuccessful) 
+	if (parsingSuccessful)
 	{
 		ofLogNotice("load Recdir") << json.getRawString(true);
 		dir = json["recDir"].asString();
@@ -1196,7 +1213,7 @@ SelectedUser testApp::getClosestUser()
 	auto skeletons = kinect.getSkeletons();
 	for (int i = 0; i != skeletons.size(); i++) {
 		Skeleton skeleton = skeletons[i];
-		if (!skeleton.empty()) { 
+		if (!skeleton.empty()) {
 			if (KinectUtil::checkMainJointsConfidence(skeleton)) {
 				user.headPoint = skeleton.at(NUI_SKELETON_POSITION_HEAD).getStartPosition();
 				user.headPoint = user.headPoint * 1000;
@@ -1213,7 +1230,7 @@ SelectedUser testApp::getClosestUser()
 			}
 		}
 	} // end for map
-	
+
 	return user;
 }
 
@@ -1233,7 +1250,7 @@ void testApp::updateSelectedUser()
 		selectedUser.id = user.id;
 		selectedUser.distance = user.distance;
 		selectedUser.headPoint = user.headPoint;
-		
+
 		Skeleton& skeleton = kinect.getSkeletons().at(user.id);
 
 		auto & head = skeleton.at(NUI_SKELETON_POSITION_HEAD);
@@ -1280,7 +1297,7 @@ void testApp::updateSelectedUser()
 		if (neck.getTrackingState() == SkeletonBone::Tracked && hip.getTrackingState() == SkeletonBone::Tracked) {
 			torsoLength = neck.getStartPosition().distance(hip.getStartPosition());
 		}
-	
+
 		if (torsoLength > selectedUser.torsoLength) {
 			selectedUser.torsoLength = torsoLength;
 		}
@@ -1302,7 +1319,7 @@ void testApp::updateSelectedUser()
 
 		bool updateLeftArm = lhj.getTrackingState() == SkeletonBone::Tracked && lsj.getTrackingState() == SkeletonBone::Tracked;
 		bool updateRightArm = rhj.getTrackingState() == SkeletonBone::Tracked && rsj.getTrackingState() == SkeletonBone::Tracked;
-		
+
 		if (updateLeftArm)
 		{
 			ofPoint leftHand = lhj.getStartPosition();
@@ -1315,7 +1332,7 @@ void testApp::updateSelectedUser()
 			ofPoint rightShoulder = rsj.getStartPosition();
 			selectedUser.rightArm.update(rightHand, rightShoulder);
 		}
-		
+
 		if (updateRightArm || updateLeftArm)
 		{
 			selectedUser.update();
@@ -1324,7 +1341,7 @@ void testApp::updateSelectedUser()
 		{
 			selectedUser.reset(selectionTimeout);
 		}
-		
+
 	}
 }
 

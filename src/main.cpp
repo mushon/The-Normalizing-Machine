@@ -18,14 +18,16 @@ int main( ){
 
 #ifdef TARGET_WIN32
 	//ofAppGlutWindow window;
-	ofSetupOpenGL(1920,1080, windowMode);	
-	//ofHideCursor();// <-------- setup the GL context
+	ofSetupOpenGL(1920,1080, windowMode);	// <-------- setup the GL context
 #endif
 #ifdef TARGET_OSX
 	ofSetupOpenGL(1024,768, windowMode);			// <-------- setup the GL context
 #endif
 #ifdef TARGET_LINUX
 	// TODO
+#endif
+#ifndef DEBUG
+	ofHideCursor();
 #endif
 
 	try

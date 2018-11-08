@@ -238,7 +238,6 @@ src;
     <ClCompile Include="src\AppCursor.cpp" />
     <ClCompile Include="src\AppDataset.cpp" />
     <ClCompile Include="src\FfmpegRecorder.cpp" />
-    <ClCompile Include="src\ImageSaver.cpp" />
     <ClCompile Include="src\KinectUtil.cpp" />
     <ClCompile Include="src\testApp.cpp" />
     <ClCompile Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.cpp" />
@@ -298,7 +297,6 @@ src;
     <ClInclude Include="src\AppDataset.h" />
     <ClInclude Include="src\AppTimer.h" />
     <ClInclude Include="src\FfmpegRecorder.h" />
-    <ClInclude Include="src\ImageSaver.h" />
     <ClInclude Include="src\KinectUtil.h" />
     <ClInclude Include="src\RecordedData.h" />
     <ClInclude Include="src\SelectedArm.h" />

@@ -1,7 +1,10 @@
 #include "FfmpegRecorder.h"
 
-const string FfmpegRecorder::args = " -y -an -t " + ofToString(RECORDING_TIME) + " -f dshow -framerate 30 -video_size 1920x1080 -i video=\"Logitech BRIO\" -preset faster ";
-const string FfmpegRecorder::ffmpeg = "C:\\Users\\PROTECH\\TNM\\ffmpeg-4.0.2-win64-static\\bin\\ffmpeg.exe";
+const string FfmpegRecorder::V_ARGS = " -y -an -t " + ofToString(RECORDING_TIME) + " -f dshow -framerate 25 -video_size 1920x1080 -i video=\"Logitech BRIO\" -an -preset faster ";
+//-c:v h264_nvenc - qp 0
+
+const string FfmpegRecorder::CAPTURE_ARGS = " -f dshow -s uhd2160 -i video=\"Logitech BRIO\" -vframes 1  -vcodec copy -an -vf crop=";
+const string FfmpegRecorder::FFMPEG = "ffmpeg.exe";
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
@@ -44,17 +47,41 @@ FfmpegRecorder::~FfmpegRecorder()
 }
 
 
-void FfmpegRecorder::start(string recDir, string filename, string ext /*= ".mp4"*/)
+bool FfmpegRecorder::start(string recDir, string filename, string ext /*= ".mp4"*/)
 {
-	string cmd(ffmpeg + args + recDir + filename + "." + ext);
-	ffmpegThread.setup(cmd);
-	recording = true;
+	if (!recording) {
+		string cmd(FFMPEG + V_ARGS + recDir + filename + "." + ext);
+		ffmpegThread.setup(cmd);
+		recordingTime = RECORDING_TIME;
+		startTime = ofGetElapsedTimef();
+		recording = true;
+		return true;
+	}
+	return false;
+}
+
+bool FfmpegRecorder::capture(string recDir, string sessionDir, ofRectangle cropRect, bool profile, string ext /*= ".jpeg"*/)
+{
+	if (!recording) {
+		string cmd(FFMPEG + CAPTURE_ARGS + ofToString(cropRect.x) + ":" +
+			ofToString(cropRect.y) + ":" +
+			ofToString(cropRect.width) + ":" +
+			ofToString(cropRect.height) + ":" + " " +
+			recDir + sessionDir + "/frame_" + ofToString(ofGetElapsedTimeMillis()) +
+	"_" + ofToString(profile) + "." + ext);
+		ffmpegThread.setup(cmd);
+		recordingTime = CAPTURE_TIME;
+		startTime = ofGetElapsedTimef();
+		recording = true;
+		return true;
+	}
+	return false;
 }
 
 void FfmpegRecorder::update()
 {
 	if (recording) {
-		if ((ofGetElapsedTimef() - time) > (RECORDING_TIME + RECORDING_TIME_EXTRA)) {
+		if ((ofGetElapsedTimef() - startTime) > (recordingTime + RECORDING_TIME_EXTRA)) {
 			ffmpegThread.close();
 			recording = false;
 		}

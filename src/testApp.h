@@ -13,7 +13,6 @@
 #include "RecordedData.h"
 #include "FfmpegRecorder.h"
 #include "AppDataset.h"
-#include "ImageSaver.h"
 #include "ofxKinectCommonBridge.h"
 
 
@@ -181,10 +180,10 @@ private:
 	float playerFrameScaleSmoothFactor = 0.8f;
 
 	float getPlayerWidth() {
-		return 380; // (ofGetScreenWidth() - margin) / 2; //380
+		return 480; // (ofGetScreenWidth() - margin) / 2; //380
 	}
 	float getPlayerHeight() {
-		return 480; // (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
+		return 640; // (ofGetScreenHeight() - margin - bottomMargin) / 2; //480
 	}
 
 	float textY;
@@ -208,13 +207,14 @@ private:
 	int recordingDuration;		// ms
 	int resultTimeout;			// ms
 	
-	ImageSaver imageSaver;
 	bool faceRecorded = false;
 	string imageDir;
 
 	float selectionBufferWidth;
 	void drawKinect();
 	void drawFbo();
+	ofPath frame;
+	static const ofRectangle cropImage;
 };
 
 
