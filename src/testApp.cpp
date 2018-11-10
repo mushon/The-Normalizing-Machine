@@ -112,7 +112,7 @@ void testApp::setupPlayback(string _filename) {
 	ofVideoPlayer& player = players[n_players];
 	n_players++;
 
-	player.close();
+	//player.close();
 	player.load(_filename + ".mp4");
 	player.play();
 }
@@ -440,7 +440,8 @@ void testApp::update(){
 
 	if (nVisibleUsers > 1)
 	{
-		state = MORE_THAN_ONE;
+		// TODO:: does not work well remove
+		//state = MORE_THAN_ONE;
 	}
 
 	// set drawing parameters (before smoothing)
@@ -460,7 +461,7 @@ void testApp::update(){
 		roundSelectionsScale = 0;
 	}
 	if (state == RAISE_HAND) {
-		liveFrameScale = 0.75;
+		liveFrameScale = 0.5;
 		playerFrameScale = 1.0f;
 		roundSelectionsScale = 1.0f;
 	}
@@ -701,19 +702,20 @@ void testApp::drawPlayers() {
 		//ofRect(border);
 
 		// draw cropped area in center of frame
-		float imageWidth = players[i].getWidth();
-		float imageHeight = players[i].getHeight();
+		//float imageWidth = players[i].getWidth();
+		//float imageHeight = players[i].getHeight();
 
-		float offsetW = (imageWidth - w) / 2;
-		float offsetH = (imageHeight - h) / 2;
-
-		frame.clear();
-		frame.rectangle(offsetW, offsetH, w, h);
-		frame.draw();
+		//float offsetW = (imageWidth - w) / 2;
+		//float offsetH = (imageHeight - h) / 2;
 
 		if (players[i].isPlaying()) {
+			frame.clear();
+			frame.rectangle(-w/2, -h/2, w, h);
+			frame.draw();
+
 			//players[i].drawImageSubsection(w, h, offsetW, offsetH);
-			players[i].getTextureReference().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
+			//players[i].getTextureReference().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
+			players[i].draw(0, 0);
 		}
 
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
@@ -919,8 +921,8 @@ void testApp::keyPressed(int key){
 
 	switch (key) {
 
-	case 'C':
-		//ofxProfile::clear();
+	case 'c':
+		recorder.capture(imageDir, session.id, cropImage, false);
 		break;
 
 	case 's':

@@ -1,10 +1,10 @@
 #include "FfmpegRecorder.h"
 
-const string FfmpegRecorder::V_ARGS = " -y -an -t " + ofToString(RECORDING_TIME) + " -f dshow -framerate 25 -video_size 1920x1080 -i video=\"Logitech BRIO\" -an -preset faster ";
+const string FfmpegRecorder::V_ARGS = " -y -an -t " + ofToString(RECORDING_TIME) + " -f dshow -framerate 25 -video_size 640x480 -i video=\"Logitech BRIO\" -an -c:v h264_nvenc -qp 0 -filter:v transpose=1 ";
 //-c:v h264_nvenc - qp 0
 
 const string FfmpegRecorder::CAPTURE_ARGS = " -f dshow -s uhd2160 -i video=\"Logitech BRIO\" -vframes 10 -r 0.5 -an -vf crop=";
-const string FfmpegRecorder::FFMPEG = "C:\\Users\\toga\\Documents\\ffmpeg-20180925-a7429d8-win64-static\\ffmpeg-20180925-a7429d8-win64-static\\bin\\ffmpeg.exeffmpeg.exe";
+const string FfmpegRecorder::FFMPEG = "C:\\TNM\\ffmpeg-4.0.2\\bin\\ffmpeg.exe";
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
@@ -63,12 +63,13 @@ bool FfmpegRecorder::start(string recDir, string filename, string ext /*= ".mp4"
 bool FfmpegRecorder::capture(string recDir, string sessionDir, ofRectangle cropRect, bool profile, string ext /*= ".jpeg"*/)
 {
 	if (!recording) {
-		string cmd(FFMPEG + CAPTURE_ARGS + ofToString(cropRect.x) + ":" +
-			ofToString(cropRect.y) + ":" +
+		string cmd(FFMPEG + CAPTURE_ARGS +
 			ofToString(cropRect.width) + ":" +
-			ofToString(cropRect.height) + ":" + " " +
+			ofToString(cropRect.height) + ":" +
+			ofToString(cropRect.x) + ":" +
+			ofToString(cropRect.y) + " " +
 			recDir + sessionDir + "/frame_" + ofToString(ofGetElapsedTimeMillis()) +
-	"_" + ofToString(profile) + "_%d." + ext);
+	"_" + ofToString(profile) + "_%0d." + ext);
 		ffmpegThread.setup(cmd);
 		recordingTime = CAPTURE_TIME;
 		startTime = ofGetElapsedTimef();
