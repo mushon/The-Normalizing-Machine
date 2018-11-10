@@ -3,8 +3,8 @@
 const string FfmpegRecorder::V_ARGS = " -y -an -t " + ofToString(RECORDING_TIME) + " -f dshow -framerate 25 -video_size 1920x1080 -i video=\"Logitech BRIO\" -an -preset faster ";
 //-c:v h264_nvenc - qp 0
 
-const string FfmpegRecorder::CAPTURE_ARGS = " -f dshow -s uhd2160 -i video=\"Logitech BRIO\" -vframes 1  -vcodec copy -an -vf crop=";
-const string FfmpegRecorder::FFMPEG = "ffmpeg.exe";
+const string FfmpegRecorder::CAPTURE_ARGS = " -f dshow -s uhd2160 -i video=\"Logitech BRIO\" -vframes 10 -r 0.5 -an -vf crop=";
+const string FfmpegRecorder::FFMPEG = "C:\\Users\\toga\\Documents\\ffmpeg-20180925-a7429d8-win64-static\\ffmpeg-20180925-a7429d8-win64-static\\bin\\ffmpeg.exeffmpeg.exe";
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
@@ -68,7 +68,7 @@ bool FfmpegRecorder::capture(string recDir, string sessionDir, ofRectangle cropR
 			ofToString(cropRect.width) + ":" +
 			ofToString(cropRect.height) + ":" + " " +
 			recDir + sessionDir + "/frame_" + ofToString(ofGetElapsedTimeMillis()) +
-	"_" + ofToString(profile) + "." + ext);
+	"_" + ofToString(profile) + "_%d." + ext);
 		ffmpegThread.setup(cmd);
 		recordingTime = CAPTURE_TIME;
 		startTime = ofGetElapsedTimef();

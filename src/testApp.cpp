@@ -113,9 +113,8 @@ void testApp::setupPlayback(string _filename) {
 	n_players++;
 
 	player.close();
-	player.load(_filename);
+	player.load(_filename + ".mp4");
 	player.play();
-
 }
 
 void testApp::setupNextRound(string forcedId, string excludeSessionId) {
@@ -138,6 +137,11 @@ void testApp::setupNextRound(string forcedId, string excludeSessionId) {
 //--------------------------------------------------------------
 void testApp::update(){
 	recorder.update();
+
+	for (auto & player : players) {
+		player.update();
+	}
+
 	static int lastMin=0;
 
 	int mins = ofGetElapsedTimeMillis() / (1000 * 60); // (ofGetElapsedTimef());
