@@ -8,6 +8,7 @@
 #define CAPTURE_IMAGE_Y 0
 #define CAPTURE_IMAGE_W 1000
 #define CAPTURE_IMAGE_H 2160
+#define WELLCOME_MSG_LENGTH 5
 
 const ofRectangle testApp::cropImage(CAPTURE_IMAGE_X, CAPTURE_IMAGE_Y, CAPTURE_IMAGE_W, CAPTURE_IMAGE_H);
 //--------------------------------------------------------------
@@ -84,6 +85,7 @@ void testApp::setup() {
 	img_one_by_one.loadImage("assets/one_by_one.png");
 	img_position_yourself.loadImage("assets/position_yourself.png");
 	img_step_in.loadImage("assets/step_in.png");
+	img_wellcome_msg.loadImage("assets/wellcome_msg.png");
 
 	ofDisableAlphaBlending();
 
@@ -133,7 +135,16 @@ void testApp::setupNextRound(string forcedId, string excludeSessionId) {
 		setupPlayback(recDir + session.othersId[r][i]);
 	}
 }
-
+/*
+void testApp::setUpResult(string id) {
+	for (int i = 0; i < n_players; i++)
+	{
+		players[i].stop();
+	}
+	n_players = 0;
+	setupPlayback(recDir + id);
+}
+*/
 //--------------------------------------------------------------
 void testApp::update(){
 	recorder.update();
@@ -208,11 +219,16 @@ void testApp::update(){
 					session = RecordedData();
 					session.id = generateFileName();
 					setupNextRound(); // first round
+					wellcomeTime = ofGetElapsedTimef();
 					state = GOTO_SPOT;
 				}
 				break;
 			}
-
+		case WELLCOM_MSG:
+			if (wellcomeTime > WELLCOME_MSG_LENGTH) {
+				state = GOTO_SPOT;
+			}
+			break;
 		case GOTO_SPOT:
 			{
 				if (selectedUser.id == SelectedUser::NO_USER ||
@@ -386,20 +402,22 @@ void testApp::update(){
 				else {
 					resultTimer.setTimeout(resultTimeout);
 					resultTimer.reset();
+					players[selectedUser.hovered].getCurrentFrame();
+					resultImage.clear();
+					resultImage.allocate(players[selectedUser.hovered].getWidth(), players[selectedUser.hovered].getHeight(), OF_IMAGE_COLOR);
+					resultImage.setFromPixels(players[selectedUser.hovered].getPixels());
 					state = RESULT;
 				}
 			}
-
 			break;
 		}
 
 		case RESULT:
 			{
+			   //string lastWinnerId = session.othersId[RecordedData::MAX_ROUND_COUNT - 1][selectedUser.hovered];
 				// show prompt - look sideways
 				userMessage << "resultTimer: " << resultTimer.getCountDown() << endl;
-				bool userShowedProfile = (resultTimer.getCountDown() <= 0); // isFaceLookingSideWays(); // get from camera
-				// userShowedProfile = true;
-				if (userShowedProfile) {
+				if (resultTimer.getCountDown() <= 0) { // isFaceLookingSideWays(); // get from camera
 					// save user measurements
 					// currData.saveUserMeasurements(selectedUser); // TODO
 					session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
@@ -409,15 +427,14 @@ void testApp::update(){
 					dataset.updateScores(session);
 					dataset.saveLibrary(recDir + datasetJsonFilename);
 					ofSleepMillis(100); // seems like it's fixed
-
+					recorder.capture(imageDir, session.id, cropImage, false);
 					state = PROFILE_CONFIRMED;
 				}
 				break;
-
 			}
+
 		case PROFILE_CONFIRMED:
 			{
-			recorder.capture(imageDir, session.id, cropImage, false);
 			// TODO: save video with sessionId (front, side). you cant save front it here too late
 			// TODO: show thank you and goodbye
 				// animate back to idle
@@ -455,6 +472,11 @@ void testApp::update(){
 		playerFrameScale = 0.0f;
 		roundSelectionsScale = 0;
 	}
+	if (state == WELLCOM_MSG) {
+		liveFrameScale = 1;
+		playerFrameScale = 0.0f;
+		roundSelectionsScale = 0;
+	}
 	if (state == GOTO_SPOT) {
 		liveFrameScale = 1;
 		playerFrameScale = 0.0f;
@@ -476,7 +498,7 @@ void testApp::update(){
 		roundSelectionsScale = 1.0f;
 	}
 	if (state == RESULT) {
-		// liveFrameScale = 0;
+		 liveFrameScale = 0.5;
 		// playerFrameScale = 0.0f;
 		roundSelectionsScale = 0;
 	}
@@ -707,7 +729,19 @@ void testApp::drawPlayers() {
 
 		//float offsetW = (imageWidth - w) / 2;
 		//float offsetH = (imageHeight - h) / 2;
-
+		/*
+		int pos = 0;
+		selectedUser.hovered
+		if (collapse != 0)
+		{
+			selectedUser.hovered = 
+			collapseNum++;
+			pos = MIN(collapse * collapseNum, w/2);
+			if (selectedUser.hovered == i) {
+	
+			}
+		}
+		*/
 		if (players[i].isPlaying()) {
 			frame.clear();
 			frame.rectangle(-w/2, -h/2, w, h);
@@ -756,7 +790,7 @@ void testApp::drawRoundSelections(){
 			img = (session.roundSelections[i] == 0) ? &img_r_left : &img_r_right;
 		}
 		else if (i == currentRound) { // current round
-			img = &img_rounds_active[i];
+			img = &img_rounds[i];
 		}
 		else {
 			img = &img_rounds[i];
@@ -829,6 +863,12 @@ void testApp::drawFbo() {
 				img_prompt_0_1_idle.draw(0, textY);
 			}
 
+			if (state == STEP_IN) {
+				ofEnableAlphaBlending();
+				img_wellcome_msg.draw(0, 0);
+				ofDisableAlphaBlending();
+			}
+
 			if (state == GOTO_SPOT) {
 				ofEnableAlphaBlending();
 				img_position_yourself.draw(0, 0);
@@ -852,6 +892,10 @@ void testApp::drawFbo() {
 
 			if (state == RESULT)
 			{
+				ofEnableAlphaBlending();
+				resultImage.draw(0, 0);
+				ofDisableAlphaBlending();
+				img_prompt_2_1_moreNormal.draw(0, textY);
 				//drawTotalScore(i);
 			}
 
@@ -1109,7 +1153,7 @@ void testApp::setupGui(){
 	margin = 8;
 	gui->addIntSlider("margin", 0, 24, &margin);
 
-	textY = getPlayerHeight() / 2 + 40;
+	textY = getPlayerHeight() / 2;
 	gui->addSlider("textY", 0, 1000, &textY);
 
 	lockCursorY = true;

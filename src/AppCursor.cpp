@@ -17,7 +17,7 @@ AppCursor::AppCursor(void)
 
 void AppCursor::update(ofPoint pos, float progress)
 {
-	float smoothingFactor = 0.1;
+	float smoothingFactor = 1;
 	position.interpolate(pos, smoothingFactor);
 	highAngle = ofMap(progress, 0.0f, 1.0f, -89, 270, true);
 }

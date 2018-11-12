@@ -143,6 +143,8 @@ private:
 	ofImage img_one_by_one;
 	ofImage img_position_yourself;
 	ofImage img_step_in;
+	ofImage img_wellcome_msg;
+
 
 
 	void drawOverheadText(ofImage&, int x, int y, int w);
@@ -215,6 +217,11 @@ private:
 	void drawFbo();
 	ofPath frame;
 	static const ofRectangle cropImage;
+	float wellcomeTime = 0;
+	//void setUpResult(string id);
+	//int collapse = 0;
+	//int collapseNum = 0;
+	ofImage resultImage;
 };
 
 
