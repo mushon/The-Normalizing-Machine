@@ -4,18 +4,19 @@
 #define HEAD_FATCOR  1.5
 #define KINECT_WIDTH 640
 #define KINECT_HIGHT 480
-#define CAPTURE_IMAGE_X 1000
-#define CAPTURE_IMAGE_Y 0
-#define CAPTURE_IMAGE_W 1000
-#define CAPTURE_IMAGE_H 2160
-#define WELLCOME_MSG_LENGTH 5
+//#define CAPTURE_IMAGE_X 1000
+//#define CAPTURE_IMAGE_Y 0
+//#define CAPTURE_IMAGE_W 1000
+//#define CAPTURE_IMAGE_H 2160
+//#define WELLCOME_MSG_LENGTH 5
+//#define RECDIR "records/"
 
-const ofRectangle testApp::cropImage(CAPTURE_IMAGE_X, CAPTURE_IMAGE_Y, CAPTURE_IMAGE_W, CAPTURE_IMAGE_H);
+//const ofRectangle testApp::cropImage(CAPTURE_IMAGE_X, CAPTURE_IMAGE_Y, CAPTURE_IMAGE_W, CAPTURE_IMAGE_H);
 //--------------------------------------------------------------
 void testApp::setup() {
 
 	ofSetVerticalSync(true);
-	ofSetFrameRate(25);
+	//ofSetFrameRate(25);
 
 	kinect.initSensor();
 	//kinect.initIRStream(640, 480);
@@ -98,6 +99,10 @@ void testApp::setup() {
 	fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
 	state = IDLE;
+	ofDirectShowPlayer* dPlayer = new ofDirectShowPlayer();
+	ofPtr <ofBaseVideoPlayer> ptr(dPlayer);
+	players[0].setPlayer(ptr);
+	players[1].setPlayer(ptr);
 	players[0].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
 	players[1].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
 
@@ -109,7 +114,7 @@ void testApp::setup() {
 
 void testApp::setupPlayback(string _filename) {
 	//player.stop();
-	ofLogNotice("setupPlayback:") << _filename << endl;
+	ofLogNotice("setupPlayback:") << _filename << ".mp4" << endl;
 
 	ofVideoPlayer& player = players[n_players];
 	n_players++;
@@ -219,13 +224,13 @@ void testApp::update(){
 					session = RecordedData();
 					session.id = generateFileName();
 					setupNextRound(); // first round
-					wellcomeTime = ofGetElapsedTimef();
+					welcomeTime = ofGetElapsedTimeMillis();
 					state = GOTO_SPOT;
 				}
 				break;
 			}
 		case WELLCOM_MSG:
-			if (wellcomeTime > WELLCOME_MSG_LENGTH) {
+			if (welcomeTime > welcomeDuration) {
 				state = GOTO_SPOT;
 			}
 			break;
@@ -247,7 +252,7 @@ void testApp::update(){
 
 		case RAISE_HAND:
 			{
-				recorder.capture(imageDir, session.id, cropImage, false);
+				recorder.capture(imageDir, session.id, ofRectangle(cropX,cropY,cropW, cropH), false);
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
 					state = GOTO_SPOT;
@@ -354,7 +359,7 @@ void testApp::update(){
 					if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 2) { // one before last round
 						if (selectedUser.selectTimer.getCountDown() < recordingDuration)
 						{
-							recorder.start(recDir, session.id);
+							recorder.start(recDir, session.id, recordingDuration);
 						}
 					}
 
@@ -422,12 +427,12 @@ void testApp::update(){
 					// currData.saveUserMeasurements(selectedUser); // TODO
 					session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
 
-					// info: ALL dataset is saved everytime
+					// info: ALL dataset is saved every time
 					dataset.saveSession(session);
 					dataset.updateScores(session);
 					dataset.saveLibrary(recDir + datasetJsonFilename);
 					ofSleepMillis(100); // seems like it's fixed
-					recorder.capture(imageDir, session.id, cropImage, false);
+					recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
 					state = PROFILE_CONFIRMED;
 				}
 				break;
@@ -892,8 +897,12 @@ void testApp::drawFbo() {
 
 			if (state == RESULT)
 			{
+		
 				ofEnableAlphaBlending();
 				resultImage.draw(0, 0);
+				frame.clear();
+				frame.rectangle(-resultImage.getWidth() / 2, -resultImage.getHeight() / 2, resultImage.getWidth(), resultImage.getHeight());
+				frame.draw();
 				ofDisableAlphaBlending();
 				img_prompt_2_1_moreNormal.draw(0, textY);
 				//drawTotalScore(i);
@@ -966,14 +975,14 @@ void testApp::keyPressed(int key){
 	switch (key) {
 
 	case 'c':
-		recorder.capture(imageDir, session.id, cropImage, false);
+		recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
 		break;
 
 	case 's':
 		recorder.abort();
 		break;
 	case 'S':
-		recorder.start(recDir, generateFileName());
+		recorder.start(recDir, generateFileName(), recordingDuration);
 		break;
 
 	case 'F':
@@ -1063,7 +1072,7 @@ void testApp::setupGui(){
 	gui->addToggle("draw (p)rojection", &drawProjection)->bindToKey('p');
 	drawCursor = true;
 	gui->addToggle("draw (c)ursor", &drawCursor)->bindToKey('c');
-	gui->addToggle("draw (P)rofiler", &drawProfiler)->bindToKey('P');
+	gui->addToggle("draw (K)Kinect", &drawProfiler)->bindToKey('K');
 
 	simulateMoreThanOne = false;
 	gui->addToggle("simulate (m)ore 1", &simulateMoreThanOne)->bindToKey('m');
@@ -1140,6 +1149,9 @@ void testApp::setupGui(){
 	recordingDuration = 2000;
 	gui->addIntSlider("recordingDuration", 100, 10000, &recordingDuration);
 
+	welcomeDuration = 5000;
+	gui->addIntSlider("welcome msg", 100, 10000, &welcomeDuration);
+
 	resultTimeout = 0; // skip
 	gui->addIntSlider("resultTimeout", 0, 10000, &resultTimeout);
 
@@ -1158,6 +1170,22 @@ void testApp::setupGui(){
 
 	lockCursorY = true;
 	gui->addToggle("(l)ock cursor Y", &lockCursorY)->bindToKey('l');
+
+	gui->addLabel("Misc");
+	kinectYPos = 0.0;
+	gui->addSlider("kinect y pos", 0.0, 4.0, &kinectYPos);
+
+	cropW = 3840;
+	gui->addIntSlider("Crop Width", 100, 3840, &cropW);
+
+	cropH = 2160;
+	gui->addIntSlider("Crop Hight", 100, 2160, &cropH);
+
+	cropX = 0;
+	gui->addIntSlider("Crop X", 100, 3840, &cropX);
+
+	cropY = 0;
+	gui->addIntSlider("Crop Y", 100, 2160, &cropY);
 
 	gui->addSpacer();
 	gui->addSpacer();
@@ -1312,6 +1340,11 @@ void testApp::updateSelectedUser()
 
 		auto & neck = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_CENTER);
 		auto & hip = skeleton.at(NUI_SKELETON_POSITION_HIP_CENTER);
+
+		//auto & lfoot = skeleton.at(NUI_SKELETON_POSITION_FOOT_LEFT);
+		//auto & rfoothip = skeleton.at(NUI_SKELETON_POSITION_FOOT_RIGHT);
+
+
 		/*
 		ofxOpenNIJoint rhj = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND);
 		ofxOpenNIJoint rsj = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
@@ -1328,7 +1361,7 @@ void testApp::updateSelectedUser()
 		// update body measurements
 		float userHeight = 0;
 		if (head.getTrackingState() == SkeletonBone::Tracked) {
-			userHeight = head.getStartPosition().y;
+			userHeight = head.getStartPosition().y + kinectYPos;
 		}
 
 		if (userHeight > selectedUser.totalHeight) {

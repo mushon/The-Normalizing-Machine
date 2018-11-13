@@ -35,7 +35,7 @@
 </Widget>
 <Widget>
     <Kind>2</Kind>
-    <Name>draw (P)rofiler</Name>
+    <Name>draw (K)Kinect</Name>
     <Value>0</Value>
 </Widget>
 <Widget>
@@ -136,12 +136,17 @@
 <Widget>
     <Kind>42</Kind>
     <Name>recordingDuration</Name>
-    <Value>4970</Value>
+    <Value>1075</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>welcome msg</Name>
+    <Value>5000</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
     <Name>resultTimeout</Name>
-    <Value>9113</Value>
+    <Value>5665</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
@@ -167,4 +172,29 @@
     <Kind>2</Kind>
     <Name>(l)ock cursor Y</Name>
     <Value>1</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>kinect y pos</Name>
+    <Value>1.024630547</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>Crop Width</Name>
+    <Value>1684</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>Crop Hight</Name>
+    <Value>972</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>Crop X</Name>
+    <Value>100</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>Crop Y</Name>
+    <Value>100</Value>
 </Widget>

@@ -207,6 +207,7 @@ private:
 	int selectionTimeout;		// ms
 	int postSelectionTimeout;	// ms
 	int recordingDuration;		// ms
+	int welcomeDuration;	    //ms
 	int resultTimeout;			// ms
 	
 	bool faceRecorded = false;
@@ -216,12 +217,17 @@ private:
 	void drawKinect();
 	void drawFbo();
 	ofPath frame;
-	static const ofRectangle cropImage;
-	float wellcomeTime = 0;
+	//static const ofRectangle cropImage;
+	int welcomeTime = 0;
 	//void setUpResult(string id);
 	//int collapse = 0;
 	//int collapseNum = 0;
 	ofImage resultImage;
+	float kinectYPos = 0.0;
+	int cropW = 3840;
+	int cropH = 2160;
+	int cropX = 0;
+	int cropY = 0;
 };
 
 

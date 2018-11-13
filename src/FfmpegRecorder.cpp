@@ -1,10 +1,10 @@
 #include "FfmpegRecorder.h"
 
-const string FfmpegRecorder::V_ARGS = " -y -an -t " + ofToString(RECORDING_TIME) + " -f dshow -framerate 25 -video_size 640x480 -i video=\"Logitech BRIO\" -an -c:v h264_nvenc -qp 0 -filter:v transpose=1 ";
-//-c:v h264_nvenc - qp 0
+const string FfmpegRecorder::V_ARGS = " -y -an -f dshow -framerate 25 -video_size 640x480 -i video=\"Logitech BRIO\" -an /-c:v h264_nvenc - qp 0 -filter:v transpose=1 ";
+//-c:v h264_nvenc - qp 0 -filter:v transpose=1
 
-const string FfmpegRecorder::CAPTURE_ARGS = " -f dshow -s uhd2160 -i video=\"Logitech BRIO\" -vframes 10 -r 0.5 -an -vf crop=";
-const string FfmpegRecorder::FFMPEG = "C:\\TNM\\ffmpeg-4.0.2\\bin\\ffmpeg.exe";
+const string FfmpegRecorder::CAPTURE_ARGS = " -f dshow -s uhd2160 -i video=\"Logitech BRIO\" -vframes 5 -r 0.5 -an -vf crop=";
+const string FfmpegRecorder::FFMPEG = "C:\\ffmpeg-4.0.2\\bin\\ffmpeg.exe";
 
 //--------------------------------------------------------------
 //--------------------------------------------------------------
@@ -47,10 +47,10 @@ FfmpegRecorder::~FfmpegRecorder()
 }
 
 
-bool FfmpegRecorder::start(string recDir, string filename, string ext /*= ".mp4"*/)
+bool FfmpegRecorder::start(string recDir, string filename, int recordingDuration, string ext /*= ".mp4"*/)
 {
 	if (!recording) {
-		string cmd(FFMPEG + V_ARGS + recDir + filename + "." + ext);
+		string cmd(FFMPEG + " -t " + ofToString(recordingDuration / 1000) + V_ARGS + recDir + filename + ext);
 		ffmpegThread.setup(cmd);
 		recordingTime = RECORDING_TIME;
 		startTime = ofGetElapsedTimef();
@@ -62,14 +62,18 @@ bool FfmpegRecorder::start(string recDir, string filename, string ext /*= ".mp4"
 
 bool FfmpegRecorder::capture(string recDir, string sessionDir, ofRectangle cropRect, bool profile, string ext /*= ".jpeg"*/)
 {
+	ofDirectory::createDirectory(recDir + sessionDir, true, true);
 	if (!recording) {
 		string cmd(FFMPEG + CAPTURE_ARGS +
 			ofToString(cropRect.width) + ":" +
 			ofToString(cropRect.height) + ":" +
 			ofToString(cropRect.x) + ":" +
-			ofToString(cropRect.y) + " " +
-			recDir + sessionDir + "/frame_" + ofToString(ofGetElapsedTimeMillis()) +
-	"_" + ofToString(profile) + "_%0d." + ext);
+			ofToString(cropRect.y) + 
+			" -vf transpose=1 Data/" +
+			recDir + sessionDir + "/frame_" +
+			ofToString(ofGetElapsedTimeMillis()) +
+			+"_%02d" +
+			"_" + ofToString(profile) + ext);
 		ffmpegThread.setup(cmd);
 		recordingTime = CAPTURE_TIME;
 		startTime = ofGetElapsedTimef();
@@ -95,5 +99,4 @@ void FfmpegRecorder::abort()
 		ffmpegThread.close();
 	}
 	recording = false;
-
 }
