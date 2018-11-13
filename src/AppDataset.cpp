@@ -77,6 +77,9 @@ vector<string> AppDataset::selectNextRound(string forcedId, string forcedId2)
 		// pick last selection
 		DataSet::iterator maxIt = dataset.begin();
 		for (auto it = dataset.begin(); it != dataset.end(); it++) {
+			if (newRound.size() > 0 && it->first == newRound[0]) {
+				continue;
+			}
 			if (it->first > maxIt->first) {
 				maxIt = it;
 			}
