@@ -15,11 +15,12 @@ public:
 	void saveLibrary(string url);
 	void loadLibrary(string url);
 
-	vector<string> selectNextRound(string forcedId = "", string excludeSessionId = "");
+	vector<string> selectNextRound(bool lastUser = false  , string forcedId = "", string excludeSessionId = "");
+	string getLatestUser();
+	string  getRandumUser();
 
 	
 
-private:
 
 	typedef map<string, RecordedData> DataSet;
 	DataSet dataset; // the whole shablang

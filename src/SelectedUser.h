@@ -37,6 +37,7 @@ public:
 		float headHeight;  // distance(head, neck)
 		float torsoLength; // distance(neck, torso)
 		float shouldersWidth; // distance(shoulders)
+		float armLength;
 
 
 		SelectedUser()
@@ -60,6 +61,7 @@ public:
 			headHeight = 0;
 			torsoLength = 0;
 			shouldersWidth = 0;
+			armLength = 0;
 		}
 
 		void update()

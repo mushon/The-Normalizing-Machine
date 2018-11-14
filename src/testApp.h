@@ -44,6 +44,7 @@ public:
 
 	SelectedUser selectedUser;
 	ofxKinectCommonBridge kinect;
+	static const string imageDir;
 
 private:
 
@@ -63,9 +64,11 @@ private:
 	string generateFileName();
 
 	// Video player
-	void setupPlayback(string _filename);
+	void loadImages(string path, vector<ofImage*>& images);
+	void setupPlayback(string path);
 	static const unsigned int MAX_PLAYERS = 2;
-	ofVideoPlayer players[MAX_PLAYERS];
+	static const unsigned int MAX_IMAGES = 5;
+	vector<ofImage*> players[MAX_PLAYERS];
 	float playbackScales[MAX_PLAYERS];
 	int n_players;
 	float selectionScaleSmoothed[MAX_PLAYERS] = { 1.0f, 1.0f };
@@ -144,6 +147,8 @@ private:
 	ofImage img_position_yourself;
 	ofImage img_step_in;
 	ofImage img_wellcome_msg;
+	string roundsUsers [RecordedData::MAX_ROUND_COUNT+1];
+	void puploateRoundUsers();
 
 
 
@@ -175,7 +180,7 @@ private:
 	void drawSplitScreen(ofFbo& fbo);
 
 	float progressSmooth = 1.0;
-	float progressSmoothFactor = 0.6f;
+	float progressSmoothFactor = 0.0f;
 
 	float playerFrameScale = 0.0f;
 	float playerFrameScaleSmooth = 0.0f;
@@ -191,7 +196,8 @@ private:
 	float textY;
 
 	AppTimer postSelectionTimer;
-	void setupNextRound(string forcedId = "", string excludeSessionId = "");
+	//void setupNextRound(bool lastUser, string forcedId = "", string excludeSessionId = "");
+	void testApp::setupNextRound(int round, string firstId = "", string secondId = "");
 
 	void drawRoundSelections();
 	float roundSelectionsScale = 0;
@@ -199,6 +205,7 @@ private:
 	float roundSelectionsSmoothFactor = 0.8f;
 
 	AppTimer resultTimer;
+	AppTimer imgSeqTimer;
 
 	ofFbo fbo;
 	bool drawProjection = true;
@@ -209,9 +216,9 @@ private:
 	int recordingDuration;		// ms
 	int welcomeDuration;	    //ms
 	int resultTimeout;			// ms
+	int imgSeqTimeout;			// ms
 	
 	bool faceRecorded = false;
-	string imageDir;
 
 	float selectionBufferWidth;
 	void drawKinect();
@@ -222,12 +229,13 @@ private:
 	//void setUpResult(string id);
 	//int collapse = 0;
 	//int collapseNum = 0;
-	ofImage resultImage;
+	ofImage* resultImage;
 	float kinectYPos = 0.0;
 	int cropW = 3840;
 	int cropH = 2160;
 	int cropX = 0;
 	int cropY = 0;
+	int imgId;
 };
 
 

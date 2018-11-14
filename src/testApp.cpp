@@ -9,14 +9,17 @@
 //#define CAPTURE_IMAGE_W 1000
 //#define CAPTURE_IMAGE_H 2160
 //#define WELLCOME_MSG_LENGTH 5
-//#define RECDIR "records/"
+#define RECDIR "records/"
 
+const string testApp::imageDir = "SeqImg/";
 //const ofRectangle testApp::cropImage(CAPTURE_IMAGE_X, CAPTURE_IMAGE_Y, CAPTURE_IMAGE_W, CAPTURE_IMAGE_H);
 //--------------------------------------------------------------
 void testApp::setup() {
 
 	ofSetVerticalSync(true);
-	//ofSetFrameRate(25);
+	ofSetFrameRate(10);
+	ofSeedRandom();
+	ofEnableAntiAliasing();
 
 	kinect.initSensor();
 	//kinect.initIRStream(640, 480);
@@ -86,7 +89,7 @@ void testApp::setup() {
 	img_one_by_one.loadImage("assets/one_by_one.png");
 	img_position_yourself.loadImage("assets/position_yourself.png");
 	img_step_in.loadImage("assets/step_in.png");
-	img_wellcome_msg.loadImage("assets/wellcome_msg.png");
+	img_wellcome_msg.loadImage("assets/welcome_msg.png");
 
 	ofDisableAlphaBlending();
 
@@ -99,12 +102,12 @@ void testApp::setup() {
 	fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
 
 	state = IDLE;
-	ofDirectShowPlayer* dPlayer = new ofDirectShowPlayer();
-	ofPtr <ofBaseVideoPlayer> ptr(dPlayer);
-	players[0].setPlayer(ptr);
-	players[1].setPlayer(ptr);
-	players[0].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
-	players[1].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
+	//ofDirectShowPlayer* dPlayer = new ofDirectShowPlayer();
+	//ofPtr <ofBaseVideoPlayer> ptr(dPlayer);
+	//players[0].setPlayer(ptr);
+	//players[1].setPlayer(ptr);
+	//players[0].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
+	//players[1].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
 
 	// video border frame
 	frame.setStrokeColor(ofColor::white);
@@ -112,34 +115,96 @@ void testApp::setup() {
 	frame.setFilled(false);
 }
 
-void testApp::setupPlayback(string _filename) {
-	//player.stop();
-	ofLogNotice("setupPlayback:") << _filename << ".mp4" << endl;
+void testApp::loadImages(string path, vector<ofImage*>& images) {
+	ofDirectory dir(path);
+	//only show png files
+	dir.allowExt("jpeg");
+	//populate the directory object
+	dir.listDir();
+	dir.sortByDate();
 
-	ofVideoPlayer& player = players[n_players];
-	n_players++;
-
-	//player.close();
-	player.load(_filename + ".mp4");
-	player.play();
+	//go through and print out all the paths
+	for (int i = 0; i < dir.size() && i < MAX_IMAGES; i++) {
+		ofLogNotice(dir.getPath(i));
+		ofImage* image = new ofImage();
+		image->load(dir.getPath(i));
+		image->update();
+		images.push_back(image);
+	}
 }
 
-void testApp::setupNextRound(string forcedId, string excludeSessionId) {
+void testApp::setupPlayback(string path) {
+	loadImages(imageDir + path, players[n_players]);
+	n_players++;
+}
+
+void testApp::setupNextRound(int round, string firstId, string secondId) {
+	for (int i = 0; i < n_players; i++)
+	{
+		for (auto& img : players[i]) {
+			delete img;
+		}
+		players[i].clear();
+	}
+	n_players = 0;
+
+	vector<string> nextIds;
+	switch(round) {
+	case 0:
+		nextIds.push_back(roundsUsers[0]);
+		nextIds.push_back(roundsUsers[1]);
+		break;
+	case 1:
+		nextIds.push_back(roundsUsers[2]);
+		nextIds.push_back(firstId);
+		break;
+	case 2:
+		nextIds.push_back(firstId);
+		nextIds.push_back(roundsUsers[3]);
+		break;
+	case 3:
+		nextIds.push_back(roundsUsers[4]);
+		nextIds.push_back(firstId);
+		break;
+	case 4:
+		nextIds.push_back(firstId);
+		nextIds.push_back(secondId);
+		break;
+	}
+
+	session.setupNextRound(nextIds);
+
+	for (int i = 0; i < session.N_OTHERS; i++)
+	{
+		int r = session.currentRound();
+		setupPlayback(session.othersId[r][i]);
+	}
+
+	imgSeqTimer.setTimeout(imgSeqTimeout);
+	imgSeqTimer.reset();
+	imgId = 0;
+}
+
+/*
+void testApp::setupNextRound(bool lastUser, string forcedId, string excludeSessionId) {
 	for (int i = 0; i<n_players; i++)
 	{
 		players[i].stop();
 	}
 	n_players = 0;
 
-	vector<string> nextIds = dataset.selectNextRound(forcedId, excludeSessionId); // better name?
+	vector<string> nextIds = dataset.selectNextRound(lastUser, forcedId, excludeSessionId); // better name?
 	session.setupNextRound(nextIds);
 
 	for (int i = 0; i<session.N_OTHERS; i++)
 	{
 		int r = session.currentRound();
-		setupPlayback(recDir + session.othersId[r][i]);
+		while (!setupPlayback(RECDIR + session.othersId[r][i])) {
+			dataset.dataset.erase(session.othersId[r][i]);
+		}
 	}
 }
+*/
 /*
 void testApp::setUpResult(string id) {
 	for (int i = 0; i < n_players; i++)
@@ -153,11 +218,7 @@ void testApp::setUpResult(string id) {
 //--------------------------------------------------------------
 void testApp::update(){
 	recorder.update();
-
-	for (auto & player : players) {
-		player.update();
-	}
-
+	
 	static int lastMin=0;
 
 	int mins = ofGetElapsedTimeMillis() / (1000 * 60); // (ofGetElapsedTimef());
@@ -204,6 +265,7 @@ void testApp::update(){
 		{
 		case IDLE:
 			{
+	
 				userMessage << selectedUser.distance << endl;
 				if (selectedUser.distance < idleThreshold)
 				{
@@ -222,15 +284,17 @@ void testApp::update(){
 				if (selectedUser.distance < stepInThreshold)
 				{
 					session = RecordedData();
+					puploateRoundUsers();
 					session.id = generateFileName();
-					setupNextRound(); // first round
+					setupNextRound(0); // first round
 					welcomeTime = ofGetElapsedTimeMillis();
-					state = GOTO_SPOT;
+					recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
+					state = WELLCOM_MSG;
 				}
 				break;
 			}
 		case WELLCOM_MSG:
-			if (welcomeTime > welcomeDuration) {
+			if (welcomeDuration < (ofGetElapsedTimeMillis() - welcomeTime)) {
 				state = GOTO_SPOT;
 			}
 			break;
@@ -252,7 +316,8 @@ void testApp::update(){
 
 		case RAISE_HAND:
 			{
-				recorder.capture(imageDir, session.id, ofRectangle(cropX,cropY,cropW, cropH), false);
+			ofVec3f s = selectedUser.getPointingDir();
+			ofLogNotice(ofToString(s.x) + " " + ofToString(s.y) + " " + ofToString(s.z));
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
 					state = GOTO_SPOT;
@@ -266,8 +331,9 @@ void testApp::update(){
 							selectedUser.reset(selectionTimeout);
 							cursor = AppCursor();
 
+							//ofVec3f s = selectedUser.getPointingDir();
+							//ofLogNotice(ofToString(s.x) + " " + ofToString(s.y) + " " + ofToString(s.z));
 							cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2));
-
 							state = SELECTION;
 						}
 						else
@@ -355,14 +421,14 @@ void testApp::update(){
 						selectedUser.waitForSteady = true;
 						//recorder.abort();
 					}
-
-					if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 2) { // one before last round
+					/*
+					if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 3) { // one before last round
 						if (selectedUser.selectTimer.getCountDown() < recordingDuration)
 						{
 							recorder.start(recDir, session.id, recordingDuration);
 						}
 					}
-
+					*/
 					//TODO select mechanism (click/timeout)
 
 					for (int i = 0; i < session.currentRound(); i++) {
@@ -382,6 +448,11 @@ void testApp::update(){
 						*/
 						postSelectionTimer.setTimeout(postSelectionTimeout);
 						postSelectionTimer.reset();
+						/*
+						if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 2) { // one before last round
+							recorder.start(recDir, session.id, recordingDuration);
+						}
+						*/
 						state = SELECTION_POST;
 					}
 
@@ -396,10 +467,10 @@ void testApp::update(){
 				if (r < RecordedData::MAX_ROUND_COUNT) {
 					string lastWinnerId = session.othersId[r-1][selectedUser.hovered];
 					if (r == RecordedData::MAX_ROUND_COUNT - 1) {
-						setupNextRound(lastWinnerId, session.id); // keep winner + show self
+						setupNextRound(r, lastWinnerId, session.id); // keep winner + show self
 					}
 					else {
-						setupNextRound(lastWinnerId); // keep winner, exclude self
+						setupNextRound(r, lastWinnerId); // keep winner, exclude self
 					}
 					selectedUser.reset(selectionTimeout);
 					state = SELECTION;
@@ -407,10 +478,18 @@ void testApp::update(){
 				else {
 					resultTimer.setTimeout(resultTimeout);
 					resultTimer.reset();
-					players[selectedUser.hovered].getCurrentFrame();
-					resultImage.clear();
-					resultImage.allocate(players[selectedUser.hovered].getWidth(), players[selectedUser.hovered].getHeight(), OF_IMAGE_COLOR);
-					resultImage.setFromPixels(players[selectedUser.hovered].getPixels());
+					//players[selectedUser.hovered]->getCurrentFrame();
+					resultImage = players[selectedUser.hovered].back();
+					//resultImage.allocate(players[selectedUser.hovered]->getWidth(), players[selectedUser.hovered]->getHeight(), OF_IMAGE_COLOR);
+					//resultImage.setFromPixels(players[selectedUser.hovered]->getPixels());
+					session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
+
+					// info: ALL dataset is saved every time
+					dataset.saveSession(session);
+					dataset.updateScores(session);
+					dataset.saveLibrary(recDir + datasetJsonFilename);
+					ofSleepMillis(100); // seems like it's fixed
+					//recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
 					state = RESULT;
 				}
 			}
@@ -425,6 +504,7 @@ void testApp::update(){
 				if (resultTimer.getCountDown() <= 0) { // isFaceLookingSideWays(); // get from camera
 					// save user measurements
 					// currData.saveUserMeasurements(selectedUser); // TODO
+					/*
 					session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
 
 					// info: ALL dataset is saved every time
@@ -433,6 +513,7 @@ void testApp::update(){
 					dataset.saveLibrary(recDir + datasetJsonFilename);
 					ofSleepMillis(100); // seems like it's fixed
 					recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
+						*/
 					state = PROFILE_CONFIRMED;
 				}
 				break;
@@ -555,12 +636,6 @@ void testApp::update(){
 		playbackScales[i] = playerFrameScaleSmooth * selectionScaleSmoothed[i];
 	}
 
-	for (int i=0; i<n_players; i++)
-	{
-		//ofxProfileSectionPush(string("openni update ").append(ofToString(i)));
-		players[i].update();
-		//ofxProfileSectionPop();
-	}
 	drawFbo();
 }
 
@@ -654,6 +729,7 @@ void testApp::drawLiveFrame() {
 
 	float offsetW = (imageWidth - w) / 2;
 	float offsetH = (imageHeight - h) / 2;
+	
 	kinect.getColorTexture().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
 	//kinect.draw(0, 0);
 	//appRecorder.drawImageSubsection(w, h, offsetW, offsetH);
@@ -747,15 +823,23 @@ void testApp::drawPlayers() {
 			}
 		}
 		*/
-		if (players[i].isPlaying()) {
-			frame.clear();
-			frame.rectangle(-w/2, -h/2, w, h);
-			frame.draw();
-
-			//players[i].drawImageSubsection(w, h, offsetW, offsetH);
-			//players[i].getTextureReference().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
-			players[i].draw(0, 0);
+		if (imgId >= players[i].size()) {
+			imgId = 0;
 		}
+		if (imgSeqTimer.getCountDown() <= 0) {
+			imgId++;
+			imgSeqTimer.reset();
+		}
+		
+		frame.clear();
+		frame.rectangle(-w/2, -h/2, w, h);
+		frame.draw();
+
+		//players[i].getTextureReference().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
+		if (players[i].size() > imgId && players[i].at(imgId) != NULL) {
+			players[i].at(imgId)->draw(0, 0,  w, h);
+		}
+		
 
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 		{
@@ -848,8 +932,7 @@ void testApp::drawFbo() {
 			ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 
 			float sc2 = liveFrameScaleSmooth;
-
-			//ofxProfileSectionPush("draw live");
+		
 			drawLiveFrame();
 
 
@@ -868,7 +951,7 @@ void testApp::drawFbo() {
 				img_prompt_0_1_idle.draw(0, textY);
 			}
 
-			if (state == STEP_IN) {
+			if (state == WELLCOM_MSG) {
 				ofEnableAlphaBlending();
 				img_wellcome_msg.draw(0, 0);
 				ofDisableAlphaBlending();
@@ -899,9 +982,10 @@ void testApp::drawFbo() {
 			{
 		
 				ofEnableAlphaBlending();
-				resultImage.draw(0, 0);
+				
+				resultImage->draw(0, 0, w, h);
 				frame.clear();
-				frame.rectangle(-resultImage.getWidth() / 2, -resultImage.getHeight() / 2, resultImage.getWidth(), resultImage.getHeight());
+				frame.rectangle(-w / 2, -h / 2, w, h);
 				frame.draw();
 				ofDisableAlphaBlending();
 				img_prompt_2_1_moreNormal.draw(0, textY);
@@ -965,8 +1049,6 @@ void testApp::draw(){
 		drawKinect();
 		//ofDrawBitmapString(ofxProfile::describe(), profilerPos);
 	}
-
-
 }
 
 //--------------------------------------------------------------
@@ -975,14 +1057,14 @@ void testApp::keyPressed(int key){
 	switch (key) {
 
 	case 'c':
-		recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
+		recorder.capture(imageDir, generateFileName(), ofRectangle(cropX, cropY, cropW, cropH), false);
 		break;
 
 	case 's':
 		recorder.abort();
 		break;
 	case 'S':
-		recorder.start(recDir, generateFileName(), recordingDuration);
+		recorder.start(recDir, generateFileName() + ofToString(ofGetElapsedTimeMillis()), recordingDuration);
 		break;
 
 	case 'F':
@@ -1021,13 +1103,14 @@ void testApp::windowResized(int w, int h){
 void testApp::exit(){
 	ofLogNotice("testApp exit");
 
-	for (int i=0; i<n_players; i++)
+	for (int i = 0; i < MAX_PLAYERS; i++)
 	{
-		players[i].close();
+		for (auto& img : players[i]) {
+			delete img;
+		}
 	}
-	kinect.stop();
 
-//	ofxOpenNI::shutdown();
+	kinect.stop();
 
 	ofLogNotice("testApp exit OK");
 }
@@ -1051,7 +1134,6 @@ void testApp::setupGui(){
 	//	recDir = ofToDataPath("/records/");
 	//  recDir = "C:/Users/SE_Shenkar/Dropbox/records/";
 
-	imageDir = "SeqImg/";
 	gui->addTextInput("ImageDir", imageDir);
 
 	recDir = getRecDirString(ofToDataPath("recDir.json"));
@@ -1155,6 +1237,9 @@ void testApp::setupGui(){
 	resultTimeout = 0; // skip
 	gui->addIntSlider("resultTimeout", 0, 10000, &resultTimeout);
 
+	imgSeqTimeout = 500;
+	gui->addIntSlider("imgSeqTimeout", 100, 1000, &imgSeqTimeout);
+
 	gui->addSpacer();
 	///
 	gui->addLabel("Drawing");
@@ -1170,6 +1255,8 @@ void testApp::setupGui(){
 
 	lockCursorY = true;
 	gui->addToggle("(l)ock cursor Y", &lockCursorY)->bindToKey('l');
+
+	gui->addSpacer();
 
 	gui->addLabel("Misc");
 	kinectYPos = 0.0;
@@ -1190,6 +1277,7 @@ void testApp::setupGui(){
 	gui->addSpacer();
 	gui->addSpacer();
 	gui->addSpacer();
+
 
 	gui->autoSizeToFitWidgets();
 	ofAddListener(gui->newGUIEvent, this, &testApp::guiEvent);
@@ -1229,6 +1317,26 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 }
 
 
+void testApp::puploateRoundUsers()
+{
+	roundsUsers[0] = dataset.getLatestUser();
+	int i = 1;
+	while (i < RecordedData::MAX_ROUND_COUNT) {
+		bool dup = false;
+		string selected =  dataset.getRandumUser();
+		for (int j = 0; j < i; j++) {
+			if (roundsUsers[j] == selected) {
+				dup = true;
+				continue;
+			}
+		}
+		if (!dup) {
+			roundsUsers[i] = selected;
+			i++;
+		}
+	}
+}
+
 void testApp::drawOverheadText(ofImage& txt, int x, int y, int w)
 {
 	ofSetColor(ofColor::black, textAlpha);
@@ -1256,7 +1364,9 @@ void testApp::drawDebugText()
 		;
 
 	for (int i = 0; i < session.N_OTHERS; i++) {
+		//if (session.othersId[session.currentRound()][i]) {
 		msg << "#" << i << ": " << session.othersId[session.currentRound()][i] << endl;
+		//}
 	}
 
 	ofDrawBitmapString(msg.str(), 220, 200);
@@ -1341,8 +1451,8 @@ void testApp::updateSelectedUser()
 		auto & neck = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_CENTER);
 		auto & hip = skeleton.at(NUI_SKELETON_POSITION_HIP_CENTER);
 
-		//auto & lfoot = skeleton.at(NUI_SKELETON_POSITION_FOOT_LEFT);
-		//auto & rfoothip = skeleton.at(NUI_SKELETON_POSITION_FOOT_RIGHT);
+		auto & relbow = skeleton.at(NUI_SKELETON_POSITION_ELBOW_RIGHT);
+		auto & rwrist = skeleton.at(NUI_SKELETON_POSITION_WRIST_RIGHT);
 
 
 		/*
@@ -1383,6 +1493,15 @@ void testApp::updateSelectedUser()
 
 		if (torsoLength > selectedUser.torsoLength) {
 			selectedUser.torsoLength = torsoLength;
+		}
+
+		float armLength = 0;
+		if (relbow.getTrackingState() == SkeletonBone::Tracked && rwrist.getTrackingState() == SkeletonBone::Tracked) {
+			armLength = neck.getStartPosition().distance(hip.getStartPosition());
+		}
+
+		if (armLength > selectedUser.armLength) {
+			selectedUser.armLength = armLength;
 		}
 
 		float shouldersWidth = 0;

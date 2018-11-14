@@ -1,4 +1,5 @@
 #include "AppDataSet.h"
+#include "testApp.h"
 
 
 void AppDataset::saveSession(const RecordedData& session)
@@ -42,7 +43,10 @@ void AppDataset::loadLibrary(string url)
 	{
 		Json::Value v = datasetJson[i];
 		string id = v["id"].asString();
-		dataset[id] = (RecordedData(v));
+		ofDirectory dir(testApp::imageDir + id);
+		if (dir.exists() && dir.listDir() > 0) { // if no images dir remove
+			dataset[id] = (RecordedData(v));
+		}
 	}
 }
 
@@ -57,10 +61,32 @@ bool sortByScoreCount(const RecordedData& lhs, const RecordedData& rhs)
 }
 
 
-vector<string> AppDataset::selectNextRound(string forcedId, string forcedId2)
+string AppDataset::getLatestUser() {
+		DataSet::iterator maxIt = dataset.begin();
+		for (auto it = dataset.begin(); it != dataset.end(); it++) {
+			if (it->first > maxIt->first) {
+				maxIt = it;
+			}
+		}
+		return maxIt->first;
+}
+
+string AppDataset::getRandumUser() {
+	DataSet::iterator it;
+	int rand = floor(ofRandom(dataset.size()));
+	it = dataset.begin();
+	for (int i = 0; i < rand; i++) {
+		it++;
+	}
+	return it->first;
+}
+
+
+
+vector<string> AppDataset::selectNextRound(bool lastUser, string forcedId, string forcedId2)
 {
 	vector<string> newRound;
-	
+
 	if (!forcedId.empty())
 	{
 		// pick forcedId
@@ -73,17 +99,22 @@ vector<string> AppDataset::selectNextRound(string forcedId, string forcedId2)
 		newRound.push_back(forcedId2);
 	}
 
+	
 	if (newRound.size() < RecordedData::N_OTHERS) {
 		// pick last selection
 		DataSet::iterator maxIt = dataset.begin();
 		for (auto it = dataset.begin(); it != dataset.end(); it++) {
+			if (newRound.size() > 0 && it->first == newRound[0]) {
+					continue;
+			}
 			if (it->first > maxIt->first) {
 				maxIt = it;
 			}
 		}
 		newRound.push_back(maxIt->first);
 	}
-
+	
+	
 	if (newRound.size() < RecordedData::N_OTHERS) {
 		// pick least scored
 		DataSet::iterator leastScoredIt = dataset.begin(); // = std::min_element(dataset.begin(), dataset.end(), sortByScoreCount);
@@ -93,9 +124,10 @@ vector<string> AppDataset::selectNextRound(string forcedId, string forcedId2)
 				leastScoredIt = it;
 			}
 		}
+
 		newRound.push_back(leastScoredIt->first);
 	}
-
+	
 	if (rand() % 2 == 0) {
 		swap(newRound[0], newRound[1]);
 	}

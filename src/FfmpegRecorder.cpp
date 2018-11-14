@@ -1,9 +1,10 @@
 #include "FfmpegRecorder.h"
 
-const string FfmpegRecorder::V_ARGS = " -y -an -f dshow -framerate 25 -video_size 640x480 -i video=\"Logitech BRIO\" -an /-c:v h264_nvenc - qp 0 -filter:v transpose=1 ";
+const string FfmpegRecorder::V_ARGS = " -y -an -f dshow -framerate 10 -video_size 640x480 -i video=\"Logitech BRIO\" -an -vcodec h264_nvenc -preset fast -filter:v transpose=1 ";
 //-c:v h264_nvenc - qp 0 -filter:v transpose=1
 
-const string FfmpegRecorder::CAPTURE_ARGS = " -f dshow -s uhd2160 -i video=\"Logitech BRIO\" -vframes 5 -r 0.5 -an -vf crop=";
+const string FfmpegRecorder::CAPTURE_ARGS = " -f dshow -s 1920x1080 -i video=\"Logitech BRIO\" -vframes 5 -r 0.5 -an -vf transpose=1,crop=";
+//-s uhd2160
 const string FfmpegRecorder::FFMPEG = "C:\\ffmpeg-4.0.2\\bin\\ffmpeg.exe";
 
 //--------------------------------------------------------------
@@ -44,6 +45,7 @@ FfmpegRecorder::FfmpegRecorder()
 
 FfmpegRecorder::~FfmpegRecorder()
 {
+	ffmpegThread.close();
 }
 
 
@@ -52,7 +54,7 @@ bool FfmpegRecorder::start(string recDir, string filename, int recordingDuration
 	if (!recording) {
 		string cmd(FFMPEG + " -t " + ofToString(recordingDuration / 1000) + V_ARGS + recDir + filename + ext);
 		ffmpegThread.setup(cmd);
-		recordingTime = RECORDING_TIME;
+		recordingTime = recordingDuration / 1000;
 		startTime = ofGetElapsedTimef();
 		recording = true;
 		return true;
@@ -68,8 +70,7 @@ bool FfmpegRecorder::capture(string recDir, string sessionDir, ofRectangle cropR
 			ofToString(cropRect.width) + ":" +
 			ofToString(cropRect.height) + ":" +
 			ofToString(cropRect.x) + ":" +
-			ofToString(cropRect.y) + 
-			" -vf transpose=1 Data/" +
+			ofToString(cropRect.y) + " Data/" +
 			recDir + sessionDir + "/frame_" +
 			ofToString(ofGetElapsedTimeMillis()) +
 			+"_%02d" +
