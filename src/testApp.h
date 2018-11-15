@@ -15,11 +15,16 @@
 #include "AppDataset.h"
 #include "ofxKinectCommonBridge.h"
 
-#ifdef TARGET_WIN32
-#include "Watchdog_Responder.h"
-#endif
 
 //#define DO_WATCHDOG
+
+#ifdef TARGET_WIN32
+#ifdef DO_WATCHDOG
+#include "Watchdog_Responder.h"
+#endif
+#endif
+
+
 
 
 class testApp : public ofBaseApp{
@@ -245,7 +250,9 @@ private:
 
 
 #ifdef TARGET_WIN32
+#ifdef DO_WATCHDOG
 		unique_ptr<WatchDog_Responder> wdr;
+#endif
 #endif
 };
 
