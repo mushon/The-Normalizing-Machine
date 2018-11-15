@@ -30,6 +30,7 @@ void AppCursor::draw()
 	ofSetLineWidth(2);
 
 	ofNoFill();
+	ofSetCircleResolution(60);
 	ofCircle(position.x, position.y, minRadius);
 	ring.clear();
 	ring.arc(position, minRadius, minRadius, lowAngle, highAngle);  
