@@ -115,10 +115,12 @@ void testApp::setup() {
 	frame.setStrokeWidth(4);
 	frame.setFilled(false);
 
-#ifdef TARGET_WIN32
 #ifdef DO_WATCHDOG
+	
+#ifdef TARGET_WIN32
 	wdr = make_unique<WatchDog_Responder>(true, 10000, "../../watchdog");
 #endif
+	
 #endif
 }
 

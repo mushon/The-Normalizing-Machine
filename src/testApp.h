@@ -18,10 +18,13 @@
 
 //#define DO_WATCHDOG
 
-#ifdef TARGET_WIN32
+
 #ifdef DO_WATCHDOG
+
+#ifdef TARGET_WIN32
 #include "Watchdog_Responder.h"
 #endif
+
 #endif
 
 
@@ -249,10 +252,12 @@ private:
 	int imgId;
 
 
-#ifdef TARGET_WIN32
 #ifdef DO_WATCHDOG
+	
+#ifdef TARGET_WIN32
 		unique_ptr<WatchDog_Responder> wdr;
 #endif
+	
 #endif
 };
 
