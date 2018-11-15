@@ -12,7 +12,7 @@
 #define RECDIR "records/"
 
 const string testApp::imageDir = "SeqImg/";
-const int playersYOffset = 100;
+const int playersYOffset = -100;
 //const ofRectangle testApp::cropImage(CAPTURE_IMAGE_X, CAPTURE_IMAGE_Y, CAPTURE_IMAGE_W, CAPTURE_IMAGE_H);
 //--------------------------------------------------------------
 void testApp::setup() {
