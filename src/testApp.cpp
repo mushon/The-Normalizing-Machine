@@ -803,6 +803,7 @@ void testApp::drawPlayers() {
 		ofTranslate(dx * (w + margin) / 2 * playbackScale, dy * (h + margin) / 2 * playbackScale);
 
 		//ofScale(playbackScale, playbackScale);
+		ofSetColor(255, 255, 255, 255 * playbackScale);
 
 		// draw player
 		//ofRectangle border(0, 0, w + margin, h + margin);
