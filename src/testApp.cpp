@@ -715,8 +715,10 @@ void testApp::drawOverlay() {
 
 
 void testApp::drawLiveFrame() {
-	float w = 380;// getPlayerWidth();
+	
+	float w = 340;// getPlayerWidth();
 	float h = 480;// getPlayerHeight();
+	
 	float scale = liveFrameScaleSmooth;
 	ofPushMatrix();
 	ofScale(scale, scale);
@@ -951,8 +953,7 @@ void testApp::drawFbo() {
 				
 				float sc2 = liveFrameScaleSmooth;
 				
-				drawLiveFrame();
-				
+				drawLiveFrame();				
 				
 				//draw overlays
 				if (state == IDLE) {
