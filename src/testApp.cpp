@@ -18,7 +18,7 @@ const int playersYOffset = -100;
 void testApp::setup() {
 
 	ofSetVerticalSync(true);
-	ofSetFrameRate(10);
+	ofSetFrameRate(30);
 	ofSeedRandom();
 	ofEnableAntiAliasing();
 
