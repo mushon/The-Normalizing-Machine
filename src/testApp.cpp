@@ -266,7 +266,7 @@ void testApp::update(){
 		}
 	}
 
-	if (nVisibleUsers == 1)
+	if (nVisibleUsers >= 1)
 	{
 		selectedUser.lastSeen.reset();
 
@@ -794,8 +794,8 @@ void testApp::drawPlayers() {
 	for (int i = 0; i < n_players; i++)
 	{
 		// draw player
-		float playbackScale = playbackScales[i]; // refac
-
+		float playbackScale = 1;  playbackScales[i]; // refac
+		float fade = playbackScales[i];
 		ofPushMatrix();
 		// video order:
 		// 0 1
@@ -812,7 +812,7 @@ void testApp::drawPlayers() {
 		ofTranslate(dx * (w + margin) / 2 * playbackScale, dy * (h + margin) / 2 * playbackScale);
 
 		//ofScale(playbackScale, playbackScale);
-		ofSetColor(255, 255, 255, 255 * playbackScale);
+		ofSetColor(255, 255, 255, 255 * fade);
 
 		// draw player
 		//ofRectangle border(0, 0, w + margin, h + margin);
@@ -1083,10 +1083,10 @@ void testApp::keyPressed(int key){
 		break;
 
 	case 's':
-		recorder.abort();
+		//recorder.abort();
 		break;
 	case 'S':
-		recorder.start(recDir, generateFileName() + ofToString(ofGetElapsedTimeMillis()), recordingDuration);
+		//recorder.start(recDir, generateFileName() + ofToString(ofGetElapsedTimeMillis()), recordingDuration);
 		break;
 
 	case 'F':
