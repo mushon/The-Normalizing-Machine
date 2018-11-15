@@ -381,7 +381,7 @@ void testApp::update(){
 					// TODO: sanity check if hand is +- at shoulder level
 					ofVec2f v(2*kx-1, 2*ky-1);
 					//ofVec2f v(2*kx-1, 2*ky-1);
-					//ofVec2f vv(selectedUser.getSelectedArm().hand.x, selectedUser.getSelectedArm().hand.y);
+
 					selectedUser.screenPoint01 = v;
 
 					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function,
@@ -808,7 +808,8 @@ void testApp::drawPlayers() {
 
 		dy = 0; // force // 2-player hack
 
-		ofEnableAlphaBlending();
+		ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
+		ofTranslate(dx * (w + margin) / 2 * playbackScale, dy * (h + margin) / 2 * playbackScale);
 
 		//ofScale(playbackScale, playbackScale);
 		ofSetColor(255, 255, 255, 255 * fade);
@@ -854,7 +855,7 @@ void testApp::drawPlayers() {
 		if (players[i].size() > imgId && players[i].at(imgId) != NULL) {
 			players[i].at(imgId)->draw(0, 0,  w, h);
 		}
-		ofDisableAlphaBlending();
+		
 
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 		{
