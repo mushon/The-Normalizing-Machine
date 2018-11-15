@@ -34,3 +34,5 @@ _ReSharper*/
 .vs/
 *.VC.db
 *.VC.VC.opendb
+
+watchdog/**

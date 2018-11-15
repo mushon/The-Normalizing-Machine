@@ -113,6 +113,12 @@ void testApp::setup() {
 	frame.setStrokeColor(ofColor::white);
 	frame.setStrokeWidth(4);
 	frame.setFilled(false);
+
+#ifdef TARGET_WIN32
+#ifdef DO_WATCHDOG
+	wdr = make_unique<WatchDog_Responder>(true, 10000, "../../watchdog");
+#endif
+#endif
 }
 
 void testApp::loadImages(string path, vector<ofImage*>& images) {
@@ -796,7 +802,7 @@ void testApp::drawPlayers() {
 		ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 		ofTranslate(dx * (w + margin) / 2 * playbackScale, dy * (h + margin) / 2 * playbackScale);
 
-		ofScale(playbackScale, playbackScale);
+		//ofScale(playbackScale, playbackScale);
 
 		// draw player
 		//ofRectangle border(0, 0, w + margin, h + margin);
