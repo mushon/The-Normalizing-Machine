@@ -636,7 +636,7 @@ void testApp::update(){
 
 		float selectionScale = 1;
 		if (state == SELECTION) {
-			selectionScale = (i == selectedUser.hovered) ? (1.0f + s) : (1.0f - s);
+			selectionScale = (i == selectedUser.hovered) ? (s) : (1.0f - s);
 		}
 
 		selectionScaleSmoothed[i] *= selectionScaleSmoothFactor;
@@ -808,10 +808,11 @@ void testApp::drawPlayers() {
 
 		dy = 0; // force // 2-player hack
 
-		ofEnableAlphaBlending();
-
+	
+		ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
+		ofTranslate(dx * (w + margin) / 2 * playbackScale, dy * (h + margin) / 2 * playbackScale);
 		//ofScale(playbackScale, playbackScale);
-		ofSetColor(255, 255, 255, 255 * fade);
+		//ofSetColor(255, 255, 255, 255 * fade);
 
 		// draw player
 		//ofRectangle border(0, 0, w + margin, h + margin);
@@ -845,7 +846,7 @@ void testApp::drawPlayers() {
 			imgId++;
 			imgSeqTimer.reset();
 		}
-		
+		ofEnableAlphaBlending();
 		frame.clear();
 		frame.rectangle(-w/2, -h/2, w, h);
 		frame.draw();
