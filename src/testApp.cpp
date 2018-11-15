@@ -12,6 +12,7 @@
 #define RECDIR "records/"
 
 const string testApp::imageDir = "SeqImg/";
+const int playersYOffset = 100;
 //const ofRectangle testApp::cropImage(CAPTURE_IMAGE_X, CAPTURE_IMAGE_Y, CAPTURE_IMAGE_W, CAPTURE_IMAGE_H);
 //--------------------------------------------------------------
 void testApp::setup() {
@@ -777,11 +778,15 @@ void testApp::drawIconAnimations(int i) {
 
 
 void testApp::drawPlayers() {
-	ofPushMatrix();
+	
 	//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!)
 	float w = getPlayerWidth();
 	float h = getPlayerHeight();
 
+	ofPushMatrix();
+	// move everything down
+	ofTranslate(0, playersYOffset);
+	
 	for (int i = 0; i < n_players; i++)
 	{
 		// draw player
@@ -927,99 +932,106 @@ void testApp::drawFbo() {
 		}
 
 		//draw live frame
-		if (liveFrameScaleSmooth > 0.01)
+		ofPushMatrix();
 		{
-			float w = getPlayerWidth();
-			float h = getPlayerHeight();
-
-			userMessage << "w" << w << endl;
-			userMessage << "h" << h << endl;
-
-			ofPushMatrix();
-			ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
-
-			float sc2 = liveFrameScaleSmooth;
-		
-			drawLiveFrame();
-
-
-			//draw overlays
-			if (state == IDLE) {
-				ofEnableAlphaBlending();
-				img_step_in.draw(0, 0);
-				ofDisableAlphaBlending();
-				img_prompt_0_1_idle.draw(0, textY);
-			}
-
-			if (state == STEP_IN) {
-				ofEnableAlphaBlending();
-				img_step_in.draw(0, 0);
-				ofDisableAlphaBlending();
-				img_prompt_0_1_idle.draw(0, textY);
-			}
-
-			if (state == WELLCOM_MSG) {
-				ofEnableAlphaBlending();
-				img_wellcome_msg.draw(0, 0);
-				ofDisableAlphaBlending();
-			}
-
-			if (state == GOTO_SPOT) {
-				ofEnableAlphaBlending();
-				img_position_yourself.draw(0, 0);
-				ofDisableAlphaBlending();
-				//drawGotoSpot(); // todo draw red shadow
-				img_prompt_0_2_position.draw(0, textY);
-			}
-
-			if (state == MORE_THAN_ONE)
+			ofTranslate(0, playersYOffset);
+			
+			if (liveFrameScaleSmooth > 0.01)
 			{
-				ofEnableAlphaBlending();
-				img_one_by_one.draw(0, 0);
-				ofDisableAlphaBlending();
-				img_prompt_0_3_onebyone.draw(0, textY);
-			}
-
-			if (state == RAISE_HAND)
-			{
-				img_prompt_1_1_point.draw(0, textY);
-			}
-
-			if (state == RESULT)
-			{
-		
-				ofEnableAlphaBlending();
+				float w = getPlayerWidth();
+				float h = getPlayerHeight();
 				
-				resultImage->draw(0, 0, w, h);
-				frame.clear();
-				frame.rectangle(-w / 2, -h / 2, w, h);
-				frame.draw();
-				ofDisableAlphaBlending();
-				img_prompt_2_1_moreNormal.draw(0, textY);
-				//drawTotalScore(i);
+				userMessage << "w" << w << endl;
+				userMessage << "h" << h << endl;
+				
+				ofPushMatrix();
+				ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
+				
+				float sc2 = liveFrameScaleSmooth;
+				
+				drawLiveFrame();
+				
+				
+				//draw overlays
+				if (state == IDLE) {
+					ofEnableAlphaBlending();
+					img_step_in.draw(0, 0);
+					ofDisableAlphaBlending();
+					img_prompt_0_1_idle.draw(0, textY);
+				}
+				
+				if (state == STEP_IN) {
+					ofEnableAlphaBlending();
+					img_step_in.draw(0, 0);
+					ofDisableAlphaBlending();
+					img_prompt_0_1_idle.draw(0, textY);
+				}
+				
+				if (state == WELLCOM_MSG) {
+					ofEnableAlphaBlending();
+					img_wellcome_msg.draw(0, 0);
+					ofDisableAlphaBlending();
+				}
+				
+				if (state == GOTO_SPOT) {
+					ofEnableAlphaBlending();
+					img_position_yourself.draw(0, 0);
+					ofDisableAlphaBlending();
+					//drawGotoSpot(); // todo draw red shadow
+					img_prompt_0_2_position.draw(0, textY);
+				}
+				
+				if (state == MORE_THAN_ONE)
+				{
+					ofEnableAlphaBlending();
+					img_one_by_one.draw(0, 0);
+					ofDisableAlphaBlending();
+					img_prompt_0_3_onebyone.draw(0, textY);
+				}
+				
+				if (state == RAISE_HAND)
+				{
+					img_prompt_1_1_point.draw(0, textY);
+				}
+				
+				if (state == RESULT)
+				{
+					
+					ofEnableAlphaBlending();
+					
+					resultImage->draw(0, 0, w, h);
+					frame.clear();
+					frame.rectangle(-w / 2, -h / 2, w, h);
+					frame.draw();
+					ofDisableAlphaBlending();
+					img_prompt_2_1_moreNormal.draw(0, textY);
+					//drawTotalScore(i);
+				}
+				
+				if (state == PROFILE_CONFIRMED)
+				{
+					ofEnableAlphaBlending();
+					img_goodbye.draw(0, 0);
+					ofDisableAlphaBlending();
+					img_prompt_10_goodbye.draw(0, textY);
+				}
+				
+				//ofxProfileSectionPop();
+				ofPopMatrix();
 			}
-
-			if (state == PROFILE_CONFIRMED)
+			
+			
+			if (state == SELECTION)
 			{
-				ofEnableAlphaBlending();
-				img_goodbye.draw(0, 0);
-				ofDisableAlphaBlending();
-				img_prompt_10_goodbye.draw(0, textY);
-			}
-
-			//ofxProfileSectionPop();
-			ofPopMatrix();
-		}
-
-
-		if (state == SELECTION)
-		{
-			//userMessage << "waiting for selection... TODO: instructions how to select" << endl;
-			//userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
-			if (drawCursor) {
-				cursor.draw();
+				//userMessage << "waiting for selection... TODO: instructions how to select" << endl;
+				//userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
+				if (drawCursor) {
+					cursor.draw();
+				}
 			}
 		}
+		ofPopMatrix();
+		
 
 	}
 	fbo.end();
