@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUI2DGraph.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUI2DPad.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIBaseDraws.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIBiLabelSlider.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIButton.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUICanvas.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUICircleSlider.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIDragableLabelButton.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIDropDownList.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIEventArgs.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIFPS.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIFPSSlider.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIImage.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIImageButton.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIImageSampler.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIImageSlider.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIImageToggle.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUILabel.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUILabelButton.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUILabelToggle.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIMinimalSlider.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIMovingGraph.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIMultiImageButton.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIMultiImageToggle.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUINumberDialer.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIRadio.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIRangeSlider.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIRectangle.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIRotarySlider.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIScrollableCanvas.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUISlider.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUISortableList.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUISpacer.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUISpectrum.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUISuperCanvas.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUITabBar.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUITextArea.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUITextInput.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIToggle.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIToggleMatrix.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIValuePlotter.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIWaveform.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIWidget.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIWidgetWithLabel.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\AppCursor.cpp" />
+    <ClCompile Include="src\AppDataset.cpp" />
+    <ClCompile Include="src\FfmpegRecorder.cpp" />
+    <ClCompile Include="src\KinectUtil.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxJSON\libs\jsoncpp\src\jsoncpp.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxKinectCommonBridge\src\ofxKinectCommonBridge.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxHttpUtils\src\ofxHttpUtils.cpp">
+      <Filter>addons\ofxHttpUtils\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\testApp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUI.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUI2DGraph.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUI2DPad.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIBaseDraws.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIBiLabelSlider.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIButton.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUICanvas.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUICircleSlider.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIDefines.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIDragableLabelButton.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIDropDownList.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIEventArgs.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIFPS.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIFPSSlider.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIImage.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIImageButton.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIImageSampler.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIImageSlider.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIImageToggle.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUILabel.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUILabelButton.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUILabelToggle.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIMinimalSlider.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIMovingGraph.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIMultiImageButton.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIMultiImageToggle.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUINumberDialer.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIOFWrapper.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIRadio.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIRangeSlider.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIRectangle.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIRotarySlider.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIScrollableCanvas.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUISlider.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUISortableList.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUISpacer.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUISpectrum.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUISuperCanvas.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUITabBar.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUITextArea.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUITextInput.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIToggle.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIToggleMatrix.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIUtils.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIValuePlotter.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWaveform.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWidget.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWidgets.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWidgetWithLabel.h" />
+    <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWrapper.h" />
+    <ClInclude Include="src\AppCursor.h" />
+    <ClInclude Include="src\AppDataset.h" />
+    <ClInclude Include="src\AppTimer.h" />
+    <ClInclude Include="src\FfmpegRecorder.h" />
+    <ClInclude Include="src\KinectUtil.h" />
+    <ClInclude Include="src\RecordedData.h" />
+    <ClInclude Include="src\SelectedArm.h" />
+    <ClInclude Include="src\SelectedUser.h" />
+    <ClInclude Include="src\State.h" />
+    <ClInclude Include="src\testApp.h" />
+    <ClInclude Include="..\..\..\addons\ofxJSON\src\ofxJSON.h" />
+    <ClInclude Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.h" />
+    <ClInclude Include="..\..\..\addons\ofxJSON\libs\jsoncpp\include\json\json-forwards.h" />
+    <ClInclude Include="..\..\..\addons\ofxJSON\libs\jsoncpp\include\json\json.h" />
+    <ClInclude Include="..\..\..\addons\ofxKinectCommonBridge\src\ofxKinectCommonBridge.h" />
+    <ClInclude Include="..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\include\KinectCommonBridgeLib.h" />
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
+    <ClInclude Include="..\..\..\addons\ofxHttpUtils\src\ofxHttpTypes.h">
+      <Filter>addons\ofxHttpUtils\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxHttpUtils\src\ofxHttpUtils.h">
+      <Filter>addons\ofxHttpUtils\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="addons">
+      <UniqueIdentifier>{a08f2d6d-ae9a-46a6-895f-2de4238981a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxHttpUtils">
+      <UniqueIdentifier>{d6a19882-f683-4d5b-8039-dcd97602d448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxHttpUtils\src">
+      <UniqueIdentifier>{7e5ca43c-de27-4f75-a721-f68877db6577}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

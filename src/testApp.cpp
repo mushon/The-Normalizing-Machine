@@ -852,7 +852,7 @@ void testApp::drawPlayers() {
 		if (players[i].size() > imgId && players[i].at(imgId) != NULL) {
 			players[i].at(imgId)->draw(0, 0,  w, h);
 		}
-
+		ofDisableAlphaBlending();
 
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 		{
