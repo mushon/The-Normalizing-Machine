@@ -36,3 +36,4 @@ _ReSharper*/
 *.VC.VC.opendb
 
 watchdog/**
+.localhistory/**

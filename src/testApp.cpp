@@ -116,11 +116,11 @@ void testApp::setup() {
 	frame.setFilled(false);
 
 #ifdef DO_WATCHDOG
-	
+
 #ifdef TARGET_WIN32
 	wdr = make_unique<WatchDog_Responder>(true, 10000, "../../watchdog");
 #endif
-	
+
 #endif
 }
 
@@ -227,7 +227,7 @@ void testApp::setUpResult(string id) {
 //--------------------------------------------------------------
 void testApp::update(){
 	recorder.update();
-	
+
 	static int lastMin=0;
 
 	int mins = ofGetElapsedTimeMillis() / (1000 * 60); // (ofGetElapsedTimef());
@@ -274,7 +274,7 @@ void testApp::update(){
 		{
 		case IDLE:
 			{
-	
+
 				userMessage << selectedUser.distance << endl;
 				if (selectedUser.distance < idleThreshold)
 				{
@@ -636,7 +636,7 @@ void testApp::update(){
 
 		float selectionScale = 1;
 		if (state == SELECTION) {
-			selectionScale = (i == selectedUser.hovered) ? (1.0f + s) : (1.0f - s);
+			selectionScale = (i == selectedUser.hovered) ? (s) : (1.0f - s);
 		}
 
 		selectionScaleSmoothed[i] *= selectionScaleSmoothFactor;
@@ -715,10 +715,10 @@ void testApp::drawOverlay() {
 
 
 void testApp::drawLiveFrame() {
-	
+
 	float w = 340;// getPlayerWidth();
 	float h = 480;// getPlayerHeight();
-	
+
 	float scale = liveFrameScaleSmooth;
 	ofPushMatrix();
 	ofScale(scale, scale);
@@ -740,7 +740,7 @@ void testApp::drawLiveFrame() {
 
 	float offsetW = (imageWidth - w) / 2;
 	float offsetH = (imageHeight - h) / 2;
-	
+
 	kinect.getColorTexture().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
 	//kinect.draw(0, 0);
 	//appRecorder.drawImageSubsection(w, h, offsetW, offsetH);
@@ -782,7 +782,7 @@ void testApp::drawIconAnimations(int i) {
 
 
 void testApp::drawPlayers() {
-	
+
 	//numbers in comments relate to screen size of width:768, height:1024 (Portrait mode!)
 	float w = getPlayerWidth();
 	float h = getPlayerHeight();
@@ -790,7 +790,7 @@ void testApp::drawPlayers() {
 	ofPushMatrix();
 	// move everything down
 	ofTranslate(0, playersYOffset);
-	
+
 	for (int i = 0; i < n_players; i++)
 	{
 		// draw player
@@ -808,11 +808,11 @@ void testApp::drawPlayers() {
 
 		dy = 0; // force // 2-player hack
 
+
 		ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 		ofTranslate(dx * (w + margin) / 2 * playbackScale, dy * (h + margin) / 2 * playbackScale);
-
 		//ofScale(playbackScale, playbackScale);
-		ofSetColor(255, 255, 255, 255 * fade);
+		//ofSetColor(255, 255, 255, 255 * fade);
 
 		// draw player
 		//ofRectangle border(0, 0, w + margin, h + margin);
@@ -831,11 +831,11 @@ void testApp::drawPlayers() {
 		selectedUser.hovered
 		if (collapse != 0)
 		{
-			selectedUser.hovered = 
+			selectedUser.hovered =
 			collapseNum++;
 			pos = MIN(collapse * collapseNum, w/2);
 			if (selectedUser.hovered == i) {
-	
+
 			}
 		}
 		*/
@@ -846,7 +846,7 @@ void testApp::drawPlayers() {
 			imgId++;
 			imgSeqTimer.reset();
 		}
-		
+		ofEnableAlphaBlending();
 		frame.clear();
 		frame.rectangle(-w/2, -h/2, w, h);
 		frame.draw();
@@ -855,7 +855,7 @@ void testApp::drawPlayers() {
 		if (players[i].size() > imgId && players[i].at(imgId) != NULL) {
 			players[i].at(imgId)->draw(0, 0,  w, h);
 		}
-		
+
 
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 		{
@@ -939,22 +939,22 @@ void testApp::drawFbo() {
 		ofPushMatrix();
 		{
 			ofTranslate(0, playersYOffset);
-			
+
 			if (liveFrameScaleSmooth > 0.01)
 			{
 				float w = getPlayerWidth();
 				float h = getPlayerHeight();
-				
+
 				userMessage << "w" << w << endl;
 				userMessage << "h" << h << endl;
-				
+
 				ofPushMatrix();
 				ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
-				
+
 				float sc2 = liveFrameScaleSmooth;
-				
-				drawLiveFrame();				
-				
+
+				drawLiveFrame();
+
 				//draw overlays
 				if (state == IDLE) {
 					ofEnableAlphaBlending();
@@ -962,20 +962,20 @@ void testApp::drawFbo() {
 					ofDisableAlphaBlending();
 					img_prompt_0_1_idle.draw(0, textY);
 				}
-				
+
 				if (state == STEP_IN) {
 					ofEnableAlphaBlending();
 					img_step_in.draw(0, 0);
 					ofDisableAlphaBlending();
 					img_prompt_0_1_idle.draw(0, textY);
 				}
-				
+
 				if (state == WELLCOM_MSG) {
 					ofEnableAlphaBlending();
 					img_wellcome_msg.draw(0, 0);
 					ofDisableAlphaBlending();
 				}
-				
+
 				if (state == GOTO_SPOT) {
 					ofEnableAlphaBlending();
 					img_position_yourself.draw(0, 0);
@@ -983,7 +983,7 @@ void testApp::drawFbo() {
 					//drawGotoSpot(); // todo draw red shadow
 					img_prompt_0_2_position.draw(0, textY);
 				}
-				
+
 				if (state == MORE_THAN_ONE)
 				{
 					ofEnableAlphaBlending();
@@ -991,17 +991,17 @@ void testApp::drawFbo() {
 					ofDisableAlphaBlending();
 					img_prompt_0_3_onebyone.draw(0, textY);
 				}
-				
+
 				if (state == RAISE_HAND)
 				{
 					img_prompt_1_1_point.draw(0, textY);
 				}
-				
+
 				if (state == RESULT)
 				{
-					
+
 					ofEnableAlphaBlending();
-					
+
 					resultImage->draw(0, 0, w, h);
 					frame.clear();
 					frame.rectangle(-w / 2, -h / 2, w, h);
@@ -1010,7 +1010,7 @@ void testApp::drawFbo() {
 					img_prompt_2_1_moreNormal.draw(0, textY);
 					//drawTotalScore(i);
 				}
-				
+
 				if (state == PROFILE_CONFIRMED)
 				{
 					ofEnableAlphaBlending();
@@ -1018,12 +1018,12 @@ void testApp::drawFbo() {
 					ofDisableAlphaBlending();
 					img_prompt_10_goodbye.draw(0, textY);
 				}
-				
+
 				//ofxProfileSectionPop();
 				ofPopMatrix();
 			}
-			
-			
+
+
 			if (state == SELECTION)
 			{
 				//userMessage << "waiting for selection... TODO: instructions how to select" << endl;
@@ -1034,7 +1034,7 @@ void testApp::drawFbo() {
 			}
 		}
 		ofPopMatrix();
-		
+
 
 	}
 	fbo.end();
