@@ -75,7 +75,7 @@ struct RecordedData
 		v["headHeight"] = headHeight;
 		v["torsoLength"] = torsoLength;
 		v["shouldersWidth"] = shouldersWidth;
-		armLength = v["armLength"].asFloat();
+		v["armLength"] = armLength;
 
 		return v;
 	}

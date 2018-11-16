@@ -251,9 +251,10 @@ private:
 	int cropY = 0;
 	int imgId;
 	ofPoint depthClip;
-	int cursorHight;
+	int cursorHightOffset;
 	int playerFade;
 	int fadeLevel;
+	int cursorWidthOffset;
 
 
 

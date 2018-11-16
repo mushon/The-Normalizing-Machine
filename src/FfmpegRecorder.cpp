@@ -3,7 +3,7 @@
 const string FfmpegRecorder::V_ARGS = " -y -an -f dshow -framerate 10 -video_size 640x480 -i video=\"Logitech BRIO\" -an -vcodec h264_nvenc -preset fast -filter:v transpose=1 ";
 //-c:v h264_nvenc - qp 0 -filter:v transpose=1
 
-const string FfmpegRecorder::CAPTURE_ARGS = " -f dshow -s 1920x1080 -i video=\"Logitech BRIO\" -vframes 10 -r 0.2 -an -vf transpose=1,crop=";
+const string FfmpegRecorder::CAPTURE_ARGS = " -f dshow -s 1920x1080 -i video=\"Logitech BRIO\" -vframes 5 -r 0.5 -an -vf transpose=1,crop=";
 //-s uhd2160
 const string FfmpegRecorder::FFMPEG = "C:\\ffmpeg-4.0.2\\bin\\ffmpeg.exe";
 
@@ -64,13 +64,14 @@ bool FfmpegRecorder::start(string recDir, string filename, int recordingDuration
 
 bool FfmpegRecorder::capture(string recDir, string sessionDir, ofRectangle cropRect, string ext /*= ".jpeg"*/)
 {
+	abort();
 	ofDirectory::createDirectory(recDir + sessionDir, true, true);
 	if (!recording) {
 		string cmd(FFMPEG + CAPTURE_ARGS +
 			ofToString(cropRect.width) + ":" +
 			ofToString(cropRect.height) + ":" +
 			ofToString(cropRect.x) + ":" +
-			ofToString(cropRect.y) + " Data/" +
+			ofToString(cropRect.y) + " " +
 			recDir + sessionDir + "/frame_" +
 			ofToString(ofGetElapsedTimeMillis()) +
 			+"_%02d" + ext);

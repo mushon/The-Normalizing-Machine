@@ -108,6 +108,7 @@ void testApp::setup() {
 	frame.setStrokeWidth(4);
 	frame.setFilled(false);
 
+
 #ifdef DO_WATCHDOG
 
 #ifdef TARGET_WIN32
@@ -290,7 +291,7 @@ void testApp::update(){
 					session.id = generateFileName();
 					setupNextRound(0); // first round
 					welcomeTime = ofGetElapsedTimeMillis();
-					recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH));
+					recorder.capture(ofToDataPath(imageDir), session.id, ofRectangle(cropX, cropY, cropW, cropH));
 					state = WELLCOM_MSG;
 				}
 				break;
@@ -335,7 +336,7 @@ void testApp::update(){
 
 							//ofVec3f s = selectedUser.getPointingDir();
 							//ofLogNotice(ofToString(s.x) + " " + ofToString(s.y) + " " + ofToString(s.z));
-							cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2));
+							cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset , ofGetScreenHeight() / 2 + cursorHightOffset));
 							state = SELECTION;
 						}
 						else
@@ -376,8 +377,8 @@ void testApp::update(){
 					//ofVec2f v(2*kx-1, 2*ky-1);
 
 					ofVec2f v;
-					v.x = ofMap(selectedUser.getSelectedArm().hand.x, screenL, screenR, 0, ofGetWidth(), true);
-					v.y = cursorHight; // ofGetHight() / 2 // fix to 
+					v.x = ofMap(selectedUser.getSelectedArm().hand.x, screenL, screenR, cursorWidthOffset, ofGetWidth()  + cursorWidthOffset, true); 
+					v.y = ofGetHeight() / 2  + cursorHightOffset; // // fix to 
 					selectedUser.screenPoint = v;
 
 					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function,
@@ -401,14 +402,14 @@ void testApp::update(){
 					cursor.update(cursorPoint, progressSmooth);
 
 					int hover = 0;
-					if (v.x > 0) hover += 1;
+					if (v.x > ofGetWidth()/2 + cursorWidthOffset) hover += 1;
 					// if (v.y < 0) hover+=2; 2 players hack
 
 					float w = getPlayerWidth();
 					float h = getPlayerHeight();
 
 
-					if (abs(selectedUser.screenPoint.x - ofGetWidth()/2 ) < selectionBufferWidth) // && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
+					if (abs(selectedUser.screenPoint.x - ofGetWidth()/2 + cursorWidthOffset) < selectionBufferWidth) // && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
 					{
 						hover = SelectedUser::NO_HOVER;
 					}
@@ -425,13 +426,6 @@ void testApp::update(){
 						selectedUser.selectTimer.reset();
 						selectedUser.waitForSteady = true;
 						//recorder.abort();
-					}
-					
-					if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 3) { // one before last round
-						if (selectedUser.selectTimer.getCountDown() < recordingDuration)
-						{
-							recorder.capture(recDir, session.id, ofRectangle(cropX, cropY, cropW, cropH));
-						}
 					}
 					
 					//TODO select mechanism (click/timeout)
@@ -458,6 +452,12 @@ void testApp::update(){
 							recorder.start(recDir, session.id, recordingDuration);
 						}
 						*/
+						if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 3) { // one before last round
+							if (selectedUser.selectTimer.getCountDown() < recordingDuration)
+							{
+								recorder.capture(recDir, session.id, ofRectangle(cropX, cropY, cropW, cropH));
+							}
+						}
 						state = SELECTION_POST;
 					}
 
@@ -731,18 +731,20 @@ void testApp::drawLiveFrame() {
 	float imageWidth = KINECT_WIDTH;
 	float imageHeight = KINECT_HIGHT;
 
-	frame.clear();
-	frame.rectangle(-w / 2, -h / 2, w, h);
-	frame.draw();
-
+	
 	float offsetW = (imageWidth - w) / 2;
 	float offsetH = (imageHeight - h) / 2;
 
 	kinect.getColorTexture().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
-	//kinect.draw(0, 0);
+	 //kinect.draw(0, 0);
 	//appRecorder.drawImageSubsection(w, h, offsetW, offsetH);
 
 	img_record.draw((img_record.getWidth() + margin - w) / 2 , (img_record.getHeight() + margin - h) / 2); // top left
+
+	frame.clear();
+	frame.rectangle(-w / 2, -h / 2, w, h);
+	frame.draw();
+
 	ofPopMatrix();
 }
 
@@ -843,7 +845,7 @@ void testApp::drawPlayers() {
 			imgId++;
 			imgSeqTimer.reset();
 		}
-		ofEnableAlphaBlending();
+	//	ofEnableAlphaBlending();
 		frame.clear();
 		frame.rectangle(-w/2, -h/2, w, h);
 		frame.draw();
@@ -852,7 +854,7 @@ void testApp::drawPlayers() {
 		if (players[i].size() > imgId && players[i].at(imgId) != NULL) {
 			players[i].at(imgId)->draw(0, 0,  w, h);
 		}
-		ofDisableAlphaBlending();
+	//	ofDisableAlphaBlending();
 
 		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
 		{
@@ -1076,7 +1078,7 @@ void testApp::keyPressed(int key){
 	switch (key) {
 
 	case 'c':
-		recorder.capture(imageDir, generateFileName(), ofRectangle(cropX, cropY, cropW, cropH));
+		recorder.capture(ofToDataPath(imageDir), generateFileName(), ofRectangle(cropX, cropY, cropW, cropH));
 		break;
 
 	case 's':
@@ -1210,12 +1212,14 @@ void testApp::setupGui(){
 	gui->addSpacer();
 	///
 	gui->addLabel("Spot & Thresholds");
-	depthClip.x = 1000;
+	depthClip.x = 500;
 	gui->addSlider("Near Clip", 500, 3000, &depthClip.x);
-	depthClip.y = 3000;
+	depthClip.y = 4000;
 	gui->addSlider("Far Clip", 2000, 6000, &depthClip.y);
-	cursorHight = ofGetHeight() / 2;
-	gui->addIntSlider("Cursor Hight", 0, ofGetHeight(), &cursorHight);
+	cursorHightOffset = 0;
+	gui->addIntSlider("Cursor Hight offset Pix", -ofGetHeight() / 2, ofGetHeight()/2, &cursorHightOffset);
+	cursorWidthOffset = 0;
+	gui->addIntSlider("Cursor Width offset Pix", -ofGetWidth() / 2, ofGetWidth() / 2, &cursorWidthOffset);
 	spot.x = 0;
 	gui->addSlider("spot X", -500, 500, &spot.x);
 
@@ -1241,7 +1245,7 @@ void testApp::setupGui(){
 	///
 	gui->addLabel("Selection");
 
-	selectionBufferWidth = 100;
+	selectionBufferWidth = 20;
 	gui->addSlider("selectionBufferWidth in Pix", 0, 1000, &selectionBufferWidth);
 
 	handShoulderDistance = 200;

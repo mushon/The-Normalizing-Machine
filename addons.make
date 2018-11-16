@@ -1,5 +1,5 @@
+ofxOsc
 ofxXmlSettings
-ofxHttpUtils
 ofxJSON
 ofxKinectCommonBridge
 ofxUI

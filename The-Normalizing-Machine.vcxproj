@@ -104,30 +104,10 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);
-..\..\..\addons\ofxJSON\libs;
-..\..\..\addons\ofxJSON\libs\jsoncpp;
-..\..\..\addons\ofxJSON\libs\jsoncpp\include;
-..\..\..\addons\ofxJSON\libs\jsoncpp\include\json;
-..\..\..\addons\ofxJSON\libs\jsoncpp\src;
-..\..\..\addons\ofxJSON\src;
-..\..\..\addons\ofxKinectCommonBridge\libs;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\include;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64_Speech;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs_Speech;
-..\..\..\addons\ofxKinectCommonBridge\src;
-..\..\..\addons\ofxUI\src;
-..\..\..\addons\ofxXmlSettings\libs;
-..\..\..\addons\ofxXmlSettings\src;
-C:\TNM\of_v0.10.0_vs2017_release\addons\ofxUI\src;
-C:\Users\toga\Documents\of_v0.10.0_vs2017_release\addons\ofxHttpUtils\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxJSON\libs;..\..\..\addons\ofxJSON\libs\jsoncpp;..\..\..\addons\ofxJSON\libs\jsoncpp\include;..\..\..\addons\ofxJSON\libs\jsoncpp\include\json;..\..\..\addons\ofxJSON\libs\jsoncpp\src;..\..\..\addons\ofxJSON\src;..\..\..\addons\ofxKinectCommonBridge\libs;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\include;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64_Speech;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs_Speech;..\..\..\addons\ofxKinectCommonBridge\src;..\..\..\addons\ofxOsc\libs;..\..\..\addons\ofxOsc\libs\oscpack;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxOsc\src;..\..\..\addons\ofxUI\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+      <PreprocessorDefinitions>OSC_HOST_LITTLE_ENDIAN</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -145,10 +125,11 @@ C:\Users\toga\Documents\of_v0.10.0_vs2017_release\addons\ofxHttpUtils\src</Addit
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>"$(INHERIT)" KinectCommonBridge.lib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxJSON\libs;..\..\..\addons\ofxJSON\libs\jsoncpp;..\..\..\addons\ofxJSON\libs\jsoncpp\include;..\..\..\addons\ofxJSON\libs\jsoncpp\include\json;..\..\..\addons\ofxJSON\libs\jsoncpp\src;..\..\..\addons\ofxJSON\src;..\..\..\addons\ofxKinectCommonBridge\libs;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\include;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64_Speech;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs_Speech;..\..\..\addons\ofxKinectCommonBridge\src;..\..\..\addons\ofxOsc\libs;..\..\..\addons\ofxOsc\libs\oscpack;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxOsc\src;..\..\..\addons\ofxUI\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>OSC_HOST_LITTLE_ENDIAN</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -165,31 +146,11 @@ C:\Users\toga\Documents\of_v0.10.0_vs2017_release\addons\ofxHttpUtils\src</Addit
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);
-..\..\..\addons\ofxJSON\libs;
-..\..\..\addons\ofxJSON\libs\jsoncpp;
-..\..\..\addons\ofxJSON\libs\jsoncpp\include;
-..\..\..\addons\ofxJSON\libs\jsoncpp\include\json;
-..\..\..\addons\ofxJSON\libs\jsoncpp\src;
-..\..\..\addons\ofxJSON\src;
-..\..\..\addons\ofxKinectCommonBridge\libs;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\include;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64_Speech;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs_Speech;
-..\..\..\addons\ofxKinectCommonBridge\src;
-..\..\..\addons\ofxUI\src;
-..\..\..\addons\ofxXmlSettings\libs;
-..\..\..\addons\ofxXmlSettings\src;
-C:\TNM\of_v0.10.0_vs2017_release\addons\ofxUI\src;
-C:\Users\toga\Documents\of_v0.10.0_vs2017_release\addons\ofxHttpUtils\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxJSON\libs;..\..\..\addons\ofxJSON\libs\jsoncpp;..\..\..\addons\ofxJSON\libs\jsoncpp\include;..\..\..\addons\ofxJSON\libs\jsoncpp\include\json;..\..\..\addons\ofxJSON\libs\jsoncpp\src;..\..\..\addons\ofxJSON\src;..\..\..\addons\ofxKinectCommonBridge\libs;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\include;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64_Speech;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs_Speech;..\..\..\addons\ofxKinectCommonBridge\src;..\..\..\addons\ofxOsc\libs;..\..\..\addons\ofxOsc\libs\oscpack;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxOsc\src;..\..\..\addons\ofxUI\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <PreprocessorDefinitions>OSC_HOST_LITTLE_ENDIAN</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -209,30 +170,10 @@ C:\Users\toga\Documents\of_v0.10.0_vs2017_release\addons\ofxHttpUtils\src</Addit
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);
-..\..\..\addons\ofxJSON\libs;
-..\..\..\addons\ofxJSON\libs\jsoncpp;
-..\..\..\addons\ofxJSON\libs\jsoncpp\include;
-..\..\..\addons\ofxJSON\libs\jsoncpp\include\json;
-..\..\..\addons\ofxJSON\libs\jsoncpp\src;
-..\..\..\addons\ofxJSON\src;
-..\..\..\addons\ofxKinectCommonBridge\libs;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\include;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64_Speech;
-..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs_Speech;
-..\..\..\addons\ofxKinectCommonBridge\src;
-..\..\..\addons\ofxUI\src;
-..\..\..\addons\ofxXmlSettings\libs;
-..\..\..\addons\ofxXmlSettings\src;
-C:\TNM\of_v0.10.0_vs2017_release\addons\ofxUI\src;
-C:\Users\toga\Documents\of_v0.10.0_vs2017_release\addons\ofxHttpUtils\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxJSON\libs;..\..\..\addons\ofxJSON\libs\jsoncpp;..\..\..\addons\ofxJSON\libs\jsoncpp\include;..\..\..\addons\ofxJSON\libs\jsoncpp\include\json;..\..\..\addons\ofxJSON\libs\jsoncpp\src;..\..\..\addons\ofxJSON\src;..\..\..\addons\ofxKinectCommonBridge\libs;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\include;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs64_Speech;..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\lib\windows\vs_Speech;..\..\..\addons\ofxKinectCommonBridge\src;..\..\..\addons\ofxOsc\libs;..\..\..\addons\ofxOsc\libs\oscpack;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxOsc\src;..\..\..\addons\ofxUI\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+      <PreprocessorDefinitions>OSC_HOST_LITTLE_ENDIAN</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
@@ -247,7 +188,26 @@ C:\Users\toga\Documents\of_v0.10.0_vs2017_release\addons\ofxHttpUtils\src</Addit
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\addons\ofxHttpUtils\src\ofxHttpUtils.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\AppCursor.cpp" />
+    <ClCompile Include="src\AppDataset.cpp" />
+    <ClCompile Include="src\FfmpegRecorder.cpp" />
+    <ClCompile Include="src\KinectUtil.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxJSON\libs\jsoncpp\src\jsoncpp.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxKinectCommonBridge\src\ofxKinectCommonBridge.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscBundle.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscMessage.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscSender.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtils.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocket.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.cpp" />
     <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUI2DGraph.cpp" />
     <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUI2DPad.cpp" />
     <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIBaseDraws.cpp" />
@@ -292,23 +252,50 @@ C:\Users\toga\Documents\of_v0.10.0_vs2017_release\addons\ofxHttpUtils\src</Addit
     <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIWaveform.cpp" />
     <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIWidget.cpp" />
     <ClCompile Include="..\..\..\addons\ofxUI\src\ofxUIWidgetWithLabel.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\AppCursor.cpp" />
-    <ClCompile Include="src\AppDataset.cpp" />
-    <ClCompile Include="src\FfmpegRecorder.cpp" />
-    <ClCompile Include="src\KinectUtil.cpp" />
-    <ClCompile Include="src\testApp.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxJSON\libs\jsoncpp\src\jsoncpp.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxKinectCommonBridge\src\ofxKinectCommonBridge.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
+    <ClCompile Include="src\testApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\addons\ofxHttpUtils\src\ofxHttpTypes.h" />
-    <ClInclude Include="..\..\..\addons\ofxHttpUtils\src\ofxHttpUtils.h" />
+    <ClInclude Include="src\AppCursor.h" />
+    <ClInclude Include="src\AppDataset.h" />
+    <ClInclude Include="src\AppTimer.h" />
+    <ClInclude Include="src\FfmpegRecorder.h" />
+    <ClInclude Include="src\KinectUtil.h" />
+    <ClInclude Include="src\RecordedData.h" />
+    <ClInclude Include="src\SelectedArm.h" />
+    <ClInclude Include="src\SelectedUser.h" />
+    <ClInclude Include="src\State.h" />
+    <ClInclude Include="src\testApp.h" />
+    <ClInclude Include="src\Watchdog_Responder.h" />
+    <ClInclude Include="..\..\..\addons\ofxJSON\src\ofxJSON.h" />
+    <ClInclude Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.h" />
+    <ClInclude Include="..\..\..\addons\ofxJSON\libs\jsoncpp\include\json\json-forwards.h" />
+    <ClInclude Include="..\..\..\addons\ofxJSON\libs\jsoncpp\include\json\json.h" />
+    <ClInclude Include="..\..\..\addons\ofxKinectCommonBridge\src\ofxKinectCommonBridge.h" />
+    <ClInclude Include="..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\include\KinectCommonBridgeLib.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOsc.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscArg.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscBundle.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscMessage.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscSender.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\TimerListener.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscException.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPacketListener.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.h" />
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUI.h" />
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUI2DGraph.h" />
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUI2DPad.h" />
@@ -359,22 +346,6 @@ C:\Users\toga\Documents\of_v0.10.0_vs2017_release\addons\ofxHttpUtils\src</Addit
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWidgets.h" />
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWidgetWithLabel.h" />
     <ClInclude Include="..\..\..\addons\ofxUI\src\ofxUIWrapper.h" />
-    <ClInclude Include="src\AppCursor.h" />
-    <ClInclude Include="src\AppDataset.h" />
-    <ClInclude Include="src\AppTimer.h" />
-    <ClInclude Include="src\FfmpegRecorder.h" />
-    <ClInclude Include="src\KinectUtil.h" />
-    <ClInclude Include="src\RecordedData.h" />
-    <ClInclude Include="src\SelectedArm.h" />
-    <ClInclude Include="src\SelectedUser.h" />
-    <ClInclude Include="src\State.h" />
-    <ClInclude Include="src\testApp.h" />
-    <ClInclude Include="..\..\..\addons\ofxJSON\src\ofxJSON.h" />
-    <ClInclude Include="..\..\..\addons\ofxJSON\src\ofxJSONElement.h" />
-    <ClInclude Include="..\..\..\addons\ofxJSON\libs\jsoncpp\include\json\json-forwards.h" />
-    <ClInclude Include="..\..\..\addons\ofxJSON\libs\jsoncpp\include\json\json.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinectCommonBridge\src\ofxKinectCommonBridge.h" />
-    <ClInclude Include="..\..\..\addons\ofxKinectCommonBridge\libs\KinectCommonBridge\include\KinectCommonBridgeLib.h" />
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
   </ItemGroup>
