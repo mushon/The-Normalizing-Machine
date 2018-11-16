@@ -16,7 +16,7 @@
 #include "ofxKinectCommonBridge.h"
 
 
-#define DO_WATCHDOG
+//#define DO_WATCHDOG
 
 
 #ifdef DO_WATCHDOG

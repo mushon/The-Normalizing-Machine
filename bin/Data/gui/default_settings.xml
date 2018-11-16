@@ -35,7 +35,7 @@
 </Widget>
 <Widget>
     <Kind>2</Kind>
-    <Name>draw (K)Kinect</Name>
+    <Name>draw (P)rofiler</Name>
     <Value>0</Value>
 </Widget>
 <Widget>
@@ -140,18 +140,8 @@
 </Widget>
 <Widget>
     <Kind>42</Kind>
-    <Name>welcome msg</Name>
-    <Value>5000</Value>
-</Widget>
-<Widget>
-    <Kind>42</Kind>
     <Name>resultTimeout</Name>
     <Value>0</Value>
-</Widget>
-<Widget>
-    <Kind>42</Kind>
-    <Name>imgSeqTimeout</Name>
-    <Value>500</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
@@ -171,35 +161,10 @@
 <Widget>
     <Kind>4</Kind>
     <Name>textY</Name>
-    <Value>320.000000000</Value>
+    <Value>360.000000000</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>(l)ock cursor Y</Name>
     <Value>1</Value>
-</Widget>
-<Widget>
-    <Kind>4</Kind>
-    <Name>kinect y pos</Name>
-    <Value>0.000000000</Value>
-</Widget>
-<Widget>
-    <Kind>42</Kind>
-    <Name>Crop Width</Name>
-    <Value>3840</Value>
-</Widget>
-<Widget>
-    <Kind>42</Kind>
-    <Name>Crop Hight</Name>
-    <Value>2160</Value>
-</Widget>
-<Widget>
-    <Kind>42</Kind>
-    <Name>Crop X</Name>
-    <Value>100</Value>
-</Widget>
-<Widget>
-    <Kind>42</Kind>
-    <Name>Crop Y</Name>
-    <Value>100</Value>
 </Widget>
