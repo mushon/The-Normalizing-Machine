@@ -24,6 +24,7 @@ struct RecordedData
 		headHeight = 0;
 		torsoLength = 0;
 		shouldersWidth = 0;
+		armLength = 0;
 
 		vScore = 0;
 		xScore = 0;
@@ -48,7 +49,7 @@ struct RecordedData
 		headHeight = v["headHeight"].asFloat();
 		torsoLength = v["torsoLength"].asFloat();
 		shouldersWidth = v["shouldersWidth"].asFloat();
-
+		armLength = v["armLength"].asFloat();
 	}
 
 	Json::Value toJson()
@@ -74,6 +75,7 @@ struct RecordedData
 		v["headHeight"] = headHeight;
 		v["torsoLength"] = torsoLength;
 		v["shouldersWidth"] = shouldersWidth;
+		armLength = v["armLength"].asFloat();
 
 		return v;
 	}
@@ -87,12 +89,13 @@ struct RecordedData
 	}
 
 
-	void saveUserMeasurements(float _totalHeight, float _headHeight, float _torsoLength, float _shouldersWidth)
+	void saveUserMeasurements(float _totalHeight, float _headHeight, float _torsoLength, float _shouldersWidth, float _armLength)
 	{
 		totalHeight = _totalHeight;
 		headHeight = _headHeight;
 		torsoLength = _torsoLength;
 		shouldersWidth = _shouldersWidth;
+		armLength = _armLength;
 	}
 
 	void setupNextRound(vector<string> nextIds) {
@@ -122,6 +125,7 @@ struct RecordedData
 	float headHeight;		// distance(head, neck)
 	float torsoLength;		// distance(neck, torso)
 	float shouldersWidth;	// distance(shoulders)
+	float armLength;        // arm from elbow to wrist
 
 
 	// time, file, location, selection v/x

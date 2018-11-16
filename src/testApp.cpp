@@ -1,19 +1,12 @@
 #include "testApp.h"
 #include "KinectUtil.h"
 
-#define HEAD_FATCOR  1.5
 #define KINECT_WIDTH 640
 #define KINECT_HIGHT 480
-//#define CAPTURE_IMAGE_X 1000
-//#define CAPTURE_IMAGE_Y 0
-//#define CAPTURE_IMAGE_W 1000
-//#define CAPTURE_IMAGE_H 2160
-//#define WELLCOME_MSG_LENGTH 5
 #define RECDIR "records/"
-
 const string testApp::imageDir = "SeqImg/";
 const int playersYOffset = -100;
-//const ofRectangle testApp::cropImage(CAPTURE_IMAGE_X, CAPTURE_IMAGE_Y, CAPTURE_IMAGE_W, CAPTURE_IMAGE_H);
+
 //--------------------------------------------------------------
 void testApp::setup() {
 
@@ -21,6 +14,7 @@ void testApp::setup() {
 	ofSetFrameRate(30);
 	ofSeedRandom();
 	ofEnableAntiAliasing();
+	setupGui();
 
 	kinect.initSensor();
 	//kinect.initIRStream(640, 480);
@@ -30,7 +24,7 @@ void testApp::setup() {
 	//kinect.setUseStreams(true);
 	//kinect.createColorPixels(KINECT_WIDTH, KINECT_HIGHT);
 	kinect.setUseTexture(true);
-	kinect.setDepthClipping(500, 5000); // TODO:: export to settings
+	kinect.setDepthClipping(depthClip.x, depthClip.y); // TODO:: export to settings
 
 	//simple start
 	kinect.start();
@@ -94,7 +88,6 @@ void testApp::setup() {
 
 	ofDisableAlphaBlending();
 
-	setupGui();
 
 	ofBackground(0, 0, 0, 0);
 
@@ -143,7 +136,7 @@ void testApp::loadImages(string path, vector<ofImage*>& images) {
 }
 
 void testApp::setupPlayback(string path) {
-	loadImages(imageDir + path, players[n_players]);
+	loadImages(recDir + path, players[n_players]);
 	n_players++;
 }
 
@@ -297,7 +290,7 @@ void testApp::update(){
 					session.id = generateFileName();
 					setupNextRound(0); // first round
 					welcomeTime = ofGetElapsedTimeMillis();
-					recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
+					recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH));
 					state = WELLCOM_MSG;
 				}
 				break;
@@ -369,39 +362,42 @@ void testApp::update(){
 				}
 				else
 				{
-					ofPoint p = selectedUser.getPointingDir();
+					//ofPoint p = selectedUser.getPointingDir();
 
-					float x = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.x / p.z - screenL;
-					float y = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.y / p.z - screenB;
+					//float x = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.x / p.z - screenL;
+					//float y = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.y / p.z - screenB;
 
-					float kx = (x-screenL) / (screenR - screenL);
-					float ky = (y-screenB) / (screenT - screenB);
+					//float kx = (x-screenL) / (screenR - screenL);
+					//float ky = (y-screenB) / (screenT - screenB);
 
 
 					// TODO: sanity check if hand is +- at shoulder level
-					ofVec2f v(2*kx-1, 2*ky-1);
+					//ofVec2f v(2*kx-1, 2*ky-1);
 					//ofVec2f v(2*kx-1, 2*ky-1);
 
-					selectedUser.screenPoint01 = v;
+					ofVec2f v;
+					v.x = ofMap(selectedUser.getSelectedArm().hand.x, screenL, screenR, 0, ofGetWidth(), true);
+					v.y = cursorHight; // ofGetHight() / 2 // fix to 
+					selectedUser.screenPoint = v;
 
 					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function,
 					//v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function,
 					//v.y = powf(v.y, 3); // only on x
 
-					float cx = ofGetScreenWidth() / 2;
-					float cy = ofGetScreenHeight() / 2;
+					//float cx = ofGetScreenWidth() / 2;
+					//float cy = ofGetScreenHeight() / 2;
 
-					selectedUser.screenPoint = v.getMapped(ofVec2f(cx, cy), ofVec2f(cx, 0), ofVec2f(0, -cy)); // reverse y, assume -1 < v.x, v.y < 1
+					//selectedUser.screenPoint = v.getMapped(ofVec2f(cx, cy), ofVec2f(cx, 0), ofVec2f(0, -cy)); // reverse y, assume -1 < v.x, v.y < 1
 
-					selectedUser.screenPoint.x = ofLerp(ofGetScreenWidth() / 2, selectedUser.screenPoint.x, 0.1);  // force to center // 2-player hack
-					selectedUser.screenPoint.y = ofLerp(ofGetScreenHeight() / 2, selectedUser.screenPoint.y, 0.1);  // force to center // 2-player hack
+					//selectedUser.screenPoint.x = ofLerp(ofGetScreenWidth() / 2, selectedUser.screenPoint.x, 0.1);  // force to center // 2-player hack
+					//selectedUser.screenPoint.y = ofLerp(ofGetScreenHeight() / 2, selectedUser.screenPoint.y, 0.1);  // force to center // 2-player hack
 
 					float progress = selectedUser.getProgress();
 
 					ofVec2f cursorPoint = selectedUser.screenPoint;
-					if (lockCursorY) {
-						cursorPoint.y = ofGetScreenHeight() / 2;
-					}
+					//if (lockCursorY) {
+					//	cursorPoint.y = ofGetScreenHeight() / 2;
+					//}
 					cursor.update(cursorPoint, progressSmooth);
 
 					int hover = 0;
@@ -412,15 +408,15 @@ void testApp::update(){
 					float h = getPlayerHeight();
 
 
-					if (abs(selectedUser.screenPoint.x - cx) < selectionBufferWidth) // && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
+					if (abs(selectedUser.screenPoint.x - ofGetWidth()/2 ) < selectionBufferWidth) // && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
 					{
 						hover = SelectedUser::NO_HOVER;
 					}
 
-					if (/* abs(v.x) > outsideScreenFactor || */ abs(v.y) > outsideScreenFactor) // hand down
-					{
-						hover = SelectedUser::NO_HOVER;
-					}
+					//if (/* abs(v.x) > outsideScreenFactor || */ abs(v.y) > outsideScreenFactor) // hand down
+					//{
+					//	hover = SelectedUser::NO_HOVER;
+					//}
 
 					if (hover == SelectedUser::NO_HOVER || selectedUser.hovered != hover) //changed selection
 					{
@@ -430,14 +426,14 @@ void testApp::update(){
 						selectedUser.waitForSteady = true;
 						//recorder.abort();
 					}
-					/*
+					
 					if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 3) { // one before last round
 						if (selectedUser.selectTimer.getCountDown() < recordingDuration)
 						{
-							recorder.start(recDir, session.id, recordingDuration);
+							recorder.capture(recDir, session.id, ofRectangle(cropX, cropY, cropW, cropH));
 						}
 					}
-					*/
+					
 					//TODO select mechanism (click/timeout)
 
 					for (int i = 0; i < session.currentRound(); i++) {
@@ -491,7 +487,7 @@ void testApp::update(){
 					resultImage = players[selectedUser.hovered].back();
 					//resultImage.allocate(players[selectedUser.hovered]->getWidth(), players[selectedUser.hovered]->getHeight(), OF_IMAGE_COLOR);
 					//resultImage.setFromPixels(players[selectedUser.hovered]->getPixels());
-					session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
+					session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth, selectedUser.armLength);
 
 					// info: ALL dataset is saved every time
 					dataset.saveSession(session);
@@ -636,13 +632,14 @@ void testApp::update(){
 
 		float selectionScale = 1;
 		if (state == SELECTION) {
-			selectionScale = (i == selectedUser.hovered) ? (s) : (1.0f - s);
+			selectionScale = (i == selectedUser.hovered) ? (1) : (1.0f - s);
 		}
+		playbackScales[i] = selectionScale;
 
-		selectionScaleSmoothed[i] *= selectionScaleSmoothFactor;
-		selectionScaleSmoothed[i] += (1 - selectionScaleSmoothFactor) * selectionScale;
+		//selectionScaleSmoothed[i] *= selectionScaleSmoothFactor;
+		//selectionScaleSmoothed[i] += (1 - selectionScaleSmoothFactor) * selectionScale;
 
-		playbackScales[i] = playerFrameScaleSmooth * selectionScaleSmoothed[i];
+		//playbackScales[i] = playerFrameScaleSmooth * selectionScaleSmoothed[i];
 	}
 
 	drawFbo();
@@ -1079,7 +1076,7 @@ void testApp::keyPressed(int key){
 	switch (key) {
 
 	case 'c':
-		recorder.capture(imageDir, generateFileName(), ofRectangle(cropX, cropY, cropW, cropH), false);
+		recorder.capture(imageDir, generateFileName(), ofRectangle(cropX, cropY, cropW, cropH));
 		break;
 
 	case 's':
@@ -1178,8 +1175,8 @@ void testApp::setupGui(){
 	gui->addToggle("draw (c)ursor", &drawCursor)->bindToKey('c');
 	gui->addToggle("draw (K)Kinect", &drawProfiler)->bindToKey('K');
 
-	simulateMoreThanOne = false;
-	gui->addToggle("simulate (m)ore 1", &simulateMoreThanOne)->bindToKey('m');
+	//simulateMoreThanOne = false;
+	//gui->addToggle("simulate (m)ore 1", &simulateMoreThanOne)->bindToKey('m');
 
 	gui->addSpacer();
 
@@ -1213,6 +1210,12 @@ void testApp::setupGui(){
 	gui->addSpacer();
 	///
 	gui->addLabel("Spot & Thresholds");
+	depthClip.x = 1000;
+	gui->addSlider("Near Clip", 500, 3000, &depthClip.x);
+	depthClip.y = 3000;
+	gui->addSlider("Far Clip", 2000, 6000, &depthClip.y);
+	cursorHight = ofGetHeight() / 2;
+	gui->addIntSlider("Cursor Hight", 0, ofGetHeight(), &cursorHight);
 	spot.x = 0;
 	gui->addSlider("spot X", -500, 500, &spot.x);
 
@@ -1239,7 +1242,7 @@ void testApp::setupGui(){
 	gui->addLabel("Selection");
 
 	selectionBufferWidth = 100;
-	gui->addSlider("selectionBufferWidth", 0, 1000, &selectionBufferWidth);
+	gui->addSlider("selectionBufferWidth in Pix", 0, 1000, &selectionBufferWidth);
 
 	handShoulderDistance = 200;
 	gui->addIntSlider("handShoulderDistance", 100, 500, &handShoulderDistance);
@@ -1259,7 +1262,7 @@ void testApp::setupGui(){
 	resultTimeout = 0; // skip
 	gui->addIntSlider("resultTimeout", 0, 10000, &resultTimeout);
 
-	imgSeqTimeout = 500;
+	imgSeqTimeout = 200;
 	gui->addIntSlider("imgSeqTimeout", 100, 1000, &imgSeqTimeout);
 
 	gui->addSpacer();
@@ -1282,7 +1285,7 @@ void testApp::setupGui(){
 
 	gui->addLabel("Misc");
 	kinectYPos = 0.0;
-	gui->addSlider("kinect y pos", 0.0, 4.0, &kinectYPos);
+	gui->addSlider("kinect y pos in Meter", 0.0, 4.0, &kinectYPos);
 
 	cropW = 3840;
 	gui->addIntSlider("Crop Width", 100, 3840, &cropW);
@@ -1517,15 +1520,6 @@ void testApp::updateSelectedUser()
 			selectedUser.torsoLength = torsoLength;
 		}
 
-		float armLength = 0;
-		if (relbow.getTrackingState() == SkeletonBone::Tracked && rwrist.getTrackingState() == SkeletonBone::Tracked) {
-			armLength = neck.getStartPosition().distance(hip.getStartPosition());
-		}
-
-		if (armLength > selectedUser.armLength) {
-			selectedUser.armLength = armLength;
-		}
-
 		float shouldersWidth = 0;
 		if (rsj.getTrackingState() == SkeletonBone::Tracked && lsj.getTrackingState() == SkeletonBone::Tracked) {
 			shouldersWidth = rsj.getScreenPosition().distance(lsj.getScreenPosition());
@@ -1534,10 +1528,20 @@ void testApp::updateSelectedUser()
 			selectedUser.shouldersWidth = shouldersWidth;
 		}
 
+		float armLength = 0;
+		if (relbow.getTrackingState() == SkeletonBone::Tracked && rwrist.getTrackingState() == SkeletonBone::Tracked) {
+			armLength = relbow.getStartPosition().distance(rwrist.getStartPosition());
+		}
+
+		if (armLength > selectedUser.armLength) {
+			selectedUser.armLength = armLength;
+		}
+
 		userMessage << "user.totalHeight: " << selectedUser.totalHeight << endl;
 		userMessage << "user.headHeight: " << selectedUser.headHeight << endl;
 		userMessage << "user.torsoLength: " << selectedUser.torsoLength << endl;
 		userMessage << "user.shouldersWidth: " << selectedUser.shouldersWidth << endl;
+		userMessage << "user.armLength: " << selectedUser.armLength << endl;
 
 
 

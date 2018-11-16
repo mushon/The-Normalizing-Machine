@@ -26,7 +26,6 @@ public:
 		SelectedArm rightArm;
 
 		ofVec2f screenPoint;
-		ofVec2f screenPoint01;
 
 		AppTimer lastSeen;
 

@@ -250,6 +250,11 @@ private:
 	int cropX = 0;
 	int cropY = 0;
 	int imgId;
+	ofPoint depthClip;
+	int cursorHight;
+	int playerFade;
+	int fadeLevel;
+
 
 
 #ifdef DO_WATCHDOG
