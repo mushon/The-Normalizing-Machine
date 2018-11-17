@@ -327,7 +327,8 @@ void testApp::update(){
 				}
 				else
 				{
-					if (selectedUser.getSelectedArm().hand.z < selectedUser.getSelectedArm().shoulder.z - handShoulderDistance)
+					if (selectedUser.getSelectedArm().hand.z < selectedUser.getSelectedArm().shoulder.z - handShoulderDistance ||
+						selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance))
 					{
 						if (selectedUser.isSteady())
 						{
@@ -350,7 +351,8 @@ void testApp::update(){
 			}
 		case SELECTION:
 			{
-				if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance)
+				if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance ||
+					selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance))
 				{
 					//recorder.abort();
 					state = RAISE_HAND;
@@ -1472,9 +1474,9 @@ void testApp::updateSelectedUser()
 
 		auto & head = skeleton.at(NUI_SKELETON_POSITION_HEAD);
 
-		auto & rhj = skeleton.at(NUI_SKELETON_POSITION_HAND_RIGHT);
+		auto & rhj = skeleton.at(NUI_SKELETON_POSITION_WRIST_RIGHT);
 		auto & rsj = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_RIGHT);
-		auto & lhj = skeleton.at(NUI_SKELETON_POSITION_HAND_LEFT);
+		auto & lhj = skeleton.at(NUI_SKELETON_POSITION_WRIST_LEFT);
 		auto & lsj = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_LEFT);
 
 		auto & neck = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_CENTER);
