@@ -379,7 +379,7 @@ void testApp::update(){
 					//ofVec2f v(2*kx-1, 2*ky-1);
 
 					ofVec2f v;
-					v.x = ofMap(selectedUser.getSelectedArm().hand.x, screenL, screenR, cursorWidthOffset + ofGetWidth()/2 - getPlayerWidth(), cursorWidthOffset + ofGetWidth() / 2 + getPlayerWidth(), true);
+					v.x = ofMap(selectedUser.getSelectedArm().hand.x, screenL, screenR, 0, ofGetWidth() , true);
 					v.y = ofGetHeight() / 2  + cursorHightOffset; // // fix to 
 					selectedUser.screenPoint = v;
 

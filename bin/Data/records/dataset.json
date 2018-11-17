@@ -1,626 +1,6 @@
 [
    {
       "armLength" : 0,
-      "headHeight" : 0.1976532936096191,
-      "id" : "2018_11_13_21_40_31_148",
-      "others" : [
-         [
-            {
-               "id" : "fingers5",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_28_52_940",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "fingers1",
-               "selection" : false
-            },
-            {
-               "id" : "fingers5",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "fingers5",
-               "selection" : true
-            },
-            {
-               "id" : "fingers2",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_28_03_647",
-               "selection" : false
-            },
-            {
-               "id" : "fingers5",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "fingers5",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_56_55_558",
-               "selection" : false
-            }
-         ]
-      ],
-      "shouldersWidth" : 79.94509124755859,
-      "torsoLength" : 0.5050187110900879,
-      "totalHeight" : 1.92393970489502,
-      "vScore" : 7,
-      "xScore" : 10
-   },
-   {
-      "armLength" : 0,
-      "headHeight" : 0.2049711346626282,
-      "id" : "2018_11_13_23_28_03_647",
-      "others" : [
-         [
-            {
-               "id" : "fingers5",
-               "selection" : true
-            },
-            {
-               "id" : "fingers1",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "fingers3",
-               "selection" : false
-            },
-            {
-               "id" : "fingers5",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "fingers5",
-               "selection" : true
-            },
-            {
-               "id" : "fingers2",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "fingers4",
-               "selection" : false
-            },
-            {
-               "id" : "fingers5",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "fingers5",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_28_03_647",
-               "selection" : false
-            }
-         ]
-      ],
-      "shouldersWidth" : 81.03089141845703,
-      "torsoLength" : 0.5024327039718628,
-      "totalHeight" : 1.952926158905029,
-      "vScore" : 9,
-      "xScore" : 14
-   },
-   {
-      "armLength" : 0,
-      "headHeight" : 0.2102195769548416,
-      "id" : "2018_11_13_23_28_52_940",
-      "others" : [
-         [
-            {
-               "id" : "fingers5",
-               "selection" : false
-            },
-            {
-               "id" : "fingers1",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "fingers4",
-               "selection" : true
-            },
-            {
-               "id" : "fingers1",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "fingers4",
-               "selection" : false
-            },
-            {
-               "id" : "fingers2",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "fingers3",
-               "selection" : true
-            },
-            {
-               "id" : "fingers2",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "fingers3",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_13_23_28_52_940",
-               "selection" : true
-            }
-         ]
-      ],
-      "shouldersWidth" : 76.78539276123047,
-      "torsoLength" : 0.5102035999298096,
-      "totalHeight" : 1.929713606834412,
-      "vScore" : 7,
-      "xScore" : 14
-   },
-   {
-      "armLength" : 0,
-      "headHeight" : 0.2034683674573898,
-      "id" : "2018_11_13_23_56_05_382",
-      "others" : [
-         [
-            {
-               "id" : "fingers5",
-               "selection" : true
-            },
-            {
-               "id" : "fingers1",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "fingers3",
-               "selection" : false
-            },
-            {
-               "id" : "fingers5",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "fingers5",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_28_52_940",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_28_03_647",
-               "selection" : false
-            },
-            {
-               "id" : "fingers5",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "fingers5",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_56_05_382",
-               "selection" : false
-            }
-         ]
-      ],
-      "shouldersWidth" : 76.39082336425781,
-      "torsoLength" : 0.5030897259712219,
-      "totalHeight" : 1.919466733932495,
-      "vScore" : 13,
-      "xScore" : 16
-   },
-   {
-      "armLength" : 0,
-      "headHeight" : 0.1976532936096191,
-      "id" : "2018_11_13_23_56_55_558",
-      "others" : [
-         [
-            {
-               "id" : "fingers5",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_28_52_940",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "fingers1",
-               "selection" : false
-            },
-            {
-               "id" : "fingers5",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "fingers5",
-               "selection" : true
-            },
-            {
-               "id" : "fingers2",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_28_03_647",
-               "selection" : false
-            },
-            {
-               "id" : "fingers5",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "fingers5",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_56_55_558",
-               "selection" : false
-            }
-         ]
-      ],
-      "shouldersWidth" : 79.94509124755859,
-      "torsoLength" : 0.5050187110900879,
-      "totalHeight" : 1.92393970489502,
-      "vScore" : 13,
-      "xScore" : 13
-   },
-   {
-      "armLength" : 0,
-      "headHeight" : 0.2083480507135391,
-      "id" : "2018_11_14_13_41_59_403",
-      "others" : [
-         [
-            {
-               "id" : "2018_11_13_23_56_55_558",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_13_23_28_03_647",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_28_52_940",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_28_03_647",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_28_52_940",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_13_21_40_31_148",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_56_05_382",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_21_40_31_148",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_56_05_382",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_14_13_41_59_403",
-               "selection" : true
-            }
-         ]
-      ],
-      "shouldersWidth" : 74.85511016845703,
-      "torsoLength" : 0.5425827503204346,
-      "totalHeight" : 0.6134990453720093,
-      "vScore" : 12,
-      "xScore" : 11
-   },
-   {
-      "armLength" : 0,
-      "headHeight" : 0.2118328064680099,
-      "id" : "2018_11_14_13_58_22_815",
-      "others" : [
-         [
-            {
-               "id" : "2018_11_14_13_41_59_403",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_56_05_382",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_56_55_558",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_14_13_41_59_403",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_14_13_41_59_403",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_28_03_647",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_21_40_31_148",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_14_13_41_59_403",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_14_13_41_59_403",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_14_13_58_22_815",
-               "selection" : false
-            }
-         ]
-      ],
-      "shouldersWidth" : 76.55805969238281,
-      "torsoLength" : 0.5096707344055176,
-      "totalHeight" : 0.6109269857406616,
-      "vScore" : 8,
-      "xScore" : 12
-   },
-   {
-      "armLength" : 0,
-      "headHeight" : 0.2012876272201538,
-      "id" : "2018_11_14_15_09_42_491",
-      "others" : [
-         [
-            {
-               "id" : "2018_11_14_13_58_22_815",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_13_23_56_05_382",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_21_40_31_148",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_13_23_56_05_382",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_56_05_382",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_28_03_647",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_28_52_940",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_13_23_56_05_382",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_56_05_382",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_14_15_09_42_491",
-               "selection" : true
-            }
-         ]
-      ],
-      "shouldersWidth" : 79.86456298828125,
-      "torsoLength" : 0.4581400454044342,
-      "totalHeight" : 0.6857113838195801,
-      "vScore" : 9,
-      "xScore" : 9
-   },
-   {
-      "armLength" : 0,
-      "headHeight" : 0.2201373875141144,
-      "id" : "2018_11_14_15_11_48_759",
-      "others" : [
-         [
-            {
-               "id" : "2018_11_14_15_09_42_491",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_13_23_56_55_558",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_28_52_940",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_13_23_56_55_558",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_56_55_558",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_28_03_647",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_14_13_41_59_403",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_13_23_56_55_558",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_56_55_558",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_14_15_11_48_759",
-               "selection" : true
-            }
-         ]
-      ],
-      "shouldersWidth" : 79.93724060058594,
-      "torsoLength" : 0.4668359160423279,
-      "totalHeight" : 0.6868605613708496,
-      "vScore" : 5,
-      "xScore" : 7
-   },
-   {
-      "armLength" : 0,
-      "headHeight" : 0.2062031775712967,
-      "id" : "2018_11_14_19_49_44_729",
-      "others" : [
-         [
-            {
-               "id" : "2018_11_14_15_11_48_759",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_13_23_56_55_558",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_56_05_382",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_13_23_56_55_558",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_13_23_56_55_558",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_13_23_28_03_647",
-               "selection" : true
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_14_15_09_42_491",
-               "selection" : true
-            },
-            {
-               "id" : "2018_11_13_23_28_03_647",
-               "selection" : false
-            }
-         ],
-         [
-            {
-               "id" : "2018_11_14_15_09_42_491",
-               "selection" : false
-            },
-            {
-               "id" : "2018_11_14_19_49_44_729",
-               "selection" : true
-            }
-         ]
-      ],
-      "shouldersWidth" : 79.90980529785156,
-      "torsoLength" : 0.4773757457733154,
-      "totalHeight" : 0.6659120321273804,
-      "vScore" : 1,
-      "xScore" : 5
-   },
-   {
-      "armLength" : 0,
       "headHeight" : 0.1926872581243515,
       "id" : "2018_11_14_23_48_15_485",
       "others" : [
@@ -740,8 +120,8 @@
       "shouldersWidth" : 77.00336456298828,
       "torsoLength" : 0.5109418034553528,
       "totalHeight" : 0.5681492686271667,
-      "vScore" : 11,
-      "xScore" : 8
+      "vScore" : 12,
+      "xScore" : 12
    },
    {
       "armLength" : 0,
@@ -802,8 +182,8 @@
       "shouldersWidth" : 80.92110443115234,
       "torsoLength" : 0.504518985748291,
       "totalHeight" : 0.9057527780532837,
-      "vScore" : 8,
-      "xScore" : 5
+      "vScore" : 9,
+      "xScore" : 10
    },
    {
       "armLength" : 0,
@@ -864,8 +244,8 @@
       "shouldersWidth" : 81.86957550048828,
       "torsoLength" : 0.4844129085540771,
       "totalHeight" : 0.8671610355377197,
-      "vScore" : 13,
-      "xScore" : 9
+      "vScore" : 22,
+      "xScore" : 11
    },
    {
       "armLength" : 0,
@@ -926,8 +306,8 @@
       "shouldersWidth" : 82.56610870361328,
       "torsoLength" : 0.4955710470676422,
       "totalHeight" : 0.9350345134735107,
-      "vScore" : 9,
-      "xScore" : 6
+      "vScore" : 15,
+      "xScore" : 11
    },
    {
       "armLength" : 0,
@@ -988,8 +368,8 @@
       "shouldersWidth" : 79.19892883300781,
       "torsoLength" : 0.4849299788475037,
       "totalHeight" : 0.8271912336349487,
-      "vScore" : 4,
-      "xScore" : 5
+      "vScore" : 9,
+      "xScore" : 11
    },
    {
       "armLength" : 0,
@@ -1050,8 +430,8 @@
       "shouldersWidth" : 81.98328399658203,
       "torsoLength" : 0.5294696092605591,
       "totalHeight" : 0.8707220554351807,
-      "vScore" : 10,
-      "xScore" : 5
+      "vScore" : 18,
+      "xScore" : 11
    },
    {
       "armLength" : 0,
@@ -1112,8 +492,8 @@
       "shouldersWidth" : 65.44765472412109,
       "torsoLength" : 0.5672362446784973,
       "totalHeight" : 0.8319674730300903,
-      "vScore" : 6,
-      "xScore" : 4
+      "vScore" : 10,
+      "xScore" : 11
    },
    {
       "armLength" : 0,
@@ -1175,7 +555,7 @@
       "torsoLength" : 0.5453295111656189,
       "totalHeight" : 0.8688846826553345,
       "vScore" : 9,
-      "xScore" : 6
+      "xScore" : 10
    },
    {
       "armLength" : 0,
@@ -1236,8 +616,8 @@
       "shouldersWidth" : 79.69344329833984,
       "torsoLength" : 0.4830217063426971,
       "totalHeight" : 0.835161566734314,
-      "vScore" : 13,
-      "xScore" : 5
+      "vScore" : 20,
+      "xScore" : 7
    },
    {
       "armLength" : 0,
@@ -1298,8 +678,8 @@
       "shouldersWidth" : 80.60655975341797,
       "torsoLength" : 0.5398720502853394,
       "totalHeight" : 0.8259212970733643,
-      "vScore" : 6,
-      "xScore" : 3
+      "vScore" : 7,
+      "xScore" : 8
    },
    {
       "armLength" : 0,
@@ -1360,8 +740,8 @@
       "shouldersWidth" : 71.60014343261719,
       "torsoLength" : 0.514647901058197,
       "totalHeight" : 0.832728385925293,
-      "vScore" : 11,
-      "xScore" : 5
+      "vScore" : 17,
+      "xScore" : 10
    },
    {
       "armLength" : 0,
@@ -1422,8 +802,8 @@
       "shouldersWidth" : 73.49951171875,
       "torsoLength" : 0.5110974907875061,
       "totalHeight" : 0.8190181255340576,
-      "vScore" : 3,
-      "xScore" : 5
+      "vScore" : 6,
+      "xScore" : 14
    },
    {
       "armLength" : 0,
@@ -1484,8 +864,8 @@
       "shouldersWidth" : 70.00279235839844,
       "torsoLength" : 0.4829494655132294,
       "totalHeight" : 0.9806877374649048,
-      "vScore" : 10,
-      "xScore" : 3
+      "vScore" : 16,
+      "xScore" : 7
    },
    {
       "armLength" : 0,
@@ -1546,8 +926,8 @@
       "shouldersWidth" : 78.07697296142578,
       "torsoLength" : 0.4914459884166718,
       "totalHeight" : 0.8315197229385376,
-      "vScore" : 0,
-      "xScore" : 3
+      "vScore" : 7,
+      "xScore" : 6
    },
    {
       "armLength" : 0,
@@ -1608,8 +988,8 @@
       "shouldersWidth" : 80.97397613525391,
       "torsoLength" : 0.4809128046035767,
       "totalHeight" : 0.8494585752487183,
-      "vScore" : 2,
-      "xScore" : 7
+      "vScore" : 4,
+      "xScore" : 12
    },
    {
       "armLength" : 0,
@@ -1671,7 +1051,7 @@
       "torsoLength" : 0.4739393591880798,
       "totalHeight" : 0.8272793292999268,
       "vScore" : 0,
-      "xScore" : 6
+      "xScore" : 8
    },
    {
       "armLength" : 0,
@@ -1732,8 +1112,8 @@
       "shouldersWidth" : 75.67897033691406,
       "torsoLength" : 0.4819449484348297,
       "totalHeight" : 0.7886886596679688,
-      "vScore" : 0,
-      "xScore" : 11
+      "vScore" : 6,
+      "xScore" : 13
    },
    {
       "armLength" : 0.2370753586292267,
@@ -1794,8 +1174,8 @@
       "shouldersWidth" : 67.57717895507813,
       "torsoLength" : 0.4998170137405396,
       "totalHeight" : 0.7956525087356567,
-      "vScore" : 3,
-      "xScore" : 2
+      "vScore" : 8,
+      "xScore" : 6
    },
    {
       "armLength" : 0.2718951106071472,
@@ -1856,8 +1236,8 @@
       "shouldersWidth" : 80.56581115722656,
       "torsoLength" : 0.4751857221126556,
       "totalHeight" : 0.7028729915618896,
-      "vScore" : 5,
-      "xScore" : 3
+      "vScore" : 6,
+      "xScore" : 6
    },
    {
       "armLength" : 0.3258777260780334,
@@ -1918,8 +1298,8 @@
       "shouldersWidth" : 81.16514587402344,
       "torsoLength" : 0.5125721096992493,
       "totalHeight" : 0.6782718300819397,
-      "vScore" : 1,
-      "xScore" : 2
+      "vScore" : 7,
+      "xScore" : 10
    },
    {
       "armLength" : 0.3043592572212219,
@@ -1980,8 +1360,8 @@
       "shouldersWidth" : 76.84394073486328,
       "torsoLength" : 0.4904441833496094,
       "totalHeight" : 0.7033893465995789,
-      "vScore" : 2,
-      "xScore" : 3
+      "vScore" : 5,
+      "xScore" : 5
    },
    {
       "armLength" : 0.2750783562660217,
@@ -2042,8 +1422,8 @@
       "shouldersWidth" : 77.84824371337891,
       "torsoLength" : 0.5431495308876038,
       "totalHeight" : 0.6857084035873413,
-      "vScore" : 1,
-      "xScore" : 1
+      "vScore" : 2,
+      "xScore" : 3
    },
    {
       "armLength" : 0.2330363094806671,
@@ -2104,8 +1484,8 @@
       "shouldersWidth" : 81.44200134277344,
       "torsoLength" : 0.5411017537117004,
       "totalHeight" : 0.6979653835296631,
-      "vScore" : 0,
-      "xScore" : 2
+      "vScore" : 9,
+      "xScore" : 5
    },
    {
       "armLength" : 0.221825048327446,
@@ -2166,8 +1546,8 @@
       "shouldersWidth" : 79.65956115722656,
       "torsoLength" : 0.5283729434013367,
       "totalHeight" : 0.67576003074646,
-      "vScore" : 3,
-      "xScore" : 1
+      "vScore" : 9,
+      "xScore" : 4
    },
    {
       "armLength" : 0.2174327820539474,
@@ -2228,8 +1608,5030 @@
       "shouldersWidth" : 85.51628875732422,
       "torsoLength" : 0.4684152901172638,
       "totalHeight" : 0.6750521063804626,
+      "vScore" : 2,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.299891322851181,
+      "headHeight" : 0.1975646018981934,
+      "id" : "2018_11_16_17_54_16_511",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_17_41_21_497",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_14_13_58_22_815",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_28_52_940",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_17_41_21_497",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_28_52_940",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_18_53_09_390",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_18_53_09_390",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_53_09_390",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 76.51282501220703,
+      "torsoLength" : 0.5156838297843933,
+      "totalHeight" : 0.6849244832992554,
+      "vScore" : 13,
+      "xScore" : 6
+   },
+   {
+      "armLength" : 0.2462835907936096,
+      "headHeight" : 0.1989271938800812,
+      "id" : "2018_11_16_18_15_11_337",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_23_44_05_211",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_28_03_647",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_28_03_647",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_16_41_46_914",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_36_01_937",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_16_41_46_914",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_36_01_937",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 77.48743438720703,
+      "torsoLength" : 0.4970132410526276,
+      "totalHeight" : 0.749186635017395,
+      "vScore" : 6,
+      "xScore" : 7
+   },
+   {
+      "armLength" : 0.2067221403121948,
+      "headHeight" : 0.2056065648794174,
+      "id" : "2018_11_16_18_16_31_838",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_11_41_18_907",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_53_09_390",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_53_09_390",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_18_14_17_690",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_51_54_600",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_18_14_17_690",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_14_17_690",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 73.28887176513672,
+      "torsoLength" : 0.5221071243286133,
+      "totalHeight" : 0.7549887299537659,
+      "vScore" : 7,
+      "xScore" : 10
+   },
+   {
+      "armLength" : 0.2404547929763794,
+      "headHeight" : 0.1912683993577957,
+      "id" : "2018_11_16_18_27_55_430",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_18_36_01_937",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_51_54_600",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_51_54_600",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_15_09_42_491",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_27_55_430",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 74.89380645751953,
+      "torsoLength" : 0.5287123918533325,
+      "totalHeight" : 0.7191553115844727,
+      "vScore" : 2,
+      "xScore" : 5
+   },
+   {
+      "armLength" : 0.2571225464344025,
+      "headHeight" : 0.1861642450094223,
+      "id" : "2018_11_16_18_35_34_587",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_18_27_55_430",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_17_52_13_812",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_39_45_101",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_27_55_430",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_39_45_101",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_11_41_18_907",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_13_41_59_403",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_11_41_18_907",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_11_41_18_907",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_35_34_587",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 83.3426513671875,
+      "torsoLength" : 0.544492244720459,
+      "totalHeight" : 0.7885086536407471,
       "vScore" : 1,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2319062501192093,
+      "headHeight" : 0.2015337198972702,
+      "id" : "2018_11_16_18_45_00_654",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_18_35_34_587",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_18_52_18_391",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_23_44_05_211",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_18_52_18_391",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_23_44_05_211",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_17_16_43_646",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_39_45_101",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_17_16_43_646",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_16_43_646",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 79.92085266113281,
+      "torsoLength" : 0.5124455094337463,
+      "totalHeight" : 0.7335003018379211,
+      "vScore" : 9,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2510218322277069,
+      "headHeight" : 0.1753955632448196,
+      "id" : "2018_11_16_18_45_39_419",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_14_23_57_22_648",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_36_01_937",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_28_03_647",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_45_39_419",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 62.44241714477539,
+      "torsoLength" : 0.4475348293781281,
+      "totalHeight" : 0.5584951043128967,
+      "vScore" : 6,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.246693417429924,
+      "headHeight" : 0.1917428374290466,
+      "id" : "2018_11_16_18_48_02_448",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_18_45_39_419",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_18_52_18_391",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_45_39_419",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_18_53_09_390",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_16_43_646",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_48_02_448",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 69.90483093261719,
+      "torsoLength" : 0.5518895983695984,
+      "totalHeight" : 0.8350880742073059,
+      "vScore" : 4,
+      "xScore" : 7
+   },
+   {
+      "armLength" : 0.330124169588089,
+      "headHeight" : 0.2359839230775833,
+      "id" : "2018_11_16_18_48_51_080",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_18_48_02_448",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_18_52_18_391",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_12_16_47_274",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_18_52_18_391",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_52_18_391",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_09_44_56_438",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_09_44_56_438",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_44_56_438",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_48_51_080",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 66.79080963134766,
+      "torsoLength" : 0.535908579826355,
+      "totalHeight" : 0.7434822916984558,
+      "vScore" : 3,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.219892293214798,
+      "headHeight" : 0.1710566580295563,
+      "id" : "2018_11_16_18_50_36_225",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_18_48_51_080",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_39_57_082",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_39_57_082",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_39_57_082",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_14_13_41_59_403",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_41_46_914",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_14_13_41_59_403",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_13_41_59_403",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_50_36_225",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 81.15868377685547,
+      "torsoLength" : 0.5981681942939758,
+      "totalHeight" : 0.7823725938796997,
+      "vScore" : 1,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.3184637129306793,
+      "headHeight" : 0.2380589097738266,
+      "id" : "2018_11_16_18_53_44_889",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_18_50_36_225",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_14_13_41_59_403",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_14_13_41_59_403",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_13_41_59_403",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_17_16_43_646",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_28_52_940",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_14_13_41_59_403",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_13_41_59_403",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_53_44_889",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 69.18125915527344,
+      "torsoLength" : 0.5720170736312866,
+      "totalHeight" : 0.8981008529663086,
+      "vScore" : 4,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2751224040985107,
+      "headHeight" : 0.1729182451963425,
+      "id" : "2018_11_16_18_56_01_552",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_18_53_44_889",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_12_32_34_390",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_21_40_31_148",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_12_32_34_390",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_21_40_31_148",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_48_02_448",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_23_44_05_211",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_13_21_40_31_148",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_23_44_05_211",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 89.16309356689453,
+      "torsoLength" : 0.5937153697013855,
+      "totalHeight" : 0.7598621845245361,
+      "vScore" : 11,
+      "xScore" : 10
+   },
+   {
+      "armLength" : 0.2498749792575836,
+      "headHeight" : 0.180975615978241,
+      "id" : "2018_11_16_18_59_04_182",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_18_08_48_784",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_50_36_225",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_52_58_550",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_59_04_182",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 83.61869812011719,
+      "torsoLength" : 0.4809849560260773,
+      "totalHeight" : 0.7140914797782898,
+      "vScore" : 4,
+      "xScore" : 5
+   },
+   {
+      "armLength" : 0.2665459513664246,
+      "headHeight" : 0.195265606045723,
+      "id" : "2018_11_16_19_01_40_531",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_18_59_04_182",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_12_32_34_390",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_59_04_182",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_12_32_34_390",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_39_57_082",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_12_32_34_390",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_39_57_082",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 80.19842529296875,
+      "torsoLength" : 0.510993480682373,
+      "totalHeight" : 0.7209120392799377,
+      "vScore" : 6,
+      "xScore" : 10
+   },
+   {
+      "armLength" : 0.2797856330871582,
+      "headHeight" : 0.1889044940471649,
+      "id" : "2018_11_16_19_03_06_130",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_13_23_28_03_647",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_41_21_497",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_13_23_28_03_647",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_28_03_647",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_17_52_13_812",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_17_52_13_812",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_03_06_130",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 81.49575805664063,
+      "torsoLength" : 0.553514301776886,
+      "totalHeight" : 0.6345541477203369,
+      "vScore" : 4,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2849534451961517,
+      "headHeight" : 0.215757891535759,
+      "id" : "2018_11_16_19_04_11_080",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_03_06_130",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_03_06_130",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_17_52_13_812",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_17_52_13_812",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_04_11_080",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 65.60071563720703,
+      "torsoLength" : 0.4818815588951111,
+      "totalHeight" : 0.5788512825965881,
+      "vScore" : 8,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2736487090587616,
+      "headHeight" : 0.2206856608390808,
+      "id" : "2018_11_16_19_06_45_679",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_04_11_080",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_09_39_45_101",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_14_17_690",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_04_11_080",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_14_17_690",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_14_15_09_42_491",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_18_14_17_690",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_14_17_690",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_06_45_679",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 77.66265869140625,
+      "torsoLength" : 0.5812174677848816,
+      "totalHeight" : 0.7143058180809021,
+      "vScore" : 2,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2748900353908539,
+      "headHeight" : 0.1963014900684357,
+      "id" : "2018_11_16_19_08_24_681",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_06_45_679",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_15_11_48_759",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_48_02_448",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_53_09_390",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_48_02_448",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_48_02_448",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_08_24_681",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 71.56095886230469,
+      "torsoLength" : 0.6487550139427185,
+      "totalHeight" : 0.8520788550376892,
+      "vScore" : 3,
+      "xScore" : 5
+   },
+   {
+      "armLength" : 0.252421647310257,
+      "headHeight" : 0.1602054387331009,
+      "id" : "2018_11_16_19_09_07_529",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_08_24_681",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_16_43_646",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_16_43_646",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_15_09_42_491",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_15_09_42_491",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_09_07_529",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 68.55218505859375,
+      "torsoLength" : 0.4938684701919556,
+      "totalHeight" : 0.6530609130859375,
+      "vScore" : 4,
+      "xScore" : 6
+   },
+   {
+      "armLength" : 0.2173069268465042,
+      "headHeight" : 0.2088788151741028,
+      "id" : "2018_11_16_19_22_36_250",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_09_07_529",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_16_21_45_267",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_59_04_182",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_16_21_45_267",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_21_45_267",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_48_51_080",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_28_03_647",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_16_21_45_267",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_28_03_647",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_22_36_250",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 84.99527740478516,
+      "torsoLength" : 0.6453197002410889,
+      "totalHeight" : 0.7128356695175171,
+      "vScore" : 0,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.325298398733139,
+      "headHeight" : 0.1993188112974167,
+      "id" : "2018_11_16_19_24_08_234",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_22_36_250",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_21_45_267",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_45_39_419",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_52_18_391",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_45_39_419",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_45_39_419",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 77.19984436035156,
+      "torsoLength" : 0.5300309658050537,
+      "totalHeight" : 0.7452519536018372,
+      "vScore" : 10,
+      "xScore" : 7
+   },
+   {
+      "armLength" : 0.2414624691009521,
+      "headHeight" : 0.2114680856466293,
+      "id" : "2018_11_16_19_26_08_984",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_08_24_681",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_28_52_940",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_26_08_984",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 67.32735443115234,
+      "torsoLength" : 0.4968047440052032,
+      "totalHeight" : 0.7632638812065125,
+      "vScore" : 6,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.2780615985393524,
+      "headHeight" : 0.193301260471344,
+      "id" : "2018_11_16_19_27_36_235",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_26_08_984",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_13_23_28_03_647",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_26_08_984",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_09_07_529",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_27_36_235",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 71.77133941650391,
+      "torsoLength" : 0.5099166035652161,
+      "totalHeight" : 0.7388476729393005,
+      "vScore" : 7,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.2913497686386108,
+      "headHeight" : 0.1890268921852112,
+      "id" : "2018_11_16_19_28_31_904",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_27_36_235",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_09_43_20_103",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_09_43_20_103",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_43_20_103",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_27_55_430",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_08_48_784",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_09_43_20_103",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_43_20_103",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_28_31_904",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 78.23531341552734,
+      "torsoLength" : 0.5228574275970459,
+      "totalHeight" : 0.6719920039176941,
+      "vScore" : 2,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.2203297317028046,
+      "headHeight" : 0.1822642087936401,
+      "id" : "2018_11_16_19_34_53_290",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_28_31_904",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_13_21_40_31_148",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_28_31_904",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_34_53_290",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 78.20093536376953,
+      "torsoLength" : 0.5151280164718628,
+      "totalHeight" : 0.7141773700714111,
+      "vScore" : 1,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2472040802240372,
+      "headHeight" : 0.1783279180526733,
+      "id" : "2018_11_16_19_38_36_242",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_34_53_290",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_35_34_587",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_34_53_290",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_26_08_984",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_13_41_59_403",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_13_41_59_403",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_38_36_242",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 70.07007598876953,
+      "torsoLength" : 0.5398414731025696,
+      "totalHeight" : 0.6655458211898804,
+      "vScore" : 1,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2912930846214294,
+      "headHeight" : 0.1751720309257507,
+      "id" : "2018_11_16_19_39_42_043",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_38_36_242",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_48_51_080",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_52_13_812",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_38_36_242",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_52_13_812",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_21_45_267",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_17_52_13_812",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_21_45_267",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_39_42_043",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 66.21956634521484,
+      "torsoLength" : 0.5246126651763916,
+      "totalHeight" : 0.6432626247406006,
+      "vScore" : 5,
+      "xScore" : 5
+   },
+   {
+      "armLength" : 0.3188424706459045,
+      "headHeight" : 0.2005847096443176,
+      "id" : "2018_11_16_19_48_05_564",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_39_42_043",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_09_07_529",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_09_07_529",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_27_55_430",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_26_08_984",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_27_55_430",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_26_08_984",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_48_05_564",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 79.68508148193359,
+      "torsoLength" : 0.5245861411094666,
+      "totalHeight" : 0.7210230231285095,
+      "vScore" : 2,
+      "xScore" : 5
+   },
+   {
+      "armLength" : 0.2179120630025864,
+      "headHeight" : 0.1845423430204391,
+      "id" : "2018_11_16_19_49_31_033",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_48_05_564",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_34_53_290",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_10_41_814",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_48_05_564",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_10_41_814",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_13_23_28_03_647",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_09_07_529",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_10_41_814",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_10_41_814",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_49_31_033",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 79.10642242431641,
+      "torsoLength" : 0.5440438389778137,
+      "totalHeight" : 0.6911355257034302,
+      "vScore" : 5,
+      "xScore" : 5
+   },
+   {
+      "armLength" : 0.2173229902982712,
+      "headHeight" : 0.189018502831459,
+      "id" : "2018_11_16_19_52_25_234",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_49_31_033",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_09_44_56_438",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_43_20_103",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_49_31_033",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_43_20_103",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_09_43_20_103",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_43_20_103",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_52_25_234",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 81.77851867675781,
+      "torsoLength" : 0.5721475481987,
+      "totalHeight" : 0.7253786325454712,
+      "vScore" : 3,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.2545400261878967,
+      "headHeight" : 0.1885278820991516,
+      "id" : "2018_11_16_19_54_58_495",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_52_25_234",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_38_36_242",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_14_23_57_22_648",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_39_45_101",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 74.96147155761719,
+      "torsoLength" : 0.4729715585708618,
+      "totalHeight" : 0.7399778962135315,
+      "vScore" : 9,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2978796660900116,
+      "headHeight" : 0.2028430998325348,
+      "id" : "2018_11_16_19_55_53_710",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_03_06_130",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_52_25_234",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_52_13_812",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_55_53_710",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 81.71293640136719,
+      "torsoLength" : 0.5777829885482788,
+      "totalHeight" : 0.7876414060592651,
+      "vScore" : 5,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2654300928115845,
+      "headHeight" : 0.1681586503982544,
+      "id" : "2018_11_16_19_56_39_324",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_55_53_710",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_44_56_438",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_44_56_438",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_17_10_41_814",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_09_44_56_438",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_56_39_324",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 71.96530914306641,
+      "torsoLength" : 0.5045762658119202,
+      "totalHeight" : 0.6704320907592773,
+      "vScore" : 2,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.2781269252300262,
+      "headHeight" : 0.1642064154148102,
+      "id" : "2018_11_16_19_57_45_922",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_56_39_324",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_13_23_28_52_940",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_59_04_182",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_56_39_324",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_59_04_182",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_12_32_34_390",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_12_32_34_390",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_12_32_34_390",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_57_45_922",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 66.78008270263672,
+      "torsoLength" : 0.514555811882019,
+      "totalHeight" : 0.5485729575157166,
+      "vScore" : 4,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.2878998816013336,
+      "headHeight" : 0.183483749628067,
+      "id" : "2018_11_16_20_04_32_130",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_19_57_45_922",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_09_44_56_438",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_41_46_914",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_09_44_56_438",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_44_56_438",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_52_25_234",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_52_25_234",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_04_32_130",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 78.43193817138672,
+      "torsoLength" : 0.5443689823150635,
+      "totalHeight" : 0.7701787948608398,
+      "vScore" : 0,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.2658212780952454,
+      "headHeight" : 0.1706156134605408,
+      "id" : "2018_11_16_20_09_59_161",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_04_32_130",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_39_42_043",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_39_42_043",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_14_15_11_48_759",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_14_15_11_48_759",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_09_59_161",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 70.14707183837891,
+      "torsoLength" : 0.4786152839660645,
+      "totalHeight" : 0.7542685866355896,
+      "vScore" : 5,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2316919267177582,
+      "headHeight" : 0.1812926977872849,
+      "id" : "2018_11_16_20_11_43_419",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_09_59_161",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_08_24_681",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_10_41_814",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_08_24_681",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_08_24_681",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_49_31_033",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_45_39_419",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_49_31_033",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_45_39_419",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_11_43_419",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 69.97189331054688,
+      "torsoLength" : 0.5438615083694458,
+      "totalHeight" : 0.6932574510574341,
+      "vScore" : 3,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2826807796955109,
+      "headHeight" : 0.1616584211587906,
+      "id" : "2018_11_16_20_17_42_926",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_11_43_419",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_56_05_382",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_56_05_382",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_18_53_09_390",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_57_45_922",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_13_23_56_05_382",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_57_45_922",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_17_42_926",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 74.20055389404297,
+      "torsoLength" : 0.4262456297874451,
+      "totalHeight" : 0.6988040208816528,
+      "vScore" : 7,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.3064066469669342,
+      "headHeight" : 0.1920682936906815,
+      "id" : "2018_11_16_20_30_23_013",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_17_42_926",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_39_42_043",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_22_36_250",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_17_42_926",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_17_42_926",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_09_59_161",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_09_59_161",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_30_23_013",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 76.371826171875,
+      "torsoLength" : 0.528063178062439,
+      "totalHeight" : 0.6678357124328613,
+      "vScore" : 1,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.338227242231369,
+      "headHeight" : 0.2089056372642517,
+      "id" : "2018_11_16_20_37_07_498",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_30_23_013",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_56_05_382",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_27_36_235",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_12_15_16_725",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_27_36_235",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_27_36_235",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 70.76143646240234,
+      "torsoLength" : 0.5853177905082703,
+      "totalHeight" : 0.7724099159240723,
+      "vScore" : 10,
+      "xScore" : 5
+   },
+   {
+      "armLength" : 0.2560199499130249,
+      "headHeight" : 0.2027820348739624,
+      "id" : "2018_11_16_20_40_39_166",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_12_15_16_725",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_13_23_56_55_558",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_51_54_600",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_13_23_56_55_558",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_51_54_600",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_40_39_166",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 68.15596008300781,
+      "torsoLength" : 0.534048318862915,
+      "totalHeight" : 0.6042914390563965,
+      "vScore" : 0,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.3030538856983185,
+      "headHeight" : 0.1907417327165604,
+      "id" : "2018_11_16_20_42_03_434",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_40_39_166",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_56_05_382",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_13_21_40_31_148",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_13_21_40_31_148",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_21_40_31_148",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_42_03_434",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 71.61971282958984,
+      "torsoLength" : 0.4927245378494263,
+      "totalHeight" : 0.7116323113441467,
+      "vScore" : 0,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.2359909415245056,
+      "headHeight" : 0.1894854158163071,
+      "id" : "2018_11_16_20_44_17_770",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_42_03_434",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_55_53_710",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_23_44_05_211",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_55_53_710",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_55_53_710",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_14_23_57_22_648",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_55_53_710",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_44_17_770",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 57.6440544128418,
+      "torsoLength" : 0.4925830960273743,
+      "totalHeight" : 0.6247433423995972,
+      "vScore" : 0,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.3068238794803619,
+      "headHeight" : 0.2241260409355164,
+      "id" : "2018_11_16_20_48_24_823",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_44_17_770",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_16_52_58_550",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_49_31_033",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_48_24_823",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_49_31_033",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_53_44_889",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_53_44_889",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_53_44_889",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_48_24_823",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 69.29191589355469,
+      "torsoLength" : 0.5687607526779175,
+      "totalHeight" : 0.8170317411422729,
+      "vScore" : 5,
+      "xScore" : 5
+   },
+   {
+      "armLength" : 0.2268646061420441,
+      "headHeight" : 0.2578495740890503,
+      "id" : "2018_11_16_20_53_00_808",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_48_24_823",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_16_21_45_267",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_53_44_889",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_48_24_823",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_53_44_889",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_03_06_130",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_06_45_679",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_03_06_130",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_03_06_130",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_53_00_808",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 72.60729217529297,
+      "torsoLength" : 0.5458550453186035,
+      "totalHeight" : 0.653063178062439,
+      "vScore" : 0,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.3170819282531738,
+      "headHeight" : 0.2085994184017181,
+      "id" : "2018_11_16_20_53_51_525",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_53_00_808",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_48_05_564",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_08_24_681",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_48_05_564",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_53_51_525",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 75.72703552246094,
+      "torsoLength" : 0.6541141271591187,
+      "totalHeight" : 0.8376922011375427,
+      "vScore" : 3,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2657037973403931,
+      "headHeight" : 0.2159578949213028,
+      "id" : "2018_11_16_20_58_44_979",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_53_51_525",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_11_43_419",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_11_43_419",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_11_43_419",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_11_43_419",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_58_44_979",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 75.91281890869141,
+      "torsoLength" : 0.4845362901687622,
+      "totalHeight" : 0.7055339217185974,
+      "vScore" : 1,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.3028072118759155,
+      "headHeight" : 0.184883788228035,
+      "id" : "2018_11_16_21_07_16_559",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_20_58_44_979",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_48_24_823",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_58_44_979",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_48_24_823",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_16_52_58_550",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_06_45_679",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_48_24_823",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_06_45_679",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_21_07_16_559",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 69.21346282958984,
+      "torsoLength" : 0.5569130778312683,
+      "totalHeight" : 0.7565926909446716,
+      "vScore" : 0,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2800812721252441,
+      "headHeight" : 0.1910179555416107,
+      "id" : "2018_11_16_21_08_15_193",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_21_07_16_559",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_04_11_080",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_13_23_28_52_940",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_04_11_080",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_04_11_080",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_49_31_033",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_55_53_710",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_49_31_033",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_49_31_033",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_08_15_193",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 77.06556701660156,
+      "torsoLength" : 0.5488584041595459,
+      "totalHeight" : 0.85965496301651,
+      "vScore" : 5,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.310533344745636,
+      "headHeight" : 0.2897378504276276,
+      "id" : "2018_11_16_21_10_25_824",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_21_08_15_193",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_13_21_40_31_148",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_58_44_979",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_08_15_193",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_21_08_15_193",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_53_09_390",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_19_49_44_729",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_10_25_824",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 106.7060775756836,
+      "torsoLength" : 0.450418621301651,
+      "totalHeight" : 0.8306893110275269,
+      "vScore" : 1,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.259663313627243,
+      "headHeight" : 0.2142319679260254,
+      "id" : "2018_11_16_21_11_13_072",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_21_10_25_824",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_11_41_18_907",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_48_02_448",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_11_41_18_907",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_11_41_18_907",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_48_24_823",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_11_41_18_907",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_11_41_18_907",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_11_13_072",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 88.50302124023438,
+      "torsoLength" : 0.5121562480926514,
+      "totalHeight" : 0.9514727592468262,
+      "vScore" : 5,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.2985193729400635,
+      "headHeight" : 0.1978126913309097,
+      "id" : "2018_11_16_21_12_11_805",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_21_11_13_072",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_13_21_40_31_148",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_52_13_812",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_11_13_072",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_21_11_13_072",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_53_44_889",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_12_15_16_725",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_11_13_072",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_21_11_13_072",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_12_11_805",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 127.8416748046875,
+      "torsoLength" : 0.5268223285675049,
+      "totalHeight" : 0.8390725255012512,
+      "vScore" : 1,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.3099056780338287,
+      "headHeight" : 0.189823716878891,
+      "id" : "2018_11_16_21_22_24_852",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_21_12_11_805",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_04_11_080",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_36_01_937",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_04_11_080",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_04_11_080",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_13_41_59_403",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_22_24_852",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 79.54647064208984,
+      "torsoLength" : 0.5352159738540649,
+      "totalHeight" : 0.7681050896644592,
+      "vScore" : 3,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.2364879697561264,
+      "headHeight" : 0.2049991339445114,
+      "id" : "2018_11_16_21_35_21_069",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_21_22_24_852",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_26_08_984",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_21_22_24_852",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_26_08_984",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_35_34_587",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_57_45_922",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_26_08_984",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_57_45_922",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_21_35_21_069",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 72.07595062255859,
+      "torsoLength" : 0.5029762387275696,
+      "totalHeight" : 0.7055383324623108,
+      "vScore" : 0,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.2588459849357605,
+      "headHeight" : 0.1913041472434998,
+      "id" : "2018_11_16_21_37_50_220",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_21_35_21_069",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_39_57_082",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_39_57_082",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_39_42_043",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_11_41_18_907",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_39_42_043",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_39_42_043",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_37_50_220",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 78.62890625,
+      "torsoLength" : 0.513555645942688,
+      "totalHeight" : 0.7663676142692566,
+      "vScore" : 4,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.2540550231933594,
+      "headHeight" : 0.1815553903579712,
+      "id" : "2018_11_16_21_51_39_124",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_21_37_50_220",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_34_53_290",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_16_43_646",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_21_37_50_220",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_16_43_646",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_38_36_242",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_48_02_448",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_17_16_43_646",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_48_02_448",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_51_39_124",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 83.19245910644531,
+      "torsoLength" : 0.5652332305908203,
+      "totalHeight" : 0.7890356779098511,
+      "vScore" : 3,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.3040400743484497,
+      "headHeight" : 0.2008534669876099,
+      "id" : "2018_11_17_12_21_12_562",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_16_21_51_39_124",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_48_02_448",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_21_51_39_124",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_22_36_250",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_12_21_12_562",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 76.94036102294922,
+      "torsoLength" : 0.4977554976940155,
+      "totalHeight" : 0.7626684904098511,
+      "vScore" : 3,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.236184686422348,
+      "headHeight" : 0.1963484883308411,
+      "id" : "2018_11_17_12_38_56_440",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_12_21_12_562",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_08_15_193",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_53_00_808",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_08_15_193",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_21_08_15_193",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_10_41_814",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_36_01_937",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_10_41_814",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_10_41_814",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_12_38_56_440",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 78.88072967529297,
+      "torsoLength" : 0.5102038979530334,
+      "totalHeight" : 0.73027104139328,
+      "vScore" : 1,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.2527452111244202,
+      "headHeight" : 0.2023705244064331,
+      "id" : "2018_11_17_12_39_41_073",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_12_38_56_440",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_17_42_926",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_23_57_22_648",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_17_42_926",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_14_23_57_22_648",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_48_24_823",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_48_24_823",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_12_39_41_073",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 75.46516418457031,
+      "torsoLength" : 0.5126972198486328,
+      "totalHeight" : 0.7274323701858521,
+      "vScore" : 5,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.2456429153680801,
+      "headHeight" : 0.1971097141504288,
+      "id" : "2018_11_17_12_40_31_139",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_12_39_41_073",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_08_24_681",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_21_11_13_072",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_12_39_41_073",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_12_39_41_073",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_23_44_05_211",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_48_51_080",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_23_44_05_211",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_48_51_080",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_12_40_31_139",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 75.91188812255859,
+      "torsoLength" : 0.5049558877944946,
+      "totalHeight" : 0.7121574282646179,
+      "vScore" : 0,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.2566044628620148,
+      "headHeight" : 0.2028886526823044,
+      "id" : "2018_11_17_12_41_52_991",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_12_40_31_139",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_18_52_18_391",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_48_51_080",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_15_18_52_18_391",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_52_18_391",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_17_52_13_812",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_28_31_904",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_18_52_18_391",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_28_31_904",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_12_41_52_991",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 69.65620422363281,
+      "torsoLength" : 0.5546040534973145,
+      "totalHeight" : 0.6712424755096436,
+      "vScore" : 1,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.2940272092819214,
+      "headHeight" : 0.1963915824890137,
+      "id" : "2018_11_17_12_57_40_524",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_12_41_52_991",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_59_04_182",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_59_04_182",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_17_24_41_141",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_55_53_710",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_12_38_56_440",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_55_53_710",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_12_38_56_440",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_12_57_40_524",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 79.425537109375,
+      "torsoLength" : 0.5304969549179077,
+      "totalHeight" : 0.772861123085022,
+      "vScore" : 2,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.3080427348613739,
+      "headHeight" : 0.1917120218276978,
+      "id" : "2018_11_17_13_05_56_794",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_12_57_40_524",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_39_57_082",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_12_57_40_524",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_39_57_082",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_12_15_16_725",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_35_34_587",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_12_15_16_725",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_12_15_16_725",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_05_56_794",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 73.99061584472656,
+      "torsoLength" : 0.5217868089675903,
+      "totalHeight" : 0.727182149887085,
+      "vScore" : 1,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.2656227648258209,
+      "headHeight" : 0.2362654805183411,
+      "id" : "2018_11_17_13_22_47_103",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_13_05_56_794",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_09_59_161",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_09_59_161",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_09_59_161",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_17_16_43_646",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_39_42_043",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_09_59_161",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_39_42_043",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_13_22_47_103",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 74.65369415283203,
+      "torsoLength" : 0.5035293698310852,
+      "totalHeight" : 0.714161217212677,
+      "vScore" : 5,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.2581375241279602,
+      "headHeight" : 0.1832505017518997,
+      "id" : "2018_11_17_13_25_07_958",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_13_22_47_103",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_59_04_182",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_42_03_434",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_22_47_103",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_13_22_47_103",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_21_08_15_193",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_48_05_564",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_22_47_103",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_13_22_47_103",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_13_25_07_958",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 77.19151306152344,
+      "torsoLength" : 0.5215823650360107,
+      "totalHeight" : 0.6763187646865845,
+      "vScore" : 6,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.2844151258468628,
+      "headHeight" : 0.212744876742363,
+      "id" : "2018_11_17_13_27_37_355",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_13_25_07_958",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_53_00_808",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_15_11_337",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_25_07_958",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_13_25_07_958",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_03_06_130",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_04_32_130",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_25_07_958",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_13_25_07_958",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_27_37_355",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 80.44918823242188,
+      "torsoLength" : 0.4698222577571869,
+      "totalHeight" : 0.655102550983429,
+      "vScore" : 1,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.2672922611236572,
+      "headHeight" : 0.1721989810466766,
+      "id" : "2018_11_17_13_36_36_224",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_13_27_37_355",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_53_51_525",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_08_48_784",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_53_51_525",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_53_51_525",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_21_35_21_069",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_23_44_05_211",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_53_51_525",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_23_44_05_211",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_13_36_36_224",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 84.387451171875,
+      "torsoLength" : 0.5718909502029419,
+      "totalHeight" : 0.7187467813491821,
+      "vScore" : 2,
+      "xScore" : 3
+   },
+   {
+      "armLength" : 0.3002613186836243,
+      "headHeight" : 0.2091677188873291,
+      "id" : "2018_11_17_13_38_50_642",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_13_36_36_224",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_12_21_12_562",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_17_42_926",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_13_36_36_224",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_17_42_926",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_09_44_56_438",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_45_39_419",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_20_17_42_926",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_17_42_926",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_13_38_50_642",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 74.72556304931641,
+      "torsoLength" : 0.5001781582832336,
+      "totalHeight" : 0.7333217859268188,
+      "vScore" : 4,
+      "xScore" : 4
+   },
+   {
+      "armLength" : 0.2410793155431747,
+      "headHeight" : 0.1726725846529007,
+      "id" : "2018_11_17_13_46_28_214",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_13_38_50_642",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_21_07_16_559",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_12_39_41_073",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_13_38_50_642",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_12_39_41_073",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_45_00_654",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_14_17_690",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_12_39_41_073",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_14_17_690",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_46_28_214",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 77.18572235107422,
+      "torsoLength" : 0.6163580417633057,
+      "totalHeight" : 0.7561171054840088,
+      "vScore" : 3,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.2621335089206696,
+      "headHeight" : 0.175826370716095,
+      "id" : "2018_11_17_13_52_36_668",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_13_46_28_214",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_10_41_814",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_21_10_25_824",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_10_41_814",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_10_41_814",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_21_07_16_559",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_52_36_668",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 77.65093994140625,
+      "torsoLength" : 0.6100217700004578,
+      "totalHeight" : 0.7628877758979797,
+      "vScore" : 1,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.3119099736213684,
+      "headHeight" : 0.2303799539804459,
+      "id" : "2018_11_17_13_54_10_220",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_13_52_36_668",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_12_21_12_562",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_12_21_12_562",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_12_21_12_562",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_37_50_220",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_48_05_564",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_37_50_220",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_21_37_50_220",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_54_10_220",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 80.79955291748047,
+      "torsoLength" : 0.5729252099990845,
+      "totalHeight" : 0.8004651665687561,
+      "vScore" : 2,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.3291549980640411,
+      "headHeight" : 0.2225968390703201,
+      "id" : "2018_11_17_13_56_12_855",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_13_54_10_220",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_12_57_40_524",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_13_25_07_958",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_13_54_10_220",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_13_25_07_958",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_12_16_47_274",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_13_25_07_958",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_13_56_12_855",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 85.30298614501953,
+      "torsoLength" : 0.5452029705047607,
+      "totalHeight" : 0.7701884508132935,
+      "vScore" : 0,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.3038924932479858,
+      "headHeight" : 0.2170462757349014,
+      "id" : "2018_11_17_13_57_00_038",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_13_56_12_855",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_41_21_497",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_22_24_852",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_18_16_31_838",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_57_00_038",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 83.87598419189453,
+      "torsoLength" : 0.5697333812713623,
+      "totalHeight" : 0.7440453767776489,
+      "vScore" : 1,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.3104866445064545,
+      "headHeight" : 0.2204886972904205,
+      "id" : "2018_11_17_13_59_44_604",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_13_57_00_038",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_27_36_235",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_09_59_161",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_27_36_235",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_27_36_235",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_13_38_50_642",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_27_55_430",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_27_36_235",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_27_36_235",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_59_44_604",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 98.93042755126953,
+      "torsoLength" : 0.6233611702919006,
+      "totalHeight" : 0.8141767382621765,
+      "vScore" : 1,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.2919025123119354,
+      "headHeight" : 0.2258177548646927,
+      "id" : "2018_11_17_14_01_01_954",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_13_59_44_604",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_21_12_11_805",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_56_01_552",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_46_28_214",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_21_45_267",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_46_28_214",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_13_46_28_214",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_14_01_01_954",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 94.96591949462891,
+      "torsoLength" : 0.4402060508728027,
+      "totalHeight" : 0.722933828830719,
+      "vScore" : 1,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.2705482840538025,
+      "headHeight" : 0.1942639201879501,
+      "id" : "2018_11_17_14_04_01_201",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_14_01_01_954",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_12_15_16_725",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_16_50_29_132",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_21_51_39_124",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_43_20_103",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_21_51_39_124",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_43_20_103",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_14_04_01_201",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 72.80367279052734,
+      "torsoLength" : 0.5241333842277527,
+      "totalHeight" : 0.7231001853942871,
+      "vScore" : 1,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.2920403182506561,
+      "headHeight" : 0.2075899243354797,
+      "id" : "2018_11_17_14_10_14_450",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_14_04_01_201",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_09_39_45_101",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_17_54_16_511",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_36_36_224",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_09_07_529",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_13_36_36_224",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_09_07_529",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_14_10_14_450",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 76.00213623046875,
+      "torsoLength" : 0.5458765029907227,
+      "totalHeight" : 0.7884490489959717,
+      "vScore" : 1,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.2931475043296814,
+      "headHeight" : 0.2151843309402466,
+      "id" : "2018_11_17_14_16_02_484",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_14_10_14_450",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_12_39_41_073",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_24_08_234",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_09_07_529",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_53_09_390",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_09_07_529",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_53_09_390",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_14_16_02_484",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 76.60498809814453,
+      "torsoLength" : 0.4998864531517029,
+      "totalHeight" : 0.808321475982666,
+      "vScore" : 6,
       "xScore" : 0
+   },
+   {
+      "armLength" : 0.269030749797821,
+      "headHeight" : 0.2188318967819214,
+      "id" : "2018_11_17_14_19_27_551",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_14_16_02_484",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_53_51_525",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_18_48_02_448",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_14_16_02_484",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_14_16_02_484",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_20_11_43_419",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_20_37_07_498",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_14_16_02_484",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_14_16_02_484",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_14_19_27_551",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 66.10465240478516,
+      "torsoLength" : 0.5791605710983276,
+      "totalHeight" : 0.8677419424057007,
+      "vScore" : 0,
+      "xScore" : 2
+   },
+   {
+      "armLength" : 0.2839965224266052,
+      "headHeight" : 0.1959579885005951,
+      "id" : "2018_11_17_14_22_35_984",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_14_19_27_551",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_38_50_642",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_13_27_37_355",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_13_38_50_642",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_13_38_50_642",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_16_19_06_45_679",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_13_38_50_642",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_54_58_495",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_14_22_35_984",
+               "selection" : true
+            }
+         ]
+      ],
+      "shouldersWidth" : 71.54578399658203,
+      "torsoLength" : 0.5385169386863708,
+      "totalHeight" : 0.7024410963058472,
+      "vScore" : 3,
+      "xScore" : 1
+   },
+   {
+      "armLength" : 0.2904290854930878,
+      "headHeight" : 0.2077930420637131,
+      "id" : "2018_11_17_14_24_48_752",
+      "others" : [
+         [
+            {
+               "id" : "2018_11_17_14_22_35_984",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_15_18_08_48_784",
+               "selection" : false
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_15_18_53_09_390",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_17_14_22_35_984",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_17_14_22_35_984",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_04_11_080",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_01_40_531",
+               "selection" : false
+            },
+            {
+               "id" : "2018_11_16_19_04_11_080",
+               "selection" : true
+            }
+         ],
+         [
+            {
+               "id" : "2018_11_16_19_04_11_080",
+               "selection" : true
+            },
+            {
+               "id" : "2018_11_17_14_24_48_752",
+               "selection" : false
+            }
+         ]
+      ],
+      "shouldersWidth" : 74.62022399902344,
+      "torsoLength" : 0.5648225545883179,
+      "totalHeight" : 0.7682351469993591,
+      "vScore" : 0,
+      "xScore" : 1
    }
 ]
 
