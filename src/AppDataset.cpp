@@ -1,6 +1,7 @@
 #include "AppDataSet.h"
 #include "testApp.h"
 
+#define MAX_USERS 300
 
 void AppDataset::saveSession(const RecordedData& session)
 {
@@ -38,8 +39,11 @@ void AppDataset::loadLibrary(string url)
 	else {
 		ofLogNotice("loadLibrary") << "Failed to parse JSON.";
 	}
-
-	for (unsigned int i = 0; i < datasetJson.size(); ++i)
+	int i = datasetJson.size() - MAX_USERS;
+	if (i < 0) {
+		i = 0;
+	}
+	for (; i < datasetJson.size(); ++i)
 	{
 		Json::Value v = datasetJson[i];
 		string id = v["id"].asString();
