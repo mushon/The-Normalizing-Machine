@@ -38,7 +38,7 @@ public:
 			handVelocity = prevHand - h;
 		}
 
-		if (handVelocity.length() > 10)
+		if (handVelocity.length() > 5)
 		{
 			steady.reset();
 		}

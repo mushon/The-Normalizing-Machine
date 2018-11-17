@@ -327,8 +327,8 @@ void testApp::update(){
 				}
 				else
 				{
-					if (selectedUser.getSelectedArm().hand.z < selectedUser.getSelectedArm().shoulder.z - handShoulderDistance ||
-						selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance))
+					if (selectedUser.getSelectedArm().hand.z < selectedUser.getSelectedArm().shoulder.z - handShoulderDistance /*||
+						selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance)*/)
 					{
 						if (selectedUser.isSteady())
 						{
@@ -351,8 +351,8 @@ void testApp::update(){
 			}
 		case SELECTION:
 			{
-				if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance ||
-					selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance))
+				if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance/* ||
+					selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance)*/)
 				{
 					//recorder.abort();
 					state = RAISE_HAND;
@@ -480,6 +480,7 @@ void testApp::update(){
 						setupNextRound(r, lastWinnerId); // keep winner, exclude self
 					}
 					selectedUser.reset(selectionTimeout);
+					cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset, ofGetScreenHeight() / 2 + cursorHightOffset));
 					state = SELECTION;
 				}
 				else {

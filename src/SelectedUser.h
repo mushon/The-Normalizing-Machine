@@ -92,6 +92,7 @@ public:
 
 
 		SelectedArm& getSelectedArm() {
+			/*
 			float z = abs(leftArm.hand.z - rightArm.hand.z);
 			float xl = abs(leftArm.hand.x - leftArm.shoulder.x);
 			float xr = abs(rightArm.hand.x - rightArm.shoulder.x);
@@ -102,9 +103,10 @@ public:
 				return rightArm;
 			}
 			else {
+				*/
 				// z is biggest 
 				return (leftArm.hand.z < rightArm.hand.z) ? leftArm : rightArm;
-			}
+			//}
 		}
 
 };
