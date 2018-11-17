@@ -68,7 +68,7 @@ public:
 		// ping to watchDog
 		if (b_use_watchdog)
 		{
-			if (ofGetElapsedTimef() - last_ping_time > 10)
+			if (ofGetElapsedTimef() - last_ping_time > 0.5)
 			{
 				ofxOscMessage m;
 				m.setAddress("/imok");
