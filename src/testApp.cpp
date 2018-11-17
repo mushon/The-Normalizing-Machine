@@ -453,10 +453,10 @@ void testApp::update(){
 						}
 						*/
 						if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 3) { // one before last round
-							if (selectedUser.selectTimer.getCountDown() < recordingDuration)
-							{
+							//if (selectedUser.selectTimer.getCountDown() < recordingDuration)
+							//{
 								recorder.capture(recDir, session.id, ofRectangle(cropX, cropY, cropW, cropH));
-							}
+							//}
 						}
 						state = SELECTION_POST;
 					}
@@ -487,7 +487,7 @@ void testApp::update(){
 					resultImage = players[selectedUser.hovered].back();
 					//resultImage.allocate(players[selectedUser.hovered]->getWidth(), players[selectedUser.hovered]->getHeight(), OF_IMAGE_COLOR);
 					//resultImage.setFromPixels(players[selectedUser.hovered]->getPixels());
-					session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth, selectedUser.armLength);
+					session.saveUserMeasurements(selectedUser.totalHeight + 0.25 * selectedUser.headHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth, selectedUser.armLength);
 
 					// info: ALL dataset is saved every time
 					dataset.saveSession(session);
