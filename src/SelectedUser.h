@@ -92,7 +92,19 @@ public:
 
 
 		SelectedArm& getSelectedArm() {
-			return (leftArm.hand.z < rightArm.hand.z) ? leftArm : rightArm;
+			float z = abs(leftArm.hand.z - rightArm.hand.z);
+			float xl = abs(leftArm.hand.x - leftArm.shoulder.x);
+			float xr = abs(rightArm.hand.x - rightArm.shoulder.x);
+			if (xl > z && xl > xr) {
+				return leftArm;
+			}
+			else if (xr > z && xr > xl) {
+				return rightArm;
+			}
+			else {
+				// z is biggest 
+				return (leftArm.hand.z < rightArm.hand.z) ? leftArm : rightArm;
+			}
 		}
 
 };
