@@ -15,6 +15,7 @@
 #include "AppDataset.h"
 
 // #include "ofxKinectCommonBridge.h"
+#include "AppInputDevice.h"
 
 
 //#define DO_WATCHDOG
@@ -59,6 +60,7 @@ public:
 
 	SelectedUser selectedUser;
 	// ofxKinectCommonBridge kinect;
+	AppMouse inputDevice;
 	static const string imageDir;
 
 private:
@@ -174,9 +176,6 @@ private:
 
 	AppCursor cursor;
 	bool lockCursorY;
-
-	SelectedUser getClosestUser();
-	void updateSelectedUser();
 
 	bool simulateMoreThanOne; // for debugging purposes
 
