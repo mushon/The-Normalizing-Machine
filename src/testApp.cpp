@@ -16,18 +16,22 @@ void testApp::setup() {
 	ofEnableAntiAliasing();
 	setupGui();
 
-	kinect.initSensor();
-	//kinect.initIRStream(640, 480);
-	kinect.initColorStream(KINECT_WIDTH, KINECT_HIGHT, true);
-	kinect.initDepthStream(KINECT_WIDTH, KINECT_HIGHT, true);
-	kinect.initSkeletonStream(false);
-	//kinect.setUseStreams(true);
-	//kinect.createColorPixels(KINECT_WIDTH, KINECT_HIGHT);
-	kinect.setUseTexture(true);
-	kinect.setDepthClipping(depthClip.x, depthClip.y); // TODO:: export to settings
+	/*
+	setupInput() {
+		kinect.initSensor();
+		//kinect.initIRStream(640, 480);
+		kinect.initColorStream(KINECT_WIDTH, KINECT_HIGHT, true);
+		kinect.initDepthStream(KINECT_WIDTH, KINECT_HIGHT, true);
+		kinect.initSkeletonStream(false);
+		//kinect.setUseStreams(true);
+		//kinect.createColorPixels(KINECT_WIDTH, KINECT_HIGHT);
+		kinect.setUseTexture(true);
+		kinect.setDepthClipping(depthClip.x, depthClip.y); // TODO:: export to settings
 
-	//simple start
-	kinect.start();
+		//simple start
+		kinect.start();
+	}
+	*/
 
 
 	drawDepth=false;
@@ -234,10 +238,11 @@ void testApp::update(){
 	userMessage = stringstream();
 
 	//ofxProfileSectionPush("openni update live");
-	kinect.update();
+	// kinect.update();
 	//ofxProfileSectionPop();
 
-	int nVisibleUsers = KinectUtil::countVisibleUsers(kinect); // vector from sensor
+	// int nVisibleUsers = KinectUtil::countVisibleUsers(kinect); // vector from sensor
+	int nVisibleUsers = KinectUtil::countVisibleUsers(); // vector from sensor
 	userMessage << nVisibleUsers << endl;
 
 	updateSelectedUser();
@@ -738,7 +743,7 @@ void testApp::drawLiveFrame() {
 	float offsetW = (imageWidth - w) / 2;
 	float offsetH = (imageHeight - h) / 2;
 
-	kinect.getColorTexture().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
+	// kinect.getColorTexture().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
 	 //kinect.draw(0, 0);
 	//appRecorder.drawImageSubsection(w, h, offsetW, offsetH);
 
@@ -1060,7 +1065,7 @@ void testApp::draw(){
 	if (drawDepth)
 	{
 		ofSetRectMode(OF_RECTMODE_CORNER);
-		kinect.drawDepth(0,0);
+		//kinect.drawDepth(0,0);
 	}
 
 	if (drawText)
@@ -1134,7 +1139,7 @@ void testApp::exit(){
 		}
 	}
 
-	kinect.stop();
+	//kinect.stop();
 
 	ofLogNotice("testApp exit OK");
 }
@@ -1426,10 +1431,13 @@ string testApp::getRecDirString(string url)
 	return dir;
 }
 
+
+// MOVE to UserManager
 // note: adds id, distance and headpoint to SelectedUser
 SelectedUser testApp::getClosestUser()
 {
 	SelectedUser user;
+	/*
 	auto skeletons = kinect.getSkeletons();
 	for (int i = 0; i != skeletons.size(); i++) {
 		Skeleton skeleton = skeletons[i];
@@ -1450,20 +1458,22 @@ SelectedUser testApp::getClosestUser()
 			}
 		}
 	} // end for map
+	 */
 
 	return user;
 }
 
 void testApp::updateSelectedUser()
 {
+	/*
 	SelectedUser user = getClosestUser();
-
 	if (user.id == SelectedUser::NO_USER)
 	{
 		selectedUser = SelectedUser(); //reset
 	}
 	else
 	{
+	 /
 		// CHANGED USER (state)
 
 		// keep track of id (if changes in the middle)
@@ -1487,19 +1497,6 @@ void testApp::updateSelectedUser()
 		auto & rwrist = skeleton.at(NUI_SKELETON_POSITION_WRIST_RIGHT);
 
 
-		/*
-		ofxOpenNIJoint rhj = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND);
-		ofxOpenNIJoint rsj = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
-		ofxOpenNIJoint lhj = u.getJoints().at(nite::JointType::JOINT_LEFT_HAND);
-		ofxOpenNIJoint lsj = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
-
-
-		ofxOpenNIJoint neck = u.getJoints().at(nite::JointType::JOINT_NECK);
-		ofxOpenNIJoint lhip= u.getJoints().at(nite::JointType::JOINT_LEFT_HIP);
-		ofxOpenNIJoint rhip = u.getJoints().at(nite::JointType::JOINT_RIGHT_HIP);
-		ofxOpenNIJoint lfoot = u.getJoints().at(nite::JointType::JOINT_LEFT_FOOT);
-		ofxOpenNIJoint rfoot = u.getJoints().at(nite::JointType::JOINT_RIGHT_FOOT);
-		*/
 		// update body measurements
 		float userHeight = 0;
 		if (head.getTrackingState() == SkeletonBone::Tracked) {
@@ -1578,6 +1575,8 @@ void testApp::updateSelectedUser()
 		}
 
 	}
+	*/
+
 }
 
 string testApp::generateFileName() {
@@ -1588,6 +1587,7 @@ string testApp::generateFileName() {
 
 void testApp::drawKinect()
 {
+	/*
 	kinect.draw(640, 0);
 	kinect.drawDepth(0, 0);
 
@@ -1619,6 +1619,8 @@ void testApp::drawKinect()
 		}
 	}
 	ofPopStyle();
+	 */
+
 }
 
 void testApp::drawSplitScreen(ofFbo& fbo) {

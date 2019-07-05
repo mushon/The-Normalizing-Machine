@@ -13,7 +13,8 @@
 #include "RecordedData.h"
 #include "FfmpegRecorder.h"
 #include "AppDataset.h"
-#include "ofxKinectCommonBridge.h"
+
+// #include "ofxKinectCommonBridge.h"
 
 
 //#define DO_WATCHDOG
@@ -57,7 +58,7 @@ public:
 	bool drawCursor;
 
 	SelectedUser selectedUser;
-	ofxKinectCommonBridge kinect;
+	// ofxKinectCommonBridge kinect;
 	static const string imageDir;
 
 private:
@@ -211,7 +212,7 @@ private:
 
 	AppTimer postSelectionTimer;
 	//void setupNextRound(bool lastUser, string forcedId = "", string excludeSessionId = "");
-	void testApp::setupNextRound(int round, string firstId = "", string secondId = "");
+	void setupNextRound(int round, string firstId = "", string secondId = "");
 
 	void drawRoundSelections();
 	float roundSelectionsScale = 0;
