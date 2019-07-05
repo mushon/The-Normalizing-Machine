@@ -34,11 +34,11 @@ void AppDataset::loadLibrary(string url)
 
 	if (parsingSuccessful)
 	{
-		ofLogNotice("loadLibrary") << datasetJson.getRawString(true);
-		ofLogNotice("datasetJson.size") << datasetJson.size();
+		// ofLogNotice("loadLibrary") << datasetJson.getRawString(true);
+		ofLogNotice("loadLibrary") << "datasetJson.size: " << datasetJson.size();
 	}
 	else {
-		ofLogNotice("loadLibrary") << "Failed to parse JSON.";
+		ofLogError("loadLibrary") << "Failed to parse JSON.";
 	}
 	int i = datasetJson.size() - MAX_USERS;
 	if (i < 0) {
@@ -54,8 +54,11 @@ void AppDataset::loadLibrary(string url)
 			dataset[id] = RecordedData(v);
 		// }
 	}
-	ofLogNotice("dataset.size") << dataset.size();
 
+	ofLogNotice("loadLibrary") << "dataset.size: " << dataset.size();
+	if (dataset.size() == 0) {
+		ofLogWarning("loadLibrary") << "! empty dataset !";
+	}
 }
 
 
