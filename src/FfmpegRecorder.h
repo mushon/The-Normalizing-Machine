@@ -27,7 +27,7 @@ public:
 	};
 	static const int  RECORDING_TIME = 20;// 20s
 	static const int  CAPTURE_TIME = 9;// 20s
-	static const int  RECORDING_TIME_EXTRA = 0.5;// 20s
+	static const int RECORDING_TIME_EXTRA = 1;// 20s
 	static const string V_ARGS;
 	static const string CAPTURE_ARGS;
 	static const string FFMPEG;
