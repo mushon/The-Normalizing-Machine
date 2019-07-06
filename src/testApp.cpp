@@ -57,6 +57,7 @@ void testApp::setup() {
 	img_placemarker_body.loadImage("assets/placemarker_body.png");
 	img_placemarker_head.loadImage("assets/placemarker_head.png");
 	img_placemark_0_2_position.loadImage("assets/placemark_0.2_position.png");
+
 	img_prompt_0_1_idle.loadImage("assets/prompt_0.1_idle.png");
 	img_prompt_0_2_position.loadImage("assets/prompt_0.2_position.png");
 	img_prompt_0_3_onebyone.loadImage("assets/prompt_0.3_onebyone.png");
@@ -69,7 +70,8 @@ void testApp::setup() {
 	img_one_by_one.loadImage("assets/one_by_one.png");
 	img_position_yourself.loadImage("assets/position_yourself.png");
 	img_step_in.loadImage("assets/step_in.png");
-	img_wellcome_msg.loadImage("assets/welcome_msg.png");
+	// img_wellcome_msg.loadImage("assets/welcome_msg.png");
+	img_prompt_0_3_intro.loadImage("assets/prompt_0.3_intro.png");
 
 	ofDisableAlphaBlending();
 
@@ -916,7 +918,7 @@ void testApp::drawFbo() {
 
 				if (state == WELCOME_MSG) {
 					ofEnableAlphaBlending();
-					img_wellcome_msg.draw(0, 0);
+					img_prompt_0_3_intro.draw(0, 0);
 					ofDisableAlphaBlending();
 				}
 

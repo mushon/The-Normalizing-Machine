@@ -158,12 +158,14 @@ private:
 	ofImage img_prompt_10_goodbye;
 	ofImage img_prompt_2_1_moreNormal;
 	ofImage img_prompt_9_turnLeft;
-
+	
 	ofImage img_goodbye;
 	ofImage img_one_by_one;
 	ofImage img_position_yourself;
 	ofImage img_step_in;
-	ofImage img_wellcome_msg;
+	// ofImage img_wellcome_msg;
+	ofImage img_prompt_0_3_intro;
+
 	string roundsUsers [RecordedData::MAX_ROUND_COUNT+1];
 	void puploateRoundUsers();
 
