@@ -115,7 +115,6 @@ private:
 
 	bool drawText;
 	void drawDebugText();
-	stringstream userMessage;
 
 	int margin;
 

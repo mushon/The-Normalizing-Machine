@@ -216,8 +216,6 @@ void testApp::update(){
 		ofLogNotice("Minutes Passed") << mins;
 	}
 
-	userMessage = stringstream();
-
 	//ofxProfileSectionPush("openni update live");
 	// kinect.update();
 	inputDevice.update();
@@ -225,7 +223,6 @@ void testApp::update(){
 
 	// int nVisibleUsers = KinectUtil::countVisibleUsers(kinect); // vector from sensor
 	int nVisibleUsers = inputDevice.countVisibleUsers();
-	userMessage << "nVisibleUsers: " << nVisibleUsers << endl;
 	
 	if (nVisibleUsers == 0)
 	{
@@ -357,7 +354,7 @@ void testApp::update(){
 					// float w = getPlayerWidth();
 					// float h = getPlayerHeight();
 
-					if (abs(screenPoint.x - ofGetWidth()/2 + cursorWidthOffset) < selectionBufferWidth) 
+					if (abs(screenPoint.x - ofGetWidth() / 2 + cursorWidthOffset) < selectionBufferWidth) 
 					// && abs(screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
 					{
 						hover = SelectedUser::NO_HOVER;
@@ -378,11 +375,6 @@ void testApp::update(){
 					}
 					
 					//TODO select mechanism (click/timeout)
-
-					for (int i = 0; i < session.currentRound(); i++) {
-						userMessage << "roundCount: " << i << ": " << session.roundSelections[i] << endl;
-					}
-
 					bool selected = (selectedUser.selectTimer.getCountDown() == 0);
 					if(selected)
 					{
@@ -401,7 +393,7 @@ void testApp::update(){
 							recorder.start(recDir, session.id, recordingDuration);
 						}
 						*/
-						if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 3) { // one before last round
+						if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 3) { // two before last round
 							//if (selectedUser.selectTimer.getCountDown() < recordingDuration)
 							//{
 								//EW mac: // recorder.capture(recDir, session.id, ofRectangle(cropX, cropY, cropW, cropH));
@@ -599,7 +591,8 @@ void testApp::drawGotoSpot() {
 
 	// // Depracated debug info:
 	// ofVec2f dist(selectedUser.headPoint.x - spot.x, selectedUser.headPoint.z - spot.z);
-	// userMessage << "go to the spot. Please move "
+	// // stst = stringstream()
+	// stst << "go to the spot. Please move "
 	// << (abs(dist.x - spotRadius < 0) ? "Right" : "Left")
 	// << (abs(dist.x - spotRadius < 0) && abs(dist.y - spotRadius < 0) ? " and " : "")
 	// << (abs(dist.y - spotRadius < 0)? "Forward" : "Back") << endl
@@ -890,9 +883,6 @@ void testApp::drawFbo() {
 				float w = getPlayerWidth();
 				float h = getPlayerHeight();
 
-				userMessage << "getPlayerWidth: " << w << endl;
-				userMessage << "getPlayerHeight: " << h << endl;
-
 				ofPushMatrix();
 				ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 
@@ -971,8 +961,6 @@ void testApp::drawFbo() {
 
 			if (state == SELECTION)
 			{
-				//userMessage << "waiting for selection... TODO: instructions how to select" << endl;
-				//userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
 				if (drawCursor) {
 					cursor.draw();
 				}
@@ -1332,23 +1320,29 @@ void testApp::drawDebugText()
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 		<< "State : " << AppState::toString(state) << endl
+		<< "Timers: " << endl
 		<< "welcome Timer: " << welcomeTimer.getCountDown() << endl
 		<< "result Timer: " << resultTimer.getCountDown() << endl
+		<< "postSelection Timer: " << postSelectionTimer.getCountDown() << endl
+		<< "imgSeq Timer: " << imgSeqTimer.getCountDown() << endl
 		<< "User: " << endl
 		<< "	distance: " << selectedUser.distance << endl
 		<< "	Last seen: " << selectedUser.lastSeen.getCountDown() << endl
 		<< "	PointingDir: " << selectedUser.getPointingDir() << endl
 		<< "	isSteady: " << selectedUser.isSteady() << endl
-		<< endl 
-		<< "User Message: " << endl 
-		<< "    " << userMessage.str() << endl
 		;
 
+
+	msg << "session.currentRound: " << session.currentRound() <<"/"<< session.MAX_ROUND_COUNT << endl;
+	for (int i = 0; i < session.currentRound(); i++) {
+		msg << "round #" << i << ": " << session.roundSelections[i] << endl;
+	}
 	for (int i = 0; i < session.N_OTHERS; i++) {
 		//if (session.othersId[session.currentRound()][i]) {
-		msg << "#" << i << ": " << session.othersId[session.currentRound()][i] << endl;
+		msg << "othersId [" << i << "]: " << session.othersId[session.currentRound()][i] << endl;
 		//}
 	}
+
 
 	ofDrawBitmapString(msg.str(), 220, 200);
 	ofPopStyle();

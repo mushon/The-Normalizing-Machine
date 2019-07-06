@@ -208,14 +208,6 @@ public:
 			selectedUser.armLength = armLength;
 		}
 
-		userMessage << "user.totalHeight: " << selectedUser.totalHeight << endl;
-		userMessage << "user.headHeight: " << selectedUser.headHeight << endl;
-		userMessage << "user.torsoLength: " << selectedUser.torsoLength << endl;
-		userMessage << "user.shouldersWidth: " << selectedUser.shouldersWidth << endl;
-		userMessage << "user.armLength: " << selectedUser.armLength << endl;
-
-
-
 		bool updateLeftArm = lhj.getTrackingState() == SkeletonBone::Tracked && lsj.getTrackingState() == SkeletonBone::Tracked;
 		bool updateRightArm = rhj.getTrackingState() == SkeletonBone::Tracked && rsj.getTrackingState() == SkeletonBone::Tracked;
 
