@@ -244,7 +244,7 @@ private:
 	//void setUpResult(string id);
 	//int collapse = 0;
 	//int collapseNum = 0;
-	ofImage* resultImage;
+	ofImage resultImage;
 	float kinectYPos = 0.0;
 	int cropW = 3840;
 	int cropH = 2160;

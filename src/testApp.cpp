@@ -237,7 +237,7 @@ void testApp::update(){
 		}
 	}
 
-	if (nVisibleUsers >= 1)
+	if (nVisibleUsers == 1)
 	{
 		selectedUser = inputDevice.getClosestUser();
 
@@ -424,19 +424,22 @@ void testApp::update(){
 					state = SELECTION;
 				}
 				else {
-					resultTimer.setTimeout(resultTimeout);
-					resultTimer.reset();
 					//players[hovered]->getCurrentFrame();
-					resultImage = players[hovered].back();
+					resultImage = yesIcon; // HACK EW// *players[hovered].back();
 					//resultImage.allocate(players[hovered]->getWidth(), players[hovered]->getHeight(), OF_IMAGE_COLOR);
 					//resultImage.setFromPixels(players[hovered]->getPixels());
 					session.saveUserMeasurements(selectedUser.totalHeight + 0.25 * selectedUser.headHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth, selectedUser.armLength);
 
 					// info: ALL dataset is saved every time
+					/*
+					EW mac_fix
 					dataset.saveSession(session);
 					dataset.updateScores(session);
 					dataset.saveLibrary(recDir + datasetJsonFilename);
-					
+					 */
+
+					resultTimer.setTimeout(resultTimeout);
+					resultTimer.reset();
 					// ofSleepMillis(100); // seems like it's fixed
 					//recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
 					state = RESULT;
@@ -925,7 +928,7 @@ void testApp::drawFbo() {
 
 					ofEnableAlphaBlending();
 
-					resultImage->draw(0, 0, w, h);
+					resultImage.draw(0, 0, w, h);
 					frame.clear();
 					frame.rectangle(-w / 2, -h / 2, w, h);
 					frame.draw();
@@ -1178,7 +1181,7 @@ void testApp::setupGui(){
 	welcomeDuration = 5000;
 	gui->addIntSlider("welcome msg", 100, 10000, &welcomeDuration);
 
-	resultTimeout = 0; // skip
+	resultTimeout = 3000; // skip
 	gui->addIntSlider("resultTimeout", 0, 10000, &resultTimeout);
 
 	imgSeqTimeout = 200;
