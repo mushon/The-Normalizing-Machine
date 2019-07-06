@@ -8,7 +8,7 @@ const int playersYOffset = -100;  // make slider ui
 void testApp::setup() {
 
 	ofSetVerticalSync(true);
-	ofSetFrameRate(30);
+	ofSetFrameRate(60);
 	ofSeedRandom();
 	ofEnableAntiAliasing();
 	setupGui();
@@ -1089,7 +1089,7 @@ void testApp::setupGui(){
 	gui->addLabel("datasetJsonFilename", datasetJsonFilename);
 	gui->addSpacer();
 
-	gui->addFPSSlider("FPS", 30)->setDrawOutline(true);
+	gui->addFPSSlider("FPS", 60)->setDrawOutline(true);
 	gui->addToggle("draw (g)ui", &drawGui)->bindToKey('g');
 	gui->addToggle("draw (v)ideo", &drawVideo)->bindToKey('v');
 	gui->addToggle("draw (d)ebug input", &drawDebugInput)->bindToKey('d');
