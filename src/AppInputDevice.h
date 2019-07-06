@@ -15,6 +15,7 @@ public:
 	virtual int countVisibleUsers() = 0;
 	virtual SelectedUser getClosestUser() = 0;  // --> activeUser
 	virtual ofPoint getScreenPoint() = 0;
+	virtual bool isHandRaised() = 0;
 
 };
 
@@ -95,6 +96,9 @@ public:
 		return mousePosition;
 	}
 
+	virtual bool isHandRaised() {
+		return ofGetMousePressed(0);
+	}
 
 private:
 	SelectedUser user;
@@ -350,6 +354,13 @@ public:
 		v.x = ofMap(selectedUser.getSelectedArm().hand.x, screenL, screenR, 0, ofGetWidth() , true);
 		v.y = ofGetHeight() / 2  + cursorHightOffset; // // fix to 
 		  */
+	}
+
+	virtual bool isHandRaised() {
+		ofLogNotice("NOT IMPLEMENTED") << "NOT IMPLEMENTED";
+		return false;
+		// selectedUser.getSelectedArm().hand.z < selectedUser.getSelectedArm().shoulder.z - handShoulderDistance 
+		/* || .getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance)*/
 	}
 
 };

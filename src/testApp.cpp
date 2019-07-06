@@ -298,7 +298,6 @@ void testApp::update(){
 				{ // user in spot
 					state = RAISE_HAND;
 				}
-
 				break;
 			}
 
@@ -310,16 +309,12 @@ void testApp::update(){
 				}
 				else
 				{
-					if (selectedUser.getSelectedArm().hand.z < selectedUser.getSelectedArm().shoulder.z - handShoulderDistance /*||
-						selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance)*/)
+					if (inputDevice.isHandRaised())
 					{
 						if (selectedUser.isSteady())
 						{
-							selectedUser.reset(selectionTimeout);
+							selectedUser.reset(selectionTimeout);  // move
 							cursor = AppCursor();
-
-							//ofVec3f s = selectedUser.getPointingDir();
-							//ofLogNotice(ofToString(s.x) + " " + ofToString(s.y) + " " + ofToString(s.z));
 							cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset , ofGetScreenHeight() / 2 + cursorHightOffset));
 							state = SELECTION;
 						}
@@ -334,7 +329,7 @@ void testApp::update(){
 			}
 		case SELECTION:
 			{
-				// EW: disable this, since user already raised hand
+				// EW: disabled this, since user already raised hand
 				// if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance/* ||
 				// 	selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance)*/)
 				// {
@@ -356,12 +351,11 @@ void testApp::update(){
 					cursor.update(screenPoint, progressSmooth);
 
 					int hover = 0;
-					if (screenPoint.x > ofGetWidth()/2 + cursorWidthOffset) hover += 1;
+					if (screenPoint.x > ofGetWidth() / 2 + cursorWidthOffset) hover += 1;
 					// if (screenPoint.y < 0) hover+=2; 2 players hack
 
-					float w = getPlayerWidth();
-					float h = getPlayerHeight();
-
+					// float w = getPlayerWidth();
+					// float h = getPlayerHeight();
 
 					if (abs(screenPoint.x - ofGetWidth()/2 + cursorWidthOffset) < selectionBufferWidth) 
 					// && abs(screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
@@ -449,7 +443,8 @@ void testApp::update(){
 					dataset.saveSession(session);
 					dataset.updateScores(session);
 					dataset.saveLibrary(recDir + datasetJsonFilename);
-					ofSleepMillis(100); // seems like it's fixed
+					
+					// ofSleepMillis(100); // seems like it's fixed
 					//recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
 					state = RESULT;
 				}
@@ -461,7 +456,6 @@ void testApp::update(){
 			{
 			   //string lastWinnerId = session.othersId[RecordedData::MAX_ROUND_COUNT - 1][selectedUser.hovered];
 				// show prompt - look sideways
-				userMessage << "resultTimer: " << resultTimer.getCountDown() << endl;
 				if (resultTimer.getCountDown() <= 0) { // isFaceLookingSideWays(); // get from camera
 					// save user measurements
 					// currData.saveUserMeasurements(selectedUser); // TODO
@@ -1095,9 +1089,9 @@ void testApp::setupGui(){
 	gui->setScrollableDirections(false, true);
 	gui->setDamping(0); // no acceleration
 
-
 	gui->addLabel("The Normalizing Machine");
 
+	gui->addLabelButton("Load XML", false);
 	gui->addLabelButton("Save XML", false);
 	gui->addLabelButton("RESET XML", false);
 
@@ -1257,7 +1251,6 @@ void testApp::setupGui(){
 	ofAddListener(gui->newGUIEvent, this, &testApp::guiEvent);
 
 	gui->saveSettings(ofToDataPath("gui/default_settings.xml"));
-	gui->loadSettings(ofToDataPath("gui/settings.xml"));
 
 	gui->setVisible(drawGui);
 }
@@ -1276,6 +1269,11 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 		ofLogNotice("guiEvent") << "value" << radio->getValue()<<
 			" active name: " << radio->getActiveName() << endl;
 		// appState.set(value, force=true)
+	}
+
+	if (name == "Load XML" && e.getButton()->getValue())
+	{
+		gui->loadSettings(ofToDataPath("gui/settings.xml"));
 	}
 
 	if (name == "Save XML" && e.getButton()->getValue())
@@ -1335,11 +1333,15 @@ void testApp::drawDebugText()
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 		<< "State : " << AppState::toString(state) << endl
 		<< "welcome Timer: " << welcomeTimer.getCountDown() << endl
+		<< "result Timer: " << resultTimer.getCountDown() << endl
 		<< "User: " << endl
 		<< "	distance: " << selectedUser.distance << endl
 		<< "	Last seen: " << selectedUser.lastSeen.getCountDown() << endl
 		<< "	PointingDir: " << selectedUser.getPointingDir() << endl
-		<< "User Message: " << endl << "    " << userMessage.str() << endl
+		<< "	isSteady: " << selectedUser.isSteady() << endl
+		<< endl 
+		<< "User Message: " << endl 
+		<< "    " << userMessage.str() << endl
 		;
 
 	for (int i = 0; i < session.N_OTHERS; i++) {
