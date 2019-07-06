@@ -1,11 +1,8 @@
 #include "testApp.h"
-// #include "KinectUtil.h"
 
-#define KINECT_WIDTH 640
-#define KINECT_HIGHT 480
 #define RECDIR "records/"
 const string testApp::imageDir = "SeqImg/";
-const int playersYOffset = -100;
+const int playersYOffset = -100;  // make slider ui
 
 //--------------------------------------------------------------
 void testApp::setup() {
@@ -19,7 +16,7 @@ void testApp::setup() {
 	inputDevice.setup();
 
 	drawCursor = true;
-	drawDepth = false;
+	drawDebugInput = false;
 	drawGui = false;
 	drawProfiler = false;
 	drawVideo = true;
@@ -226,7 +223,7 @@ void testApp::update(){
 
 	// int nVisibleUsers = KinectUtil::countVisibleUsers(kinect); // vector from sensor
 	int nVisibleUsers = inputDevice.countVisibleUsers();
-	userMessage << nVisibleUsers << endl;
+	userMessage << "nVisibleUsers: " << nVisibleUsers << endl;
 	
 	if (nVisibleUsers == 0)
 	{
@@ -250,8 +247,6 @@ void testApp::update(){
 		{
 		case IDLE:
 			{
-
-				userMessage << selectedUser.distance << endl;
 				if (selectedUser.distance < idleThreshold)
 				{
 					state = STEP_IN;
@@ -274,11 +269,11 @@ void testApp::update(){
 					setupNextRound(0); // first round
 					welcomeTime = ofGetElapsedTimeMillis();
 					//EW mac: // recorder.capture(ofToDataPath(imageDir), session.id, ofRectangle(cropX, cropY, cropW, cropH));
-					state = WELLCOM_MSG;
+					state = WELCOME_MSG;
 				}
 				break;
 			}
-		case WELLCOM_MSG:
+		case WELCOME_MSG:
 			if (welcomeDuration < (ofGetElapsedTimeMillis() - welcomeTime)) {
 				state = GOTO_SPOT;
 			}
@@ -324,7 +319,7 @@ void testApp::update(){
 						}
 						else
 						{
-							userMessage << "Hold Steady" << endl;
+							// show "Hold Steady"?
 						}
 					}
 				}
@@ -533,8 +528,6 @@ void testApp::update(){
 
 	if (nVisibleUsers > 1)
 	{
-		// TODO:: does not work well remove
-		// TODO: what does not work well?
 		state = MORE_THAN_ONE;
 	}
 
@@ -549,7 +542,7 @@ void testApp::update(){
 		playerFrameScale = 0.0f;
 		roundSelectionsScale = 0;
 	}
-	if (state == WELLCOM_MSG) {
+	if (state == WELCOME_MSG) {
 		liveFrameScale = 1;
 		playerFrameScale = 0.0f;
 		roundSelectionsScale = 0;
@@ -714,12 +707,12 @@ void testApp::drawLiveFrame() {
 	//ofRect(0, 0, w + 2 * margin / scale, h + 2 * margin / scale);
 
 	// draw cropped area in center of frame
-	float imageWidth = KINECT_WIDTH;
-	float imageHeight = KINECT_HIGHT;
+	// float imageWidth = KINECT_WIDTH;
+	// float imageHeight = KINECT_HIGHT;
 
 	
-	float offsetW = (imageWidth - w) / 2;
-	float offsetH = (imageHeight - h) / 2;
+	// float offsetW = (imageWidth - w) / 2;
+	// float offsetH = (imageHeight - h) / 2;
 
 	inputDevice.draw();
 	img_record.draw((img_record.getWidth() + margin - w) / 2 , (img_record.getHeight() + margin - h) / 2); // top left
@@ -927,8 +920,8 @@ void testApp::drawFbo() {
 				float w = getPlayerWidth();
 				float h = getPlayerHeight();
 
-				userMessage << "w" << w << endl;
-				userMessage << "h" << h << endl;
+				userMessage << "getPlayerWidth: " << w << endl;
+				userMessage << "getPlayerHeight: " << h << endl;
 
 				ofPushMatrix();
 				ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
@@ -952,7 +945,7 @@ void testApp::drawFbo() {
 					img_prompt_0_1_idle.draw(0, textY);
 				}
 
-				if (state == WELLCOM_MSG) {
+				if (state == WELCOME_MSG) {
 					ofEnableAlphaBlending();
 					img_wellcome_msg.draw(0, 0);
 					ofDisableAlphaBlending();
@@ -1037,7 +1030,7 @@ void testApp::draw(){
 	}
 
 	// debugging draw
-	if (drawDepth)
+	if (drawDebugInput)
 	{
 		ofSetRectMode(OF_RECTMODE_CORNER);
 		inputDevice.draw_debug();
@@ -1150,11 +1143,11 @@ void testApp::setupGui(){
 	gui->addFPSSlider("FPS", 30)->setDrawOutline(true);
 	gui->addToggle("draw (g)ui", &drawGui)->bindToKey('g');
 	gui->addToggle("draw (v)ideo", &drawVideo)->bindToKey('v');
-	gui->addToggle("draw (d)epth", &drawDepth)->bindToKey('d');
+	gui->addToggle("draw (d)ebug input", &drawDebugInput)->bindToKey('d');
 	gui->addToggle("draw (t)ext", &drawText)->bindToKey('t');
 	gui->addToggle("draw (p)rojection", &drawProjection)->bindToKey('p');
 	gui->addToggle("draw (c)ursor", &drawCursor)->bindToKey('c');
-	gui->addToggle("draw (K)Kinect", &drawProfiler)->bindToKey('K');
+	// gui->addToggle("draw (K)Kinect", &drawProfiler)->bindToKey('K');
 
 	gui->addSpacer();
 
@@ -1365,6 +1358,7 @@ void testApp::drawDebugText()
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 		<< "State : " << AppState::toString(state) << endl
+		<< "User distance: " << selectedUser.distance << endl
 		<< "User Last seen: " << selectedUser.lastSeen.getCountDown() << endl
 		<< "User Message: " << userMessage.str() << endl
 		;

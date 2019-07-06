@@ -55,7 +55,7 @@ public:
 
 	ofPoint profilerPos;
 	bool drawProfiler;
-	bool drawDepth;
+	bool drawDebugInput;
 	bool drawCursor;
 
 	SelectedUser selectedUser;
