@@ -268,27 +268,34 @@ void testApp::update(){
 					puploateRoundUsers();
 					session.id = generateFileName();
 					setupNextRound(0); // first round
-					welcomeTime = ofGetElapsedTimeMillis();
+					welcomeTimer.setTimeout(welcomeDuration);
+					welcomeTimer.reset();
 					//EW mac: // recorder.capture(ofToDataPath(imageDir), session.id, ofRectangle(cropX, cropY, cropW, cropH));
 					state = WELCOME_MSG;
 				}
 				break;
 			}
 		case WELCOME_MSG:
-			if (welcomeDuration < (ofGetElapsedTimeMillis() - welcomeTime)) {
+			if (welcomeTimer.getCountDown() == 0) {
 				state = GOTO_SPOT;
+				// TODO: when user is already in spot
+				// this creates one frame flash when changing states:
+				// -> GOTO_SPOT -> RAISE_HAND
+				// possibly, just show welcome overlay, regardless (no welcome state)
 			}
 			break;
 		case GOTO_SPOT:
 			{
-				if (selectedUser.id == SelectedUser::NO_USER ||
-					selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
-				{
+				if (selectedUser.id == SelectedUser::NO_USER) 
+				{ // user lost
+					state = IDLE;
+				}
+				else if (selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
+				{ // user stepped out of interaction zone
 					state = STEP_IN;
 				}
-
-				if (selectedUser.distance < spotRadius)
-				{
+				else if (selectedUser.distance < spotRadius)
+				{ // user in spot
 					state = RAISE_HAND;
 				}
 
@@ -297,8 +304,6 @@ void testApp::update(){
 
 		case RAISE_HAND:
 			{
-			ofVec3f s = selectedUser.getPointingDir();
-			ofLogNotice(ofToString(s.x) + " " + ofToString(s.y) + " " + ofToString(s.z));
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
 					state = GOTO_SPOT;
@@ -841,7 +846,7 @@ void testApp::drawRoundSelections(){
 			img = (session.roundSelections[i] == 0) ? &img_r_left : &img_r_right;
 		}
 		else if (i == currentRound) { // current round
-			img = &img_rounds[i];
+			img = &img_rounds_active[i];
 		}
 		else {
 			img = &img_rounds[i];
@@ -1329,9 +1334,12 @@ void testApp::drawDebugText()
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
 		<< "State : " << AppState::toString(state) << endl
-		<< "User distance: " << selectedUser.distance << endl
-		<< "User Last seen: " << selectedUser.lastSeen.getCountDown() << endl
-		<< "User Message: " << userMessage.str() << endl
+		<< "welcome Timer: " << welcomeTimer.getCountDown() << endl
+		<< "User: " << endl
+		<< "	distance: " << selectedUser.distance << endl
+		<< "	Last seen: " << selectedUser.lastSeen.getCountDown() << endl
+		<< "	PointingDir: " << selectedUser.getPointingDir() << endl
+		<< "User Message: " << endl << "    " << userMessage.str() << endl
 		;
 
 	for (int i = 0; i < session.N_OTHERS; i++) {

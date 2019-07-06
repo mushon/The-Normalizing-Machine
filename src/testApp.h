@@ -238,7 +238,7 @@ private:
 	void drawFbo();
 	ofPath frame;
 	//static const ofRectangle cropImage;
-	int welcomeTime = 0;
+	AppTimer welcomeTimer = 0;
 	//void setUpResult(string id);
 	//int collapse = 0;
 	//int collapseNum = 0;
