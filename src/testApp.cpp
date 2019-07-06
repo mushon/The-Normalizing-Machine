@@ -534,7 +534,8 @@ void testApp::update(){
 	if (nVisibleUsers > 1)
 	{
 		// TODO:: does not work well remove
-		//state = MORE_THAN_ONE;
+		// TODO: what does not work well?
+		state = MORE_THAN_ONE;
 	}
 
 	// set drawing parameters (before smoothing)
