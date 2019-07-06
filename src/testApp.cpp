@@ -1146,8 +1146,6 @@ void testApp::setupGui(){
 	gui->addLabel("datasetJsonFilename", datasetJsonFilename);
 	gui->addSpacer();
 
-
-	// add FPS
 	gui->addFPSSlider("FPS", 30)->setDrawOutline(true);
 	gui->addToggle("draw (g)ui", &drawGui)->bindToKey('g');
 	gui->addToggle("draw (v)ideo", &drawVideo)->bindToKey('v');
@@ -1156,9 +1154,6 @@ void testApp::setupGui(){
 	gui->addToggle("draw (p)rojection", &drawProjection)->bindToKey('p');
 	gui->addToggle("draw (c)ursor", &drawCursor)->bindToKey('c');
 	gui->addToggle("draw (K)Kinect", &drawProfiler)->bindToKey('K');
-
-	//simulateMoreThanOne = false;
-	//gui->addToggle("simulate (m)ore 1", &simulateMoreThanOne)->bindToKey('m');
 
 	gui->addSpacer();
 

@@ -168,7 +168,6 @@ private:
 	void puploateRoundUsers();
 
 
-
 	void drawOverheadText(ofImage&, int x, int y, int w);
 
 	void setupGui();
@@ -176,8 +175,6 @@ private:
 
 	AppCursor cursor;
 	bool lockCursorY;
-
-	bool simulateMoreThanOne; // for debugging purposes
 
 	string getRecDirString(string url);
 	bool testLoadLibrary;
