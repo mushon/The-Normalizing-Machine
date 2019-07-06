@@ -30,7 +30,7 @@ int main( ){
 	// TODO
 #endif
 
-	ofCreateWindow(settings);
+	// ofCreateWindow(settings);
 
 #ifndef DEBUG
 	ofHideCursor();
