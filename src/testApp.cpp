@@ -1319,12 +1319,17 @@ void testApp::drawDebugText()
 		<< "s : start/stop recording: " << (recorder.isRecording() ? "RECORDING" : "READY") << endl
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
+		<< "inputDevice: " << endl
+		<< "	Visible Users : " << inputDevice.countVisibleUsers() << endl
+		<< "	Screen Point : " << inputDevice.getScreenPoint() << endl
+		<< "	is Hand Raised : " << inputDevice.isHandRaised() << endl
+		
 		<< "State : " << AppState::toString(state) << endl
 		<< "Timers: " << endl
-		<< "welcome Timer: " << welcomeTimer.getCountDown() << endl
-		<< "result Timer: " << resultTimer.getCountDown() << endl
-		<< "postSelection Timer: " << postSelectionTimer.getCountDown() << endl
-		<< "imgSeq Timer: " << imgSeqTimer.getCountDown() << endl
+		<< "	welcome Timer: " << welcomeTimer.getCountDown() << endl
+		<< "	result Timer: " << resultTimer.getCountDown() << endl
+		<< "	postSelection Timer: " << postSelectionTimer.getCountDown() << endl
+		<< "	imgSeq Timer: " << imgSeqTimer.getCountDown() << endl
 		<< "User: " << endl
 		<< "	distance: " << selectedUser.distance << endl
 		<< "	Last seen: " << selectedUser.lastSeen.getCountDown() << endl
