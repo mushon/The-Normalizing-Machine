@@ -1,5 +1,5 @@
 #include "testApp.h"
-#include "KinectUtil.h"
+// #include "KinectUtil.h"
 
 #define KINECT_WIDTH 640
 #define KINECT_HIGHT 480
@@ -18,12 +18,12 @@ void testApp::setup() {
 
 	inputDevice.setup();
 
-
-	drawDepth=false;
-	drawGui=false;
-	drawProfiler=false;
-	drawVideo=true;
-	drawText=false;
+	drawCursor = true;
+	drawDepth = false;
+	drawGui = false;
+	drawProfiler = false;
+	drawVideo = true;
+	drawText = false;
 
 	selectedUser.lastSeen.setTimeout(3000);
 
@@ -51,7 +51,6 @@ void testApp::setup() {
 	img_rounds_star.loadImage("assets/r_star.png");
 	img_rounds_star_active.loadImage("assets/r_star_active.png");
 
-
 	img_r_left.loadImage("assets/r_left.png");
 	img_r_right.loadImage("assets/r_right.png");
 	img_record.loadImage("assets/record.png");
@@ -77,7 +76,6 @@ void testApp::setup() {
 
 	ofDisableAlphaBlending();
 
-
 	ofBackground(0, 0, 0, 0);
 
 	dataset.loadLibrary(recDir + datasetJsonFilename);
@@ -96,7 +94,6 @@ void testApp::setup() {
 	frame.setStrokeColor(ofColor::white);
 	frame.setStrokeWidth(4);
 	frame.setFilled(false);
-
 
 #ifdef DO_WATCHDOG
 
@@ -1043,7 +1040,6 @@ void testApp::draw(){
 	{
 		ofSetRectMode(OF_RECTMODE_CORNER);
 		inputDevice.draw_debug();
-		//kinect.drawDepth(0,0);
 	}
 
 	if (drawText)
@@ -1158,7 +1154,6 @@ void testApp::setupGui(){
 	gui->addToggle("draw (d)epth", &drawDepth)->bindToKey('d');
 	gui->addToggle("draw (t)ext", &drawText)->bindToKey('t');
 	gui->addToggle("draw (p)rojection", &drawProjection)->bindToKey('p');
-	drawCursor = true;
 	gui->addToggle("draw (c)ursor", &drawCursor)->bindToKey('c');
 	gui->addToggle("draw (K)Kinect", &drawProfiler)->bindToKey('K');
 
