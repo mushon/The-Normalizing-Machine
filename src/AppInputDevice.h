@@ -14,6 +14,7 @@ public:
 
 	virtual int countVisibleUsers() = 0;
 	virtual SelectedUser getClosestUser() = 0;  // --> activeUser
+	virtual ofPoint getScreenPoint() = 0;
 
 };
 
@@ -22,28 +23,63 @@ class AppMouse : public AppInputDevice {
 public:
 	virtual void setup() { 
 		user.id = 99;
+		user.lastSeen.setTimeout(10000);
+		selectionTimer.setTimeout(1000);
 	};
 
 	virtual void update() {
+		user.update();
+
 		mousePosition.x = ofGetPreviousMouseX();
 		mousePosition.y = ofGetPreviousMouseY();
+		
+		if (ofGetMousePressed(0)) {
+			selectionTimer.reset();
+		}
 
+		cursor.update(mousePosition, selectionTimer.getProgress());
 		user.distance = mousePosition.distance(ofPoint(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2));;
 	};
-	// virtual void draw() { };
-	// virtual void draw_debug() { };
+	
+	virtual void draw() { 
+		// show fake image?
+		ofPushMatrix();
+		ofPushStyle();
+		
+		ofSetColor(ofColor::white);
+		ofSetLineWidth(2);
+		ofCircle(0, 0, 100);
+	
+		ofSetColor(ofColor::green);
+		ofCircle(30, -50, 10);
+		ofCircle(-30, -50, 10);
+	
+		ofSetColor(ofColor::red);
+		ofSetLineWidth(3);
+		ofTranslate(0, 30);
+		int a = 5;
+		ofLine(-a, -a, a, a); // \ line
+		ofLine(a, -a, -a, a); // / line
+		ofPopStyle();
+		ofPopMatrix();
+
+	};
+	
+	virtual void draw_debug() { 
+		cursor.draw();
+	};
 	// virtual void exit() { };
 
 	virtual int countVisibleUsers() {
-		if (mousePosition.x < 100 && mousePosition.y < 100)
+		if (mousePosition.x > ofGetScreenWidth() - 100 && mousePosition.y < 100)
 		{
-			return 0;
-		}
-		else if (mousePosition.x > 1000 && mousePosition.y > 1000) {
 			return 2;
 		}
-		else {
+		else if (user.distance < 1000) {
 			return 1;
+		}
+		else {
+		 	return 0;
 		}
 	}
 	virtual SelectedUser getClosestUser() {
@@ -55,9 +91,17 @@ public:
 		}
 	}
 
+	virtual ofPoint getScreenPoint() {
+		return mousePosition;
+	}
+
+
 private:
 	SelectedUser user;
 	ofPoint mousePosition;
+	AppCursor cursor;
+	AppTimer selectionTimer;
+
 };
 
 class AppKinect : public AppInputDevice {
@@ -269,6 +313,43 @@ public:
 	}
 	ofPopStyle();
 	 */
+	}
+
+
+	virtual ofPoint getScreenPoint() {
+
+		//ofPoint p = selectedUser.getPointingDir();
+
+		//float x = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.x / p.z - screenL;
+		//float y = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.y / p.z - screenB;
+
+		//float kx = (x-screenL) / (screenR - screenL);
+		//float ky = (y-screenB) / (screenT - screenB);
+
+
+		// TODO: sanity check if hand is +- at shoulder level
+		//ofVec2f v(2*kx-1, 2*ky-1);
+		//ofVec2f v(2*kx-1, 2*ky-1);
+		
+
+		//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function,
+		//v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function,
+		//v.y = powf(v.y, 3); // only on x
+
+		//float cx = ofGetScreenWidth() / 2;
+		//float cy = ofGetScreenHeight() / 2;
+
+		//selectedUser.screenPoint = v.getMapped(ofVec2f(cx, cy), ofVec2f(cx, 0), ofVec2f(0, -cy)); // reverse y, assume -1 < v.x, v.y < 1
+
+		//selectedUser.screenPoint.x = ofLerp(ofGetScreenWidth() / 2, selectedUser.screenPoint.x, 0.1);  // force to center // 2-player hack
+		//selectedUser.screenPoint.y = ofLerp(ofGetScreenHeight() / 2, selectedUser.screenPoint.y, 0.1);  // force to center // 2-player hack
+		 
+		 /*
+		 EW: this was the latest running code, all the above was commented
+		ofVec2f v;
+		v.x = ofMap(selectedUser.getSelectedArm().hand.x, screenL, screenR, 0, ofGetWidth() , true);
+		v.y = ofGetHeight() / 2  + cursorHightOffset; // // fix to 
+		  */
 	}
 
 };

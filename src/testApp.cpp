@@ -241,7 +241,6 @@ void testApp::update(){
 	if (nVisibleUsers >= 1)
 	{
 		selectedUser = inputDevice.getClosestUser();
-		selectedUser.lastSeen.reset();
 
 		switch (state)
 		{
@@ -328,12 +327,13 @@ void testApp::update(){
 			}
 		case SELECTION:
 			{
-				if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance/* ||
-					selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance)*/)
-				{
-					//recorder.abort();
-					state = RAISE_HAND;
-				}
+				// EW: disable this, since user already raised hand
+				// if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance/* ||
+				// 	selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance)*/)
+				// {
+				// 	//recorder.abort();
+				// state = RAISE_HAND;
+				// }
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
 					//recorder.abort();
@@ -342,53 +342,22 @@ void testApp::update(){
 				}
 				else
 				{
-					//ofPoint p = selectedUser.getPointingDir();
-
-					//float x = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.x / p.z - screenL;
-					//float y = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.y / p.z - screenB;
-
-					//float kx = (x-screenL) / (screenR - screenL);
-					//float ky = (y-screenB) / (screenT - screenB);
-
-
-					// TODO: sanity check if hand is +- at shoulder level
-					//ofVec2f v(2*kx-1, 2*ky-1);
-					//ofVec2f v(2*kx-1, 2*ky-1);
-
-					ofVec2f v;
-					v.x = ofMap(selectedUser.getSelectedArm().hand.x, screenL, screenR, 0, ofGetWidth() , true);
-					v.y = ofGetHeight() / 2  + cursorHightOffset; // // fix to 
-					selectedUser.screenPoint = v;
-
-					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function,
-					//v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function,
-					//v.y = powf(v.y, 3); // only on x
-
-					//float cx = ofGetScreenWidth() / 2;
-					//float cy = ofGetScreenHeight() / 2;
-
-					//selectedUser.screenPoint = v.getMapped(ofVec2f(cx, cy), ofVec2f(cx, 0), ofVec2f(0, -cy)); // reverse y, assume -1 < v.x, v.y < 1
-
-					//selectedUser.screenPoint.x = ofLerp(ofGetScreenWidth() / 2, selectedUser.screenPoint.x, 0.1);  // force to center // 2-player hack
-					//selectedUser.screenPoint.y = ofLerp(ofGetScreenHeight() / 2, selectedUser.screenPoint.y, 0.1);  // force to center // 2-player hack
-
+					ofPoint screenPoint = inputDevice.getScreenPoint();
 					float progress = selectedUser.getProgress();
 
-					ofVec2f cursorPoint = selectedUser.screenPoint;
-					//if (lockCursorY) {
-					//	cursorPoint.y = ofGetScreenHeight() / 2;
-					//}
-					cursor.update(cursorPoint, progressSmooth);
+					if (lockCursorY) { screenPoint.y = ofGetScreenHeight() / 2; }
+					cursor.update(screenPoint, progressSmooth);
 
 					int hover = 0;
-					if (v.x > ofGetWidth()/2 + cursorWidthOffset) hover += 1;
-					// if (v.y < 0) hover+=2; 2 players hack
+					if (screenPoint.x > ofGetWidth()/2 + cursorWidthOffset) hover += 1;
+					// if (screenPoint.y < 0) hover+=2; 2 players hack
 
 					float w = getPlayerWidth();
 					float h = getPlayerHeight();
 
 
-					if (abs(selectedUser.screenPoint.x - ofGetWidth()/2 + cursorWidthOffset) < selectionBufferWidth) // && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
+					if (abs(screenPoint.x - ofGetWidth()/2 + cursorWidthOffset) < selectionBufferWidth) 
+					// && abs(screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
 					{
 						hover = SelectedUser::NO_HOVER;
 					}
