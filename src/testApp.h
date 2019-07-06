@@ -207,6 +207,9 @@ private:
 
 	float textY;
 
+	static const int NO_HOVER = __INT_MAX__;
+	int hovered = NO_HOVER;
+
 	AppTimer postSelectionTimer;
 	//void setupNextRound(bool lastUser, string forcedId = "", string excludeSessionId = "");
 	void setupNextRound(int round, string firstId = "", string secondId = "");

@@ -25,21 +25,22 @@ public:
 	virtual void setup() { 
 		user.id = 99;
 		user.lastSeen.setTimeout(10000);
-		selectionTimer.setTimeout(1000);
+		user.selectionTimer.setTimeout(1000);
+		user.selectionTimer.reset();
 	};
 
 	virtual void update() {
 		user.update();
 
-		mousePosition.x = ofGetPreviousMouseX();
-		mousePosition.y = ofGetPreviousMouseY();
+		mousePosition.x = ofGetMouseX();
+		mousePosition.y = ofGetMouseY();
 		
 		if (ofGetMousePressed(0)) {
-			selectionTimer.reset();
+			user.selectionTimer.reset();
 		}
 
-		cursor.update(mousePosition, selectionTimer.getProgress());
-		user.distance = mousePosition.distance(ofPoint(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2));;
+		cursor.update(mousePosition, user.selectionTimer.getProgress());
+		user.distance = mousePosition.distance(ofPoint(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2));
 	};
 	
 	virtual void draw() { 
@@ -104,8 +105,6 @@ private:
 	SelectedUser user;
 	ofPoint mousePosition;
 	AppCursor cursor;
-	AppTimer selectionTimer;
-
 };
 
 class AppKinect : public AppInputDevice {

@@ -79,7 +79,7 @@ void testApp::setup() {
 
 	dataset.loadLibrary(recDir + datasetJsonFilename);
 
-	fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
+	fbo.allocate(ofGetScreenWidth(), ofGetScreenHeight(), GL_RGBA);
 
 	state = IDLE;
 	//ofDirectShowPlayer* dPlayer = new ofDirectShowPlayer();
@@ -308,17 +308,15 @@ void testApp::update(){
 				{
 					if (inputDevice.isHandRaised())
 					{
-						if (selectedUser.isSteady())
-						{
-							selectedUser.reset(selectionTimeout);  // move
-							cursor = AppCursor();
-							cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset , ofGetScreenHeight() / 2 + cursorHightOffset));
-							state = SELECTION;
-						}
-						else
-						{
-							// show "Hold Steady"?
-						}
+						// if (selectedUser.isSteady())
+						// {
+						hovered = NO_HOVER;
+						selectedUser.selectionTimer.setTimeout(selectionTimeout);
+						selectedUser.selectionTimer.reset();
+						cursor = AppCursor();
+						cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset , ofGetScreenHeight() / 2 + cursorHightOffset));
+						state = SELECTION;
+						// }
 					}
 				}
 
@@ -347,39 +345,34 @@ void testApp::update(){
 					if (lockCursorY) { screenPoint.y = ofGetScreenHeight() / 2; }
 					cursor.update(screenPoint, progressSmooth);
 
-					int hover = 0;
-					if (screenPoint.x > ofGetWidth() / 2 + cursorWidthOffset) hover += 1;
-					// if (screenPoint.y < 0) hover+=2; 2 players hack
+					int hover = NO_HOVER;
 
-					// float w = getPlayerWidth();
-					// float h = getPlayerHeight();
-
-					if (abs(screenPoint.x - ofGetWidth() / 2 + cursorWidthOffset) < selectionBufferWidth) 
-					// && abs(screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
+					if (screenPoint.x < ofGetScreenWidth() / 2) //- cursorWidthOffset - selectionBufferWidth) {
 					{
-						hover = SelectedUser::NO_HOVER;
+						hover = 0;  // left
+					}
+					if (screenPoint.x > ofGetScreenWidth() / 2)
+					// if (screenPoint.x > ofGetScreenWidth() / 2 + cursorWidthOffset + selectionBufferWidth) {
+					{
+						hover = 1;  // right
 					}
 
-					//if (/* abs(v.x) > outsideScreenFactor || */ abs(v.y) > outsideScreenFactor) // hand down
-					//{
-					//	hover = SelectedUser::NO_HOVER;
-					//}
-
-					if (hover == SelectedUser::NO_HOVER || selectedUser.hovered != hover) //changed selection
-					{
-						selectedUser.hovered = hover;
-						selectedUser.getSelectedArm().steady.reset();
-						selectedUser.selectTimer.reset();
-						selectedUser.waitForSteady = true;
+					if (hover == NO_HOVER || hovered != hover)
+					{ 
+						// changed selection
+						// selectedUser.getSelectedArm().steady.reset();
+						selectedUser.selectionTimer.reset();
+						// selectedUser.waitForSteady = true;
 						//recorder.abort();
 					}
+					hovered = hover;
 					
 					//TODO select mechanism (click/timeout)
-					bool selected = (selectedUser.selectTimer.getCountDown() == 0);
+					bool selected = (selectedUser.selectionTimer.getCountDown() == 0);
 					if(selected)
 					{
 						// add vote
-						session.makeSelection(selectedUser.hovered);
+						session.makeSelection(hovered);
 						/*
 						if (appRecorder.IsRecording()) {
 							appRecorder.stop();
@@ -394,7 +387,7 @@ void testApp::update(){
 						}
 						*/
 						if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 3) { // two before last round
-							//if (selectedUser.selectTimer.getCountDown() < recordingDuration)
+							//if (selectedUser.selectionTimer.getCountDown() < recordingDuration)
 							//{
 								//EW mac: // recorder.capture(recDir, session.id, ofRectangle(cropX, cropY, cropW, cropH));
 							//}
@@ -411,24 +404,32 @@ void testApp::update(){
 			if (postSelectionTimer.getCountDown() <= 0) {
 				int r = session.currentRound();
 				if (r < RecordedData::MAX_ROUND_COUNT) {
-					string lastWinnerId = session.othersId[r-1][selectedUser.hovered];
+					string lastWinnerId = session.othersId[r-1][hovered];
 					if (r == RecordedData::MAX_ROUND_COUNT - 1) {
 						setupNextRound(r, lastWinnerId, session.id); // keep winner + show self
 					}
 					else {
 						setupNextRound(r, lastWinnerId); // keep winner, exclude self
 					}
-					selectedUser.reset(selectionTimeout);
+
+					// selectedUser.reset(selectionTimeout);
 					cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset, ofGetScreenHeight() / 2 + cursorHightOffset));
+
+					// reset hover (selection)  
+					// TODO: move to enter selection (when states have proper enter/exit)
+					hovered = NO_HOVER;					
+					selectedUser.selectionTimer.reset();
+					// selectedUser.waitForSteady = true;
+
 					state = SELECTION;
 				}
 				else {
 					resultTimer.setTimeout(resultTimeout);
 					resultTimer.reset();
-					//players[selectedUser.hovered]->getCurrentFrame();
-					resultImage = players[selectedUser.hovered].back();
-					//resultImage.allocate(players[selectedUser.hovered]->getWidth(), players[selectedUser.hovered]->getHeight(), OF_IMAGE_COLOR);
-					//resultImage.setFromPixels(players[selectedUser.hovered]->getPixels());
+					//players[hovered]->getCurrentFrame();
+					resultImage = players[hovered].back();
+					//resultImage.allocate(players[hovered]->getWidth(), players[hovered]->getHeight(), OF_IMAGE_COLOR);
+					//resultImage.setFromPixels(players[hovered]->getPixels());
 					session.saveUserMeasurements(selectedUser.totalHeight + 0.25 * selectedUser.headHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth, selectedUser.armLength);
 
 					// info: ALL dataset is saved every time
@@ -446,7 +447,7 @@ void testApp::update(){
 
 		case RESULT:
 			{
-			   //string lastWinnerId = session.othersId[RecordedData::MAX_ROUND_COUNT - 1][selectedUser.hovered];
+			   //string lastWinnerId = session.othersId[RecordedData::MAX_ROUND_COUNT - 1][hovered];
 				// show prompt - look sideways
 				if (resultTimer.getCountDown() <= 0) { // isFaceLookingSideWays(); // get from camera
 					// save user measurements
@@ -554,7 +555,7 @@ void testApp::update(){
 	playerFrameScaleSmooth += (1 - playerFrameScaleSmoothFactor) * playerFrameScale;
 
 	float progress = 1.0;
-	if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
+	if (state == SELECTION && hovered != NO_HOVER)
 	{
 		progress = selectedUser.getProgress();
 	}
@@ -573,7 +574,7 @@ void testApp::update(){
 
 		float selectionScale = 1;
 		if (state == SELECTION) {
-			selectionScale = (i == selectedUser.hovered) ? (1) : (1.0f - s);
+			selectionScale = (i == hovered) ? (1) : (1.0f - s);
 		}
 		playbackScales[i] = selectionScale;
 
@@ -694,10 +695,10 @@ void testApp::drawIconAnimations(int i) {
 	int dx = i % 2;
 	dx = 2 * dx - 1; // map 0,1 to -1,1
 
-	ofImage& icon = (i == selectedUser.hovered) ? yesIcon : noIcon;
+	ofImage& icon = (i == hovered) ? yesIcon : noIcon;
 
 	float transitionLength = 0.05;
-	float transitionBegin = (i == selectedUser.hovered) ? 0.4 : 0.5 + 0.05 * i;
+	float transitionBegin = (i == hovered) ? 0.4 : 0.5 + 0.05 * i;
 	int alphaIcon = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 255, true);
 
 	//float iconScale = ofMap(selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 1.0f, 0.0f, true);
@@ -712,7 +713,7 @@ void testApp::drawIconAnimations(int i) {
 	icon.draw(0, 0);
 	ofPopMatrix();
 
-	if (i == selectedUser.hovered)
+	if (i == hovered)
 	{
 		drawOverheadText(txt_pointing, -dx * (-w + txt_pointing.getWidth()) / 2, (h - txt_pointing.getHeight()) / 2, w);
 	}
@@ -764,19 +765,6 @@ void testApp::drawPlayers() {
 
 		//float offsetW = (imageWidth - w) / 2;
 		//float offsetH = (imageHeight - h) / 2;
-		/*
-		int pos = 0;
-		selectedUser.hovered
-		if (collapse != 0)
-		{
-			selectedUser.hovered =
-			collapseNum++;
-			pos = MIN(collapse * collapseNum, w/2);
-			if (selectedUser.hovered == i) {
-
-			}
-		}
-		*/
 		if (imgId >= players[i].size()) {
 			imgId = 0;
 		}
@@ -795,9 +783,9 @@ void testApp::drawPlayers() {
 		}
 	//	ofDisableAlphaBlending();
 
-		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
+		if (state == SELECTION && hovered != NO_HOVER)
 		{
-			if (i == selectedUser.hovered) {
+			if (i == hovered) {
 				img_prompt_2_1_moreNormal.draw(0, textY);
 			}
 			// drawIconAnimations(i);
@@ -1144,9 +1132,9 @@ void testApp::setupGui(){
 	depthClip.y = 4000;
 	gui->addSlider("Far Clip", 2000, 6000, &depthClip.y);
 	cursorHightOffset = 0;
-	gui->addIntSlider("Cursor Hight offset Pix", -ofGetHeight() / 2, ofGetHeight()/2, &cursorHightOffset);
+	gui->addIntSlider("Cursor Hight offset Pix", -ofGetScreenHeight() / 2, ofGetScreenHeight()/2, &cursorHightOffset);
 	cursorWidthOffset = 0;
-	gui->addIntSlider("Cursor Width offset Pix", -ofGetWidth() / 2, ofGetWidth() / 2, &cursorWidthOffset);
+	gui->addIntSlider("Cursor Width offset Pix", -ofGetScreenWidth() / 2, ofGetScreenWidth() / 2, &cursorWidthOffset);
 	spot.x = 0;
 	gui->addSlider("spot X", -500, 500, &spot.x);
 
@@ -1323,7 +1311,7 @@ void testApp::drawDebugText()
 		<< "	Visible Users : " << inputDevice.countVisibleUsers() << endl
 		<< "	Screen Point : " << inputDevice.getScreenPoint() << endl
 		<< "	is Hand Raised : " << inputDevice.isHandRaised() << endl
-		
+		<< " hovered: " << hovered << endl
 		<< "State : " << AppState::toString(state) << endl
 		<< "Timers: " << endl
 		<< "	welcome Timer: " << welcomeTimer.getCountDown() << endl
@@ -1335,6 +1323,7 @@ void testApp::drawDebugText()
 		<< "	Last seen: " << selectedUser.lastSeen.getCountDown() << endl
 		<< "	PointingDir: " << selectedUser.getPointingDir() << endl
 		<< "	isSteady: " << selectedUser.isSteady() << endl
+		<< "	selectedUser.selectionTimer: " << selectedUser.selectionTimer.getCountDown() << endl
 		;
 
 
@@ -1386,7 +1375,7 @@ string testApp::generateFileName() {
 void testApp::drawSplitScreen(ofFbo& fbo) {
 	ofPushMatrix();
 	//float z = tan(angle)* fboW / 2;
-	ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2 - fbo.getHeight() / 2);
+	ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2 - fbo.getHeight() / 2);
 	ofRotateY(-wallAngle);
 	fbo.getTextureReference().drawSubsection(-(fbo.getWidth() / 2), 0, 0, fbo.getWidth() / 2, fbo.getHeight(), 0, 0, fbo.getWidth() / 2, fbo.getHeight());
 	ofRotateY(wallAngle * 2);

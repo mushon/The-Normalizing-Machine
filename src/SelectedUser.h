@@ -12,9 +12,6 @@ class SelectedUser
 {
 public:
 		static const int NO_USER = -1;
-		static const int NO_HOVER = -1;
-
-		int hovered;
 
 		int id;
 
@@ -27,7 +24,7 @@ public:
 
 		AppTimer lastSeen;
 
-		AppTimer selectTimer;
+		AppTimer selectionTimer;
 		bool waitForSteady;
 
 		float totalHeight; // distance(head, feet)
@@ -43,15 +40,11 @@ public:
 			distance = FLT_MAX;
 		}
 
-		void reset(unsigned long long timeout)
+		void reset()
 		{
 			leftArm.reset();
 			rightArm.reset();
 			
-			hovered = NO_HOVER;
-
-			selectTimer.setTimeout(timeout);
-			selectTimer.reset();
 			waitForSteady = true;
 
 			totalHeight = 0;
@@ -71,7 +64,7 @@ public:
 			}
 			if (waitForSteady)
 			{
-				selectTimer.reset();
+				selectionTimer.reset();
 			}
 		}
 
@@ -85,7 +78,7 @@ public:
 
 		float getProgress()
 		{
-			return waitForSteady ? 1.0f : selectTimer.getProgress();
+			return waitForSteady ? 1.0f : selectionTimer.getProgress();
 		}
 
 
