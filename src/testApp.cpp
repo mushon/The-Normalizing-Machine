@@ -1181,7 +1181,7 @@ void testApp::setupGui(){
 	welcomeDuration = 5000;
 	gui->addIntSlider("welcome msg", 100, 10000, &welcomeDuration);
 
-	resultTimeout = 3000; // skip
+	resultTimeout = 3000;
 	gui->addIntSlider("resultTimeout", 0, 10000, &resultTimeout);
 
 	imgSeqTimeout = 200;

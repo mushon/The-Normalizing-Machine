@@ -156,7 +156,7 @@
 <Widget>
     <Kind>42</Kind>
     <Name>resultTimeout</Name>
-    <Value>0</Value>
+    <Value>3000</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
