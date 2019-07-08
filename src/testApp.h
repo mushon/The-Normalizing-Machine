@@ -167,7 +167,7 @@ private:
 	ofImage img_prompt_0_3_intro;
 
 	string roundsUsers [RecordedData::MAX_ROUND_COUNT+1];
-	void puploateRoundUsers();
+	void populateRoundUsers();
 
 
 	void drawOverheadText(ofImage&, int x, int y, int w);

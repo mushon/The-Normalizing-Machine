@@ -317,7 +317,7 @@ void testApp::update(){
 				if (prev_state != state) {
 					// was in step in !?
 					session = RecordedData();
-					puploateRoundUsers();
+					populateRoundUsers();
 					session.id = generateFileName();
 					setupNextRound(0);
 
@@ -1267,7 +1267,7 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 }
 
 
-void testApp::puploateRoundUsers()
+void testApp::populateRoundUsers()
 {
 	roundsUsers[0] = dataset.getLatestUser();
 	int i = 1;
