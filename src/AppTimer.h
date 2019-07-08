@@ -26,7 +26,7 @@ public:
 		return max(0, countdown);
 	}
 
-	// 0 <= x <= 1, 0 -> 0
+	// 0 <= x <= 1, 1 -> 0
 	float getProgress()
 	{
 		return float(getCountDown()) / timeout;
