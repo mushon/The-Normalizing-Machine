@@ -15,11 +15,9 @@ public:
 	void saveLibrary(string url);
 	void loadLibrary(string url);
 
-	vector<string> selectNextRound(bool lastUser = false  , string forcedId = "", string excludeSessionId = "");
+	vector<string> selectNextRound(bool lastUser = false, string forcedId = "", string excludeSessionId = "");
 	string getLatestUser();
-	string  getRandumUser();
-
-	
+	string getRandomUser();
 
 
 	typedef map<string, RecordedData> DataSet;

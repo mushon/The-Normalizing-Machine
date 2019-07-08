@@ -1273,7 +1273,7 @@ void testApp::populateRoundUsers()
 	int i = 1;
 	while (i < RecordedData::MAX_ROUND_COUNT) {
 		bool dup = false;
-		string selected =  dataset.getRandumUser();
+		string selected =  dataset.getRandomUser();
 		for (int j = 0; j < i; j++) {
 			if (roundsUsers[j] == selected) {
 				dup = true;

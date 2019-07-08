@@ -82,7 +82,7 @@ string AppDataset::getLatestUser() {
 		return maxIt->first;
 }
 
-string AppDataset::getRandumUser() {
+string AppDataset::getRandomUser() {
 	DataSet::iterator it;
 	int size = dataset.size();
 	int rand = ofRandom(size);
