@@ -240,6 +240,10 @@ void testApp::update(){
 	if (nVisibleUsers == 1)
 	{
 		selectedUser = inputDevice.getClosestUser();
+		if (selectedUser.id == SelectedUser::NO_USER) 
+		{ // user lost
+			state = IDLE;
+		}
 
 		switch (state)
 		{
@@ -253,41 +257,19 @@ void testApp::update(){
 			}
 		case STEP_IN:
 			{
-				if (selectedUser.id == SelectedUser::NO_USER ||
-				   selectedUser.distance > idleThreshold + idleThresholdHysteresis)
-				{
+				if(selectedUser.distance > idleThreshold + idleThresholdHysteresis) {
 					state = IDLE;
 				}
 
 				if (selectedUser.distance < stepInThreshold)
 				{
-					session = RecordedData();
-					puploateRoundUsers();
-					session.id = generateFileName();
-					setupNextRound(0); // first round
-					welcomeTimer.setTimeout(welcomeDuration);
-					welcomeTimer.reset();
-					//EW mac: // recorder.capture(ofToDataPath(imageDir), session.id, ofRectangle(cropX, cropY, cropW, cropH));
-					state = WELCOME_MSG;
+					state = GOTO_SPOT;
 				}
 				break;
 			}
-		case WELCOME_MSG:
-			if (welcomeTimer.getCountDown() == 0) {
-				state = GOTO_SPOT;
-				// TODO: when user is already in spot
-				// this creates one frame flash when changing states:
-				// -> GOTO_SPOT -> RAISE_HAND
-				// possibly, just show welcome overlay, regardless (no welcome state)
-			}
-			break;
 		case GOTO_SPOT:
 			{
-				if (selectedUser.id == SelectedUser::NO_USER) 
-				{ // user lost
-					state = IDLE;
-				}
-				else if (selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
+				if (selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
 				{ // user stepped out of interaction zone
 					state = STEP_IN;
 				}
@@ -297,7 +279,20 @@ void testApp::update(){
 				}
 				break;
 			}
-
+			// // enter
+			// welcomeTimer.setTimeout(welcomeDuration);
+			// welcomeTimer.reset();
+			// //EW mac: // recorder.capture(ofToDataPath(imageDir), session.id, ofRectangle(cropX, cropY, cropW, cropH));
+			// state = WELCOME_MSG;
+			// ---
+			// case WELCOME_MSG:
+			// 	if (welcomeTimer.getCountDown() == 0) {
+			// 		// TODO: when user is already in spot
+			// 		// this creates one frame flash when changing states:
+			// 		// -> GOTO_SPOT -> RAISE_HAND
+			// 		// possibly, just show welcome overlay, regardless (no welcome state)
+			// 	}
+			// 	break;
 		case RAISE_HAND:
 			{
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
@@ -310,11 +305,6 @@ void testApp::update(){
 					{
 						// if (selectedUser.isSteady())
 						// {
-						hovered = NO_HOVER;
-						selectedUser.selectionTimer.setTimeout(selectionTimeout);
-						selectedUser.selectionTimer.reset();
-						cursor = AppCursor();
-						cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset , ofGetScreenHeight() / 2 + cursorHightOffset));
 						state = SELECTION;
 						// }
 					}
@@ -324,6 +314,21 @@ void testApp::update(){
 			}
 		case SELECTION:
 			{
+				if (prev_state != state) {
+					// was in step in !?
+					session = RecordedData();
+					puploateRoundUsers();
+					session.id = generateFileName();
+					setupNextRound(0);
+
+					// was in RAISE_HAND
+					hovered = NO_HOVER;
+					selectedUser.selectionTimer.setTimeout(selectionTimeout);
+					selectedUser.selectionTimer.reset();
+					cursor = AppCursor();
+					cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset , ofGetScreenHeight() / 2 + cursorHightOffset));
+				}
+
 				// EW: disabled this, since user already raised hand
 				// if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance/* ||
 				// 	selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance)*/)
@@ -412,15 +417,6 @@ void testApp::update(){
 						setupNextRound(r, lastWinnerId); // keep winner, exclude self
 					}
 
-					// selectedUser.reset(selectionTimeout);
-					cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset, ofGetScreenHeight() / 2 + cursorHightOffset));
-
-					// reset hover (selection)  
-					// TODO: move to enter selection (when states have proper enter/exit)
-					hovered = NO_HOVER;					
-					selectedUser.selectionTimer.reset();
-					// selectedUser.waitForSteady = true;
-
 					state = SELECTION;
 				}
 				else {
@@ -496,6 +492,9 @@ void testApp::update(){
 	{
 		state = MORE_THAN_ONE;
 	}
+
+	prev_state = state;
+	// // // 
 
 	// set drawing parameters (before smoothing)
 	if (state == IDLE) {

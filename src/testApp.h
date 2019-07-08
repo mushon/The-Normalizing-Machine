@@ -66,6 +66,7 @@ public:
 private:
 
 	State state;
+	State prev_state;  // the normalizing state maching
 
 	// session
 	RecordedData session;
