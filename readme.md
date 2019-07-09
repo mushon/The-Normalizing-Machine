@@ -1,27 +1,17 @@
-##Install
+# install
 
-1. clone those addons (from github):
+download of-0.10
+https://openframeworks.cc/versions/v0.10.1/of_v0.10.1_osx_release.zip
 
-    ```
-    git clone https://github.com/kylemcdonald/ofxCv.git
-    git clone https://github.com/eranws/ofxFaceTracker.git
-    git clone https://github.com/eranws/ofxOpenNI.git // (experimental branch)
-    git clone https://github.com/rezaali/ofxUI
-    ```
-    the ofxOpenCv libary is also required but should be included in oF
-    <!--
-    irrelevant if cloning eranws/ofxFacetracker
-    
-    rename ofxFaceTracker Tracker.cc/h to 
-    FTracker.cc/h (or whatever) - this solves Tracker issues with ofxCv's Tracker.cpp/h
-    -->
 
-2. Download & Install OpenNI 2.2.x
+This script pulls only shallow branch (15M vs. 417M full repo)
+builds and run the app (on mac :)
+```
+cd of-0.10
+cd apps/myApps
 
-    https://dl.dropboxusercontent.com/u/3685114/OpenNI_Nite_install/OpenNI-Windows-x86-2.2.msi
-
-3. Download & Install  Nite
-
-    https://dl.dropboxusercontent.com/u/3685114/OpenNI_Nite_install/NiTE-Windows-x86-2.2.msi
-
-4. Restart Computer (sets paths)
+git clone --single-branch --branch mac_fix --depth 1 git@github.com:mushon/The-Normalizing-Machine.git tnm-thin
+cd tnm-thin
+make
+make RunRelease
+```
