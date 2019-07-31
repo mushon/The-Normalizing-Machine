@@ -24,54 +24,7 @@ void testApp::setup() {
 
 	selectedUser.lastSeen.setTimeout(3000);
 
-	yesIcon20.loadImage("assets/i-yes-20.png");
-	noIcon20.loadImage("assets/i-no-20.png");
-
-	yesIcon.loadImage("assets/i-yes-40.png");
-	noIcon.loadImage("assets/i-no-40.png");
-
-	txt_pointing.loadImage("assets/txt_pointing.png");
-	txt_position.loadImage("assets/txt_position.png");
-	txt_prompt.loadImage("assets/txt_prompt.png");
-	txt_toomany.loadImage("assets/txt_toomany.png");
-
-	img_arrow_left.loadImage("assets/arrow_left.png");
-	img_face_left.loadImage("assets/face_left.png");
-	img_placemark_body.loadImage("assets/placemark_body.png");
-	img_placemark_head.loadImage("assets/placemark_head.png");
-
-	for (int i = 0; i < RecordedData::MAX_ROUND_COUNT; i++){
-		img_rounds[i].loadImage("assets/r" + to_string(i+1) + ".png");
-		img_rounds_active[i].loadImage("assets/r" + to_string(i+1) + "_active.png");
-	}
-
-	img_rounds_star.loadImage("assets/r_star.png");
-	img_rounds_star_active.loadImage("assets/r_star_active.png");
-
-	img_r_left.loadImage("assets/r_left.png");
-	img_r_right.loadImage("assets/r_right.png");
-	img_record.loadImage("assets/record.png");
-
-	img_gapmarker.loadImage("assets/gapmarker.png");
-	img_placemark.loadImage("assets/placemark.png");
-	img_placemarker_body.loadImage("assets/placemarker_body.png");
-	img_placemarker_head.loadImage("assets/placemarker_head.png");
-	img_placemark_0_2_position.loadImage("assets/placemark_0.2_position.png");
-
-	img_prompt_0_1_idle.loadImage("assets/prompt_0.1_idle.png");
-	img_prompt_0_2_position.loadImage("assets/prompt_0.2_position.png");
-	img_prompt_0_3_onebyone.loadImage("assets/prompt_0.3_onebyone.png");
-	img_prompt_1_1_point.loadImage("assets/prompt_1.1_point.png");
-	img_prompt_10_goodbye.loadImage("assets/prompt_10_goodbye.png");
-	img_prompt_2_1_moreNormal.loadImage("assets/prompt_2.1_moreNormal.png");
-	img_prompt_9_turnLeft.loadImage("assets/prompt_9_turnLeft.png");
-
-	img_goodbye.loadImage("assets/goodbye.png");
-	img_one_by_one.loadImage("assets/one_by_one.png");
-	img_position_yourself.loadImage("assets/position_yourself.png");
-	img_step_in.loadImage("assets/step_in.png");
-	// img_wellcome_msg.loadImage("assets/welcome_msg.png");
-	img_prompt_0_3_intro.loadImage("assets/prompt_0.3_intro.png");
+	setupAssets();
 
 	ofDisableAlphaBlending();
 
@@ -1381,4 +1334,56 @@ void testApp::drawSplitScreen(ofFbo& fbo) {
 	ofRotateY(wallAngle * 2);
 	fbo.getTextureReference().drawSubsection(0, 0, 0, fbo.getWidth() / 2, fbo.getHeight(), fbo.getWidth() / 2, 0, fbo.getWidth() / 2, fbo.getHeight());
 	ofPopMatrix();
+}
+
+void testApp::setupAssets() {
+
+	yesIcon20.loadImage("assets/i-yes-20.png");
+	noIcon20.loadImage("assets/i-no-20.png");
+
+	yesIcon.loadImage("assets/i-yes-40.png");
+	noIcon.loadImage("assets/i-no-40.png");
+
+	txt_pointing.loadImage("assets/txt_pointing.png");
+	txt_position.loadImage("assets/txt_position.png");
+	txt_prompt.loadImage("assets/txt_prompt.png");
+	txt_toomany.loadImage("assets/txt_toomany.png");
+
+	img_arrow_left.loadImage("assets/arrow_left.png");
+	img_face_left.loadImage("assets/face_left.png");
+	img_placemark_body.loadImage("assets/placemark_body.png");
+	img_placemark_head.loadImage("assets/placemark_head.png");
+
+	for (int i = 0; i < RecordedData::MAX_ROUND_COUNT; i++){
+		img_rounds[i].loadImage("assets/r" + to_string(i+1) + ".png");
+		img_rounds_active[i].loadImage("assets/r" + to_string(i+1) + "_active.png");
+	}
+
+	img_rounds_star.loadImage("assets/r_star.png");
+	img_rounds_star_active.loadImage("assets/r_star_active.png");
+
+	img_r_left.loadImage("assets/r_left.png");
+	img_r_right.loadImage("assets/r_right.png");
+	img_record.loadImage("assets/record.png");
+
+	img_gapmarker.loadImage("assets/gapmarker.png");
+	img_placemark.loadImage("assets/placemark.png");
+	img_placemarker_body.loadImage("assets/placemarker_body.png");
+	img_placemarker_head.loadImage("assets/placemarker_head.png");
+	img_placemark_0_2_position.loadImage("assets/placemark_0.2_position.png");
+
+	img_prompt_0_1_idle.loadImage("assets/prompt_0.1_idle.png");
+	img_prompt_0_2_position.loadImage("assets/prompt_0.2_position.png");
+	img_prompt_0_3_onebyone.loadImage("assets/prompt_0.3_onebyone.png");
+	img_prompt_1_1_point.loadImage("assets/prompt_1.1_point.png");
+	img_prompt_10_goodbye.loadImage("assets/prompt_10_goodbye.png");
+	img_prompt_2_1_moreNormal.loadImage("assets/prompt_2.1_moreNormal.png");
+	img_prompt_9_turnLeft.loadImage("assets/prompt_9_turnLeft.png");
+
+	img_goodbye.loadImage("assets/goodbye.png");
+	img_one_by_one.loadImage("assets/one_by_one.png");
+	img_position_yourself.loadImage("assets/position_yourself.png");
+	img_step_in.loadImage("assets/step_in.png");
+	// img_wellcome_msg.loadImage("assets/welcome_msg.png");
+	img_prompt_0_3_intro.loadImage("assets/prompt_0.3_intro.png");
 }

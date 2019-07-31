@@ -119,7 +119,7 @@ private:
 
 	int margin;
 
-
+	void setupAssets();
 	ofImage yesIcon;
 	ofImage noIcon;
 	ofImage yesIcon20;
