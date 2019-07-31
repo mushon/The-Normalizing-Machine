@@ -182,7 +182,7 @@ void testApp::update(){
 		if (state != IDLE)
 		{
 			// stop recording?
-			if (selectedUser.lastSeen.getCountDown() == 0)
+			if (selectedUser.lastSeen.done())
 			{
 				// 1 -> 0
 				state = IDLE;
@@ -239,7 +239,7 @@ void testApp::update(){
 			// state = WELCOME_MSG;
 			// ---
 			// case WELCOME_MSG:
-			// 	if (welcomeTimer.getCountDown() == 0) {
+			// 	if (welcomeTimer.done()) {
 			// 		// TODO: when user is already in spot
 			// 		// this creates one frame flash when changing states:
 			// 		// -> GOTO_SPOT -> RAISE_HAND
@@ -344,7 +344,7 @@ void testApp::update(){
 					hovered = hover;
 					
 					//TODO select mechanism (click/timeout)
-					bool selected = (selectedUser.selectionTimer.getCountDown() == 0);
+					bool selected = (selectedUser.selectionTimer.done());
 					if(selected)
 					{
 						// add vote
@@ -377,7 +377,7 @@ void testApp::update(){
 			}
 		case SELECTION_POST:
 		{
-			if (postSelectionTimer.getCountDown() <= 0) {
+			if (postSelectionTimer.done()) {
 				int r = session.currentRound();
 				if (r < RecordedData::MAX_ROUND_COUNT) {
 					string lastWinnerId = session.othersId[r-1][hovered];
@@ -419,7 +419,7 @@ void testApp::update(){
 			{
 			   //string lastWinnerId = session.othersId[RecordedData::MAX_ROUND_COUNT - 1][hovered];
 				// show prompt - look sideways
-				if (resultTimer.getCountDown() <= 0) { // isFaceLookingSideWays(); // get from camera
+				if (resultTimer.done()) { // isFaceLookingSideWays(); // get from camera
 					// save user measurements
 					// currData.saveUserMeasurements(selectedUser); // TODO
 					/*
@@ -741,7 +741,7 @@ void testApp::drawPlayers() {
 		if (imgId >= players[i].size()) {
 			imgId = 0;
 		}
-		if (imgSeqTimer.getCountDown() <= 0) {
+		if (imgSeqTimer.done()) {
 			imgId++;
 			imgSeqTimer.reset();
 		}

@@ -20,6 +20,11 @@ public:
 		timeout = _timeout;
 	}
 
+	bool done() const
+	{
+		return getCountDown() <= 0;
+	}
+
 	int getCountDown() const
 	{
 		int countdown = last + timeout - ofGetSystemTime();
