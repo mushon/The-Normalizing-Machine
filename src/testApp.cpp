@@ -317,7 +317,27 @@ void testApp::update(){
 				if (prev_state != state) {
 					// was in step in !?
 					session = RecordedData();
-					populateRoundUsers();
+
+					// # populate
+					roundsUsers[0] = dataset.getLatestUser();
+					int i = 1;
+					while (i < RecordedData::MAX_ROUND_COUNT) {
+						bool dup = false;
+						string selected =  dataset.getRandomUser();
+						for (int j = 0; j < i; j++) {
+							if (roundsUsers[j] == selected) {
+								dup = true;
+								continue;
+							}
+						}
+						if (!dup) {
+							roundsUsers[i] = selected;
+							i++;
+						}
+					}
+
+
+					
 					session.id = generateFileName();
 					setupNextRound(0);
 
@@ -1266,26 +1286,6 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 
 }
 
-
-void testApp::populateRoundUsers()
-{
-	roundsUsers[0] = dataset.getLatestUser();
-	int i = 1;
-	while (i < RecordedData::MAX_ROUND_COUNT) {
-		bool dup = false;
-		string selected =  dataset.getRandomUser();
-		for (int j = 0; j < i; j++) {
-			if (roundsUsers[j] == selected) {
-				dup = true;
-				continue;
-			}
-		}
-		if (!dup) {
-			roundsUsers[i] = selected;
-			i++;
-		}
-	}
-}
 
 void testApp::drawOverheadText(ofImage& txt, int x, int y, int w)
 {
