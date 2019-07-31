@@ -33,6 +33,7 @@ public:
 		float shouldersWidth; // distance(shoulders)
 		float armLength;
 
+		bool handRaised;
 
 		SelectedUser()
 		{
@@ -66,6 +67,11 @@ public:
 			{
 				selectionTimer.reset();
 			}
+
+			// TODO update: handRaised 
+			// getSelectedArm().hand.z < getSelectedArm().shoulder.z - handShoulderDistance 
+			//	|| getSelectedArm().hand.x - getSelectedArm().shoulder.x > abs(handShoulderDistance)
+
 		}
 
 		ofVec3f getPointingDir() {
@@ -97,7 +103,9 @@ public:
 				*/
 				// z is biggest 
 				return (leftArm.hand.z < rightArm.hand.z) ? leftArm : rightArm;
+				// TODO: add hysteresis for switching hands. Track arm state.
 			//}
 		}
+
 
 };

@@ -301,7 +301,7 @@ void testApp::update(){
 				}
 				else
 				{
-					if (inputDevice.isHandRaised())
+					if (selectedUser.handRaised)
 					{
 						// if (selectedUser.isSteady())
 						// {
@@ -365,8 +365,6 @@ void testApp::update(){
 				else
 				{
 					ofPoint screenPoint = inputDevice.getScreenPoint();
-					float progress = selectedUser.getProgress();
-
 					if (lockCursorY) { screenPoint.y = ofGetScreenHeight() / 2; }
 					cursor.update(screenPoint, progressSmooth);
 
@@ -1312,7 +1310,6 @@ void testApp::drawDebugText()
 		<< "inputDevice: " << endl
 		<< "	Visible Users : " << inputDevice.countVisibleUsers() << endl
 		<< "	Screen Point : " << inputDevice.getScreenPoint() << endl
-		<< "	is Hand Raised : " << inputDevice.isHandRaised() << endl
 		<< " hovered: " << hovered << endl
 		<< "State : " << AppState::toString(state) << endl
 		<< "Timers: " << endl
@@ -1325,6 +1322,7 @@ void testApp::drawDebugText()
 		<< "	Last seen: " << selectedUser.lastSeen.getCountDown() << endl
 		<< "	PointingDir: " << selectedUser.getPointingDir() << endl
 		<< "	isSteady: " << selectedUser.isSteady() << endl
+		<< "	is Hand Raised : " << selectedUser.handRaised << endl
 		<< "	selectedUser.selectionTimer: " << selectedUser.selectionTimer.getCountDown() << endl
 		;
 
