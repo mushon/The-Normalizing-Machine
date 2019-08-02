@@ -29,11 +29,11 @@ public:
 	};
 
 	virtual void update() {
-		user.update();
 
 		mousePosition.x = ofGetMouseX();
 		mousePosition.y = ofGetMouseY();
 		
+		user.update();
 		user.handRaised = false;
 		if (ofGetMousePressed(0)) {
 			user.selectionTimer.reset();
@@ -41,6 +41,10 @@ public:
 		}
 
 		cursor.update(mousePosition, user.selectionTimer.getProgress());
+		
+		user.headPoint = ofPoint(mousePosition.x - ofGetScreenWidth() / 2, 
+			0, mousePosition.y);
+
 		user.distance = mousePosition.distance(ofPoint(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2));
 
 	};

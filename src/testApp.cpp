@@ -86,37 +86,6 @@ void testApp::setupNextRound(int round, string firstId, string secondId) {
 	imgId = 0;
 }
 
-/*
-void testApp::setupNextRound(bool lastUser, string forcedId, string excludeSessionId) {
-	for (int i = 0; i<n_players; i++)
-	{
-		players[i].stop();
-	}
-	n_players = 0;
-
-	vector<string> nextIds = dataset.selectNextRound(lastUser, forcedId, excludeSessionId); // better name?
-	session.setupNextRound(nextIds);
-
-	for (int i = 0; i<session.N_OTHERS; i++)
-	{
-		int r = session.currentRound();
-		while (!setupPlayback(RECDIR + session.othersId[r][i])) {
-			dataset.dataset.erase(session.othersId[r][i]);
-		}
-	}
-}
-*/
-/*
-void testApp::setUpResult(string id) {
-	for (int i = 0; i < n_players; i++)
-	{
-		players[i].stop();
-	}
-	n_players = 0;
-	setupPlayback(recDir + id);
-}
-*/
-//--------------------------------------------------------------
 void testApp::update(){
 	recorder.update();
 
@@ -826,7 +795,7 @@ void testApp::drawFbo() {
 					ofEnableAlphaBlending();
 					img_position_yourself.draw(0, 0);
 					ofDisableAlphaBlending();
-					//drawGotoSpot(); // todo draw red shadow
+					// drawGotoSpot(); // todo draw red shadow
 					img_prompt_0_2_position.draw(0, textY);
 				}
 
@@ -1223,7 +1192,8 @@ void testApp::drawDebugText()
 		<< "User: " << endl
 		<< "	distance: " << selectedUser.distance << endl
 		<< "	Last seen: " << selectedUser.lastSeen.getCountDown() << endl
-		<< "	PointingDir: " << selectedUser.getPointingDir() << endl
+		<< "	Head Point: " << selectedUser.headPoint << endl
+		<< "	Pointing Dir: " << selectedUser.getPointingDir() << endl
 		<< "	isSteady: " << selectedUser.isSteady() << endl
 		<< "	is Hand Raised : " << selectedUser.handRaised << endl
 		<< "	selectedUser.selectionTimer: " << selectedUser.selectionTimer.getCountDown() << endl
