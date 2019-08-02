@@ -65,6 +65,10 @@ public:
 
 private:
 
+	void setupInput();
+	void setupDisplay();
+	void setupWatchdog();
+
 	State state;
 	State prev_state;  // the normalizing state maching
 

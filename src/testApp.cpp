@@ -6,62 +6,22 @@ const int playersYOffset = -100;  // make slider ui
 
 //--------------------------------------------------------------
 void testApp::setup() {
-
-	ofSetVerticalSync(true);
-	ofSetFrameRate(60);
 	ofSeedRandom();
-	ofEnableAntiAliasing();
+	setupDisplay();
 	setupGui();
-
-	inputDevice.setup();
-
-	drawCursor = true;
-	drawDebugInput = false;
-	drawGui = false;
-	drawProfiler = false;
-	drawVideo = true;
-	drawText = false;
-
-	selectedUser.lastSeen.setTimeout(3000);
-
+	setupInput();
 	setupAssets();
-
-	ofDisableAlphaBlending();
-
-	ofBackground(0, 0, 0, 0);
-
 	dataset.loadLibrary(recDir + datasetJsonFilename);
 
-	fbo.allocate(ofGetScreenWidth(), ofGetScreenHeight(), GL_RGBA);
-
+	setupWatchdog();
 	state = IDLE;
-	//ofDirectShowPlayer* dPlayer = new ofDirectShowPlayer();
-	//ofPtr <ofBaseVideoPlayer> ptr(dPlayer);
-	//players[0].setPlayer(ptr);
-	//players[1].setPlayer(ptr);
-	//players[0].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
-	//players[1].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
-
-	// video border frame
-	frame.setStrokeColor(ofColor::white);
-	frame.setStrokeWidth(4);
-	frame.setFilled(false);
-
-#ifdef DO_WATCHDOG
-
-#ifdef TARGET_WIN32
-	wdr = make_unique<WatchDog_Responder>(true, 10000, "../../watchdog");
-#endif
-
-#endif
 }
 
 void testApp::loadImages(string path, vector<ofImage*>& images) {
 	ofDirectory dir(path);
-	//only show png files
-	dir.allowExt("jpeg");
-	//populate the directory object
-	dir.listDir();
+	
+	dir.allowExt("jpeg"); // only show ? files
+	dir.listDir(); 	// populate the directory object
 	dir.sortByDate();
 
 	//go through and print out all the paths
@@ -1387,3 +1347,53 @@ void testApp::setupAssets() {
 	// img_wellcome_msg.loadImage("assets/welcome_msg.png");
 	img_prompt_0_3_intro.loadImage("assets/prompt_0.3_intro.png");
 }
+
+
+void testApp::setupInput() {
+	inputDevice.setup();
+	selectedUser.lastSeen.setTimeout(3000);
+}
+	
+
+void testApp::setupDisplay() {
+	ofSetVerticalSync(true);
+	ofSetFrameRate(60);
+
+	drawCursor = true;
+	drawDebugInput = false;
+	drawGui = false;
+	drawProfiler = false;
+	drawVideo = true;
+	drawText = false;
+
+	ofEnableAntiAliasing();
+	ofDisableAlphaBlending();
+
+	ofBackground(0, 0, 0, 0);
+
+	fbo.allocate(ofGetScreenWidth(), ofGetScreenHeight(), GL_RGBA);
+	//ofDirectShowPlayer* dPlayer = new ofDirectShowPlayer();
+	//ofPtr <ofBaseVideoPlayer> ptr(dPlayer);
+	//players[0].setPlayer(ptr);
+	//players[1].setPlayer(ptr);
+	//players[0].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
+	//players[1].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
+
+	// video border frame
+	frame.setStrokeColor(ofColor::white);
+	frame.setStrokeWidth(4);
+	frame.setFilled(false);
+}
+
+
+void testApp::setupWatchdog() {
+#ifdef DO_WATCHDOG
+
+#ifdef TARGET_WIN32
+	wdr = make_unique<WatchDog_Responder>(true, 10000, "../../watchdog");
+#endif
+
+#endif
+}
+
+
