@@ -19,7 +19,7 @@ public:
 };
 
 class AppMouse : public AppInputDevice {
-
+// This class emulates both a 'kinect' sensor (# people), and a User (position)
 public:
 	virtual void setup() { 
 		user.id = 99;
