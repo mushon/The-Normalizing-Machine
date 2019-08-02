@@ -229,30 +229,43 @@ void testApp::update(){
 			{
 				if (prev_state != state) {
 					// was in step in !?
-					session = RecordedData();
+					if (prev_state == RAISE_HAND){
+						// First time only
+						session = RecordedData();
+						session.id = generateFileName();
 
-					// # populate
-					roundsUsers[0] = dataset.getLatestUser();
-					int i = 1;
-					while (i < RecordedData::MAX_ROUND_COUNT) {
-						bool dup = false;
-						string selected =  dataset.getRandomUser();
-						for (int j = 0; j < i; j++) {
-							if (roundsUsers[j] == selected) {
-								dup = true;
-								continue;
+						// # populate
+						roundsUsers[0] = dataset.getLatestUser();
+						int i = 1;
+						while (i < RecordedData::MAX_ROUND_COUNT) {
+							bool dup = false;
+							string selected =  dataset.getRandomUser();
+							for (int j = 0; j < i; j++) {
+								if (roundsUsers[j] == selected) {
+									dup = true;
+									continue;
+								}
+							}
+							if (!dup) {
+								roundsUsers[i] = selected;
+								i++;
 							}
 						}
-						if (!dup) {
-							roundsUsers[i] = selected;
-							i++;
-						}
+	
+						setupNextRound(0);
 					}
 
-
-					
-					session.id = generateFileName();
-					setupNextRound(0);
+					if (prev_state == SELECTION_POST) {
+						int r = session.currentRound();
+						if (r < RecordedData::MAX_ROUND_COUNT) {
+						string lastWinnerId = session.othersId[r-1][hovered];
+						if (r == RecordedData::MAX_ROUND_COUNT - 1) {
+							setupNextRound(r, lastWinnerId, session.id); // keep winner + show self
+						}
+						else {
+							setupNextRound(r, lastWinnerId); // keep winner, exclude self
+						}
+					}
 
 					// was in RAISE_HAND
 					hovered = NO_HOVER;
@@ -338,16 +351,6 @@ void testApp::update(){
 		case SELECTION_POST:
 		{
 			if (postSelectionTimer.done()) {
-				int r = session.currentRound();
-				if (r < RecordedData::MAX_ROUND_COUNT) {
-					string lastWinnerId = session.othersId[r-1][hovered];
-					if (r == RecordedData::MAX_ROUND_COUNT - 1) {
-						setupNextRound(r, lastWinnerId, session.id); // keep winner + show self
-					}
-					else {
-						setupNextRound(r, lastWinnerId); // keep winner, exclude self
-					}
-
 					state = SELECTION;
 				}
 				else {
@@ -377,21 +380,8 @@ void testApp::update(){
 
 		case RESULT:
 			{
-			   //string lastWinnerId = session.othersId[RecordedData::MAX_ROUND_COUNT - 1][hovered];
 				// show prompt - look sideways
 				if (resultTimer.done()) { // isFaceLookingSideWays(); // get from camera
-					// save user measurements
-					// currData.saveUserMeasurements(selectedUser); // TODO
-					/*
-					session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
-
-					// info: ALL dataset is saved every time
-					dataset.saveSession(session);
-					dataset.updateScores(session);
-					dataset.saveLibrary(recDir + datasetJsonFilename);
-					ofSleepMillis(100); // seems like it's fixed
-					recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
-						*/
 					state = PROFILE_CONFIRMED;
 				}
 				break;
@@ -399,8 +389,8 @@ void testApp::update(){
 
 		case PROFILE_CONFIRMED:
 			{
-			// TODO: save video with sessionId (front, side). you cant save front it here too late
-			// TODO: show thank you and goodbye
+				// TODO: save video with sessionId (front, side). you cant save front it here too late
+				// TODO: show thank you and goodbye
 				// animate back to idle
 				// change from live to recording
 				if (selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
