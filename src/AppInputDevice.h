@@ -13,7 +13,7 @@ public:
 	virtual void exit() { };
 
 	virtual int countVisibleUsers() = 0;
-	virtual SelectedUser getClosestUser() = 0;  // --> activeUser
+	virtual const SelectedUser& getClosestUser() = 0;  // --> activeUser
 	virtual ofPoint getScreenPoint() = 0;
 
 };
@@ -111,7 +111,7 @@ public:
 		 	return 0;
 		}
 	}
-	virtual SelectedUser getClosestUser() {
+	virtual const SelectedUser& getClosestUser() {
 		if (countVisibleUsers() > 0) {
 			return user;
 		}
@@ -269,7 +269,7 @@ public:
 
 
 	// note: adds id, distance and headpoint to SelectedUser
-	virtual SelectedUser getClosestUser()
+	virtual const SelectedUser& getClosestUser()
 	{
 		SelectedUser user;
 		/*
