@@ -14,7 +14,7 @@ void testApp::setup() {
 	dataset.loadLibrary(recDir + datasetJsonFilename);
 
 	setupWatchdog();
-	state = IDLE;
+	setState(IDLE);
 }
 
 void testApp::loadImages(string path, vector<ofImage*>& images) {
@@ -108,13 +108,14 @@ void testApp::update(){
 	
 	if (nVisibleUsers == 0)
 	{
+		// setState(IDLE) // move check inside
 		if (state != IDLE)
 		{
 			// stop recording?
 			if (selectedUser.lastSeen.done())
 			{
 				// 1 -> 0
-				state = IDLE;
+				setState(IDLE);
 			}
 		}
 	}
@@ -124,7 +125,7 @@ void testApp::update(){
 		selectedUser = inputDevice.getClosestUser();
 		if (selectedUser.id == SelectedUser::NO_USER) 
 		{ // user lost
-			state = IDLE;
+			setState(IDLE);
 		}
 
 		switch (state)
@@ -133,19 +134,19 @@ void testApp::update(){
 			{
 				if (selectedUser.distance < idleThreshold)
 				{
-					state = STEP_IN;
+					setState(STEP_IN);
 				}
 				break;
 			}
 		case STEP_IN:
 			{
 				if(selectedUser.distance > idleThreshold + idleThresholdHysteresis) {
-					state = IDLE;
+					setState(IDLE);
 				}
 
 				if (selectedUser.distance < stepInThreshold)
 				{
-					state = GOTO_SPOT;
+					setState(GOTO_SPOT);
 				}
 				break;
 			}
@@ -153,11 +154,11 @@ void testApp::update(){
 			{
 				if (selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
 				{ // user stepped out of interaction zone
-					state = STEP_IN;
+					setState(STEP_IN);
 				}
 				else if (selectedUser.distance < spotRadius)
 				{ // user in spot
-					state = RAISE_HAND;
+					setState(RAISE_HAND);
 				}
 				break;
 			}
@@ -165,7 +166,7 @@ void testApp::update(){
 			// welcomeTimer.setTimeout(welcomeDuration);
 			// welcomeTimer.reset();
 			// //EW mac: // recorder.capture(ofToDataPath(imageDir), session.id, ofRectangle(cropX, cropY, cropW, cropH));
-			// state = WELCOME_MSG;
+			// setState(WELCOME_MSG);
 			// ---
 			// case WELCOME_MSG:
 			// 	if (welcomeTimer.done()) {
@@ -179,7 +180,7 @@ void testApp::update(){
 			{
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
-					state = GOTO_SPOT;
+					setState(GOTO_SPOT);
 				}
 				else
 				{
@@ -187,8 +188,11 @@ void testApp::update(){
 					{
 						// if (selectedUser.isSteady())
 						// {
-						state = SELECTION;
-						ofLogNotice("state = SELECTION");
+						// state.set(???)
+						setState(SELECTION);
+
+						ofLogNotice("setState(SELECTION)");
+						ofLogNotice(AppState::toString(state));
 
 						// }
 					}
@@ -198,66 +202,18 @@ void testApp::update(){
 			}
 		case SELECTION:
 			{
-				if (prev_state != state) {
-					// was in step in !?
-					if (prev_state == RAISE_HAND){
-						// First time only
-						session = RecordedData();
-						session.id = generateFileName();
-
-						// # populate
-						roundsUsers[0] = dataset.getLatestUser();
-						int i = 1;
-						while (i < RecordedData::MAX_ROUND_COUNT) {
-							bool dup = false;
-							string selected =  dataset.getRandomUser();
-							for (int j = 0; j < i; j++) {
-								if (roundsUsers[j] == selected) {
-									dup = true;
-									continue;
-								}
-							}
-							if (!dup) {
-								roundsUsers[i] = selected;
-								i++;
-							}
-						}
-	
-						setupNextRound(0);
-					}
-
-					if (prev_state == SELECTION_POST) {
-						int r = session.currentRound();
-						if (r < RecordedData::MAX_ROUND_COUNT) {
-						string lastWinnerId = session.othersId[r-1][hovered];
-						if (r == RecordedData::MAX_ROUND_COUNT - 1) {
-							setupNextRound(r, lastWinnerId, session.id); // keep winner + show self
-						}
-						else {
-							setupNextRound(r, lastWinnerId); // keep winner, exclude self
-						}
-					}
-
-					// was in RAISE_HAND
-					hovered = NO_HOVER;
-					selectedUser.selectionTimer.setTimeout(selectionTimeout);
-					selectedUser.selectionTimer.reset();
-					cursor = AppCursor();
-					cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset , ofGetScreenHeight() / 2 + cursorHightOffset));
-				}
-
 				// EW: disabled this, since user already raised hand
 				// if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance/* ||
 				// 	selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance)*/)
 				// {
 				// 	//recorder.abort();
-				// state = RAISE_HAND;
+				// setState(RAISE_HAND);
 				// }
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
 					//recorder.abort();
 					//give timeout?
-					state = GOTO_SPOT;
+					setState(GOTO_SPOT);
 				}
 				else
 				{
@@ -289,66 +245,66 @@ void testApp::update(){
 					
 					//TODO select mechanism (click/timeout)
 					bool selected = (selectedUser.selectionTimer.done());
-					cout << (selected);
+
 					if(selected)
 					{
 						// add vote
 						session.makeSelection(hovered);
-						/*
-						if (appRecorder.IsRecording()) {
-							appRecorder.stop();
-							ofSleepMillis(100); // seems like it's fixed
-						}
-						*/
+
+						// if (appRecorder.IsRecording()) {
+						// 	appRecorder.stop();
+						// 	ofSleepMillis(100); // seems like it's fixed
+						// }
+
 						postSelectionTimer.setTimeout(postSelectionTimeout);
 						postSelectionTimer.reset();
-						/*
-						if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 2) { // one before last round
-							recorder.start(recDir, session.id, recordingDuration);
-						}
-						*/
+
+						// if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 2) { // one before last round
+						// 	recorder.start(recDir, session.id, recordingDuration);
+						// }
+
 						if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 3) { // two before last round
 							//if (selectedUser.selectionTimer.getCountDown() < recordingDuration)
 							//{
 								//EW mac: // recorder.capture(recDir, session.id, ofRectangle(cropX, cropY, cropW, cropH));
 							//}
 						}
-						state = SELECTION_POST;
-						ofLogNotice("state = SELECTION_POST;");
-
+						setState(SELECTION_POST);
 					}
-
 				}
 				break;
-
 			}
 		case SELECTION_POST:
-		{
-			if (postSelectionTimer.done()) {
-					state = SELECTION;
-				}
-				else {
-					//players[hovered]->getCurrentFrame();
-					resultImage = yesIcon; // HACK EW// *players[hovered].back();
-					//resultImage.allocate(players[hovered]->getWidth(), players[hovered]->getHeight(), OF_IMAGE_COLOR);
-					//resultImage.setFromPixels(players[hovered]->getPixels());
-					session.saveUserMeasurements(selectedUser.totalHeight + 0.25 * selectedUser.headHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth, selectedUser.armLength);
+			{
+				if (postSelectionTimer.done()) {
+					int round = session.currentRound();
+					if (round < RecordedData::MAX_ROUND_COUNT) {
+						setState(SELECTION);
+					} else {
+						string lastWinnerId = session.othersId[round-1][hovered]; 
 
-					// info: ALL dataset is saved every time
-					/*
-					EW mac_fix
-					dataset.saveSession(session);
-					dataset.updateScores(session);
-					dataset.saveLibrary(recDir + datasetJsonFilename);
-					 */
+						//players[hovered]->getCurrentFrame();
+						resultImage = yesIcon; // HACK EW// *players[hovered].back();
 
-					resultTimer.setTimeout(resultTimeout);
-					resultTimer.reset();
-					// ofSleepMillis(100); // seems like it's fixed
-					//recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
-					state = RESULT;
+						//resultImage.allocate(players[hovered]->getWidth(), players[hovered]->getHeight(), OF_IMAGE_COLOR);
+						//resultImage.setFromPixels(players[hovered]->getPixels());
+						session.saveUserMeasurements(selectedUser.totalHeight + 0.25 * selectedUser.headHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth, selectedUser.armLength);
+
+						// info: ALL dataset is saved every time
+						/*
+						EW mac_fix
+						dataset.saveSession(session);
+						dataset.updateScores(session);
+						dataset.saveLibrary(recDir + datasetJsonFilename);
+							*/
+
+						resultTimer.setTimeout(resultTimeout);
+						resultTimer.reset();
+						// ofSleepMillis(100); // seems like it's fixed
+						//recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
+						setState(RESULT);
+					}				
 				}
-			}
 			break;
 		}
 
@@ -356,7 +312,7 @@ void testApp::update(){
 			{
 				// show prompt - look sideways
 				if (resultTimer.done()) { // isFaceLookingSideWays(); // get from camera
-					state = PROFILE_CONFIRMED;
+					setState(PROFILE_CONFIRMED);
 				}
 				break;
 			}
@@ -370,14 +326,14 @@ void testApp::update(){
 				if (selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
 				{
 					ofLogNotice("RESULT -> IDLE");
-					state = IDLE;
+					setState(IDLE);
 				}
 				break;
 			}
 
 		case MORE_THAN_ONE:
 			{
-				state = IDLE;
+				setState(IDLE);
 				break;
 			}
 		}
@@ -385,11 +341,8 @@ void testApp::update(){
 
 	if (nVisibleUsers > 1)
 	{
-		state = MORE_THAN_ONE;
+		setState(MORE_THAN_ONE);
 	}
-
-	prev_state = state;
-	// // // 
 
 	// set drawing parameters (before smoothing)
 	if (state == IDLE) {
@@ -1367,4 +1320,59 @@ void testApp::setupWatchdog() {
 #endif
 }
 
+void testApp::setState(State to) {
+	State from = state;
+	ofLogNotice("set state from: " + AppState::toString(from) + " to: " + AppState::toString(to));
 
+	int round = session.currentRound();
+
+	if (to == SELECTION) {
+		if (round == 0) { // if (from = RAISE_HAND) {
+			// create new session
+			session = RecordedData();
+			session.id = generateFileName();
+			ofLogNotice(session.id);
+
+			// # populate
+			roundsUsers[0] = dataset.getLatestUser();
+			int i = 1;
+			while (i < RecordedData::MAX_ROUND_COUNT) {
+				bool dup = false;
+				string selected =  dataset.getRandomUser();
+				for (int j = 0; j < i; j++) {
+					if (roundsUsers[j] == selected) {
+						dup = true;
+						continue;
+					}
+				}
+				if (!dup) {
+					roundsUsers[i] = selected;
+					i++;
+				}
+			}
+
+			setupNextRound(0);
+		}
+
+		if (round > 0) {  // if (from = SELECTION_POST) {
+			string lastWinnerId = session.othersId[round-1][hovered];
+			if (round == RecordedData::MAX_ROUND_COUNT - 1) {
+				setupNextRound(round, lastWinnerId, session.id); // keep winner + show self
+			}
+			else {
+				setupNextRound(round, lastWinnerId); // keep winner, exclude self
+			}
+		}
+		// reset selection (was in RAISE_HAND)
+		hovered = NO_HOVER; 
+		selectedUser.selectionTimer.setTimeout(selectionTimeout);
+		selectedUser.selectionTimer.reset();
+		cursor = AppCursor();
+		cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset , ofGetScreenHeight() / 2 + cursorHightOffset));
+	}
+
+
+	// setting state
+	setState(to);
+	ofLogNotice("state: " + AppState::toString(state));
+}
