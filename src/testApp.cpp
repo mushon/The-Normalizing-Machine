@@ -1373,6 +1373,6 @@ void testApp::setState(State to) {
 
 
 	// setting state
-	setState(to);
+	state = to;
 	ofLogNotice("state: " + AppState::toString(state));
 }
