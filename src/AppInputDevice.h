@@ -138,7 +138,7 @@ private:
 
 };
 
-class AppKinect : public AppInputDevice {
+class KinectInputDevice : public AppInputDevice {
 	
 public:
 	virtual void setup() {
