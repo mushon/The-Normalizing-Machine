@@ -188,6 +188,8 @@ void testApp::update(){
 						// if (selectedUser.isSteady())
 						// {
 						state = SELECTION;
+						ofLogNotice("state = SELECTION");
+
 						// }
 					}
 				}
@@ -287,6 +289,7 @@ void testApp::update(){
 					
 					//TODO select mechanism (click/timeout)
 					bool selected = (selectedUser.selectionTimer.done());
+					cout << (selected);
 					if(selected)
 					{
 						// add vote
@@ -311,6 +314,8 @@ void testApp::update(){
 							//}
 						}
 						state = SELECTION_POST;
+						ofLogNotice("state = SELECTION_POST;");
+
 					}
 
 				}
@@ -1199,15 +1204,21 @@ void testApp::drawDebugText()
 		<< "	selectedUser.selectionTimer: " << selectedUser.selectionTimer.getCountDown() << endl
 		;
 
+	
+	int currentRound = session.currentRound();
 
-	msg << "session.currentRound: " << session.currentRound() <<"/"<< session.MAX_ROUND_COUNT << endl;
-	for (int i = 0; i < session.currentRound(); i++) {
-		msg << "round #" << i << ": " << session.roundSelections[i] << endl;
-	}
-	for (int i = 0; i < session.N_OTHERS; i++) {
-		//if (session.othersId[session.currentRound()][i]) {
-		msg << "othersId [" << i << "]: " << session.othersId[session.currentRound()][i] << endl;
-		//}
+	msg << "session: " << endl;
+	msg << "	currentRound: " << currentRound << endl
+	 	<< "	MAX_ROUND_COUNT: " << session.MAX_ROUND_COUNT << endl;
+
+	for (int r = 0; r < currentRound; r++) {
+		msg << "	round #" << r << ": " << session.roundSelections[r] << endl;
+		for (int i = 0; i < session.N_OTHERS; i++) {
+			//if (session.othersId[session.currentRound()][i]) {
+			msg << "		othersId [" << r << "]: " << session.othersId[r][i] << endl;
+			msg << "		othersSelection [" << r << "]: " << session.othersSelection[r][i] << endl;
+			//}
+		}
 	}
 
 

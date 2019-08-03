@@ -74,21 +74,21 @@ public:
 
 		}
 
-		ofVec3f getPointingDir() {
+		ofVec3f getPointingDir() const {
 			return getSelectedArm().getPointingDir();
 		}
 
-		bool isSteady() {
+		bool isSteady() const {
 			return getSelectedArm().isSteady();
 		}
 
-		float getProgress()
+		float getProgress() const 
 		{
 			return waitForSteady ? 1.0f : selectionTimer.getProgress();
 		}
 
 
-		SelectedArm& getSelectedArm() {
+		const SelectedArm& getSelectedArm() const {
 			/*
 			float z = abs(leftArm.hand.z - rightArm.hand.z);
 			float xl = abs(leftArm.hand.x - leftArm.shoulder.x);

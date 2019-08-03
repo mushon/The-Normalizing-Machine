@@ -32,7 +32,7 @@ public:
 	}
 
 	// 0 <= x <= 1, 1 -> 0
-	float getProgress()
+	float getProgress() const
 	{
 		return float(getCountDown()) / timeout;
 	}
