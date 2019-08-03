@@ -19,13 +19,42 @@ public:
 };
 
 class AppMouse : public AppInputDevice {
-// This class emulates both a 'kinect' sensor (# people), and a User (position)
+// This class emulates both:
+// -  a 'kinect' sensor (# people),
+// -  a User (id, position, hand-raised)
+// -  Video Input (recording)
+
 public:
 	virtual void setup() { 
 		user.id = 99;
 		user.lastSeen.setTimeout(10000);
 		user.selectionTimer.setTimeout(1000);
 		user.selectionTimer.reset();
+
+		// Grabber
+		camWidth = 640;  // try to grab at this size.
+		camHeight = 480;
+		
+
+		//get back a list of devices.
+		vector<ofVideoDevice> devices = vidGrabber.listDevices();
+
+		for(size_t i = 0; i < devices.size(); i++){
+			if(devices[i].bAvailable){
+				//log the device
+				ofLogNotice() << devices[i].id << ": " << devices[i].deviceName;
+			} else {
+				//log the device and note it as unavailable
+				ofLogNotice() << devices[i].id << ": " << devices[i].deviceName << " - unavailable ";
+			}
+		}
+
+		vidGrabber.setDeviceID(0);
+		vidGrabber.setDesiredFrameRate(30);
+		vidGrabber.initGrabber(camWidth, camHeight);
+
+		videoPixels.allocate(camWidth, camHeight, OF_PIXELS_RGB);
+		videoTexture.allocate(videoPixels);
 	};
 
 	virtual void update() {
@@ -47,27 +76,19 @@ public:
 
 		user.distance = mousePosition.distance(ofPoint(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2));
 
+		vidGrabber.update();
+
 	};
 	
 	virtual void draw() { 
 		// show fake image?
 		ofPushMatrix();
 		ofPushStyle();
-		
+
 		ofSetColor(ofColor::white);
-		ofSetLineWidth(2);
-		ofCircle(0, 0, 100);
-	
-		ofSetColor(ofColor::green);
-		ofCircle(30, -50, 10);
-		ofCircle(-30, -50, 10);
-	
-		ofSetColor(ofColor::red);
-		ofSetLineWidth(3);
-		ofTranslate(0, 30);
-		int a = 5;
-		ofLine(-a, -a, a, a); // \ line
-		ofLine(a, -a, -a, a); // / line
+    	vidGrabber.draw(0, 0, 340, 480); // 340? 380?
+
+
 		ofPopStyle();
 		ofPopMatrix();
 
@@ -108,6 +129,13 @@ private:
 	SelectedUser user;
 	ofPoint mousePosition;
 	AppCursor cursor;
+
+	ofVideoGrabber vidGrabber;
+	ofPixels videoPixels;
+	ofTexture videoTexture;
+	int camWidth;
+	int camHeight;
+
 };
 
 class AppKinect : public AppInputDevice {
