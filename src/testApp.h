@@ -60,7 +60,7 @@ public:
 
 	SelectedUser selectedUser;
 	// ofxKinectCommonBridge kinect;
-	AppMouse inputDevice;
+	MouseInputDevice inputDevice;
 	static const string imageDir;
 
 private:

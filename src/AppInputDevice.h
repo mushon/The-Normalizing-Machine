@@ -18,7 +18,7 @@ public:
 
 };
 
-class AppMouse : public AppInputDevice {
+class MouseInputDevice : public AppInputDevice {
 // This class emulates both:
 // -  a 'kinect' sensor (# people),
 // -  a User (id, position, hand-raised)
