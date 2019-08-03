@@ -12,9 +12,9 @@ public:
 	virtual void draw_debug() { };
 	virtual void exit() { };
 
-	virtual int countVisibleUsers() = 0;
-	virtual const SelectedUser& getClosestUser() = 0;  // --> activeUser
-	virtual ofPoint getScreenPoint() = 0;
+	virtual int countVisibleUsers() const = 0;
+	virtual const SelectedUser& getClosestUser() const = 0;  // --> activeUser
+	virtual ofPoint getScreenPoint() const = 0;
 
 };
 
@@ -99,7 +99,7 @@ public:
 	};
 	// virtual void exit() { };
 
-	virtual int countVisibleUsers() {
+	virtual int countVisibleUsers() const {
 		if (mousePosition.x > ofGetScreenWidth() - 100 && mousePosition.y < 100)
 		{
 			return 2;
@@ -111,7 +111,8 @@ public:
 		 	return 0;
 		}
 	}
-	virtual const SelectedUser& getClosestUser() {
+
+	virtual const SelectedUser& getClosestUser() const {
 		if (countVisibleUsers() > 0) {
 			return user;
 		}
@@ -120,9 +121,11 @@ public:
 		}
 	}
 
-	virtual ofPoint getScreenPoint() {
+	virtual ofPoint getScreenPoint() const {
 		return mousePosition;
 	}
+
+	
 
 
 private:
@@ -343,7 +346,7 @@ public:
 
 
 	virtual ofPoint getScreenPoint() {
-
+		return ofPoint();
 		//ofPoint p = selectedUser.getPointingDir();
 
 		//float x = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.x / p.z - screenL;
