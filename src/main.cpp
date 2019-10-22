@@ -23,13 +23,14 @@ int main( ){
 	//ofSetupOpenGL(1920,1080, windowMode);	// <-------- setup the GL context
 #endif
 #ifdef TARGET_OSX
-	ofSetupOpenGL(1024,768, windowMode);			// <-------- setup the GL context
+	auto windowMode = OF_WINDOW;
+	ofSetupOpenGL(1920,1080, windowMode);			// <-------- setup the GL context
 #endif
 #ifdef TARGET_LINUX
 	// TODO
 #endif
 
-	ofCreateWindow(settings);
+	// ofCreateWindow(settings);
 
 #ifndef DEBUG
 	ofHideCursor();

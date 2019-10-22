@@ -11,11 +11,11 @@
 <Widget>
     <Kind>2</Kind>
     <Name>draw (v)ideo</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
-    <Name>draw (d)epth</Name>
+    <Name>draw (d)ebug input</Name>
     <Value>0</Value>
 </Widget>
 <Widget>
@@ -32,11 +32,6 @@
     <Kind>2</Kind>
     <Name>draw (c)ursor</Name>
     <Value>1</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>draw (K)Kinect</Name>
-    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -161,7 +156,7 @@
 <Widget>
     <Kind>42</Kind>
     <Name>resultTimeout</Name>
-    <Value>0</Value>
+    <Value>3000</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>

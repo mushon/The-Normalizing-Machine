@@ -1,129 +1,27 @@
 #include "testApp.h"
-#include "KinectUtil.h"
 
-#define KINECT_WIDTH 640
-#define KINECT_HIGHT 480
 #define RECDIR "records/"
 const string testApp::imageDir = "SeqImg/";
-const int playersYOffset = -100;
+const int playersYOffset = -100;  // make slider ui
 
 //--------------------------------------------------------------
 void testApp::setup() {
-
-	ofSetVerticalSync(true);
-	ofSetFrameRate(30);
 	ofSeedRandom();
-	ofEnableAntiAliasing();
+	setupDisplay();
 	setupGui();
-
-	kinect.initSensor();
-	//kinect.initIRStream(640, 480);
-	kinect.initColorStream(KINECT_WIDTH, KINECT_HIGHT, true);
-	kinect.initDepthStream(KINECT_WIDTH, KINECT_HIGHT, true);
-	kinect.initSkeletonStream(false);
-	//kinect.setUseStreams(true);
-	//kinect.createColorPixels(KINECT_WIDTH, KINECT_HIGHT);
-	kinect.setUseTexture(true);
-	kinect.setDepthClipping(depthClip.x, depthClip.y); // TODO:: export to settings
-
-	//simple start
-	kinect.start();
-
-
-	drawDepth=false;
-	drawGui=false;
-	drawProfiler=false;
-	drawVideo=true;
-	drawText=false;
-
-	selectedUser.lastSeen.setTimeout(3000);
-
-	yesIcon20.loadImage("assets/i-yes-20.png");
-	noIcon20.loadImage("assets/i-no-20.png");
-
-	yesIcon.loadImage("assets/i-yes-40.png");
-	noIcon.loadImage("assets/i-no-40.png");
-
-	txt_pointing.loadImage("assets/txt_pointing.png");
-	txt_position.loadImage("assets/txt_position.png");
-	txt_prompt.loadImage("assets/txt_prompt.png");
-	txt_toomany.loadImage("assets/txt_toomany.png");
-
-	img_arrow_left.loadImage("assets/arrow_left.png");
-	img_face_left.loadImage("assets/face_left.png");
-	img_placemark_body.loadImage("assets/placemark_body.png");
-	img_placemark_head.loadImage("assets/placemark_head.png");
-
-	for (int i = 0; i < RecordedData::MAX_ROUND_COUNT; i++){
-		img_rounds[i].loadImage("assets/r" + to_string(i+1) + ".png");
-		img_rounds_active[i].loadImage("assets/r" + to_string(i+1) + "_active.png");
-	}
-
-	img_rounds_star.loadImage("assets/r_star.png");
-	img_rounds_star_active.loadImage("assets/r_star_active.png");
-
-
-	img_r_left.loadImage("assets/r_left.png");
-	img_r_right.loadImage("assets/r_right.png");
-	img_record.loadImage("assets/record.png");
-
-	img_gapmarker.loadImage("assets/gapmarker.png");
-	img_placemark.loadImage("assets/placemark.png");
-	img_placemarker_body.loadImage("assets/placemarker_body.png");
-	img_placemarker_head.loadImage("assets/placemarker_head.png");
-	img_placemark_0_2_position.loadImage("assets/placemark_0.2_position.png");
-	img_prompt_0_1_idle.loadImage("assets/prompt_0.1_idle.png");
-	img_prompt_0_2_position.loadImage("assets/prompt_0.2_position.png");
-	img_prompt_0_3_onebyone.loadImage("assets/prompt_0.3_onebyone.png");
-	img_prompt_1_1_point.loadImage("assets/prompt_1.1_point.png");
-	img_prompt_10_goodbye.loadImage("assets/prompt_10_goodbye.png");
-	img_prompt_2_1_moreNormal.loadImage("assets/prompt_2.1_moreNormal.png");
-	img_prompt_9_turnLeft.loadImage("assets/prompt_9_turnLeft.png");
-
-	img_goodbye.loadImage("assets/goodbye.png");
-	img_one_by_one.loadImage("assets/one_by_one.png");
-	img_position_yourself.loadImage("assets/position_yourself.png");
-	img_step_in.loadImage("assets/step_in.png");
-	img_wellcome_msg.loadImage("assets/welcome_msg.png");
-
-	ofDisableAlphaBlending();
-
-
-	ofBackground(0, 0, 0, 0);
-
+	setupInput();
+	setupAssets();
 	dataset.loadLibrary(recDir + datasetJsonFilename);
 
-	fbo.allocate(ofGetWidth(), ofGetHeight(), GL_RGBA);
-
-	state = IDLE;
-	//ofDirectShowPlayer* dPlayer = new ofDirectShowPlayer();
-	//ofPtr <ofBaseVideoPlayer> ptr(dPlayer);
-	//players[0].setPlayer(ptr);
-	//players[1].setPlayer(ptr);
-	//players[0].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
-	//players[1].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
-
-	// video border frame
-	frame.setStrokeColor(ofColor::white);
-	frame.setStrokeWidth(4);
-	frame.setFilled(false);
-
-
-#ifdef DO_WATCHDOG
-
-#ifdef TARGET_WIN32
-	wdr = make_unique<WatchDog_Responder>(true, 10000, "../../watchdog");
-#endif
-
-#endif
+	setupWatchdog();
+	setState(IDLE);
 }
 
 void testApp::loadImages(string path, vector<ofImage*>& images) {
 	ofDirectory dir(path);
-	//only show png files
-	dir.allowExt("jpeg");
-	//populate the directory object
-	dir.listDir();
+	
+	dir.allowExt("jpeg"); // only show ? files
+	dir.listDir(); 	// populate the directory object
 	dir.sortByDate();
 
 	//go through and print out all the paths
@@ -188,37 +86,6 @@ void testApp::setupNextRound(int round, string firstId, string secondId) {
 	imgId = 0;
 }
 
-/*
-void testApp::setupNextRound(bool lastUser, string forcedId, string excludeSessionId) {
-	for (int i = 0; i<n_players; i++)
-	{
-		players[i].stop();
-	}
-	n_players = 0;
-
-	vector<string> nextIds = dataset.selectNextRound(lastUser, forcedId, excludeSessionId); // better name?
-	session.setupNextRound(nextIds);
-
-	for (int i = 0; i<session.N_OTHERS; i++)
-	{
-		int r = session.currentRound();
-		while (!setupPlayback(RECDIR + session.othersId[r][i])) {
-			dataset.dataset.erase(session.othersId[r][i]);
-		}
-	}
-}
-*/
-/*
-void testApp::setUpResult(string id) {
-	for (int i = 0; i < n_players; i++)
-	{
-		players[i].stop();
-	}
-	n_players = 0;
-	setupPlayback(recDir + id);
-}
-*/
-//--------------------------------------------------------------
 void testApp::update(){
 	recorder.update();
 
@@ -231,119 +98,103 @@ void testApp::update(){
 		ofLogNotice("Minutes Passed") << mins;
 	}
 
-	userMessage = stringstream();
-
 	//ofxProfileSectionPush("openni update live");
-	kinect.update();
+	// kinect.update();
+	inputDevice.update();
 	//ofxProfileSectionPop();
 
-	int nVisibleUsers = KinectUtil::countVisibleUsers(kinect); // vector from sensor
-	userMessage << nVisibleUsers << endl;
-
-	updateSelectedUser();
-
-	if (simulateMoreThanOne)
-	{
-		nVisibleUsers = 99;
-	}
-
+	// int nVisibleUsers = KinectUtil::countVisibleUsers(kinect); // vector from sensor
+	int nVisibleUsers = inputDevice.countVisibleUsers();
+	
 	if (nVisibleUsers == 0)
 	{
+		// setState(IDLE) // move check inside
 		if (state != IDLE)
 		{
 			// stop recording?
-			if (selectedUser.lastSeen.getCountDown() == 0)
+			if (selectedUser.lastSeen.done())
 			{
 				// 1 -> 0
-				state = IDLE;
+				setState(IDLE);
 			}
 		}
 	}
 
-	if (nVisibleUsers >= 1)
+	if (nVisibleUsers == 1)
 	{
-		selectedUser.lastSeen.reset();
+		selectedUser = inputDevice.getClosestUser();
+		if (selectedUser.id == SelectedUser::NO_USER) 
+		{ // user lost
+			setState(IDLE);
+		}
 
 		switch (state)
 		{
 		case IDLE:
 			{
-
-				userMessage << selectedUser.distance << endl;
 				if (selectedUser.distance < idleThreshold)
 				{
-					state = STEP_IN;
+					setState(STEP_IN);
 				}
 				break;
 			}
 		case STEP_IN:
 			{
-				if (selectedUser.id == SelectedUser::NO_USER ||
-				   selectedUser.distance > idleThreshold + idleThresholdHysteresis)
-				{
-					state = IDLE;
+				if(selectedUser.distance > idleThreshold + idleThresholdHysteresis) {
+					setState(IDLE);
 				}
 
 				if (selectedUser.distance < stepInThreshold)
 				{
-					session = RecordedData();
-					puploateRoundUsers();
-					session.id = generateFileName();
-					setupNextRound(0); // first round
-					welcomeTime = ofGetElapsedTimeMillis();
-					recorder.capture(ofToDataPath(imageDir), session.id, ofRectangle(cropX, cropY, cropW, cropH));
-					state = WELLCOM_MSG;
+					setState(GOTO_SPOT);
 				}
 				break;
 			}
-		case WELLCOM_MSG:
-			if (welcomeDuration < (ofGetElapsedTimeMillis() - welcomeTime)) {
-				state = GOTO_SPOT;
-			}
-			break;
 		case GOTO_SPOT:
 			{
-				if (selectedUser.id == SelectedUser::NO_USER ||
-					selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
-				{
-					state = STEP_IN;
+				if (selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
+				{ // user stepped out of interaction zone
+					setState(STEP_IN);
 				}
-
-				if (selectedUser.distance < spotRadius)
-				{
-					state = RAISE_HAND;
+				else if (selectedUser.distance < spotRadius)
+				{ // user in spot
+					setState(RAISE_HAND);
 				}
-
 				break;
 			}
-
+			// // enter
+			// welcomeTimer.setTimeout(welcomeDuration);
+			// welcomeTimer.reset();
+			// //EW mac: // recorder.capture(ofToDataPath(imageDir), session.id, ofRectangle(cropX, cropY, cropW, cropH));
+			// setState(WELCOME_MSG);
+			// ---
+			// case WELCOME_MSG:
+			// 	if (welcomeTimer.done()) {
+			// 		// TODO: when user is already in spot
+			// 		// this creates one frame flash when changing states:
+			// 		// -> GOTO_SPOT -> RAISE_HAND
+			// 		// possibly, just show welcome overlay, regardless (no welcome state)
+			// 	}
+			// 	break;
 		case RAISE_HAND:
 			{
-			ofVec3f s = selectedUser.getPointingDir();
-			ofLogNotice(ofToString(s.x) + " " + ofToString(s.y) + " " + ofToString(s.z));
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
-					state = GOTO_SPOT;
+					setState(GOTO_SPOT);
 				}
 				else
 				{
-					if (selectedUser.getSelectedArm().hand.z < selectedUser.getSelectedArm().shoulder.z - handShoulderDistance /*||
-						selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance)*/)
+					if (selectedUser.handRaised)
 					{
-						if (selectedUser.isSteady())
-						{
-							selectedUser.reset(selectionTimeout);
-							cursor = AppCursor();
+						// if (selectedUser.isSteady())
+						// {
+						// state.set(???)
+						setState(SELECTION);
 
-							//ofVec3f s = selectedUser.getPointingDir();
-							//ofLogNotice(ofToString(s.x) + " " + ofToString(s.y) + " " + ofToString(s.z));
-							cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset , ofGetScreenHeight() / 2 + cursorHightOffset));
-							state = SELECTION;
-						}
-						else
-						{
-							userMessage << "Hold Steady" << endl;
-						}
+						ofLogNotice("setState(SELECTION)");
+						ofLogNotice(AppState::toString(state));
+
+						// }
 					}
 				}
 
@@ -351,199 +202,138 @@ void testApp::update(){
 			}
 		case SELECTION:
 			{
-				if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance/* ||
-					selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance)*/)
-				{
-					//recorder.abort();
-					state = RAISE_HAND;
-				}
+				// EW: disabled this, since user already raised hand
+				// if (selectedUser.getSelectedArm().hand.z > selectedUser.getSelectedArm().shoulder.z - handShoulderDistance/* ||
+				// 	selectedUser.getSelectedArm().hand.x - selectedUser.getSelectedArm().shoulder.x > abs(handShoulderDistance)*/)
+				// {
+				// 	//recorder.abort();
+				// setState(RAISE_HAND);
+				// }
 				if (selectedUser.distance > spotRadius + spotRadiusHysteresis)
 				{
 					//recorder.abort();
 					//give timeout?
-					state = GOTO_SPOT;
+					setState(GOTO_SPOT);
 				}
 				else
 				{
-					//ofPoint p = selectedUser.getPointingDir();
+					ofPoint screenPoint = inputDevice.getScreenPoint();
+					if (lockCursorY) { screenPoint.y = ofGetScreenHeight() / 2; }
+					cursor.update(screenPoint, progressSmooth);
 
-					//float x = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.x / p.z - screenL;
-					//float y = -(selectedUser.getSelectedArm().shoulder.z - screenZ) * p.y / p.z - screenB;
+					int hover = NO_HOVER;
 
-					//float kx = (x-screenL) / (screenR - screenL);
-					//float ky = (y-screenB) / (screenT - screenB);
-
-
-					// TODO: sanity check if hand is +- at shoulder level
-					//ofVec2f v(2*kx-1, 2*ky-1);
-					//ofVec2f v(2*kx-1, 2*ky-1);
-
-					ofVec2f v;
-					v.x = ofMap(selectedUser.getSelectedArm().hand.x, screenL, screenR, 0, ofGetWidth() , true);
-					v.y = ofGetHeight() / 2  + cursorHightOffset; // // fix to 
-					selectedUser.screenPoint = v;
-
-					//v.x = powf(fabs(v.x), 1.5) * (v.x > 0 ? 1 : -1); // should do some non linear function,
-					//v.y = powf(fabs(v.y), 1.5) * (v.y > 0 ? 1 : -1); // should do some non linear function,
-					//v.y = powf(v.y, 3); // only on x
-
-					//float cx = ofGetScreenWidth() / 2;
-					//float cy = ofGetScreenHeight() / 2;
-
-					//selectedUser.screenPoint = v.getMapped(ofVec2f(cx, cy), ofVec2f(cx, 0), ofVec2f(0, -cy)); // reverse y, assume -1 < v.x, v.y < 1
-
-					//selectedUser.screenPoint.x = ofLerp(ofGetScreenWidth() / 2, selectedUser.screenPoint.x, 0.1);  // force to center // 2-player hack
-					//selectedUser.screenPoint.y = ofLerp(ofGetScreenHeight() / 2, selectedUser.screenPoint.y, 0.1);  // force to center // 2-player hack
-
-					float progress = selectedUser.getProgress();
-
-					ofVec2f cursorPoint = selectedUser.screenPoint;
-					//if (lockCursorY) {
-					//	cursorPoint.y = ofGetScreenHeight() / 2;
-					//}
-					cursor.update(cursorPoint, progressSmooth);
-
-					int hover = 0;
-					if (v.x > ofGetWidth()/2 + cursorWidthOffset) hover += 1;
-					// if (v.y < 0) hover+=2; 2 players hack
-
-					float w = getPlayerWidth();
-					float h = getPlayerHeight();
-
-
-					if (abs(selectedUser.screenPoint.x - ofGetWidth()/2 + cursorWidthOffset) < selectionBufferWidth) // && abs(selectedUser.screenPoint.y - (ofGetScreenHeight()/2)) < h/4) //inside middle frame
+					if (screenPoint.x < ofGetScreenWidth() / 2) //- cursorWidthOffset - selectionBufferWidth) {
 					{
-						hover = SelectedUser::NO_HOVER;
+						hover = 0;  // left
+					}
+					if (screenPoint.x > ofGetScreenWidth() / 2)
+					// if (screenPoint.x > ofGetScreenWidth() / 2 + cursorWidthOffset + selectionBufferWidth) {
+					{
+						hover = 1;  // right
 					}
 
-					//if (/* abs(v.x) > outsideScreenFactor || */ abs(v.y) > outsideScreenFactor) // hand down
-					//{
-					//	hover = SelectedUser::NO_HOVER;
-					//}
-
-					if (hover == SelectedUser::NO_HOVER || selectedUser.hovered != hover) //changed selection
-					{
-						selectedUser.hovered = hover;
-						selectedUser.getSelectedArm().steady.reset();
-						selectedUser.selectTimer.reset();
-						selectedUser.waitForSteady = true;
+					if (hover == NO_HOVER || hovered != hover)
+					{ 
+						// changed selection
+						// selectedUser.getSelectedArm().steady.reset();
+						selectedUser.selectionTimer.reset();
+						// selectedUser.waitForSteady = true;
 						//recorder.abort();
 					}
+					hovered = hover;
 					
 					//TODO select mechanism (click/timeout)
+					bool selected = (selectedUser.selectionTimer.done());
 
-					for (int i = 0; i < session.currentRound(); i++) {
-						userMessage << "roundCount: " << i << ": " << session.roundSelections[i] << endl;
-					}
-
-					bool selected = (selectedUser.selectTimer.getCountDown() == 0);
 					if(selected)
 					{
 						// add vote
-						session.makeSelection(selectedUser.hovered);
-						/*
-						if (appRecorder.IsRecording()) {
-							appRecorder.stop();
-							ofSleepMillis(100); // seems like it's fixed
-						}
-						*/
+						session.makeSelection(hovered);
+
+						// if (appRecorder.IsRecording()) {
+						// 	appRecorder.stop();
+						// 	ofSleepMillis(100); // seems like it's fixed
+						// }
+
 						postSelectionTimer.setTimeout(postSelectionTimeout);
 						postSelectionTimer.reset();
-						/*
-						if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 2) { // one before last round
-							recorder.start(recDir, session.id, recordingDuration);
-						}
-						*/
-						if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 3) { // one before last round
-							//if (selectedUser.selectTimer.getCountDown() < recordingDuration)
+
+						// if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 2) { // one before last round
+						// 	recorder.start(recDir, session.id, recordingDuration);
+						// }
+
+						if (session.currentRound() == RecordedData::MAX_ROUND_COUNT - 3) { // two before last round
+							//if (selectedUser.selectionTimer.getCountDown() < recordingDuration)
 							//{
-								recorder.capture(recDir, session.id, ofRectangle(cropX, cropY, cropW, cropH));
+								//EW mac: // recorder.capture(recDir, session.id, ofRectangle(cropX, cropY, cropW, cropH));
 							//}
 						}
-						state = SELECTION_POST;
+						setState(SELECTION_POST);
 					}
-
 				}
 				break;
-
 			}
 		case SELECTION_POST:
-		{
-			if (postSelectionTimer.getCountDown() <= 0) {
-				int r = session.currentRound();
-				if (r < RecordedData::MAX_ROUND_COUNT) {
-					string lastWinnerId = session.othersId[r-1][selectedUser.hovered];
-					if (r == RecordedData::MAX_ROUND_COUNT - 1) {
-						setupNextRound(r, lastWinnerId, session.id); // keep winner + show self
-					}
-					else {
-						setupNextRound(r, lastWinnerId); // keep winner, exclude self
-					}
-					selectedUser.reset(selectionTimeout);
-					cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset, ofGetScreenHeight() / 2 + cursorHightOffset));
-					state = SELECTION;
-				}
-				else {
-					resultTimer.setTimeout(resultTimeout);
-					resultTimer.reset();
-					//players[selectedUser.hovered]->getCurrentFrame();
-					resultImage = players[selectedUser.hovered].back();
-					//resultImage.allocate(players[selectedUser.hovered]->getWidth(), players[selectedUser.hovered]->getHeight(), OF_IMAGE_COLOR);
-					//resultImage.setFromPixels(players[selectedUser.hovered]->getPixels());
-					session.saveUserMeasurements(selectedUser.totalHeight + 0.25 * selectedUser.headHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth, selectedUser.armLength);
+			{
+				if (postSelectionTimer.done()) {
+					int round = session.currentRound();
+					if (round < RecordedData::MAX_ROUND_COUNT) {
+						setState(SELECTION);
+					} else {
+						string lastWinnerId = session.othersId[round-1][hovered]; 
 
-					// info: ALL dataset is saved every time
-					dataset.saveSession(session);
-					dataset.updateScores(session);
-					dataset.saveLibrary(recDir + datasetJsonFilename);
-					ofSleepMillis(100); // seems like it's fixed
-					//recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
-					state = RESULT;
+						//players[hovered]->getCurrentFrame();
+						resultImage = yesIcon; // HACK EW// *players[hovered].back();
+
+						//resultImage.allocate(players[hovered]->getWidth(), players[hovered]->getHeight(), OF_IMAGE_COLOR);
+						//resultImage.setFromPixels(players[hovered]->getPixels());
+						session.saveUserMeasurements(selectedUser.totalHeight + 0.25 * selectedUser.headHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth, selectedUser.armLength);
+
+						// info: ALL dataset is saved every time
+						/*
+						EW mac_fix
+						dataset.saveSession(session);
+						dataset.updateScores(session);
+						dataset.saveLibrary(recDir + datasetJsonFilename);
+							*/
+
+						resultTimer.setTimeout(resultTimeout);
+						resultTimer.reset();
+						// ofSleepMillis(100); // seems like it's fixed
+						//recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
+						setState(RESULT);
+					}				
 				}
-			}
 			break;
 		}
 
 		case RESULT:
 			{
-			   //string lastWinnerId = session.othersId[RecordedData::MAX_ROUND_COUNT - 1][selectedUser.hovered];
 				// show prompt - look sideways
-				userMessage << "resultTimer: " << resultTimer.getCountDown() << endl;
-				if (resultTimer.getCountDown() <= 0) { // isFaceLookingSideWays(); // get from camera
-					// save user measurements
-					// currData.saveUserMeasurements(selectedUser); // TODO
-					/*
-					session.saveUserMeasurements(selectedUser.totalHeight, selectedUser.headHeight, selectedUser.torsoLength, selectedUser.shouldersWidth);
-
-					// info: ALL dataset is saved every time
-					dataset.saveSession(session);
-					dataset.updateScores(session);
-					dataset.saveLibrary(recDir + datasetJsonFilename);
-					ofSleepMillis(100); // seems like it's fixed
-					recorder.capture(imageDir, session.id, ofRectangle(cropX, cropY, cropW, cropH), false);
-						*/
-					state = PROFILE_CONFIRMED;
+				if (resultTimer.done()) { // isFaceLookingSideWays(); // get from camera
+					setState(PROFILE_CONFIRMED);
 				}
 				break;
 			}
 
 		case PROFILE_CONFIRMED:
 			{
-			// TODO: save video with sessionId (front, side). you cant save front it here too late
-			// TODO: show thank you and goodbye
+				// TODO: save video with sessionId (front, side). you cant save front it here too late
+				// TODO: show thank you and goodbye
 				// animate back to idle
 				// change from live to recording
 				if (selectedUser.distance > stepInThreshold + stepInThresholdHysteresis)
 				{
 					ofLogNotice("RESULT -> IDLE");
-					state = IDLE;
+					setState(IDLE);
 				}
 				break;
 			}
 
 		case MORE_THAN_ONE:
 			{
-				state = IDLE;
+				setState(IDLE);
 				break;
 			}
 		}
@@ -551,8 +341,7 @@ void testApp::update(){
 
 	if (nVisibleUsers > 1)
 	{
-		// TODO:: does not work well remove
-		//state = MORE_THAN_ONE;
+		setState(MORE_THAN_ONE);
 	}
 
 	// set drawing parameters (before smoothing)
@@ -566,7 +355,7 @@ void testApp::update(){
 		playerFrameScale = 0.0f;
 		roundSelectionsScale = 0;
 	}
-	if (state == WELLCOM_MSG) {
+	if (state == WELCOME_MSG) {
 		liveFrameScale = 1;
 		playerFrameScale = 0.0f;
 		roundSelectionsScale = 0;
@@ -616,7 +405,7 @@ void testApp::update(){
 	playerFrameScaleSmooth += (1 - playerFrameScaleSmoothFactor) * playerFrameScale;
 
 	float progress = 1.0;
-	if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
+	if (state == SELECTION && hovered != NO_HOVER)
 	{
 		progress = selectedUser.getProgress();
 	}
@@ -635,7 +424,7 @@ void testApp::update(){
 
 		float selectionScale = 1;
 		if (state == SELECTION) {
-			selectionScale = (i == selectedUser.hovered) ? (1) : (1.0f - s);
+			selectionScale = (i == hovered) ? (1) : (1.0f - s);
 		}
 		playbackScales[i] = selectionScale;
 
@@ -653,7 +442,8 @@ void testApp::drawGotoSpot() {
 
 	// // Depracated debug info:
 	// ofVec2f dist(selectedUser.headPoint.x - spot.x, selectedUser.headPoint.z - spot.z);
-	// userMessage << "go to the spot. Please move "
+	// // stst = stringstream()
+	// stst << "go to the spot. Please move "
 	// << (abs(dist.x - spotRadius < 0) ? "Right" : "Left")
 	// << (abs(dist.x - spotRadius < 0) && abs(dist.y - spotRadius < 0) ? " and " : "")
 	// << (abs(dist.y - spotRadius < 0)? "Forward" : "Back") << endl
@@ -731,17 +521,14 @@ void testApp::drawLiveFrame() {
 	//ofRect(0, 0, w + 2 * margin / scale, h + 2 * margin / scale);
 
 	// draw cropped area in center of frame
-	float imageWidth = KINECT_WIDTH;
-	float imageHeight = KINECT_HIGHT;
+	// float imageWidth = KINECT_WIDTH;
+	// float imageHeight = KINECT_HIGHT;
 
 	
-	float offsetW = (imageWidth - w) / 2;
-	float offsetH = (imageHeight - h) / 2;
+	// float offsetW = (imageWidth - w) / 2;
+	// float offsetH = (imageHeight - h) / 2;
 
-	kinect.getColorTexture().drawSubsection(0, 0, w, h, offsetW, offsetH, w, h);
-	 //kinect.draw(0, 0);
-	//appRecorder.drawImageSubsection(w, h, offsetW, offsetH);
-
+	inputDevice.draw();
 	img_record.draw((img_record.getWidth() + margin - w) / 2 , (img_record.getHeight() + margin - h) / 2); // top left
 
 	frame.clear();
@@ -758,10 +545,10 @@ void testApp::drawIconAnimations(int i) {
 	int dx = i % 2;
 	dx = 2 * dx - 1; // map 0,1 to -1,1
 
-	ofImage& icon = (i == selectedUser.hovered) ? yesIcon : noIcon;
+	ofImage& icon = (i == hovered) ? yesIcon : noIcon;
 
 	float transitionLength = 0.05;
-	float transitionBegin = (i == selectedUser.hovered) ? 0.4 : 0.5 + 0.05 * i;
+	float transitionBegin = (i == hovered) ? 0.4 : 0.5 + 0.05 * i;
 	int alphaIcon = ofMap(1 - selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 0, 255, true);
 
 	//float iconScale = ofMap(selectedUser.getProgress(), transitionBegin, transitionBegin + transitionLength, 1.0f, 0.0f, true);
@@ -776,7 +563,7 @@ void testApp::drawIconAnimations(int i) {
 	icon.draw(0, 0);
 	ofPopMatrix();
 
-	if (i == selectedUser.hovered)
+	if (i == hovered)
 	{
 		drawOverheadText(txt_pointing, -dx * (-w + txt_pointing.getWidth()) / 2, (h - txt_pointing.getHeight()) / 2, w);
 	}
@@ -828,23 +615,10 @@ void testApp::drawPlayers() {
 
 		//float offsetW = (imageWidth - w) / 2;
 		//float offsetH = (imageHeight - h) / 2;
-		/*
-		int pos = 0;
-		selectedUser.hovered
-		if (collapse != 0)
-		{
-			selectedUser.hovered =
-			collapseNum++;
-			pos = MIN(collapse * collapseNum, w/2);
-			if (selectedUser.hovered == i) {
-
-			}
-		}
-		*/
 		if (imgId >= players[i].size()) {
 			imgId = 0;
 		}
-		if (imgSeqTimer.getCountDown() <= 0) {
+		if (imgSeqTimer.done()) {
 			imgId++;
 			imgSeqTimer.reset();
 		}
@@ -859,9 +633,9 @@ void testApp::drawPlayers() {
 		}
 	//	ofDisableAlphaBlending();
 
-		if (state == SELECTION && selectedUser.hovered != SelectedUser::NO_HOVER)
+		if (state == SELECTION && hovered != NO_HOVER)
 		{
-			if (i == selectedUser.hovered) {
+			if (i == hovered) {
 				img_prompt_2_1_moreNormal.draw(0, textY);
 			}
 			// drawIconAnimations(i);
@@ -897,7 +671,7 @@ void testApp::drawRoundSelections(){
 			img = (session.roundSelections[i] == 0) ? &img_r_left : &img_r_right;
 		}
 		else if (i == currentRound) { // current round
-			img = &img_rounds[i];
+			img = &img_rounds_active[i];
 		}
 		else {
 			img = &img_rounds[i];
@@ -947,9 +721,6 @@ void testApp::drawFbo() {
 				float w = getPlayerWidth();
 				float h = getPlayerHeight();
 
-				userMessage << "w" << w << endl;
-				userMessage << "h" << h << endl;
-
 				ofPushMatrix();
 				ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2);
 
@@ -972,9 +743,9 @@ void testApp::drawFbo() {
 					img_prompt_0_1_idle.draw(0, textY);
 				}
 
-				if (state == WELLCOM_MSG) {
+				if (state == WELCOME_MSG) {
 					ofEnableAlphaBlending();
-					img_wellcome_msg.draw(0, 0);
+					img_prompt_0_3_intro.draw(0, 0);
 					ofDisableAlphaBlending();
 				}
 
@@ -982,7 +753,7 @@ void testApp::drawFbo() {
 					ofEnableAlphaBlending();
 					img_position_yourself.draw(0, 0);
 					ofDisableAlphaBlending();
-					//drawGotoSpot(); // todo draw red shadow
+					// drawGotoSpot(); // todo draw red shadow
 					img_prompt_0_2_position.draw(0, textY);
 				}
 
@@ -1004,7 +775,7 @@ void testApp::drawFbo() {
 
 					ofEnableAlphaBlending();
 
-					resultImage->draw(0, 0, w, h);
+					resultImage.draw(0, 0, w, h);
 					frame.clear();
 					frame.rectangle(-w / 2, -h / 2, w, h);
 					frame.draw();
@@ -1028,8 +799,6 @@ void testApp::drawFbo() {
 
 			if (state == SELECTION)
 			{
-				//userMessage << "waiting for selection... TODO: instructions how to select" << endl;
-				//userMessage << "pointing dir: " << selectedUser.getPointingDir() << endl;
 				if (drawCursor) {
 					cursor.draw();
 				}
@@ -1057,10 +826,10 @@ void testApp::draw(){
 	}
 
 	// debugging draw
-	if (drawDepth)
+	if (drawDebugInput)
 	{
 		ofSetRectMode(OF_RECTMODE_CORNER);
-		kinect.drawDepth(0,0);
+		inputDevice.draw_debug();
 	}
 
 	if (drawText)
@@ -1070,7 +839,6 @@ void testApp::draw(){
 
 	if (drawProfiler)
 	{
-		drawKinect();
 		//ofDrawBitmapString(ofxProfile::describe(), profilerPos);
 	}
 }
@@ -1134,7 +902,7 @@ void testApp::exit(){
 		}
 	}
 
-	kinect.stop();
+	//kinect.stop();
 
 	ofLogNotice("testApp exit OK");
 }
@@ -1147,9 +915,9 @@ void testApp::setupGui(){
 	gui->setScrollableDirections(false, true);
 	gui->setDamping(0); // no acceleration
 
-
 	gui->addLabel("The Normalizing Machine");
 
+	gui->addLabelButton("Load XML", false);
 	gui->addLabelButton("Save XML", false);
 	gui->addLabelButton("RESET XML", false);
 
@@ -1168,20 +936,14 @@ void testApp::setupGui(){
 	gui->addLabel("datasetJsonFilename", datasetJsonFilename);
 	gui->addSpacer();
 
-
-	// add FPS
-	gui->addFPSSlider("FPS", 30)->setDrawOutline(true);
+	gui->addFPSSlider("FPS", 60)->setDrawOutline(true);
 	gui->addToggle("draw (g)ui", &drawGui)->bindToKey('g');
 	gui->addToggle("draw (v)ideo", &drawVideo)->bindToKey('v');
-	gui->addToggle("draw (d)epth", &drawDepth)->bindToKey('d');
+	gui->addToggle("draw (d)ebug input", &drawDebugInput)->bindToKey('d');
 	gui->addToggle("draw (t)ext", &drawText)->bindToKey('t');
 	gui->addToggle("draw (p)rojection", &drawProjection)->bindToKey('p');
-	drawCursor = true;
 	gui->addToggle("draw (c)ursor", &drawCursor)->bindToKey('c');
-	gui->addToggle("draw (K)Kinect", &drawProfiler)->bindToKey('K');
-
-	//simulateMoreThanOne = false;
-	//gui->addToggle("simulate (m)ore 1", &simulateMoreThanOne)->bindToKey('m');
+	// gui->addToggle("draw (K)Kinect", &drawProfiler)->bindToKey('K');
 
 	gui->addSpacer();
 
@@ -1220,9 +982,9 @@ void testApp::setupGui(){
 	depthClip.y = 4000;
 	gui->addSlider("Far Clip", 2000, 6000, &depthClip.y);
 	cursorHightOffset = 0;
-	gui->addIntSlider("Cursor Hight offset Pix", -ofGetHeight() / 2, ofGetHeight()/2, &cursorHightOffset);
+	gui->addIntSlider("Cursor Hight offset Pix", -ofGetScreenHeight() / 2, ofGetScreenHeight()/2, &cursorHightOffset);
 	cursorWidthOffset = 0;
-	gui->addIntSlider("Cursor Width offset Pix", -ofGetWidth() / 2, ofGetWidth() / 2, &cursorWidthOffset);
+	gui->addIntSlider("Cursor Width offset Pix", -ofGetScreenWidth() / 2, ofGetScreenWidth() / 2, &cursorWidthOffset);
 	spot.x = 0;
 	gui->addSlider("spot X", -500, 500, &spot.x);
 
@@ -1266,7 +1028,7 @@ void testApp::setupGui(){
 	welcomeDuration = 5000;
 	gui->addIntSlider("welcome msg", 100, 10000, &welcomeDuration);
 
-	resultTimeout = 0; // skip
+	resultTimeout = 3000;
 	gui->addIntSlider("resultTimeout", 0, 10000, &resultTimeout);
 
 	imgSeqTimeout = 200;
@@ -1315,7 +1077,6 @@ void testApp::setupGui(){
 	ofAddListener(gui->newGUIEvent, this, &testApp::guiEvent);
 
 	gui->saveSettings(ofToDataPath("gui/default_settings.xml"));
-	gui->loadSettings(ofToDataPath("gui/settings.xml"));
 
 	gui->setVisible(drawGui);
 }
@@ -1336,6 +1097,11 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 		// appState.set(value, force=true)
 	}
 
+	if (name == "Load XML" && e.getButton()->getValue())
+	{
+		gui->loadSettings(ofToDataPath("gui/settings.xml"));
+	}
+
 	if (name == "Save XML" && e.getButton()->getValue())
 	{
 		gui->saveSettings(ofToDataPath("gui/settings.xml"));
@@ -1348,26 +1114,6 @@ void testApp::guiEvent(ofxUIEventArgs &e)
 
 }
 
-
-void testApp::puploateRoundUsers()
-{
-	roundsUsers[0] = dataset.getLatestUser();
-	int i = 1;
-	while (i < RecordedData::MAX_ROUND_COUNT) {
-		bool dup = false;
-		string selected =  dataset.getRandumUser();
-		for (int j = 0; j < i; j++) {
-			if (roundsUsers[j] == selected) {
-				dup = true;
-				continue;
-			}
-		}
-		if (!dup) {
-			roundsUsers[i] = selected;
-			i++;
-		}
-	}
-}
 
 void testApp::drawOverheadText(ofImage& txt, int x, int y, int w)
 {
@@ -1382,6 +1128,7 @@ void testApp::drawOverheadText(ofImage& txt, int x, int y, int w)
 void testApp::drawDebugText()
 {
 
+	ofPushStyle();
 	ofSetColor(255, 255, 0);
 
 	stringstream msg;
@@ -1390,20 +1137,48 @@ void testApp::drawDebugText()
 		<< "s : start/stop recording: " << (recorder.isRecording() ? "RECORDING" : "READY") << endl
 		<< endl
 		//XXX << "File  : " << openNIRecorder.getDevice(). g_Recorder.getCurrentFileName() << endl
+		<< "inputDevice: " << endl
+		<< "	Visible Users : " << inputDevice.countVisibleUsers() << endl
+		<< "	Screen Point : " << inputDevice.getScreenPoint() << endl
+		<< " hovered: " << hovered << endl
 		<< "State : " << AppState::toString(state) << endl
-		<< "User Last seen: " << selectedUser.lastSeen.getCountDown() << endl
-		<< "User Message: " << userMessage.str() << endl
+		<< "Timers: " << endl
+		<< "	welcome Timer: " << welcomeTimer.getCountDown() << endl
+		<< "	result Timer: " << resultTimer.getCountDown() << endl
+		<< "	postSelection Timer: " << postSelectionTimer.getCountDown() << endl
+		<< "	imgSeq Timer: " << imgSeqTimer.getCountDown() << endl
+		<< "User: " << endl
+		<< "	distance: " << selectedUser.distance << endl
+		<< "	Last seen: " << selectedUser.lastSeen.getCountDown() << endl
+		<< "	Head Point: " << selectedUser.headPoint << endl
+		<< "	Pointing Dir: " << selectedUser.getPointingDir() << endl
+		<< "	isSteady: " << selectedUser.isSteady() << endl
+		<< "	is Hand Raised : " << selectedUser.handRaised << endl
+		<< "	selectedUser.selectionTimer: " << selectedUser.selectionTimer.getCountDown() << endl
 		;
 
-	for (int i = 0; i < session.N_OTHERS; i++) {
-		//if (session.othersId[session.currentRound()][i]) {
-		msg << "#" << i << ": " << session.othersId[session.currentRound()][i] << endl;
-		//}
+	
+	int currentRound = session.currentRound();
+
+	msg << "session: " << endl;
+	msg << "	currentRound: " << currentRound << endl
+	 	<< "	MAX_ROUND_COUNT: " << session.MAX_ROUND_COUNT << endl;
+
+	for (int r = 0; r < currentRound; r++) {
+		msg << "	round #" << r << ": " << session.roundSelections[r] << endl;
+		for (int i = 0; i < session.N_OTHERS; i++) {
+			//if (session.othersId[session.currentRound()][i]) {
+			msg << "		othersId [" << r << "]: " << session.othersId[r][i] << endl;
+			msg << "		othersSelection [" << r << "]: " << session.othersSelection[r][i] << endl;
+			//}
+		}
 	}
 
-	ofDrawBitmapString(msg.str(), 220, 200);
 
+	ofDrawBitmapString(msg.str(), 220, 200);
+	ofPopStyle();
 }
+
 
 string testApp::getRecDirString(string url)
 {
@@ -1426,159 +1201,6 @@ string testApp::getRecDirString(string url)
 	return dir;
 }
 
-// note: adds id, distance and headpoint to SelectedUser
-SelectedUser testApp::getClosestUser()
-{
-	SelectedUser user;
-	auto skeletons = kinect.getSkeletons();
-	for (int i = 0; i != skeletons.size(); i++) {
-		Skeleton skeleton = skeletons[i];
-		if (!skeleton.empty()) {
-			if (KinectUtil::checkMainJointsConfidence(skeleton)) {
-				user.headPoint = skeleton.at(NUI_SKELETON_POSITION_HEAD).getStartPosition();
-				user.headPoint = user.headPoint * 1000;
-				ofVec2f dist = ofVec2f(user.headPoint.x - spot.x, user.headPoint.z - spot.z); // discard height(y)    <<<--------------------------might be a hang here, consider other way of choosing
-
-				float distance = dist.length();
-				if (distance < user.distance)
-				{
-					user.id = i;
-					user.distance = distance;
-				}
-
-				userMessage << user.id << ":" << user.headPoint << endl;
-			}
-		}
-	} // end for map
-
-	return user;
-}
-
-void testApp::updateSelectedUser()
-{
-	SelectedUser user = getClosestUser();
-
-	if (user.id == SelectedUser::NO_USER)
-	{
-		selectedUser = SelectedUser(); //reset
-	}
-	else
-	{
-		// CHANGED USER (state)
-
-		// keep track of id (if changes in the middle)
-		selectedUser.id = user.id;
-		selectedUser.distance = user.distance;
-		selectedUser.headPoint = user.headPoint;
-
-		Skeleton& skeleton = kinect.getSkeletons().at(user.id);
-
-		auto & head = skeleton.at(NUI_SKELETON_POSITION_HEAD);
-
-		auto & rhj = skeleton.at(NUI_SKELETON_POSITION_WRIST_RIGHT);
-		auto & rsj = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_RIGHT);
-		auto & lhj = skeleton.at(NUI_SKELETON_POSITION_WRIST_LEFT);
-		auto & lsj = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_LEFT);
-
-		auto & neck = skeleton.at(NUI_SKELETON_POSITION_SHOULDER_CENTER);
-		auto & hip = skeleton.at(NUI_SKELETON_POSITION_HIP_CENTER);
-
-		auto & relbow = skeleton.at(NUI_SKELETON_POSITION_ELBOW_RIGHT);
-		auto & rwrist = skeleton.at(NUI_SKELETON_POSITION_WRIST_RIGHT);
-
-
-		/*
-		ofxOpenNIJoint rhj = u.getJoints().at(nite::JointType::JOINT_RIGHT_HAND);
-		ofxOpenNIJoint rsj = u.getJoints().at(nite::JointType::JOINT_RIGHT_SHOULDER);
-		ofxOpenNIJoint lhj = u.getJoints().at(nite::JointType::JOINT_LEFT_HAND);
-		ofxOpenNIJoint lsj = u.getJoints().at(nite::JointType::JOINT_LEFT_SHOULDER);
-
-
-		ofxOpenNIJoint neck = u.getJoints().at(nite::JointType::JOINT_NECK);
-		ofxOpenNIJoint lhip= u.getJoints().at(nite::JointType::JOINT_LEFT_HIP);
-		ofxOpenNIJoint rhip = u.getJoints().at(nite::JointType::JOINT_RIGHT_HIP);
-		ofxOpenNIJoint lfoot = u.getJoints().at(nite::JointType::JOINT_LEFT_FOOT);
-		ofxOpenNIJoint rfoot = u.getJoints().at(nite::JointType::JOINT_RIGHT_FOOT);
-		*/
-		// update body measurements
-		float userHeight = 0;
-		if (head.getTrackingState() == SkeletonBone::Tracked) {
-			userHeight = head.getStartPosition().y + kinectYPos;
-		}
-
-		if (userHeight > selectedUser.totalHeight) {
-			selectedUser.totalHeight = userHeight;
-		}
-
-		float headHeight = 0;
-		if (neck.getTrackingState() == SkeletonBone::Tracked && head.getTrackingState() == SkeletonBone::Tracked) {
-			headHeight = head.getStartPosition().distance(neck.getStartPosition());
-		}
-		if (headHeight > selectedUser.headHeight) {
-			selectedUser.headHeight = headHeight;
-		}
-
-		float torsoLength = 0;
-		if (neck.getTrackingState() == SkeletonBone::Tracked && hip.getTrackingState() == SkeletonBone::Tracked) {
-			torsoLength = neck.getStartPosition().distance(hip.getStartPosition());
-		}
-
-		if (torsoLength > selectedUser.torsoLength) {
-			selectedUser.torsoLength = torsoLength;
-		}
-
-		float shouldersWidth = 0;
-		if (rsj.getTrackingState() == SkeletonBone::Tracked && lsj.getTrackingState() == SkeletonBone::Tracked) {
-			shouldersWidth = rsj.getScreenPosition().distance(lsj.getScreenPosition());
-		}
-		if (shouldersWidth > selectedUser.shouldersWidth) {
-			selectedUser.shouldersWidth = shouldersWidth;
-		}
-
-		float armLength = 0;
-		if (relbow.getTrackingState() == SkeletonBone::Tracked && rwrist.getTrackingState() == SkeletonBone::Tracked) {
-			armLength = relbow.getStartPosition().distance(rwrist.getStartPosition());
-		}
-
-		if (armLength > selectedUser.armLength) {
-			selectedUser.armLength = armLength;
-		}
-
-		userMessage << "user.totalHeight: " << selectedUser.totalHeight << endl;
-		userMessage << "user.headHeight: " << selectedUser.headHeight << endl;
-		userMessage << "user.torsoLength: " << selectedUser.torsoLength << endl;
-		userMessage << "user.shouldersWidth: " << selectedUser.shouldersWidth << endl;
-		userMessage << "user.armLength: " << selectedUser.armLength << endl;
-
-
-
-		bool updateLeftArm = lhj.getTrackingState() == SkeletonBone::Tracked && lsj.getTrackingState() == SkeletonBone::Tracked;
-		bool updateRightArm = rhj.getTrackingState() == SkeletonBone::Tracked && rsj.getTrackingState() == SkeletonBone::Tracked;
-
-		if (updateLeftArm)
-		{
-			ofPoint leftHand = lhj.getStartPosition();
-			ofPoint leftShoulder = lsj.getStartPosition();
-			selectedUser.leftArm.update(leftHand, leftShoulder);
-		}
-		if (updateRightArm)
-		{
-			ofPoint rightHand = rhj.getStartPosition();
-			ofPoint rightShoulder = rsj.getStartPosition();
-			selectedUser.rightArm.update(rightHand, rightShoulder);
-		}
-
-		if (updateRightArm || updateLeftArm)
-		{
-			selectedUser.update();
-		}
-		else
-		{
-			selectedUser.reset(selectionTimeout);
-		}
-
-	}
-}
 
 string testApp::generateFileName() {
 	string timeFormat = "%Y_%m_%d_%H_%M_%S_%i";
@@ -1586,48 +1208,171 @@ string testApp::generateFileName() {
 	return name;
 }
 
-void testApp::drawKinect()
-{
-	kinect.draw(640, 0);
-	kinect.drawDepth(0, 0);
-
-	ofPushStyle();
-	ofSetColor(255, 0, 0);
-	ofSetLineWidth(3.0f);
-	auto skeletons = kinect.getSkeletons();
-	for (auto & skeleton : skeletons) {
-		for (auto & bone : skeleton) {
-			switch (bone.second.getTrackingState()) {
-			case SkeletonBone::Inferred:
-				ofSetColor(0, 0, 255);
-				break;
-			case SkeletonBone::Tracked:
-				ofSetColor(0, 255, 0);
-				break;
-			case SkeletonBone::NotTracked:
-				ofSetColor(255, 0, 0);
-				break;
-			}
-
-			auto index = bone.second.getStartJoint();
-			auto connectedTo = skeleton.find((_NUI_SKELETON_POSITION_INDEX)index);
-			if (connectedTo != skeleton.end()) {
-				ofLine(connectedTo->second.getScreenPosition(), bone.second.getScreenPosition());
-			}
-
-			ofCircle(bone.second.getScreenPosition(), 10.0f);
-		}
-	}
-	ofPopStyle();
-}
 
 void testApp::drawSplitScreen(ofFbo& fbo) {
 	ofPushMatrix();
 	//float z = tan(angle)* fboW / 2;
-	ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2 - fbo.getHeight() / 2);
+	ofTranslate(ofGetScreenWidth() / 2, ofGetScreenHeight() / 2 - fbo.getHeight() / 2);
 	ofRotateY(-wallAngle);
 	fbo.getTextureReference().drawSubsection(-(fbo.getWidth() / 2), 0, 0, fbo.getWidth() / 2, fbo.getHeight(), 0, 0, fbo.getWidth() / 2, fbo.getHeight());
 	ofRotateY(wallAngle * 2);
 	fbo.getTextureReference().drawSubsection(0, 0, 0, fbo.getWidth() / 2, fbo.getHeight(), fbo.getWidth() / 2, 0, fbo.getWidth() / 2, fbo.getHeight());
 	ofPopMatrix();
+}
+
+void testApp::setupAssets() {
+
+	yesIcon20.loadImage("assets/i-yes-20.png");
+	noIcon20.loadImage("assets/i-no-20.png");
+
+	yesIcon.loadImage("assets/i-yes-40.png");
+	noIcon.loadImage("assets/i-no-40.png");
+
+	txt_pointing.loadImage("assets/txt_pointing.png");
+	txt_position.loadImage("assets/txt_position.png");
+	txt_prompt.loadImage("assets/txt_prompt.png");
+	txt_toomany.loadImage("assets/txt_toomany.png");
+
+	img_arrow_left.loadImage("assets/arrow_left.png");
+	img_face_left.loadImage("assets/face_left.png");
+	img_placemark_body.loadImage("assets/placemark_body.png");
+	img_placemark_head.loadImage("assets/placemark_head.png");
+
+	for (int i = 0; i < RecordedData::MAX_ROUND_COUNT; i++){
+		img_rounds[i].loadImage("assets/r" + to_string(i+1) + ".png");
+		img_rounds_active[i].loadImage("assets/r" + to_string(i+1) + "_active.png");
+	}
+
+	img_rounds_star.loadImage("assets/r_star.png");
+	img_rounds_star_active.loadImage("assets/r_star_active.png");
+
+	img_r_left.loadImage("assets/r_left.png");
+	img_r_right.loadImage("assets/r_right.png");
+	img_record.loadImage("assets/record.png");
+
+	img_gapmarker.loadImage("assets/gapmarker.png");
+	img_placemark.loadImage("assets/placemark.png");
+	img_placemarker_body.loadImage("assets/placemarker_body.png");
+	img_placemarker_head.loadImage("assets/placemarker_head.png");
+	img_placemark_0_2_position.loadImage("assets/placemark_0.2_position.png");
+
+	img_prompt_0_1_idle.loadImage("assets/prompt_0.1_idle.png");
+	img_prompt_0_2_position.loadImage("assets/prompt_0.2_position.png");
+	img_prompt_0_3_onebyone.loadImage("assets/prompt_0.3_onebyone.png");
+	img_prompt_1_1_point.loadImage("assets/prompt_1.1_point.png");
+	img_prompt_10_goodbye.loadImage("assets/prompt_10_goodbye.png");
+	img_prompt_2_1_moreNormal.loadImage("assets/prompt_2.1_moreNormal.png");
+	img_prompt_9_turnLeft.loadImage("assets/prompt_9_turnLeft.png");
+
+	img_goodbye.loadImage("assets/goodbye.png");
+	img_one_by_one.loadImage("assets/one_by_one.png");
+	img_position_yourself.loadImage("assets/position_yourself.png");
+	img_step_in.loadImage("assets/step_in.png");
+	// img_wellcome_msg.loadImage("assets/welcome_msg.png");
+	img_prompt_0_3_intro.loadImage("assets/prompt_0.3_intro.png");
+}
+
+
+void testApp::setupInput() {
+	inputDevice.setup();
+	selectedUser.lastSeen.setTimeout(3000);
+}
+	
+
+void testApp::setupDisplay() {
+	ofSetVerticalSync(true);
+	ofSetFrameRate(60);
+
+	drawCursor = true;
+	drawDebugInput = false;
+	drawGui = false;
+	drawProfiler = false;
+	drawVideo = true;
+	drawText = false;
+
+	ofEnableAntiAliasing();
+	ofDisableAlphaBlending();
+
+	ofBackground(0, 0, 0, 0);
+
+	fbo.allocate(ofGetScreenWidth(), ofGetScreenHeight(), GL_RGBA);
+	//ofDirectShowPlayer* dPlayer = new ofDirectShowPlayer();
+	//ofPtr <ofBaseVideoPlayer> ptr(dPlayer);
+	//players[0].setPlayer(ptr);
+	//players[1].setPlayer(ptr);
+	//players[0].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
+	//players[1].setLoopState(ofLoopType::OF_LOOP_PALINDROME);
+
+	// video border frame
+	frame.setStrokeColor(ofColor::white);
+	frame.setStrokeWidth(4);
+	frame.setFilled(false);
+}
+
+
+void testApp::setupWatchdog() {
+#ifdef DO_WATCHDOG
+
+#ifdef TARGET_WIN32
+	wdr = make_unique<WatchDog_Responder>(true, 10000, "../../watchdog");
+#endif
+
+#endif
+}
+
+void testApp::setState(State to) {
+	State from = state;
+	ofLogNotice("set state from: " + AppState::toString(from) + " to: " + AppState::toString(to));
+
+	int round = session.currentRound();
+
+	if (to == SELECTION) {
+		if (round == 0) { // if (from = RAISE_HAND) {
+			// create new session
+			session = RecordedData();
+			session.id = generateFileName();
+			ofLogNotice(session.id);
+
+			// # populate
+			roundsUsers[0] = dataset.getLatestUser();
+			int i = 1;
+			while (i < RecordedData::MAX_ROUND_COUNT) {
+				bool dup = false;
+				string selected =  dataset.getRandomUser();
+				for (int j = 0; j < i; j++) {
+					if (roundsUsers[j] == selected) {
+						dup = true;
+						continue;
+					}
+				}
+				if (!dup) {
+					roundsUsers[i] = selected;
+					i++;
+				}
+			}
+
+			setupNextRound(0);
+		}
+
+		if (round > 0) {  // if (from = SELECTION_POST) {
+			string lastWinnerId = session.othersId[round-1][hovered];
+			if (round == RecordedData::MAX_ROUND_COUNT - 1) {
+				setupNextRound(round, lastWinnerId, session.id); // keep winner + show self
+			}
+			else {
+				setupNextRound(round, lastWinnerId); // keep winner, exclude self
+			}
+		}
+		// reset selection (was in RAISE_HAND)
+		hovered = NO_HOVER; 
+		selectedUser.selectionTimer.setTimeout(selectionTimeout);
+		selectedUser.selectionTimer.reset();
+		cursor = AppCursor();
+		cursor.setPosition(ofVec2f(ofGetScreenWidth() / 2 + cursorWidthOffset , ofGetScreenHeight() / 2 + cursorHightOffset));
+	}
+
+
+	// setting state
+	state = to;
+	ofLogNotice("state: " + AppState::toString(state));
 }

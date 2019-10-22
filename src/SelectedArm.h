@@ -52,7 +52,7 @@ public:
 	}
 
 	bool isSteady() const {
-		return steady.getCountDown() <= 0;
+		return steady.done();
 	}
 
 

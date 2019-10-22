@@ -6,7 +6,7 @@
 <Widget>
     <Kind>2</Kind>
     <Name>draw (g)ui</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
@@ -15,33 +15,23 @@
 </Widget>
 <Widget>
     <Kind>2</Kind>
-    <Name>draw (d)epth</Name>
-    <Value>0</Value>
+    <Name>draw (d)ebug input</Name>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>draw (t)ext</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>draw (p)rojection</Name>
-    <Value>0</Value>
+    <Value>1</Value>
 </Widget>
 <Widget>
     <Kind>2</Kind>
     <Name>draw (c)ursor</Name>
     <Value>1</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>draw (K)Kinect</Name>
-    <Value>0</Value>
-</Widget>
-<Widget>
-    <Kind>2</Kind>
-    <Name>simulate (m)ore 1</Name>
-    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -72,6 +62,26 @@
     <Kind>4</Kind>
     <Name>outsideScreenFactor</Name>
     <Value>5.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Near Clip</Name>
+    <Value>500.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>Far Clip</Name>
+    <Value>4000.000000000</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>Cursor Hight offset Pix</Name>
+    <Value>0</Value>
+</Widget>
+<Widget>
+    <Kind>42</Kind>
+    <Name>Cursor Width offset Pix</Name>
+    <Value>0</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -115,8 +125,8 @@
 </Widget>
 <Widget>
     <Kind>4</Kind>
-    <Name>selectionBufferWidth</Name>
-    <Value>30.000000000</Value>
+    <Name>selectionBufferWidth in Pix</Name>
+    <Value>20.000000000</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>
@@ -180,8 +190,8 @@
 </Widget>
 <Widget>
     <Kind>4</Kind>
-    <Name>kinect y pos</Name>
-    <Value>0.150000006</Value>
+    <Name>kinect y pos in Meter</Name>
+    <Value>0.000000000</Value>
 </Widget>
 <Widget>
     <Kind>42</Kind>

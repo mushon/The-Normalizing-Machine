@@ -20,14 +20,19 @@ public:
 		timeout = _timeout;
 	}
 
+	bool done() const
+	{
+		return getCountDown() <= 0;
+	}
+
 	int getCountDown() const
 	{
 		int countdown = last + timeout - ofGetSystemTime();
 		return max(0, countdown);
 	}
 
-	// 0 <= x <= 1, 0 -> 0
-	float getProgress()
+	// 0 <= x <= 1, 1 -> 0
+	float getProgress() const
 	{
 		return float(getCountDown()) / timeout;
 	}

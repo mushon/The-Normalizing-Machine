@@ -34,10 +34,11 @@ void AppDataset::loadLibrary(string url)
 
 	if (parsingSuccessful)
 	{
-		ofLogNotice("loadLibrary") << datasetJson.getRawString(true);
+		// ofLogNotice("loadLibrary") << datasetJson.getRawString(true);
+		ofLogNotice("loadLibrary") << "datasetJson.size: " << datasetJson.size();
 	}
 	else {
-		ofLogNotice("loadLibrary") << "Failed to parse JSON.";
+		ofLogError("loadLibrary") << "Failed to parse JSON.";
 	}
 	int i = datasetJson.size() - MAX_USERS;
 	if (i < 0) {
@@ -48,9 +49,15 @@ void AppDataset::loadLibrary(string url)
 		Json::Value v = datasetJson[i];
 		string id = v["id"].asString();
 		ofDirectory dir(testApp::imageDir + id);
-		if (dir.exists() && dir.listDir() > 0) { // if no images dir remove
-			dataset[id] = (RecordedData(v));
-		}
+		// TODO: bootstrap
+		// EW // if (dir.exists() && dir.listDir() > 0) { // if no images dir remove
+			dataset[id] = RecordedData(v);
+		// }
+	}
+
+	ofLogNotice("loadLibrary") << "dataset.size: " << dataset.size();
+	if (dataset.size() == 0) {
+		ofLogWarning("loadLibrary") << "! empty dataset !";
 	}
 }
 
@@ -75,9 +82,10 @@ string AppDataset::getLatestUser() {
 		return maxIt->first;
 }
 
-string AppDataset::getRandumUser() {
+string AppDataset::getRandomUser() {
 	DataSet::iterator it;
-	int rand = floor(ofRandom(dataset.size()));
+	int size = dataset.size();
+	int rand = ofRandom(size);
 	it = dataset.begin();
 	for (int i = 0; i < rand; i++) {
 		it++;

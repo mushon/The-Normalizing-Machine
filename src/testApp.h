@@ -13,7 +13,9 @@
 #include "RecordedData.h"
 #include "FfmpegRecorder.h"
 #include "AppDataset.h"
-#include "ofxKinectCommonBridge.h"
+
+// #include "ofxKinectCommonBridge.h"
+#include "AppInputDevice.h"
 
 
 //#define DO_WATCHDOG
@@ -53,16 +55,23 @@ public:
 
 	ofPoint profilerPos;
 	bool drawProfiler;
-	bool drawDepth;
+	bool drawDebugInput;
 	bool drawCursor;
 
 	SelectedUser selectedUser;
-	ofxKinectCommonBridge kinect;
+	// ofxKinectCommonBridge kinect;
+	MouseInputDevice inputDevice;
 	static const string imageDir;
 
 private:
 
+	void setupInput();
+	void setupDisplay();
+	void setupWatchdog();
+
 	State state;
+	void setState(State to);
+	
 
 	// session
 	RecordedData session;
@@ -112,11 +121,10 @@ private:
 
 	bool drawText;
 	void drawDebugText();
-	stringstream userMessage;
 
 	int margin;
 
-
+	void setupAssets();
 	ofImage yesIcon;
 	ofImage noIcon;
 	ofImage yesIcon20;
@@ -155,15 +163,15 @@ private:
 	ofImage img_prompt_10_goodbye;
 	ofImage img_prompt_2_1_moreNormal;
 	ofImage img_prompt_9_turnLeft;
-
+	
 	ofImage img_goodbye;
 	ofImage img_one_by_one;
 	ofImage img_position_yourself;
 	ofImage img_step_in;
-	ofImage img_wellcome_msg;
-	string roundsUsers [RecordedData::MAX_ROUND_COUNT+1];
-	void puploateRoundUsers();
+	// ofImage img_wellcome_msg;
+	ofImage img_prompt_0_3_intro;
 
+	string roundsUsers [RecordedData::MAX_ROUND_COUNT+1];
 
 
 	void drawOverheadText(ofImage&, int x, int y, int w);
@@ -173,11 +181,6 @@ private:
 
 	AppCursor cursor;
 	bool lockCursorY;
-
-	SelectedUser getClosestUser();
-	void updateSelectedUser();
-
-	bool simulateMoreThanOne; // for debugging purposes
 
 	string getRecDirString(string url);
 	bool testLoadLibrary;
@@ -209,9 +212,12 @@ private:
 
 	float textY;
 
+	static const int NO_HOVER = __INT_MAX__;
+	int hovered = NO_HOVER;
+
 	AppTimer postSelectionTimer;
 	//void setupNextRound(bool lastUser, string forcedId = "", string excludeSessionId = "");
-	void testApp::setupNextRound(int round, string firstId = "", string secondId = "");
+	void setupNextRound(int round, string firstId = "", string secondId = "");
 
 	void drawRoundSelections();
 	float roundSelectionsScale = 0;
@@ -239,11 +245,11 @@ private:
 	void drawFbo();
 	ofPath frame;
 	//static const ofRectangle cropImage;
-	int welcomeTime = 0;
+	AppTimer welcomeTimer = 0;
 	//void setUpResult(string id);
 	//int collapse = 0;
 	//int collapseNum = 0;
-	ofImage* resultImage;
+	ofImage resultImage;
 	float kinectYPos = 0.0;
 	int cropW = 3840;
 	int cropH = 2160;

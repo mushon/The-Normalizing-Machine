@@ -12,9 +12,6 @@ class SelectedUser
 {
 public:
 		static const int NO_USER = -1;
-		static const int NO_HOVER = -1;
-
-		int hovered;
 
 		int id;
 
@@ -25,11 +22,9 @@ public:
 		SelectedArm leftArm;
 		SelectedArm rightArm;
 
-		ofVec2f screenPoint;
-
 		AppTimer lastSeen;
 
-		AppTimer selectTimer;
+		AppTimer selectionTimer;
 		bool waitForSteady;
 
 		float totalHeight; // distance(head, feet)
@@ -38,6 +33,7 @@ public:
 		float shouldersWidth; // distance(shoulders)
 		float armLength;
 
+		bool handRaised;
 
 		SelectedUser()
 		{
@@ -45,15 +41,11 @@ public:
 			distance = FLT_MAX;
 		}
 
-		void reset(unsigned long long timeout)
+		void reset()
 		{
 			leftArm.reset();
 			rightArm.reset();
 			
-			hovered = NO_HOVER;
-
-			selectTimer.setTimeout(timeout);
-			selectTimer.reset();
 			waitForSteady = true;
 
 			totalHeight = 0;
@@ -73,25 +65,30 @@ public:
 			}
 			if (waitForSteady)
 			{
-				selectTimer.reset();
+				selectionTimer.reset();
 			}
+
+			// TODO update: handRaised 
+			// getSelectedArm().hand.z < getSelectedArm().shoulder.z - handShoulderDistance 
+			//	|| getSelectedArm().hand.x - getSelectedArm().shoulder.x > abs(handShoulderDistance)
+
 		}
 
-		ofVec3f getPointingDir() {
+		ofVec3f getPointingDir() const {
 			return getSelectedArm().getPointingDir();
 		}
 
-		bool isSteady() {
+		bool isSteady() const {
 			return getSelectedArm().isSteady();
 		}
 
-		float getProgress()
+		float getProgress() const 
 		{
-			return waitForSteady ? 1.0f : selectTimer.getProgress();
+			return waitForSteady ? 1.0f : selectionTimer.getProgress();
 		}
 
 
-		SelectedArm& getSelectedArm() {
+		const SelectedArm& getSelectedArm() const {
 			/*
 			float z = abs(leftArm.hand.z - rightArm.hand.z);
 			float xl = abs(leftArm.hand.x - leftArm.shoulder.x);
@@ -106,7 +103,9 @@ public:
 				*/
 				// z is biggest 
 				return (leftArm.hand.z < rightArm.hand.z) ? leftArm : rightArm;
+				// TODO: add hysteresis for switching hands. Track arm state.
 			//}
 		}
+
 
 };
